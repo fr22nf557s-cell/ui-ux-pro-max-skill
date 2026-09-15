@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    /* Design tokens mirrored as CSS vars so non-Tailwind surfaces
+       (canvas, SVG gradients, inline styles) stay on-brand. */
+    --ink: #0b0c10;
+    --void: #000000;
+    --tactical: #f59e0b;
+    --white: #ffffff;
+    --hairline: rgba(255, 255, 255, 0.08);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Accessibility: users who ask for less motion get the final, readable
+     state — no smooth-scroll hijack, no long transitions, no looping decor. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+
+  body {
+    @apply bg-ink font-body text-white antialiased;
+    margin: 0;
+    overflow-x: hidden;
+  }
+
+  /* One visible, high-contrast focus ring for the whole site. */
+  :where(a, button, input, [tabindex]):focus-visible {
+    outline: 2px solid var(--tactical);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--tactical);
+    color: var(--void);
+  }
+}
+
+@layer components {
+  /* Eyebrow label: mono, uppercase, heavy tracking — the "instrument panel" voice. */
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-tactical text-tactical;
+  }
+
+  /* Glassmorphism surface used by the secondary CTA and the dashboard chrome. */
+  .glass {
+    @apply border border-white/10 bg-white/[0.045] backdrop-blur-xl;
+  }
+
+  /* Hairline rule that fades at both ends — reads as a HUD divider, not a border. */
+  .hairline {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+  }
+}
+
+@layer utilities {
+  /* Promote only elements we actually animate; avoids blanket will-change. */
+  .gpu {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+}
