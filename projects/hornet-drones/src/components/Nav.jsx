@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { motion, useMotionValueEvent, useScroll, useReducedMotion } from 'framer-motion'
 import { EASE, DURATION } from '../lib/motion'
 import { StatusDot } from './Primitives'
+import Logo from './Logo'
 
 const LINKS = [
   { href: '#hardware', label: 'Hardware' },
@@ -40,15 +41,8 @@ export default function Nav() {
         aria-label="Primary"
         className="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-4 sm:px-8 lg:px-12"
       >
-        <a href="#top" className="flex items-center gap-3">
-          {/* Hornet mark: amber hexagon, drawn not imported */}
-          <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 1.6 21 6.8v10.4L12 22.4 3 17.2V6.8z" fill="none" stroke="#F59E0B" strokeWidth="1.4" />
-            <circle cx="12" cy="12" r="3.1" fill="#F59E0B" />
-          </svg>
-          <span className="font-display text-sm font-bold uppercase tracking-wide2">
-            Hornet<span className="text-tactical">.</span>
-          </span>
+        <a href="#top" className="flex items-center">
+          <Logo />
           <span className="sr-only">Hornet Drones home</span>
         </a>
 

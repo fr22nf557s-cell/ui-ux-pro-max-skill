@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { EASE, DURATION, VIEWPORT, revealUp, stagger } from '../lib/motion'
 import { StatusDot } from './Primitives'
+import Logo from './Logo'
 
 /*
  * SECTION 05 — FINAL CTA + FOOTER
@@ -166,16 +167,8 @@ export default function FooterCTA() {
         {/* ── Footer body ── */}
         <div className="mt-24 grid grid-cols-2 gap-10 border-t border-white/8 py-14 sm:grid-cols-2 lg:grid-cols-5">
           <div className="col-span-2">
-            <div className="flex items-center gap-3">
-              <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 1.6 21 6.8v10.4L12 22.4 3 17.2V6.8z" fill="none" stroke="#F59E0B" strokeWidth="1.4" />
-                <circle cx="12" cy="12" r="3.1" fill="#F59E0B" />
-              </svg>
-              <span className="font-display text-sm font-bold uppercase tracking-wide2">
-                Hornet<span className="text-tactical">.</span>
-              </span>
-            </div>
-            <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/40">
+            <Logo variant="stacked" className="max-w-[210px]" />
+            <p className="mt-7 max-w-xs text-sm leading-relaxed text-white/40">
               Autonomous aerial protection for the private perimeter. Designed and assembled in-house.
             </p>
           </div>

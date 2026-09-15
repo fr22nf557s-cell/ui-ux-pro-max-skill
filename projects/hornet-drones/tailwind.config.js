@@ -28,6 +28,8 @@ export default {
         display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
         body: ['Inter', 'system-ui', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        // Logo lockup only — chamfered techno sans matching the brand wordmark.
+        brand: ['"Chakra Petch"', '"Space Grotesk"', 'sans-serif'],
       },
       letterSpacing: {
         // Generous tracking is the signature of the section eyebrows / labels.
