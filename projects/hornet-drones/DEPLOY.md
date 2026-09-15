@@ -39,14 +39,62 @@ grep -rn 'hornetdrones\.com' --include='*.html' --include='*.xml' \
 
 ---
 
-## 1. Add the domain to Cloudflare
+## 1. Point the domain at Cloudflare
 
-Dashboard → **Add a site** → enter your domain → follow the nameserver
-instructions at your registrar. Wait for it to go active (usually minutes;
-occasionally hours).
+The domain is registered at **123-reg**. Cloudflare needs to become
+authoritative for DNS, which means replacing 123-reg's nameservers with
+Cloudflare's.
 
-This one step gives you **forced HTTPS**, a free certificate, and the ability
-to serve the `_headers` file — three items off the launch checklist.
+### In Cloudflare
+
+Dashboard → **Add a site** → `hornetdrones.com` → choose the **Free** plan.
+
+It will scan for existing DNS records (a brand-new domain has none worth
+keeping) and then show you **two nameservers**, something like:
+
+```
+gina.ns.cloudflare.com
+rick.ns.cloudflare.com
+```
+
+Those two are unique to your account. Copy them exactly.
+
+### In 123-reg
+
+1. Log in → **Manage** next to `hornetdrones.com`.
+2. Find **Manage DNS** / **Change nameservers** (123-reg moves this around;
+   it is sometimes under "Advanced settings").
+3. Switch from *123-reg nameservers* to **custom / other nameservers**.
+4. **Delete every existing entry** — the `ns.123-reg.co.uk` ones — and enter
+   only the two Cloudflare names. Adding Cloudflare *alongside* 123-reg is the
+   classic mistake: DNS answers then come from whichever responds first, so the
+   site works intermittently and is maddening to debug.
+5. Save.
+
+Two 123-reg specifics worth knowing:
+
+- **Turn off any web forwarding or parking page** on the domain. If it stays
+  on, 123-reg keeps answering for the apex and your site never appears.
+- A 60-day *transfer* lock after purchase does **not** affect nameserver
+  changes. You do not need to wait.
+
+Propagation is usually under two hours, occasionally up to 24. Cloudflare
+emails you when the zone goes active — do not start step 5 before it does.
+
+Check progress yourself:
+
+```bash
+dig +short NS hornetdrones.com
+# expect the two *.ns.cloudflare.com names, nothing from 123-reg
+```
+
+### Then, in Cloudflare
+
+**SSL/TLS → Overview** → set **Full (strict)**.
+**SSL/TLS → Edge Certificates** → turn on **Always Use HTTPS**.
+
+That gives you forced HTTPS, a free certificate, and the ability to serve the
+`_headers` file — three items off the launch checklist.
 
 Then under **SSL/TLS → Overview** set the mode to **Full (strict)**, and under
 **Edge Certificates** turn on **Always Use HTTPS**.
@@ -149,6 +197,46 @@ Cloudflare:
 
 That covers three more checklist items. Then create an API key in Resend for
 `RESEND_API_KEY`.
+
+### One SPF record, not two
+
+A domain may publish **exactly one** SPF TXT record. Two is not "both apply" —
+it is a permanent error, and receivers may then fail everything you send.
+
+If you end up needing more than one sender, merge the includes into a single
+record rather than adding a second:
+
+```
+v=spf1 include:_spf.mx.cloudflare.net include:amazonses.com ~all
+```
+
+Use whatever `include:` Resend's dashboard actually shows you — if it puts its
+records on a subdomain such as `send.hornetdrones.com`, there is no conflict
+with the apex at all and you can leave the apex SPF alone.
+
+### Receiving mail — Cloudflare Email Routing
+
+Resend **sends**; it does not receive. But the site publishes addresses that
+have to work:
+
+- `privacy@hornetdrones.com` — named in the privacy notice, and a UK GDPR
+  subject-access request sent there must reach you.
+- `dmarc@hornetdrones.com` — where DMARC reports land.
+- Replies to `alpha@hornetdrones.com`, because people reply to everything.
+
+Cloudflare **Email Routing** does this free, and it forwards to any inbox you
+already have:
+
+Dashboard → your domain → **Email** → **Email Routing** → **Get started**
+
+Add a custom address for each of the three above, pointing at your real
+mailbox. Cloudflare adds the MX records for you.
+
+> If you bought a 123-reg mailbox with the domain, switching nameservers in
+> step 1 **breaks it**, because the MX records live at 123-reg and Cloudflare
+> will not know about them. Either copy those MX records into Cloudflare DNS
+> by hand, or drop the 123-reg mailbox and use Email Routing instead. Decide
+> before you switch, not after the first bounce.
 
 ---
 
