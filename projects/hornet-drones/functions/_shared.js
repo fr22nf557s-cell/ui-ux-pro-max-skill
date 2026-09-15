@@ -125,6 +125,51 @@ export async function verifyTurnstile(secret, responseToken, remoteIp) {
   }
 }
 
+/**
+ * Which Origins may POST to the API.
+ *
+ * The production host and its www variant, plus any *.pages.dev host: the
+ * very first deploy lives on <project>.pages.dev before custom domains are
+ * attached, and every preview deploy lives there permanently. Rejecting those
+ * makes the form fail at precisely the moment someone first tests it.
+ *
+ * This is defence in depth only. A cross-site POST still needs a valid
+ * Turnstile token, and those are bound to the site key's domain.
+ */
+export function originAllowed(origin, siteUrl) {
+  let o
+  try {
+    o = new URL(origin)
+  } catch {
+    return false
+  }
+  if (o.protocol !== 'https:' && o.hostname !== 'localhost') return false
+  if (o.hostname.endsWith('.pages.dev')) return true
+  if (!siteUrl) return true // unset in local dev; nothing to compare against
+  try {
+    const site = new URL(siteUrl).hostname
+    return o.hostname === site || o.hostname === `www.${site}`
+  } catch {
+    return false
+  }
+}
+
+/**
+ * Delete signups that never confirmed.
+ *
+ * The privacy notice promises unconfirmed addresses are removed after 30 days.
+ * This is what makes that true. Runs on ~2% of signups so no cron is needed,
+ * and keys on consent_at rather than created_at: consent_at refreshes on every
+ * submit, so someone who re-signed up yesterday is never swept out because
+ * their original row happens to be old.
+ */
+export async function pruneUnconfirmed(db) {
+  if (Math.random() >= 0.02) return
+  await db
+    .prepare(`DELETE FROM waitlist WHERE confirmed_at IS NULL AND consent_at < datetime('now', '-30 days')`)
+    .run()
+}
+
 /** Escape untrusted values before they reach an HTML email or response body. */
 export function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c])

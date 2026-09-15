@@ -4,9 +4,11 @@
 # report-to are ignored in meta, and HSTS can only ever be a real header.
 
 /*
-  # Two years, subdomains included, preload-eligible. Only turn on preload once
-  # you are certain every subdomain can serve HTTPS — it is hard to undo.
-  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  # Two years, subdomains included. Deliberately NOT `preload`: that flag gets
+  # the domain baked into browser preload lists and is close to irreversible,
+  # so it belongs on a domain that has run HTTPS on every subdomain for a while,
+  # not on launch day. Add `; preload` later, once you are certain.
+  Strict-Transport-Security: max-age=63072000; includeSubDomains
 
   # Vite emits no inline script, so script-src needs no 'unsafe-inline'.
   # style-src does: Tailwind is a static file, but Framer Motion writes inline

@@ -1,4 +1,4 @@
-import { json, normaliseEmail, token, sha256, rateLimited, verifyTurnstile, sendMail, mailShell } from '../_shared.js'
+import { json, normaliseEmail, token, sha256, rateLimited, verifyTurnstile, sendMail, mailShell, originAllowed, pruneUnconfirmed } from '../_shared.js'
 
 /*
  * POST /api/waitlist — join the alpha waitlist.
@@ -27,8 +27,12 @@ export async function onRequestPost({ request, env }) {
 
   // ── 1. Same-origin. No CORS headers are ever sent, but a form POST from
   //    another site would still arrive, so Origin is checked explicitly.
+  //    Accepted: the production host, its www variant, and *.pages.dev —
+  //    the first deploy and every preview deploy live there, and rejecting
+  //    them means the form fails at exactly the moment it is first tested.
+  //    This is defence in depth; Turnstile is the real gate.
   const origin = request.headers.get('Origin')
-  if (origin && env.SITE_URL && origin !== env.SITE_URL) {
+  if (origin && !originAllowed(origin, env.SITE_URL)) {
     return json({ error: 'Bad origin.' }, 403)
   }
 
@@ -65,6 +69,9 @@ export async function onRequestPost({ request, env }) {
     return json({ error: 'Too many attempts. Try again later.' }, 429, { 'Retry-After': '3600' })
   }
 
+  // Keep the privacy notice true: unconfirmed rows do not live forever.
+  await pruneUnconfirmed(db)
+
   // ── 6. Turnstile. Last gate before any write.
   const ok = await verifyTurnstile(env.TURNSTILE_SECRET_KEY, payload.turnstileToken, ip)
   if (!ok) return json({ error: 'Verification failed. Please try again.', field: 'turnstile' }, 400)
@@ -77,8 +84,8 @@ export async function onRequestPost({ request, env }) {
 
   // ON CONFLICT rather than SELECT-then-INSERT: the UNIQUE index decides,
   // so two simultaneous submits cannot both create a row. On a repeat signup
-  // we issue a fresh confirm token (the old link may have expired) but leave
-  // created_at, consent and the first-touch UTMs untouched.
+  // we issue a fresh confirm token (the old link may have expired), record
+  // the new consent act, and leave created_at and the first-touch UTMs alone.
   const row = await db
     .prepare(
       `INSERT INTO waitlist
@@ -90,7 +97,10 @@ export async function onRequestPost({ request, env }) {
                                 THEN ?2 ELSE waitlist.confirm_token END,
          confirmed_at    = CASE WHEN waitlist.unsubscribed_at IS NOT NULL
                                 THEN NULL ELSE waitlist.confirmed_at END,
-         unsubscribed_at = NULL
+         unsubscribed_at = NULL,
+         -- A repeat submit is a fresh consent event; the record must say so.
+         consent_text    = ?4,
+         consent_at      = datetime('now')
        RETURNING id, confirm_token, unsub_token, confirmed_at`,
     )
     .bind(
@@ -117,7 +127,7 @@ export async function onRequestPost({ request, env }) {
   const confirmUrl = `${env.SITE_URL}/api/confirm?token=${row.confirm_token}`
   const unsubUrl = `${env.SITE_URL}/api/unsubscribe?token=${row.unsub_token}`
 
-  await sendMail(env, {
+  const sent = await sendMail(env, {
     to: email,
     subject: 'Confirm your Hornet Drones alpha place',
     listUnsubscribe: unsubUrl,
@@ -129,6 +139,16 @@ export async function onRequestPost({ request, env }) {
       { href: confirmUrl, label: 'Confirm my place' },
     ),
   })
+
+  if (!sent) {
+    // The row is saved; only the email failed. A retry re-issues the token
+    // and sends again, so this is recoverable by the user, not just by ops.
+    return json(
+      { error: "Your address is saved, but we couldn't send the confirmation email. Please try again in a minute." },
+      502,
+      { 'Retry-After': '60' },
+    )
+  }
 
   // Identical response whether new, unconfirmed-repeat, or already-confirmed.
   return json({ ok: true })
