@@ -21,9 +21,9 @@ export default function DroneSVG({ reduce = false }) {
           <stop offset="100%" stopColor="#0E1015" />
         </linearGradient>
         <radialGradient id="lens">
-          <stop offset="0%" stopColor="#FCD34D" />
-          <stop offset="70%" stopColor="#F59E0B" />
-          <stop offset="100%" stopColor="#F59E0B" stopOpacity="0" />
+          <stop offset="0%" stopColor="#FFFFFF" />
+          <stop offset="70%" stopColor="#D6DCE6" />
+          <stop offset="100%" stopColor="#D6DCE6" stopOpacity="0" />
         </radialGradient>
         <filter id="bloom" x="-60%" y="-60%" width="220%" height="220%">
           <feGaussianBlur stdDeviation="6" result="b" />
@@ -36,7 +36,7 @@ export default function DroneSVG({ reduce = false }) {
 
       {/* Ground scan rings — staggered so one is always expanding */}
       {[0, 1.6].map((delay) => (
-        <ellipse key={delay} cx="260" cy="300" rx="40" ry="12" fill="none" stroke="#F59E0B" strokeWidth="1.5">
+        <ellipse key={delay} cx="260" cy="300" rx="40" ry="12" fill="none" stroke="#FFFFFF" strokeWidth="1.5">
           <animate attributeName="rx" values="30;170" dur={dur('3.2s')} begin={`${delay}s`} repeatCount="indefinite" />
           <animate attributeName="ry" values="9;50" dur={dur('3.2s')} begin={`${delay}s`} repeatCount="indefinite" />
           <animate attributeName="opacity" values="0.55;0" dur={dur('3.2s')} begin={`${delay}s`} repeatCount="indefinite" />
@@ -89,7 +89,7 @@ export default function DroneSVG({ reduce = false }) {
               )}
             </g>
             <circle r="7" fill="url(#hull)" stroke="#2A2F3C" />
-            <circle r="3" fill="#F59E0B" opacity="0.9">
+            <circle r="3" fill="#FFFFFF" opacity="0.9">
               {!reduce && <animate attributeName="opacity" values="0.35;1;0.35" dur="2.2s" repeatCount="indefinite" />}
             </circle>
           </g>
@@ -98,7 +98,7 @@ export default function DroneSVG({ reduce = false }) {
         {/* Fuselage */}
         <rect x="200" y="162" width="120" height="42" rx="12" fill="url(#hull)" stroke="#2A2F3C" />
         <rect x="216" y="150" width="88" height="20" rx="8" fill="#1C202A" stroke="#2A2F3C" />
-        <rect x="232" y="156" width="56" height="3" rx="1.5" fill="#F59E0B" />
+        <rect x="232" y="156" width="56" height="3" rx="1.5" fill="#FFFFFF" />
 
         {/* Sensor gimbal + lens bloom */}
         <circle cx="260" cy="212" r="18" fill="#0C0E13" stroke="#2A2F3C" />

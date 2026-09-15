@@ -16,14 +16,14 @@ const FEED_MODES = {
   optical: {
     label: 'Optical',
     // Cool moonlit CCTV grade
-    background: 'linear-gradient(170deg,#1B2130 0%,#0C0E13 60%,#05060A 100%)',
-    blob: 'rgba(159,196,255,0.30)',
+    background: 'linear-gradient(170deg,#191D26 0%,#0C0E13 60%,#05060A 100%)',
+    blob: 'rgba(168,184,208,0.26)',
   },
   thermal: {
     label: 'Thermal',
     // LWIR palette: black -> amber -> white-hot
-    background: 'linear-gradient(170deg,#2A1405 0%,#120A02 55%,#05060A 100%)',
-    blob: 'rgba(245,158,11,0.62)',
+    background: 'linear-gradient(170deg,#2E323A 0%,#121419 55%,#05060A 100%)',
+    blob: 'rgba(255,255,255,0.78)',
   },
 }
 
@@ -81,7 +81,7 @@ export default function Dashboard() {
   return (
     <section id="command" className="relative overflow-hidden py-28 sm:py-36">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-1/3 h-[38vh] w-[70vw] -translate-x-1/2 rounded-[50%] bg-tactical/[0.09] blur-[120px]" />
+        <div className="absolute left-1/2 top-1/3 h-[38vh] w-[70vw] -translate-x-1/2 rounded-[50%] bg-white/[0.045] blur-[120px]" />
       </div>
 
       <div className="relative mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-16 px-5 sm:px-8 lg:grid-cols-12 lg:px-12">
@@ -108,7 +108,7 @@ export default function Dashboard() {
             {['Sub-second live link over local mesh', 'Geofence editing with drag handles', 'Full event history, stored on-premise'].map(
               (line) => (
                 <li key={line} className="flex items-start gap-3 text-sm text-white/55">
-                  <span className="mt-[7px] h-1 w-1 flex-none rounded-full bg-tactical" aria-hidden="true" />
+                  <span className="mt-[7px] h-1 w-1 flex-none rounded-full bg-white/70" aria-hidden="true" />
                   {line}
                 </li>
               ),
@@ -137,7 +137,7 @@ export default function Dashboard() {
                 <div className="flex items-center gap-2">
                   <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
                   <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-tactical/70" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-white/70" />
                   <span className="ml-3 font-mono text-[10px] uppercase tracking-wide2 text-white/40">
                     Hornet Command · HRN-01
                   </span>
@@ -161,13 +161,13 @@ export default function Dashboard() {
                     {[1, 0.7, 0.42, 0.16].map((s) => (
                       <span
                         key={s}
-                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-tactical/20"
+                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/20"
                         style={{ width: `${s * 100}%`, height: `${s * 100}%` }}
                       />
                     ))}
                     {/* Crosshair */}
-                    <span className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-tactical/12" />
-                    <span className="absolute left-0 top-1/2 h-px w-full -translate-y-1/2 bg-tactical/12" />
+                    <span className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-white/[0.10]" />
+                    <span className="absolute left-0 top-1/2 h-px w-full -translate-y-1/2 bg-white/[0.10]" />
 
                     {/* Sweep: a rotating conic gradient is one composited layer,
                         far cheaper than redrawing a canvas every frame. */}
@@ -175,13 +175,13 @@ export default function Dashboard() {
                       className="absolute inset-0 rounded-full animate-sweep"
                       style={{
                         background:
-                          'conic-gradient(from 0deg, rgba(245,158,11,0) 0deg, rgba(245,158,11,0) 300deg, rgba(245,158,11,0.32) 352deg, rgba(245,158,11,0.75) 360deg)',
+                          'conic-gradient(from 0deg, rgba(255,255,255,0) 0deg, rgba(255,255,255,0) 300deg, rgba(255,255,255,0.22) 352deg, rgba(255,255,255,0.6) 360deg)',
                         maskImage: 'radial-gradient(circle, #000 68%, transparent 69%)',
                         WebkitMaskImage: 'radial-gradient(circle, #000 68%, transparent 69%)',
                       }}
                     />
                     {/* Expanding geofence pulse */}
-                    <span className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 rounded-full border border-tactical/50 animate-ping" />
+                    <span className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/50 animate-ping" />
 
                     {/* Contacts. The breach blip carries the amber alert colour. */}
                     {[
@@ -193,7 +193,7 @@ export default function Dashboard() {
                         key={b.x + b.y}
                         title={b.label}
                         className={`absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full ${
-                          b.alert ? 'bg-tactical shadow-glow animate-breathe' : 'bg-white/45'
+                          b.alert ? 'bg-white shadow-glow animate-breathe' : 'bg-white/35'
                         }`}
                         style={{ left: b.x, top: b.y }}
                       />
@@ -205,7 +205,7 @@ export default function Dashboard() {
                   {/* The empty space below the scope is deliberate: it is where
                       the companion phone panel floats on large screens. */}
                   <div className="mt-auto flex items-center justify-end pt-6 font-mono text-[10px]">
-                    <span className="text-tactical">3 CONTACTS</span>
+                    <span className="text-white">3 CONTACTS</span>
                   </div>
                 </div>
 
@@ -231,8 +231,8 @@ export default function Dashboard() {
                         style={{ background: feed.blob }}
                       />
                       {/* Tracking box */}
-                      <span className="absolute left-[22%] top-[27%] h-[44%] w-[17%] border border-tactical/80">
-                        <span className="absolute -top-5 left-0 whitespace-nowrap bg-tactical px-1.5 py-0.5 font-mono text-[9px] font-bold text-void">
+                      <span className="absolute left-[22%] top-[27%] h-[44%] w-[17%] border border-white/80">
+                        <span className="absolute -top-5 left-0 whitespace-nowrap bg-white px-1.5 py-0.5 font-mono text-[9px] font-bold text-void">
                           HUMAN 98%
                         </span>
                       </span>
@@ -270,7 +270,7 @@ export default function Dashboard() {
                             <motion.span
                               layoutId="feed-pill"
                               transition={{ duration: reduce ? 0.001 : DURATION.ui, ease: EASE }}
-                              className="absolute inset-0 rounded-lg bg-tactical"
+                              className="absolute inset-0 rounded-lg bg-white"
                             />
                           )}
                           <span className="relative">{m.label}</span>
@@ -303,7 +303,7 @@ export default function Dashboard() {
                         <span className="text-white/30">{e.t}</span>
                         <span
                           className={`h-1 w-1 flex-none rounded-full ${
-                            e.tone === 'alert' ? 'bg-tactical' : e.tone === 'ok' ? 'bg-emerald-400' : 'bg-white/25'
+                            e.tone === 'alert' ? 'bg-white' : e.tone === 'ok' ? 'bg-white/45' : 'bg-white/20'
                           }`}
                         />
                         <span className={e.tone === 'alert' ? 'text-white' : 'text-white/45'}>{e.text}</span>
@@ -318,8 +318,8 @@ export default function Dashboard() {
                     aria-live="polite"
                     className={`relative w-full overflow-hidden rounded-xl px-6 py-4 font-mono text-[12px] font-bold uppercase tracking-wide2 transition-colors duration-200 ${
                       trigger === 'idle'
-                        ? 'bg-tactical text-void hover:bg-tactical-300'
-                        : 'bg-tactical-600 text-void'
+                        ? 'bg-white text-void hover:bg-white/90'
+                        : 'bg-white/70 text-void'
                     }`}
                   >
                     {/* Arming progress bar sweeps left→right beneath the label */}
@@ -366,12 +366,12 @@ export default function Dashboard() {
             >
               <div className="rounded-[1.2rem] bg-void/80 p-3">
                 <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-white/20" />
-                <p className="font-mono text-[9px] uppercase tracking-wide2 text-tactical">Alert · South gate</p>
+                <p className="font-mono text-[9px] uppercase tracking-wide2 text-white">Alert · South gate</p>
                 <p className="mt-2 text-xs leading-snug text-white/70">
                   Unrecognised person detected. Drone is on station.
                 </p>
                 <div className="mt-3 grid grid-cols-2 gap-1.5">
-                  <span className="rounded-md bg-tactical px-2 py-1.5 text-center font-mono text-[9px] font-bold uppercase text-void">
+                  <span className="rounded-md bg-white px-2 py-1.5 text-center font-mono text-[9px] font-bold uppercase text-void">
                     Deter
                   </span>
                   <span className="rounded-md border border-white/15 px-2 py-1.5 text-center font-mono text-[9px] uppercase text-white/70">

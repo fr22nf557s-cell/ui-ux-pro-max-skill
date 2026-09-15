@@ -48,13 +48,13 @@ export default function FooterCTA() {
       {/* Amber horizon glow rising from the bottom edge */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-40 left-1/2 h-[60vh] w-[110vw] -translate-x-1/2 rounded-[50%] bg-tactical/[0.11] blur-[130px]"
+        className="pointer-events-none absolute -bottom-40 left-1/2 h-[60vh] w-[110vw] -translate-x-1/2 rounded-[50%] bg-white/[0.05] blur-[130px]"
       />
 
       <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
         <motion.div variants={stagger(reduce)} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
           <motion.div variants={revealUp(reduce)} className="flex items-center gap-3">
-            <span className="h-px w-8 bg-tactical/60" aria-hidden="true" />
+            <span className="h-px w-8 bg-white/45" aria-hidden="true" />
             <span className="eyebrow">05 / Alpha access</span>
           </motion.div>
 
@@ -65,7 +65,7 @@ export default function FooterCTA() {
           >
             Your Perimeter,
             <br />
-            <span className="text-tactical">Reimagined.</span>
+            <span className="text-silver">Reimagined.</span>
           </motion.h2>
 
           <motion.p variants={revealUp(reduce)} className="mt-8 max-w-xl text-[17px] leading-relaxed text-white/55">
@@ -83,14 +83,14 @@ export default function FooterCTA() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: DURATION.ui, ease: EASE }}
-                  className="flex items-center gap-4 rounded-full border border-tactical/50 bg-tactical/[0.08] px-6 py-4"
+                  className="flex items-center gap-4 rounded-full border border-white/50 bg-white/[0.08] px-6 py-4"
                 >
-                  <span className="grid h-7 w-7 flex-none place-items-center rounded-full bg-tactical text-void">
+                  <span className="grid h-7 w-7 flex-none place-items-center rounded-full bg-white text-void">
                     <svg width="13" height="13" viewBox="0 0 14 14" aria-hidden="true">
                       <path d="M2 7.5l3.5 3.5L12 3.5" fill="none" stroke="currentColor" strokeWidth="2" />
                     </svg>
                   </span>
-                  <p className="font-mono text-[12px] uppercase tracking-wide2 text-tactical">
+                  <p className="font-mono text-[12px] uppercase tracking-wide2 text-white">
                     You're on the list — dossier inbound.
                   </p>
                 </motion.div>
@@ -134,7 +134,7 @@ export default function FooterCTA() {
                     whileHover={reduce ? undefined : { y: -2 }}
                     whileTap={reduce ? undefined : { y: 0, scale: 0.985 }}
                     transition={{ duration: DURATION.micro, ease: EASE }}
-                    className="h-14 flex-none rounded-full bg-tactical px-8 font-mono text-[12px] font-bold uppercase tracking-wide2 text-void shadow-glow transition-colors duration-200 hover:bg-tactical-300 disabled:opacity-60"
+                    className="h-14 flex-none rounded-full bg-white px-8 font-mono text-[12px] font-bold uppercase tracking-wide2 text-void shadow-glow transition-colors duration-200 hover:bg-white/90 disabled:opacity-60"
                   >
                     {status === 'pending' ? 'Securing…' : 'Join Alpha'}
                   </motion.button>
@@ -175,11 +175,11 @@ export default function FooterCTA() {
 
           {FOOTER_LINKS.map((col) => (
             <nav key={col.title} aria-label={col.title}>
-              <h3 className="font-mono text-[10px] uppercase tracking-tactical text-white/35">{col.title}</h3>
+              <h3 className="font-mono text-[10px] uppercase tracking-label text-white/35">{col.title}</h3>
               <ul className="mt-5 space-y-3">
                 {col.links.map((l) => (
                   <li key={l}>
-                    <a href="#top" className="text-sm text-white/55 transition-colors duration-200 hover:text-tactical">
+                    <a href="#top" className="text-sm text-white/55 transition-colors duration-200 hover:text-white">
                       {l}
                     </a>
                   </li>

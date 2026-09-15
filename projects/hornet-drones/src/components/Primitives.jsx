@@ -5,7 +5,7 @@ import { EASE, DURATION, VIEWPORT, revealUp } from '../lib/motion'
 export function SectionLabel({ index, children, className = '' }) {
   return (
     <div className={`flex items-center gap-3 ${className}`}>
-      <span className="h-px w-8 bg-tactical/60" aria-hidden="true" />
+      <span className="h-px w-8 bg-white/45" aria-hidden="true" />
       <span className="eyebrow">
         {index ? `${index} / ` : ''}
         {children}
@@ -44,7 +44,7 @@ export function GlowButton({ children, className = '', ...props }) {
       whileHover={reduce ? undefined : { y: -2 }}
       whileTap={reduce ? undefined : { y: 0, scale: 0.985 }}
       transition={{ duration: DURATION.micro, ease: EASE }}
-      className={`group relative isolate overflow-hidden rounded-full border border-tactical/70 bg-tactical/[0.07] px-8 py-4 font-mono text-[12px] uppercase tracking-wide2 text-tactical shadow-glow transition-colors duration-200 hover:bg-tactical hover:text-void ${className}`}
+      className={`group relative isolate overflow-hidden rounded-full border border-white/70 bg-white/[0.07] px-8 py-4 font-mono text-[12px] uppercase tracking-wide2 text-white shadow-glow transition-colors duration-200 hover:bg-white hover:text-void ${className}`}
       {...props}
     >
       {/* Sweeping highlight that crosses the button on hover */}
@@ -75,8 +75,8 @@ export function GlassButton({ children, className = '', ...props }) {
 }
 
 /** Live status dot: solid core + expanding halo. */
-export function StatusDot({ tone = 'tactical' }) {
-  const color = tone === 'tactical' ? 'bg-tactical' : 'bg-emerald-400'
+export function StatusDot({ tone = 'signal' }) {
+  const color = tone === 'signal' ? 'bg-white' : 'bg-white/55'
   return (
     <span className="relative flex h-2 w-2" aria-hidden="true">
       <span className={`absolute inline-flex h-full w-full rounded-full ${color} opacity-60 animate-ping`} />

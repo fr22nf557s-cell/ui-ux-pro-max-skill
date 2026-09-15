@@ -112,7 +112,7 @@ function Layer({ part, index, progress, active }) {
       style={{ z, x: spread }}
       className={`absolute inset-0 rounded-2xl border transition-colors duration-300 ${
         active
-          ? 'border-tactical/70 bg-tactical/[0.08] shadow-[0_0_40px_-8px_rgba(245,158,11,0.55)]'
+          ? 'border-white/60 bg-white/[0.07] shadow-[0_0_40px_-10px_rgba(255,255,255,0.28)]'
           : 'border-white/12 bg-steel-900/80'
       }`}
     >
@@ -121,14 +121,14 @@ function Layer({ part, index, progress, active }) {
         <div className="absolute inset-0 bg-grid [background-size:22px_22px] opacity-40" />
         <div
           className={`absolute inset-0 transition-opacity duration-300 ${active ? 'opacity-100' : 'opacity-0'}`}
-          style={{ background: 'linear-gradient(120deg, transparent 35%, rgba(245,158,11,0.16) 50%, transparent 65%)' }}
+          style={{ background: 'linear-gradient(120deg, transparent 35%, rgba(255,255,255,0.14) 50%, transparent 65%)' }}
         />
       </div>
 
       {/* Schematic glyph, centred and laid flat on the slab */}
       <div
         className={`absolute inset-0 grid place-items-center transition-colors duration-300 ${
-          active ? 'text-tactical/80' : 'text-white/12'
+          active ? 'text-white/85' : 'text-white/12'
         }`}
       >
         <Glyph kind={part.glyph} />
@@ -136,8 +136,8 @@ function Layer({ part, index, progress, active }) {
 
       {/* Corner pins + part code, laid flat on the slab */}
       <span className="absolute left-4 top-3 font-mono text-[10px] tracking-wide2 text-white/45">{part.code}</span>
-      <span className={`absolute right-4 top-3 h-1.5 w-1.5 rounded-full ${active ? 'bg-tactical' : 'bg-white/20'}`} />
-      <span className="absolute bottom-3 left-4 font-mono text-[9px] uppercase tracking-tactical text-white/25">
+      <span className={`absolute right-4 top-3 h-1.5 w-1.5 rounded-full ${active ? 'bg-white' : 'bg-white/20'}`} />
+      <span className="absolute bottom-3 left-4 font-mono text-[9px] uppercase tracking-label text-white/25">
         {String(index + 1).padStart(2, '0')}
       </span>
     </motion.div>
@@ -150,7 +150,7 @@ function StaticBreakdown() {
     <ol className="grid gap-4 sm:grid-cols-2">
       {PARTS.map((p, i) => (
         <li key={p.id} className="rounded-2xl border border-white/12 bg-steel-900/70 p-6">
-          <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-wide2 text-tactical">
+          <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-wide2 text-silver">
             <span>{String(i + 1).padStart(2, '0')}</span>
             <span className="text-white/35">{p.code}</span>
           </div>
@@ -226,12 +226,12 @@ export default function ExplodedView() {
                       <motion.span
                         layoutId="step-marker"
                         transition={{ duration: DURATION.ui, ease: EASE }}
-                        className="absolute inset-y-2 left-0 w-0.5 rounded-full bg-tactical"
+                        className="absolute inset-y-2 left-0 w-0.5 rounded-full bg-white"
                       />
                     )}
                     <span
                       className={`mt-0.5 font-mono text-[11px] transition-colors duration-300 ${
-                        i === active ? 'text-tactical' : 'text-white/25'
+                        i === active ? 'text-white' : 'text-white/25'
                       }`}
                     >
                       {String(i + 1).padStart(2, '0')}
@@ -260,7 +260,7 @@ export default function ExplodedView() {
                               {p.specs.map((s) => (
                                 <li
                                   key={s}
-                                  className="rounded-full border border-tactical/25 bg-tactical/5 px-3 py-1 font-mono text-[10px] text-tactical/90"
+                                  className="rounded-full border border-white/25 bg-white/[0.06] px-3 py-1 font-mono text-[10px] text-white/80"
                                 >
                                   {s}
                                 </li>
@@ -285,7 +285,7 @@ export default function ExplodedView() {
                   exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.3, ease: EASE }}
                 >
-                  <span className="font-mono text-[11px] text-tactical">
+                  <span className="font-mono text-[11px] text-white">
                     {String(active + 1).padStart(2, '0')} / {String(PARTS.length).padStart(2, '0')}
                   </span>
                   <h3 className="mt-2 font-display text-lg font-semibold leading-snug">{PARTS[active].name}</h3>
@@ -298,7 +298,7 @@ export default function ExplodedView() {
                   <span
                     key={p.id}
                     className={`h-0.5 flex-1 rounded-full transition-colors duration-300 ${
-                      i <= active ? 'bg-tactical' : 'bg-white/12'
+                      i <= active ? 'bg-white' : 'bg-white/12'
                     }`}
                   />
                 ))}
@@ -327,7 +327,7 @@ export default function ExplodedView() {
               {/* Amber ground glow under the stack */}
               <div
                 aria-hidden="true"
-                className="absolute left-1/2 top-[68%] h-40 w-[70%] -translate-x-1/2 rounded-[50%] bg-tactical/15 blur-3xl"
+                className="absolute left-1/2 top-[68%] h-40 w-[70%] -translate-x-1/2 rounded-[50%] bg-white/[0.07] blur-3xl"
               />
             </div>
           </div>

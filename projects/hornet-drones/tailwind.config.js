@@ -4,23 +4,21 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Brand core — dark charcoal ground, pure black wells, tactical amber, crisp white.
-        ink: '#0B0C10',
+        // Monochrome system. Hierarchy comes from luminance, never hue:
+        // black grounds, charcoal surfaces, and white as the single accent.
         void: '#000000',
+        ink: '#0B0C10',
+        carbon: '#16181D',
         steel: {
-          900: '#0E1015',
-          800: '#14171F',
-          700: '#1C202A',
-          600: '#2A2F3C',
-          500: '#3B4250',
+          900: '#16181D',
+          800: '#1C1F26',
+          700: '#262A33',
+          600: '#333843',
+          500: '#454B58',
         },
-        tactical: {
-          DEFAULT: '#F59E0B',
-          300: '#FCD34D',
-          400: '#FBBF24',
-          500: '#F59E0B',
-          600: '#D97706',
-        },
+        signal: '#FFFFFF', // accent: CTAs, active state, live indicators
+        silver: '#A8ADB8', // secondary: technical labels, eyebrows, sub-heads
+        slate: '#6B7280', // tertiary: muted detail
       },
       fontFamily: {
         // Space Grotesk = geometric/technical display. Inter = UI + body.
@@ -33,7 +31,7 @@ export default {
       },
       letterSpacing: {
         // Generous tracking is the signature of the section eyebrows / labels.
-        tactical: '0.28em',
+        label: '0.28em',
         wide2: '0.16em',
       },
       fontSize: {
@@ -44,8 +42,8 @@ export default {
       },
       boxShadow: {
         // The amber "glow" is two stacked shadows: a tight core + a wide bloom.
-        glow: '0 0 0 1px rgba(245,158,11,0.55), 0 0 22px -4px rgba(245,158,11,0.55), 0 0 60px -20px rgba(245,158,11,0.45)',
-        'glow-lg': '0 0 0 1px rgba(245,158,11,0.75), 0 0 34px -2px rgba(245,158,11,0.7), 0 0 90px -20px rgba(245,158,11,0.55)',
+        glow: '0 0 0 1px rgba(255,255,255,0.42), 0 0 22px -6px rgba(255,255,255,0.30), 0 0 60px -22px rgba(255,255,255,0.20)',
+        'glow-lg': '0 0 0 1px rgba(255,255,255,0.68), 0 0 34px -4px rgba(255,255,255,0.42), 0 0 90px -22px rgba(255,255,255,0.26)',
         panel: '0 30px 80px -30px rgba(0,0,0,0.95), inset 0 1px 0 0 rgba(255,255,255,0.06)',
       },
       backgroundImage: {

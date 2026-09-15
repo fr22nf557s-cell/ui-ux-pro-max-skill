@@ -70,7 +70,7 @@ export default function Logo({ variant = 'inline', className = '' }) {
   if (variant === 'stacked') {
     return (
       <div className={`flex flex-col items-start ${className}`}>
-        <HornetMark size={64} className="text-tactical" />
+        <HornetMark size={64} className="text-white" />
         <span className="mt-3 font-brand text-3xl font-bold italic leading-none tracking-[-0.01em] text-white">
           HORNET
         </span>
@@ -86,7 +86,7 @@ export default function Logo({ variant = 'inline', className = '' }) {
 
   return (
     <span className={`flex items-center gap-2.5 ${className}`}>
-      <HornetMark size={30} className="text-tactical" />
+      <HornetMark size={30} className="text-white" />
       <span className="font-brand text-[17px] font-bold italic leading-none tracking-[-0.01em] text-white">
         HORNET
       </span>

@@ -9,7 +9,8 @@
        (canvas, SVG gradients, inline styles) stay on-brand. */
     --ink: #0b0c10;
     --void: #000000;
-    --tactical: #f59e0b;
+    --signal: #ffffff;
+    --silver: #a8adb8;
     --white: #ffffff;
     --hairline: rgba(255, 255, 255, 0.08);
   }
@@ -42,13 +43,13 @@
 
   /* One visible, high-contrast focus ring for the whole site. */
   :where(a, button, input, [tabindex]):focus-visible {
-    outline: 2px solid var(--tactical);
+    outline: 2px solid var(--signal);
     outline-offset: 3px;
     border-radius: 4px;
   }
 
   ::selection {
-    background: var(--tactical);
+    background: var(--signal);
     color: var(--void);
   }
 }
@@ -56,7 +57,7 @@
 @layer components {
   /* Eyebrow label: mono, uppercase, heavy tracking — the "instrument panel" voice. */
   .eyebrow {
-    @apply font-mono text-[11px] uppercase tracking-tactical text-tactical;
+    @apply font-mono text-[11px] uppercase tracking-label text-silver;
   }
 
   /* Glassmorphism surface used by the secondary CTA and the dashboard chrome. */

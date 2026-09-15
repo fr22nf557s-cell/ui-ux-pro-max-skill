@@ -52,10 +52,10 @@ function Spec({ spec, index }) {
       {/* Amber rule wipes across the cell top on hover (scaleX only) */}
       <span
         aria-hidden="true"
-        className="absolute left-0 top-0 h-px w-full origin-left scale-x-0 bg-tactical transition-transform duration-500 ease-out group-hover:scale-x-100 motion-reduce:transition-none md:left-auto md:top-0 md:h-full md:w-px md:origin-top md:scale-y-0 md:group-hover:scale-y-100"
+        className="absolute left-0 top-0 h-px w-full origin-left scale-x-0 bg-white transition-transform duration-500 ease-out group-hover:scale-x-100 motion-reduce:transition-none md:left-auto md:top-0 md:h-full md:w-px md:origin-top md:scale-y-0 md:group-hover:scale-y-100"
       />
 
-      <p className="font-mono text-[10px] uppercase tracking-tactical text-tactical">
+      <p className="font-mono text-[10px] uppercase tracking-label text-silver">
         {String(index + 1).padStart(2, '0')}
       </p>
 

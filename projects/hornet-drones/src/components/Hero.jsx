@@ -1,19 +1,14 @@
-import { Suspense, lazy, useRef } from 'react'
+import { useRef } from 'react'
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { EASE, DURATION, stagger, revealUp } from '../lib/motion'
-import { supportsWebGL } from '../lib/webgl'
 import { GlowButton, GlassButton, StatusDot } from './Primitives'
-import DroneSVG from './DroneSVG'
-
-// three.js only downloads if/when the hero actually mounts the 3D branch.
-const DroneScene = lazy(() => import('./DroneScene'))
+import HeroFlight from './HeroFlight'
 
 const HEADLINE = ['Autonomous Aerial', 'Protection.', 'Unseen. Unmatched.']
 
 export default function Hero() {
   const reduce = useReducedMotion()
   const sectionRef = useRef(null)
-  const canUse3D = supportsWebGL()
 
   // Scroll-linked hero exit. Mapping the section's own progress (0 -> 1 across
   // one viewport) means the copy drifts up and dims as the next section takes
@@ -41,7 +36,7 @@ export default function Hero() {
           style={{ maskImage: 'radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 78%)', WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 78%)' }}
         />
         {/* Amber floor bloom beneath the aircraft */}
-        <div className="absolute left-1/2 top-[58%] h-[46vh] w-[76vw] -translate-x-1/2 rounded-[50%] bg-tactical/[0.16] blur-[110px]" />
+        <div className="absolute left-1/2 top-[58%] h-[46vh] w-[76vw] -translate-x-1/2 rounded-[50%] bg-white/[0.055] blur-[110px]" />
         {/* Pure-black vignette anchors the section to the footer */}
         <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-void to-transparent" />
       </div>
@@ -57,7 +52,7 @@ export default function Hero() {
         >
           <motion.div variants={revealUp(reduce)} className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 backdrop-blur-md">
             <StatusDot />
-            <span className="font-mono text-[10px] uppercase tracking-tactical text-white/70">
+            <span className="font-mono text-[10px] uppercase tracking-label text-white/70">
               Alpha units shipping Q3
             </span>
           </motion.div>
@@ -76,7 +71,7 @@ export default function Hero() {
                 >
                   {i === 2 ? (
                     <>
-                      <span className="text-tactical">Unseen.</span> Unmatched.
+                      <span className="text-silver">Unseen.</span> Unmatched.
                     </>
                   ) : (
                     line
@@ -96,7 +91,7 @@ export default function Hero() {
               Reserve System
             </GlowButton>
             <GlassButton>
-              <span className="grid h-6 w-6 place-items-center rounded-full bg-white/10 transition-colors group-hover:bg-tactical group-hover:text-void">
+              <span className="grid h-6 w-6 place-items-center rounded-full bg-white/10 transition-colors group-hover:bg-white group-hover:text-void">
                 <svg width="8" height="9" viewBox="0 0 8 9" aria-hidden="true">
                   <path d="M0 0l8 4.5L0 9z" fill="currentColor" />
                 </svg>
@@ -130,15 +125,9 @@ export default function Hero() {
           transition={{ duration: 1.2, ease: EASE, delay: 0.25 }}
           className="gpu relative order-first h-[32vh] min-h-[240px] w-full lg:order-none lg:col-span-6 lg:h-[72vh]"
         >
-          {canUse3D ? (
-            // Suspense fallback is the SVG drone: the hero is never empty,
-            // even on the first paint before the three.js chunk lands.
-            <Suspense fallback={<DroneSVG reduce={reduce} />}>
-              <DroneScene reduce={Boolean(reduce)} />
-            </Suspense>
-          ) : (
-            <DroneSVG reduce={reduce} />
-          )}
+          {/* Real flight footage, playhead driven by this section's scroll
+              progress. Falls back to the WebGL drone, then to SVG. */}
+          <HeroFlight progress={scrollYProgress} className="h-full w-full" />
 
           {/* HUD corner brackets framing the aircraft */}
           <div aria-hidden="true" className="pointer-events-none absolute inset-6 hidden lg:block">
@@ -148,9 +137,9 @@ export default function Hero() {
               'left-0 bottom-0 border-l border-b',
               'right-0 bottom-0 border-r border-b',
             ].map((pos) => (
-              <span key={pos} className={`absolute h-6 w-6 border-tactical/40 ${pos}`} />
+              <span key={pos} className={`absolute h-6 w-6 border-white/40 ${pos}`} />
             ))}
-            <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 font-mono text-[9px] uppercase tracking-tactical text-white/25">
+            <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 font-mono text-[9px] uppercase tracking-label text-white/25">
               HRN-01 · Live telemetry
             </span>
           </div>
@@ -165,10 +154,10 @@ export default function Hero() {
         style={{ opacity: copyOpacity }}
         className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-3 lg:flex"
       >
-        <span className="font-mono text-[9px] uppercase tracking-tactical text-white/35">Scroll</span>
+        <span className="font-mono text-[9px] uppercase tracking-label text-white/35">Scroll</span>
         {/* The line "drains" downward on a loop: transform-origin trick, GPU only */}
         <span className="relative h-12 w-px overflow-hidden bg-white/10">
-          <span className="absolute inset-x-0 top-0 h-1/2 bg-tactical animate-scanline" />
+          <span className="absolute inset-x-0 top-0 h-1/2 bg-white animate-scanline" />
         </span>
       </motion.div>
     </section>

@@ -55,7 +55,7 @@ export default function Nav() {
               >
                 {l.label}
                 {/* Underline wipes in from the left on hover — scaleX only, no reflow */}
-                <span className="absolute -bottom-1.5 left-0 h-px w-full origin-left scale-x-0 bg-tactical transition-transform duration-300 ease-out group-hover:scale-x-100 motion-reduce:transition-none" />
+                <span className="absolute -bottom-1.5 left-0 h-px w-full origin-left scale-x-0 bg-white transition-transform duration-300 ease-out group-hover:scale-x-100 motion-reduce:transition-none" />
               </a>
             </li>
           ))}
@@ -64,7 +64,7 @@ export default function Nav() {
         <div className="flex items-center gap-4">
           <a
             href="#reserve"
-            className="hidden rounded-full border border-tactical/60 px-5 py-2.5 font-mono text-[11px] uppercase tracking-wide2 text-tactical transition-colors duration-200 hover:bg-tactical hover:text-void sm:inline-block"
+            className="hidden rounded-full border border-white/60 px-5 py-2.5 font-mono text-[11px] uppercase tracking-wide2 text-white transition-colors duration-200 hover:bg-white hover:text-void sm:inline-block"
           >
             Reserve
           </a>

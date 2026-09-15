@@ -29,7 +29,7 @@ const CARBON = '#0F1116' // arms, booms
 const METAL = '#6B727C' // anodised aluminium
 const RUBBER = '#0E1013'
 const GLASS = '#05070B'
-const AMBER = '#F59E0B'
+const SIGNAL = '#FFFFFF' // nav lights, lens ring, scan pulse
 
 // Motor hubs: X-configuration, front pair swept forward, rear pair wider.
 const MOTORS = [
@@ -172,10 +172,10 @@ function Rotor({ at, cw, spin }) {
         <torusGeometry args={[0.076, 0.009, 10, 32]} />
         <meshStandardMaterial color={CARBON} metalness={0.7} roughness={0.5} />
       </mesh>
-      {/* Amber nav light in the base — the only thing visible from the ground */}
+      {/* Nav light in the base — the only thing visible from the ground */}
       <mesh position={[0, -0.046, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <ringGeometry args={[0.042, 0.07, 28]} />
-        <meshBasicMaterial color={AMBER} transparent opacity={0.92} side={THREE.DoubleSide} toneMapped={false} />
+        <meshBasicMaterial color={SIGNAL} transparent opacity={0.8} side={THREE.DoubleSide} toneMapped={false} />
       </mesh>
 
       <group ref={rotor} position={[0, 0.095, 0]}>
@@ -230,10 +230,10 @@ function Gimbal() {
           <cylinderGeometry args={[0.055, 0.062, 0.075, 28]} />
           <meshStandardMaterial color={CARBON} metalness={0.75} roughness={0.35} />
         </mesh>
-        {/* Amber lens ring */}
+        {/* Lens ring */}
         <mesh position={[0.04, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
           <torusGeometry args={[0.049, 0.006, 8, 28]} />
-          <meshBasicMaterial color={AMBER} toneMapped={false} />
+          <meshBasicMaterial color={SIGNAL} toneMapped={false} />
         </mesh>
         {/* Front element: near-black glass with a hard clearcoat highlight */}
         <mesh position={[0.045, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
@@ -297,10 +297,10 @@ function Airframe({ reduce }) {
         <meshPhysicalMaterial color={CARBON} metalness={0.4} roughness={0.55} clearcoat={0.3} />
       </mesh>
 
-      {/* Amber status strip */}
+      {/* Status strip */}
       <mesh position={[0.12, 0.166, 0]}>
         <boxGeometry args={[0.34, 0.006, 0.026]} />
-        <meshBasicMaterial color={AMBER} toneMapped={false} />
+        <meshBasicMaterial color={SIGNAL} toneMapped={false} />
       </mesh>
 
       {/* Forward obstacle-avoidance sensors */}
@@ -314,7 +314,7 @@ function Airframe({ reduce }) {
       {/* Rear beacon */}
       <mesh position={[-0.67, 0.06, 0]}>
         <sphereGeometry args={[0.028, 16, 12]} />
-        <meshBasicMaterial color={AMBER} toneMapped={false} />
+        <meshBasicMaterial color={SIGNAL} toneMapped={false} />
       </mesh>
 
       <Gimbal />
@@ -361,13 +361,13 @@ function ScanPulse({ active }) {
     const t = (state.clock.elapsedTime % 3.4) / 3.4
     const s = 0.45 + t * 1.35
     ring.current.scale.set(s, s, s)
-    ring.current.material.opacity = 0.2 * (1 - t)
+    ring.current.material.opacity = 0.14 * (1 - t)
   })
 
   return (
     <mesh ref={ring} position={[0, -1.12, 0]} rotation={[-Math.PI / 2, 0, 0]}>
       <ringGeometry args={[0.93, 0.965, 96]} />
-      <meshBasicMaterial color={AMBER} transparent opacity={0.2} side={THREE.DoubleSide} toneMapped={false} />
+      <meshBasicMaterial color={SIGNAL} transparent opacity={0.14} side={THREE.DoubleSide} toneMapped={false} />
     </mesh>
   )
 }
@@ -407,8 +407,8 @@ export default function DroneScene({ reduce = false }) {
       />
       {/* Cold rim to separate the silhouette from the charcoal page */}
       <directionalLight position={[-3.4, 1.6, -4]} intensity={0.9} color="#9FC4FF" />
-      {/* Amber under-glow from the scan pulse below */}
-      <pointLight position={[-1.6, -1.5, 1.8]} intensity={9} distance={7} color={AMBER} />
+      {/* Cool under-fill from the scan pulse below */}
+      <pointLight position={[-1.6, -1.5, 1.8]} intensity={7} distance={7} color="#C8D2E2" />
 
       <Airframe reduce={reduce} />
       <ScanPulse active={!reduce} />
