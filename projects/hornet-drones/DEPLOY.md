@@ -134,7 +134,9 @@ curl -sI https://www.hornetdrones.com/privacy | grep -iE '^(HTTP|location)'
 All in the dashboard — no terminal, no `wrangler` install.
 
 1. Cloudflare → **Storage & Databases** → **D1** → **Create database**. Name it
-   exactly `hornet-waitlist`.
+   exactly `hornet-waitlist`. Under **Location**, pick **Western Europe (WEUR)**:
+   the privacy notice and the form's "data stays in-region" line both promise
+   the list lives in Europe, and the location hint is what makes that true.
 2. Open it → **Console** tab → paste the contents of `schema.sql` (comments and
    all; SQLite ignores them) → **Execute**.
 3. **Tables** tab should now list `waitlist` and `rate_limit`, both empty.
@@ -221,6 +223,8 @@ have to work:
 
 - `privacy@hornetdrones.com` — named in the privacy notice, and a UK GDPR
   subject-access request sent there must reach you.
+- `hello@hornetdrones.com` — the contact address on the About, Press, Careers,
+  Terms and Airspace pages, and the footer's Contact link.
 - `dmarc@hornetdrones.com` — where DMARC reports land.
 - Replies to `alpha@hornetdrones.com`, because people reply to everything.
 
@@ -229,7 +233,7 @@ already have:
 
 Dashboard → your domain → **Email** → **Email Routing** → **Get started**
 
-Add a custom address for each of the three above, pointing at your real
+Add a custom address for each of the four above, pointing at your real
 mailbox. Cloudflare adds the MX records for you.
 
 > If you bought a 123-reg mailbox with the domain, switching nameservers in
@@ -332,8 +336,12 @@ These are not code problems, so they are not done:
    figures or remove. The "VERIFIED" stamp asserts third-party validation and
    should go regardless.
 2. **"Alpha units shipping Q3"** is a delivery promise.
-3. **The privacy notice is a draft.** Every `[square bracket]` needs filling
-   and the whole document needs a solicitor's eye.
+3. **The privacy notice and terms are drafts.** Every `[square bracket]` needs
+   filling and both documents need a solicitor's eye. The About, Press,
+   Careers and Airspace pages each carry a ⚠ box saying what is still missing
+   (team and registration details, a real press kit, application retention,
+   the product's regulatory status). Remove each box only when its content is
+   real.
 4. **Company details.** If Hornet Drones Ltd is a registered company, UK law
    requires its number and registered office on the site.
 5. **Error tracking** is not wired up. Cloudflare's Workers logs cover the API;

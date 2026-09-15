@@ -244,17 +244,24 @@ export default function ExplodedView() {
                       >
                         {p.name}
                       </h3>
-                      {/* Body copy only exists for the active row: height+opacity
-                          animate together so the list re-flows smoothly. */}
-                      <AnimatePresence initial={false}>
-                        {i === active && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.4, ease: EASE }}
-                            className="overflow-hidden"
-                          >
+                      {/*
+                          Body copy collapses via grid-template-rows 0fr -> 1fr,
+                          not an animated `height: auto`. Framer has to measure
+                          an auto height, and its measurement pass ends with
+                          window.scrollTo(0, currentY) — which cancels any
+                          smooth scroll in progress. This section changes its
+                          active row *while* the page scrolls through it, so
+                          every "jump to Command/Specs" link was being cut short
+                          right here. The CSS transition needs no measurement.
+                      */}
+                      <div
+                        aria-hidden={i !== active}
+                        className={`grid transition-[grid-template-rows] duration-[400ms] ease-out ${
+                          i === active ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+                        }`}
+                      >
+                        <div className="min-h-0 overflow-hidden">
+                          <div className={`transition-opacity duration-300 ${i === active ? 'opacity-100' : 'opacity-0'}`}>
                             <p className="pt-2 text-sm leading-relaxed text-white/55">{p.copy}</p>
                             <ul className="flex flex-wrap gap-2 pt-3">
                               {p.specs.map((s) => (
@@ -266,9 +273,9 @@ export default function ExplodedView() {
                                 </li>
                               ))}
                             </ul>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </li>

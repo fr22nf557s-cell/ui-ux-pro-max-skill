@@ -122,13 +122,13 @@ export default function Hero() {
             <GlowButton onClick={() => document.querySelector('#reserve')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' })}>
               Reserve System
             </GlowButton>
-            <GlassButton>
+            <GlassButton onClick={() => document.querySelector('#command')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' })}>
+              Explore Command View
               <span className="grid h-6 w-6 place-items-center rounded-full bg-white/10 transition-colors group-hover:bg-white group-hover:text-void">
-                <svg width="8" height="9" viewBox="0 0 8 9" aria-hidden="true">
-                  <path d="M0 0l8 4.5L0 9z" fill="currentColor" />
+                <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+                  <path d="M2 5h6M5 2l3 3-3 3" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </span>
-              Watch Patrol Demo
             </GlassButton>
           </motion.div>
 

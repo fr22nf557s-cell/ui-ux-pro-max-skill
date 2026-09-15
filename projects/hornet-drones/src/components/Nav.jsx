@@ -88,14 +88,22 @@ export default function Nav() {
         </div>
       </nav>
 
-      {/* Mobile sheet: height animation is cheap here (few children, no images) */}
-      <motion.div
+      {/*
+        Mobile sheet. Opens/closes with a grid-template-rows transition rather
+        than an animated `height: auto`: Framer's auto-height measurement ends
+        with a window.scrollTo() that cancels the smooth scroll a tapped link
+        has just started, so the menu would close and the page would stop
+        moving. `inert` keeps the hidden links out of the tab order.
+      */}
+      <div
         id="mobile-nav"
-        initial={false}
-        animate={{ height: open ? 'auto' : 0, opacity: open ? 1 : 0 }}
-        transition={{ duration: reduce ? 0.001 : DURATION.ui, ease: EASE }}
-        className="overflow-hidden border-t border-white/5 bg-ink/95 backdrop-blur-xl md:hidden"
+        aria-hidden={!open}
+        inert={open ? undefined : ''}
+        className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out md:hidden ${
+          open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+        }`}
       >
+        <div className="min-h-0 overflow-hidden border-t border-white/5 bg-ink/95 backdrop-blur-xl">
         <ul className="space-y-1 px-5 py-4">
           {[...LINKS, { href: '#reserve', label: 'Reserve System' }].map((l) => (
             <li key={l.href}>
@@ -113,7 +121,8 @@ export default function Nav() {
           <StatusDot />
           All systems operational
         </div>
-      </motion.div>
+        </div>
+      </div>
     </motion.header>
   )
 }

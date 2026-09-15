@@ -35,16 +35,34 @@ const CONSENT_TEXT =
 // design; the secret half never leaves the server.
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
 
+// Every entry is a real destination: a section of this page, a page under
+// /public, or a mailbox that Email Routing forwards (see DEPLOY.md §4).
 const FOOTER_LINKS = [
-  { title: 'System', links: ['HRN-01 Drone', 'Charging Nest', 'Command App', 'Coverage Map'] },
-  { title: 'Company', links: ['About', 'Engineering', 'Press', 'Careers'] },
+  {
+    title: 'System',
+    links: [
+      { label: 'HRN-01 Drone', href: '#hardware' },
+      { label: 'Charging Nest', href: '#hardware' },
+      { label: 'Command View', href: '#command' },
+      { label: 'Specifications', href: '#specs' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { label: 'About', href: '/about' },
+      { label: 'Press', href: '/press' },
+      { label: 'Careers', href: '/careers' },
+      { label: 'Contact', href: 'mailto:hello@hornetdrones.com' },
+    ],
+  },
   {
     title: 'Legal',
     links: [
       { label: 'Privacy notice', href: '/privacy' },
-      { label: 'Data residency', href: '/privacy#who-processes-it-for-us' },
-      { label: 'Airspace compliance', href: '#' },
-      { label: 'Terms', href: '#' },
+      { label: 'Data residency', href: '/privacy#processors' },
+      { label: 'Airspace & regulation', href: '/airspace' },
+      { label: 'Terms of use', href: '/terms' },
     ],
   },
 ]
@@ -293,18 +311,13 @@ export default function FooterCTA() {
             <nav key={col.title} aria-label={col.title}>
               <h3 className="font-mono text-[10px] uppercase tracking-label text-white/55">{col.title}</h3>
               <ul className="mt-5 space-y-3">
-                {/* Columns hold either a plain label or a {label, href} pair,
-                    so the ones with real destinations link out properly. */}
-                {col.links.map((l) => {
-                  const { label, href } = typeof l === 'string' ? { label: l, href: '#top' } : l
-                  return (
-                    <li key={label}>
-                      <a href={href} className="text-sm text-white/55 transition-colors duration-200 hover:text-white">
-                        {label}
-                      </a>
-                    </li>
-                  )
-                })}
+                {col.links.map(({ label, href }) => (
+                  <li key={label}>
+                    <a href={href} className="text-sm text-white/55 transition-colors duration-200 hover:text-white">
+                      {label}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </nav>
           ))}
