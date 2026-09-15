@@ -28,12 +28,20 @@ const DroneScene = lazy(() => import('./DroneScene'))
  *
  * Fallbacks, in order: video → WebGL drone → animated SVG drone.
  */
-export default function HeroFlight({ progress, className = '' }) {
+export default function HeroFlight({ progress, className = '', fullBleed = false }) {
   const reduce = useReducedMotion()
   const videoRef = useRef(null)
   const target = useRef(0)
   const [failed, setFailed] = useState(false)
   const [ready, setReady] = useState(false)
+
+  // As a contained plate the clip needs its edges feathered so it does not read
+  // as a pasted-in rectangle. Full-bleed it runs to the viewport edge instead,
+  // and the section's own scrims do the blending.
+  const edgeMask = fullBleed
+    ? undefined
+    : 'radial-gradient(ellipse 50% 50% at 50% 50%, #000 30%, rgba(0,0,0,0.45) 66%, transparent 100%)'
+  const maskStyle = edgeMask ? { maskImage: edgeMask, WebkitMaskImage: edgeMask } : undefined
 
   // Scroll only ever writes a target; it never touches the video directly.
   useMotionValueEvent(progress, 'change', (p) => {
@@ -97,16 +105,11 @@ export default function HeroFlight({ progress, className = '' }) {
   }
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={fullBleed ? className : `relative ${className}`}>
       <video
         ref={videoRef}
-        className={`h-full w-full object-cover transition-opacity duration-700 ${ready ? 'opacity-100' : 'opacity-0'}`}
-        // The clip is a square plate on a dark page; feathering the edges stops
-        // it reading as a pasted-in rectangle.
-        style={{
-          maskImage: 'radial-gradient(ellipse 50% 50% at 50% 50%, #000 30%, rgba(0,0,0,0.45) 66%, transparent 100%)',
-          WebkitMaskImage: 'radial-gradient(ellipse 50% 50% at 50% 50%, #000 30%, rgba(0,0,0,0.45) 66%, transparent 100%)',
-        }}
+        className={`h-full w-full object-cover object-[50%_38%] transition-opacity duration-700 ${ready ? 'opacity-100' : 'opacity-0'}`}
+        style={maskStyle}
         poster="hornet-flight-poster.jpg"
         preload="auto"
         muted
@@ -127,11 +130,8 @@ export default function HeroFlight({ progress, className = '' }) {
           src="hornet-flight-poster.jpg"
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover"
-          style={{
-            maskImage: 'radial-gradient(ellipse 50% 50% at 50% 50%, #000 30%, rgba(0,0,0,0.45) 66%, transparent 100%)',
-            WebkitMaskImage: 'radial-gradient(ellipse 50% 50% at 50% 50%, #000 30%, rgba(0,0,0,0.45) 66%, transparent 100%)',
-          }}
+          className="absolute inset-0 h-full w-full object-cover object-[50%_38%]"
+          style={maskStyle}
         />
       )}
     </div>

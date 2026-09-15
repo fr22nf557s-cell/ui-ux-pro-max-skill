@@ -28,27 +28,59 @@ export default function Hero() {
       className="relative min-h-[100svh] overflow-hidden pt-24 sm:pt-32"
       aria-labelledby="hero-heading"
     >
-      {/* ── Ambient background stack (all decorative, all pointer-events-none) ── */}
+      {/*
+        ── Full-bleed backdrop ──
+        The flight footage is the introduction: it fills the whole section and
+        its playhead is driven by this section's scroll progress, so the swarm
+        flies in as you enter the page. A slow scale-up on the same progress
+        adds depth without a second scroll listener.
+      */}
+      <motion.div style={{ scale: sceneScale }} className="gpu absolute inset-0">
+        <HeroFlight progress={scrollYProgress} fullBleed className="absolute inset-0" />
+      </motion.div>
+
+      {/* ── Legibility scrims + ambient stack (decorative, never interactive) ── */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        {/*
+          Text sits in the left column, so the ground is opaque there and opens
+          up across to the right. Without this the headline would sit on moving
+          footage and fail contrast at unpredictable frames.
+        */}
+        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/25 lg:to-transparent" />
+        {/* Top and bottom falloff ties the section into the nav and the next one */}
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/90 via-transparent to-void" />
         {/* Tactical grid, masked to fade toward the edges */}
         <div
-          className="absolute inset-0 bg-grid [background-size:64px_64px] opacity-[0.55]"
+          className="absolute inset-0 bg-grid [background-size:64px_64px] opacity-[0.28]"
           style={{ maskImage: 'radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 78%)', WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 78%)' }}
         />
-        {/* Amber floor bloom beneath the aircraft */}
-        <div className="absolute left-1/2 top-[58%] h-[46vh] w-[76vw] -translate-x-1/2 rounded-[50%] bg-white/[0.055] blur-[110px]" />
-        {/* Pure-black vignette anchors the section to the footer */}
+        {/* Pure-black vignette anchors the section to the one below */}
         <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-void to-transparent" />
+
+        {/* HUD brackets, now framing the whole viewport rather than a panel */}
+        <div className="absolute inset-5 hidden sm:inset-8 lg:block lg:inset-12">
+          {[
+            'left-0 top-0 border-l border-t',
+            'right-0 top-0 border-r border-t',
+            'left-0 bottom-0 border-l border-b',
+            'right-0 bottom-0 border-r border-b',
+          ].map((pos) => (
+            <span key={pos} className={`absolute h-7 w-7 border-white/25 ${pos}`} />
+          ))}
+          <span className="absolute bottom-1 right-10 font-mono text-[9px] uppercase tracking-label text-white/30">
+            HRN-01 · Live telemetry
+          </span>
+        </div>
       </div>
 
       <div className="relative mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-10 px-5 sm:px-8 lg:grid-cols-12 lg:gap-6 lg:px-12">
-        {/* ── Copy column ── */}
+        {/* ── Copy, overlaid on the footage ── */}
         <motion.div
           style={{ y: copyY, opacity: copyOpacity }}
           variants={stagger(reduce, 0.11)}
           initial="hidden"
           animate="visible"
-          className="z-10 lg:col-span-6"
+          className="z-10 lg:col-span-7 xl:col-span-6"
         >
           <motion.div variants={revealUp(reduce)} className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 backdrop-blur-md">
             <StatusDot />
@@ -117,33 +149,6 @@ export default function Hero() {
           </motion.dl>
         </motion.div>
 
-        {/* ── Visual column: 3D canvas, or the SVG airframe if WebGL is out ── */}
-        <motion.div
-          style={{ scale: sceneScale }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.2, ease: EASE, delay: 0.25 }}
-          className="gpu relative order-first h-[32vh] min-h-[240px] w-full lg:order-none lg:col-span-6 lg:h-[72vh]"
-        >
-          {/* Real flight footage, playhead driven by this section's scroll
-              progress. Falls back to the WebGL drone, then to SVG. */}
-          <HeroFlight progress={scrollYProgress} className="h-full w-full" />
-
-          {/* HUD corner brackets framing the aircraft */}
-          <div aria-hidden="true" className="pointer-events-none absolute inset-6 hidden lg:block">
-            {[
-              'left-0 top-0 border-l border-t',
-              'right-0 top-0 border-r border-t',
-              'left-0 bottom-0 border-l border-b',
-              'right-0 bottom-0 border-r border-b',
-            ].map((pos) => (
-              <span key={pos} className={`absolute h-6 w-6 border-white/40 ${pos}`} />
-            ))}
-            <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 font-mono text-[9px] uppercase tracking-label text-white/25">
-              HRN-01 · Live telemetry
-            </span>
-          </div>
-        </motion.div>
       </div>
 
       {/* Scroll affordance */}
