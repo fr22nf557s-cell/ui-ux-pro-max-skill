@@ -16,16 +16,26 @@ You need:
 - A [Resend](https://resend.com) account (free tier: 3,000 emails/month) for
   confirmation mail.
 
-Throughout, replace `hornetdrones.com` with your real domain. It appears in
-five places and they must agree:
+The domain is **hornetdrones.com**, and all 14 references in the repo already
+use it — `wrangler.toml`, `index.html` (canonical, og:url, JSON-LD),
+`robots.txt`, `sitemap.xml` and the privacy notice. Nothing to substitute.
 
-| File | What to change |
+If it ever changes, those are the five files to update together:
+
+| File | What it holds |
 | --- | --- |
 | `wrangler.toml` | `SITE_URL`, `MAIL_FROM` |
-| `index.html` | `<link rel="canonical">`, the `og:url`, and the three `@id`/`url` values in the JSON-LD |
+| `index.html` | canonical, `og:url`, three `@id`/`url` values in the JSON-LD |
 | `public/robots.txt` | the `Sitemap:` line |
 | `public/sitemap.xml` | both `<loc>` values |
-| `public/privacy/index.html` | `<link rel="canonical">` and the contact address |
+| `public/privacy/index.html` | canonical and the contact address |
+
+Verify with:
+
+```bash
+grep -rn 'hornetdrones\.com' --include='*.html' --include='*.xml' \
+  --include='*.txt' --include='*.toml' . | grep -v dist/
+```
 
 ---
 
@@ -40,6 +50,37 @@ to serve the `_headers` file — three items off the launch checklist.
 
 Then under **SSL/TLS → Overview** set the mode to **Full (strict)**, and under
 **Edge Certificates** turn on **Always Use HTTPS**.
+
+### Pick one hostname and redirect the other
+
+Every canonical tag in this repo points at the **apex**
+(`https://hornetdrones.com/`), so `www` must 301 to it. If both hostnames
+serve the site, Google sees two copies of every page and splits the ranking
+signals between them — the canonical tag is a hint, a 301 is not.
+
+Do this as a zone-level **Redirect Rule**, not in the Pages `_redirects` file,
+which matches on path and does not reliably match on hostname:
+
+Dashboard → your domain → **Rules** → **Redirect Rules** → **Create rule**
+
+| Field | Value |
+| --- | --- |
+| When incoming requests match | `Hostname` `equals` `www.hornetdrones.com` |
+| Type | Dynamic |
+| Expression | `concat("https://hornetdrones.com", http.request.uri.path)` |
+| Status code | 301 |
+| Preserve query string | on |
+
+Add **both** `hornetdrones.com` and `www.hornetdrones.com` as custom domains on
+the Pages project first, otherwise the `www` certificate will not issue and the
+redirect will fail on TLS before it ever runs.
+
+Verify once live:
+
+```bash
+curl -sI https://www.hornetdrones.com/privacy | grep -iE '^(HTTP|location)'
+# expect: HTTP/2 301  +  location: https://hornetdrones.com/privacy
+```
 
 ---
 
