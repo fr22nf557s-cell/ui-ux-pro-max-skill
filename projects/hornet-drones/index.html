@@ -15,6 +15,55 @@
       content="The ultra-quiet, AI-powered perimeter drone system that patrols, detects, and deters threats before they reach your doorstep."
     />
 
+    <!-- Update the domain here and in wrangler.toml, robots.txt and sitemap.xml together. -->
+    <link rel="canonical" href="https://hornetdrones.com/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://hornetdrones.com/" />
+    <meta property="og:title" content="Hornet Drones — Autonomous Aerial Protection" />
+    <meta
+      property="og:description"
+      content="The ultra-quiet, AI-powered perimeter drone system that patrols, detects, and deters threats before they reach your doorstep."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!--
+      Organization + Product only.
+
+      Deliberately NOT LocalBusiness: that type is for premises customers visit,
+      and misusing it risks a structured-data manual action. Equally there is no
+      `offers` block (no public price) and no `aggregateRating` (no reviews) —
+      inventing either is exactly the kind of markup that earns a penalty.
+    -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://hornetdrones.com/#org",
+            "name": "Hornet Drones",
+            "url": "https://hornetdrones.com/",
+            "description": "Autonomous aerial perimeter protection for private property."
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://hornetdrones.com/#site",
+            "url": "https://hornetdrones.com/",
+            "name": "Hornet Drones",
+            "publisher": { "@id": "https://hornetdrones.com/#org" }
+          },
+          {
+            "@type": "Product",
+            "name": "HRN-01",
+            "description": "Ultra-quiet autonomous perimeter drone with thermal and optical sensing, returning to a weatherproof charging nest between patrols.",
+            "category": "Home security system",
+            "brand": { "@id": "https://hornetdrones.com/#org" }
+          }
+        ]
+      }
+    </script>
+
     <!-- Fonts: preconnect first so the display face is not the LCP bottleneck. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

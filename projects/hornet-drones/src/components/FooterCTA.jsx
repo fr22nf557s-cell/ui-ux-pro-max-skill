@@ -1,46 +1,113 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { EASE, DURATION, VIEWPORT, revealUp, stagger } from '../lib/motion'
 import { StatusDot } from './Primitives'
 import Logo from './Logo'
+import Turnstile from './Turnstile'
+import { getAttribution } from '../lib/attribution'
 
 /*
  * SECTION 05 — FINAL CTA + FOOTER
  *
- * The waitlist form is fully client-side here: it validates, shows pending
- * and success states, and never pretends to have submitted anything.
- * Wire `submitEmail` to your real endpoint (see the TODO) and the UI states
- * already handle the rest.
+ * The waitlist form posts to /api/waitlist (Cloudflare Pages Function), which
+ * verifies Turnstile server-side, rate-limits by IP, stores the row in D1 and
+ * sends a double opt-in confirmation.
+ *
+ * Three things the UI has to get right for that back end to be lawful and
+ * deliverable:
+ *  - Consent is an unticked checkbox. Pre-ticked is not consent under UK GDPR,
+ *    and the exact wording agreed to is sent with the request so it can be
+ *    stored as evidence.
+ *  - Success says "check your email", never "you're on the list" — nothing is
+ *    confirmed until the link is clicked.
+ *  - The honeypot field is hidden from sight AND from assistive tech, but is
+ *    not `display:none`, which some bots detect.
  */
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
+// Rendered in the checkbox label AND posted to the API verbatim. One constant,
+// so the consent we store is always the consent that was actually shown.
+const CONSENT_TEXT =
+  'I agree to Hornet Drones emailing me about alpha access. I can unsubscribe at any time.'
+
+// Injected at build time (VITE_TURNSTILE_SITE_KEY). The site key is public by
+// design; the secret half never leaves the server.
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
+
 const FOOTER_LINKS = [
   { title: 'System', links: ['HRN-01 Drone', 'Charging Nest', 'Command App', 'Coverage Map'] },
   { title: 'Company', links: ['About', 'Engineering', 'Press', 'Careers'] },
-  { title: 'Legal', links: ['Privacy', 'Data residency', 'Airspace compliance', 'Terms'] },
+  {
+    title: 'Legal',
+    links: [
+      { label: 'Privacy notice', href: '/privacy' },
+      { label: 'Data residency', href: '/privacy#who-processes-it-for-us' },
+      { label: 'Airspace compliance', href: '#' },
+      { label: 'Terms', href: '#' },
+    ],
+  },
 ]
 
 export default function FooterCTA() {
   const reduce = useReducedMotion()
   const [email, setEmail] = useState('')
+  const [consent, setConsent] = useState(false)
   const [status, setStatus] = useState('idle') // idle | error | pending | done
   const [error, setError] = useState('')
+  const turnstileToken = useRef(null)
+  const honeypot = useRef(null)
 
   async function submitEmail(e) {
     e.preventDefault()
+
     if (!EMAIL_RE.test(email.trim())) {
       setError('Enter a valid email address.')
       setStatus('error')
       return
     }
+    if (!consent) {
+      setError('Please tick the box so we know we can email you.')
+      setStatus('error')
+      return
+    }
+    // Only block on a missing token when Turnstile is actually configured;
+    // otherwise local development would be unusable.
+    if (TURNSTILE_SITE_KEY && !turnstileToken.current) {
+      setError('Still verifying you are human — give it a second and try again.')
+      setStatus('error')
+      return
+    }
+
     setError('')
     setStatus('pending')
 
-    // TODO: replace with your real endpoint, e.g.
-    // await fetch('/api/waitlist', { method: 'POST', body: JSON.stringify({ email }) })
-    await new Promise((r) => setTimeout(r, 900))
-    setStatus('done')
+    try {
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email.trim(),
+          consent,
+          consentText: CONSENT_TEXT,
+          turnstileToken: turnstileToken.current,
+          company: honeypot.current?.value || '', // honeypot; empty for humans
+          ...getAttribution(),
+        }),
+      })
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        setError(body.error || 'Something went wrong. Please try again.')
+        setStatus('error')
+        return
+      }
+      setStatus('done')
+    } catch {
+      // Network failure, offline, blocked request.
+      setError('Could not reach the server. Check your connection and try again.')
+      setStatus('error')
+    }
   }
 
   return (
@@ -91,7 +158,7 @@ export default function FooterCTA() {
                     </svg>
                   </span>
                   <p className="font-mono text-[12px] uppercase tracking-wide2 text-white">
-                    You're on the list — dossier inbound.
+                    Check your email — dossier inbound.
                   </p>
                 </motion.div>
               ) : (
@@ -103,8 +170,9 @@ export default function FooterCTA() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: DURATION.ui, ease: EASE }}
-                  className="flex flex-col gap-3 sm:flex-row"
+                  className="block"
                 >
+                  <div className="flex flex-col gap-3 sm:flex-row">
                   <div className="relative flex-1">
                     <label htmlFor="waitlist-email" className="sr-only">
                       Email address
@@ -138,6 +206,54 @@ export default function FooterCTA() {
                   >
                     {status === 'pending' ? 'Securing…' : 'Join Alpha'}
                   </motion.button>
+                  </div>
+
+                  {/*
+                    Honeypot. Positioned off-screen rather than display:none —
+                    headless bots increasingly skip fields that are not rendered.
+                    aria-hidden + tabIndex -1 keeps it away from real users.
+                  */}
+                  <div aria-hidden="true" className="absolute left-[-9999px] top-0 h-px w-px overflow-hidden">
+                  <label htmlFor="waitlist-company">Company (leave blank)</label>
+                  <input
+                    ref={honeypot}
+                    id="waitlist-company"
+                    name="company"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
+
+                {/* Unticked by default. A pre-ticked box is not consent. */}
+                <div className="mt-5 flex items-start gap-3 pl-6">
+                  <input
+                    id="waitlist-consent"
+                    type="checkbox"
+                    checked={consent}
+                    onChange={(e) => {
+                      setConsent(e.target.checked)
+                      if (status === 'error') setStatus('idle')
+                    }}
+                    className="mt-0.5 h-4 w-4 flex-none cursor-pointer rounded border-white/30 bg-white/[0.06] accent-white"
+                  />
+                  <label htmlFor="waitlist-consent" className="cursor-pointer text-[13px] leading-relaxed text-white/55">
+                    {CONSENT_TEXT}{' '}
+                    <a href="/privacy" className="text-white underline underline-offset-2 hover:text-white/80">
+                      Privacy notice
+                    </a>
+                    .
+                  </label>
+                </div>
+
+                  <div className="pl-6">
+                    <Turnstile
+                      siteKey={TURNSTILE_SITE_KEY}
+                      onToken={(t) => {
+                        turnstileToken.current = t
+                      }}
+                    />
+                  </div>
                 </motion.form>
               )}
             </AnimatePresence>
@@ -177,13 +293,18 @@ export default function FooterCTA() {
             <nav key={col.title} aria-label={col.title}>
               <h3 className="font-mono text-[10px] uppercase tracking-label text-white/55">{col.title}</h3>
               <ul className="mt-5 space-y-3">
-                {col.links.map((l) => (
-                  <li key={l}>
-                    <a href="#top" className="text-sm text-white/55 transition-colors duration-200 hover:text-white">
-                      {l}
-                    </a>
-                  </li>
-                ))}
+                {/* Columns hold either a plain label or a {label, href} pair,
+                    so the ones with real destinations link out properly. */}
+                {col.links.map((l) => {
+                  const { label, href } = typeof l === 'string' ? { label: l, href: '#top' } : l
+                  return (
+                    <li key={label}>
+                      <a href={href} className="text-sm text-white/55 transition-colors duration-200 hover:text-white">
+                        {label}
+                      </a>
+                    </li>
+                  )
+                })}
               </ul>
             </nav>
           ))}

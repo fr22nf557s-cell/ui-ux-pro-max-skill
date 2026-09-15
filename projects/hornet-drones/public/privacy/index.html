@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <title>Privacy notice — Hornet Drones</title>
+    <meta name="description" content="How Hornet Drones collects, uses and stores personal data, and the rights you have over it." />
+    <link rel="canonical" href="https://hornetdrones.com/privacy" />
+
+    <!--
+      DRAFT — NOT LEGAL ADVICE.
+
+      This is a working draft written to cover what the site actually does
+      today: one waitlist form, storing an email address, consent evidence and
+      first-touch campaign parameters in Cloudflare D1, with confirmation mail
+      sent via Resend. It has NOT been reviewed by a solicitor.
+
+      Before launch you must:
+        1. Replace every [SQUARE BRACKET] placeholder with real detail.
+        2. Have it reviewed — UK GDPR Art. 13 governs what must appear here,
+           and a notice that describes the wrong processing is worse than none.
+        3. Re-check it whenever the data you collect changes. Adding analytics,
+           a phone field or a CRM all change this document.
+    -->
+
+    <style>
+      :root { color-scheme: dark; --ink:#0b0c10; --silver:#a8adb8; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0; background: var(--ink); color: #fff; padding: 0 20px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+        line-height: 1.65; -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 720px; margin: 0 auto; padding: 56px 0 96px; }
+      .mark { font-size: 17px; font-weight: 700; letter-spacing: -.01em; text-decoration: none; color: #fff; display: inline-block; }
+      .mark span { font-size: 9px; letter-spacing: .34em; color: var(--silver); padding-left: 8px; }
+      h1 { font-size: clamp(28px, 5vw, 40px); line-height: 1.15; margin: 48px 0 8px; letter-spacing: -.02em; }
+      .updated { color: var(--silver); font-size: 13px; margin: 0 0 40px; }
+      h2 { font-size: 19px; margin: 40px 0 10px; letter-spacing: -.01em; }
+      p, li { color: var(--silver); font-size: 15.5px; }
+      ul { padding-left: 20px; }
+      li { margin-bottom: 8px; }
+      a { color: #fff; }
+      table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14.5px; }
+      th, td { text-align: left; padding: 10px 12px; border: 1px solid rgba(255,255,255,.12); vertical-align: top; color: var(--silver); }
+      th { color: #fff; font-weight: 600; background: rgba(255,255,255,.04); }
+      .todo { border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.05); padding: 16px 18px; border-radius: 10px; margin: 32px 0; }
+      .todo p { color: #fff; margin: 0; font-size: 14px; }
+      footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.12); font-size: 13px; color: var(--silver); }
+      a.back { display: inline-block; margin-top: 8px; }
+      @media (max-width: 560px) { table, thead, tbody, th, td, tr { display: block; } th { display: none; } td { border: 0; border-bottom: 1px solid rgba(255,255,255,.12); padding: 8px 0; } }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <a class="mark" href="/">HORNET<span>DRONES</span></a>
+
+      <h1>Privacy notice</h1>
+      <p class="updated">Last updated: 15 September 2026</p>
+
+      <div class="todo">
+        <p>
+          ⚠ Draft pending legal review. Placeholders in [square brackets] must be completed and
+          the document checked by a qualified adviser before this site goes live.
+        </p>
+      </div>
+
+      <h2>Who we are</h2>
+      <p>
+        Hornet Drones is the data controller for the personal data described here. We are
+        [registered in England and Wales, company number XXXXXXXX], with a registered office at
+        [address]. You can reach us about anything on this page at
+        <a href="mailto:privacy@hornetdrones.com">privacy@hornetdrones.com</a>.
+      </p>
+
+      <h2>What this notice covers</h2>
+      <p>
+        This site currently does one thing with personal data: it operates a waitlist for early
+        access to the HRN-01 system. We do not use analytics, advertising pixels or tracking
+        cookies, and we do not sell or share data with third parties for their own marketing.
+      </p>
+
+      <h2>What we collect and why</h2>
+      <table>
+        <thead>
+          <tr><th>Data</th><th>Why</th><th>Lawful basis</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Email address</td>
+            <td>To send you the confirmation email, and then occasional updates about alpha access.</td>
+            <td>Consent (UK GDPR Art. 6(1)(a))</td>
+          </tr>
+          <tr>
+            <td>Consent record — the wording you agreed to, and the time</td>
+            <td>To evidence that consent was freely given, as we are required to.</td>
+            <td>Legal obligation / legitimate interests</td>
+          </tr>
+          <tr>
+            <td>Country, derived from your IP at the moment of signup</td>
+            <td>To know which data-protection rules apply to you. Your IP address itself is not stored.</td>
+            <td>Legitimate interests</td>
+          </tr>
+          <tr>
+            <td>Campaign parameters (utm_*) and referring site, if any</td>
+            <td>To understand which channels bring people here. Not linked to any advertising profile.</td>
+            <td>Legitimate interests</td>
+          </tr>
+          <tr>
+            <td>A hashed, irreversible form of your IP address</td>
+            <td>Rate limiting, to stop the form being abused. Deleted within hours.</td>
+            <td>Legitimate interests</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Confirmation before anything else</h2>
+      <p>
+        We use double opt-in. After you submit the form we send one email asking you to confirm.
+        Until you click that link, we send you nothing else, and if you never click it the
+        record is deleted. That one confirmation email is the only message an unconfirmed
+        address ever receives.
+      </p>
+
+      <h2>Cookies</h2>
+      <p>
+        We set no cookies. The site stores your campaign parameters in your browser's
+        <code>sessionStorage</code> so that attribution survives you moving around the page; it
+        is cleared when you close the tab and is never read by any third party.
+      </p>
+
+      <h2>Who processes it for us</h2>
+      <ul>
+        <li><strong>Cloudflare</strong> — hosting, bot protection and the database holding the list. [Confirm your data-residency setting.]</li>
+        <li><strong>Resend</strong> — sends the confirmation and update emails.</li>
+      </ul>
+      <p>Both act on our instructions under a data-processing agreement, and neither uses your data for their own purposes.</p>
+
+      <h2>How long we keep it</h2>
+      <ul>
+        <li><strong>Unconfirmed signups:</strong> deleted after [30] days.</li>
+        <li><strong>Confirmed signups:</strong> until you unsubscribe, or after [24] months of no contact from us.</li>
+        <li><strong>Unsubscribes:</strong> we keep a minimal record of the address so we do not email you again by mistake.</li>
+        <li><strong>Rate-limit hashes:</strong> hours, not days.</li>
+      </ul>
+
+      <h2>Your rights</h2>
+      <p>Under UK GDPR you can ask us to give you a copy of your data, correct it, delete it, restrict or object to how we use it, or hand it to another provider. You can withdraw consent at any time — every email carries a one-click unsubscribe, and using it takes effect immediately.</p>
+      <p>
+        Email <a href="mailto:privacy@hornetdrones.com">privacy@hornetdrones.com</a> and we will respond within one month. If you are not satisfied you can complain to the
+        <a href="https://ico.org.uk/make-a-complaint/" rel="noopener">Information Commissioner's Office</a>.
+      </p>
+
+      <h2>Changes</h2>
+      <p>If we change what we collect we will update this page and, where the change is significant, tell the people on the list directly.</p>
+
+      <footer>
+        © <span id="y">2026</span> Hornet Drones. <a class="back" href="/">Back to the site</a>
+        <script>document.getElementById('y').textContent = new Date().getFullYear()</script>
+      </footer>
+    </div>
+  </body>
+</html>

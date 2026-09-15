@@ -1,0 +1,182 @@
+/*
+ * Shared helpers for the Hornet Drones API.
+ *
+ * Every export here runs on the Cloudflare Workers runtime, so it uses Web
+ * Crypto and fetch rather than any Node built-in.
+ *
+ * Environment bindings (set in the Pages dashboard, never in the repo):
+ *   DB                    D1 binding — the waitlist database
+ *   TURNSTILE_SECRET_KEY  secret — server half of the Turnstile keypair
+ *   RESEND_API_KEY        secret — transactional email
+ *   SITE_URL              var    — e.g. https://hornetdrones.com (no trailing slash)
+ *   MAIL_FROM             var    — e.g. "Hornet Drones <alpha@hornetdrones.com>"
+ */
+
+export const JSON_HEADERS = {
+  'Content-Type': 'application/json; charset=utf-8',
+  // These endpoints are strictly same-origin. No CORS header is emitted at
+  // all, so a cross-site fetch fails before it reaches the handler.
+  'Cache-Control': 'no-store',
+  'X-Content-Type-Options': 'nosniff',
+}
+
+export function json(body, status = 200, extra = {}) {
+  return new Response(JSON.stringify(body), { status, headers: { ...JSON_HEADERS, ...extra } })
+}
+
+/**
+ * Deliberately strict but not clever. Over-engineered email regexes reject
+ * valid addresses; the real proof of validity is that the confirmation mail
+ * arrives and the recipient clicks it.
+ */
+export function normaliseEmail(raw) {
+  if (typeof raw !== 'string') return null
+  const email = raw.trim().toLowerCase()
+  if (email.length < 6 || email.length > 254) return null
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return null
+  return email
+}
+
+/** 32 bytes of CSPRNG as hex. Used for both confirm and unsubscribe tokens. */
+export function token() {
+  const b = new Uint8Array(32)
+  crypto.getRandomValues(b)
+  return [...b].map((x) => x.toString(16).padStart(2, '0')).join('')
+}
+
+/**
+ * Constant-time string compare, so token lookups cannot be narrowed by timing.
+ * D1 does the matching in SQL, but any comparison we do in JS uses this.
+ */
+export function safeEqual(a, b) {
+  if (typeof a !== 'string' || typeof b !== 'string' || a.length !== b.length) return false
+  let diff = 0
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i)
+  return diff === 0
+}
+
+/** SHA-256 hex. Used to key rate limits without storing a raw IP. */
+export async function sha256(input) {
+  const data = new TextEncoder().encode(input)
+  const digest = await crypto.subtle.digest('SHA-256', data)
+  return [...new Uint8Array(digest)].map((x) => x.toString(16).padStart(2, '0')).join('')
+}
+
+/**
+ * Fixed-window rate limit in D1.
+ *
+ * A fixed window can allow up to 2x the limit across a boundary. That is an
+ * accepted trade here: the cost of an extra signup attempt is nil, and a
+ * sliding window would need either Durable Objects or several more round
+ * trips per request.
+ *
+ * Returns true when the caller is over budget.
+ */
+export async function rateLimited(db, key, { limit, windowSeconds }) {
+  const now = Math.floor(Date.now() / 1000)
+  const windowAt = now - (now % windowSeconds)
+  const id = `${key}:${windowAt}`
+
+  // One statement: insert, or bump the counter if this window already exists.
+  const row = await db
+    .prepare(
+      `INSERT INTO rate_limit (key, hits, window_at) VALUES (?1, 1, ?2)
+       ON CONFLICT(key) DO UPDATE SET hits = hits + 1
+       RETURNING hits`,
+    )
+    .bind(id, windowAt)
+    .first()
+
+  // Opportunistic prune, ~2% of writes, so the table cannot grow without bound
+  // and we still avoid a scheduled worker.
+  if (Math.random() < 0.02) {
+    await db.prepare('DELETE FROM rate_limit WHERE window_at < ?1').bind(windowAt - windowSeconds * 4).run()
+  }
+
+  return (row?.hits ?? 0) > limit
+}
+
+/**
+ * Verify a Cloudflare Turnstile token server-side.
+ *
+ * The widget token alone proves nothing — it MUST be exchanged with
+ * siteverify using the secret key, which is why this cannot be done in the
+ * browser. Each token is single-use and short-lived.
+ */
+export async function verifyTurnstile(secret, responseToken, remoteIp) {
+  if (!responseToken || typeof responseToken !== 'string') return false
+
+  const body = new FormData()
+  body.append('secret', secret)
+  body.append('response', responseToken)
+  if (remoteIp) body.append('remoteip', remoteIp)
+
+  try {
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body,
+    })
+    if (!res.ok) return false
+    const out = await res.json()
+    return out.success === true
+  } catch {
+    // A siteverify outage must not silently disable the check.
+    return false
+  }
+}
+
+/** Escape untrusted values before they reach an HTML email or response body. */
+export function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c])
+}
+
+/**
+ * Send transactional mail via Resend.
+ *
+ * `listUnsubscribe` adds the RFC 8058 headers. Gmail and Yahoo require
+ * one-click unsubscribe for bulk senders, and the POST variant is what makes
+ * it one click rather than a landing page.
+ */
+export async function sendMail(env, { to, subject, html, text, listUnsubscribe }) {
+  const headers = {}
+  if (listUnsubscribe) {
+    headers['List-Unsubscribe'] = `<${listUnsubscribe}>`
+    headers['List-Unsubscribe-Post'] = 'List-Unsubscribe=One-Click'
+  }
+
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${env.RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ from: env.MAIL_FROM, to, subject, html, text, headers }),
+  })
+
+  if (!res.ok) {
+    // Surface to Workers logs; never to the caller, since the body can echo
+    // the recipient address back.
+    console.error('resend failed', res.status, await res.text())
+    return false
+  }
+  return true
+}
+
+/** Plain-text-first email shell. Dark, minimal, matches the brand. */
+export function mailShell(heading, bodyHtml, cta) {
+  return `<!doctype html><html><body style="margin:0;background:#0b0c10;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0b0c10;padding:40px 16px">
+<tr><td align="center">
+<table role="presentation" width="100%" style="max-width:520px" cellpadding="0" cellspacing="0">
+<tr><td style="padding-bottom:28px">
+  <span style="color:#fff;font-size:17px;font-weight:700;letter-spacing:-.01em">HORNET</span>
+  <span style="color:#a8adb8;font-size:9px;letter-spacing:.34em;padding-left:8px">DRONES</span>
+</td></tr>
+<tr><td style="color:#fff;font-size:22px;font-weight:600;line-height:1.3;padding-bottom:16px">${heading}</td></tr>
+<tr><td style="color:#a8adb8;font-size:15px;line-height:1.65">${bodyHtml}</td></tr>
+${cta ? `<tr><td style="padding-top:28px"><a href="${cta.href}" style="display:inline-block;background:#fff;color:#000;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:14px 28px;border-radius:999px">${cta.label}</a></td></tr>` : ''}
+<tr><td style="color:#6b7280;font-size:12px;line-height:1.6;padding-top:36px;border-top:1px solid rgba(255,255,255,.1);margin-top:36px">
+  You are receiving this because this address was entered on the Hornet Drones alpha waitlist.
+</td></tr>
+</table></td></tr></table></body></html>`
+}

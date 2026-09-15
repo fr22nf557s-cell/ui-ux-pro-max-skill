@@ -1,0 +1,27 @@
+# Hornet Drones
+
+User-agent: *
+Allow: /
+
+# Confirmation and unsubscribe endpoints are per-recipient and must never be
+# indexed or prefetched. They also carry <meta name="robots" content="noindex">.
+Disallow: /api/
+
+# AI search crawlers are explicitly welcome — being answerable in an assistant
+# is distribution, not leakage, for a product page.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://hornetdrones.com/sitemap.xml
