@@ -15,10 +15,12 @@ pages_build_output_dir = "dist"
 SITE_URL = "https://hornetdrones.com"   # no trailing slash — API builds links from this
 MAIL_FROM = "Hornet Drones <alpha@hornetdrones.com>"
 
-# Created with:
-#   npx wrangler d1 create hornet-waitlist
-# then paste the returned database_id here.
-[[d1_databases]]
-binding = "DB"
-database_name = "hornet-waitlist"
-database_id = "PASTE_DATABASE_ID_HERE"
+# No [[d1_databases]] block on purpose.
+#
+# The database is bound in the Pages dashboard (Settings → Functions → D1
+# database bindings, variable name DB), which is what production actually
+# reads. Leaving a placeholder database_id here would fail the Pages build
+# before it ever got to the site.
+#
+# If you later want `wrangler dev` locally, add the block back with the real id
+# from the dashboard — it is an identifier, not a secret.
