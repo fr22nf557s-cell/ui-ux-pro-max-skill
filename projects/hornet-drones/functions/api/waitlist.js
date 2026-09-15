@@ -179,9 +179,14 @@ async function handle({ request, env }) {
   if (!sent) {
     // The row is saved; only the email failed. A retry re-issues the token
     // and sends again, so this is recoverable by the user, not just by ops.
+    //
+    // 503, never 502: on non-Enterprise plans Cloudflare swaps any 502 or
+    // 504 from a Function for its own HTML error page, so the JSON body
+    // below would never reach the browser and the form would show a blank
+    // "something went wrong" instead of this sentence.
     return json(
       { error: "Your address is saved, but we couldn't send the confirmation email. Please try again in a minute." },
-      502,
+      503,
       { 'Retry-After': '60' },
     )
   }
