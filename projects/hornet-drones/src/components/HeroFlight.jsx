@@ -10,7 +10,8 @@ const DroneScene = lazy(() => import('./DroneScene'))
  * SCROLL-SCRUBBED FLIGHT FOOTAGE
  *
  * The hero aircraft is real footage whose playhead is driven by scroll
- * position rather than by time — scroll down and the swarm flies in.
+ * position rather than by time. The clip opens on one aircraft and pulls back
+ * to the whole swarm, so scrolling in is what turns one into many.
  *
  * Three things make this smooth rather than janky:
  *
@@ -115,7 +116,7 @@ export default function HeroFlight({ progress, className = '', fullBleed = false
         muted
         playsInline
         disablePictureInPicture
-        aria-label="Hornet drone swarm on approach over open ground at dusk"
+        aria-label="A single Hornet drone hovering at dusk, pulling back to reveal the full swarm behind it"
         onLoadedData={() => setReady(true)}
         onError={() => setFailed(true)}
       >
