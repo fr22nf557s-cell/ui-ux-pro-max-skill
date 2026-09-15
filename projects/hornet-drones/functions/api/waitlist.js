@@ -22,7 +22,35 @@ import { json, normaliseEmail, token, sha256, rateLimited, verifyTurnstile, send
 
 const MAX_BODY = 4096 // bytes; a legitimate submission is ~400
 
-export async function onRequestPost({ request, env }) {
+export async function onRequestPost(ctx) {
+  // Two deployment states are worth naming to the visitor, because they are
+  // fixed in the dashboard, not by trying again: no database binding, and no
+  // Turnstile secret. Neither message tells an attacker anything they could
+  // not already see. Everything else is caught below and reported generically
+  // — the real error goes to the Workers log, never to the browser.
+  if (!ctx.env.DB) {
+    console.error('D1 binding "DB" is missing for this deployment')
+    return json({ error: 'Signups are not switched on yet. (Server has no database connection.)' }, 503)
+  }
+  try {
+    return await handle(ctx)
+  } catch (err) {
+    console.error('waitlist handler failed', err)
+    const msg = String(err?.message || err)
+    const isDb = /D1_|SQLITE|no such (table|column)|constraint|prepare/i.test(msg)
+    return json(
+      {
+        error: isDb
+          ? 'The database rejected the signup. Please try again in a minute. (Server: database error.)'
+          : 'Something went wrong on our side. Please try again in a minute. (Server error.)',
+      },
+      500,
+      { 'Retry-After': '60' },
+    )
+  }
+}
+
+async function handle({ request, env }) {
   const db = env.DB
 
   // ── 1. Same-origin. No CORS headers are ever sent, but a form POST from
