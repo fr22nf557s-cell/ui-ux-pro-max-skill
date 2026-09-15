@@ -131,26 +131,29 @@ curl -sI https://www.hornetdrones.com/privacy | grep -iE '^(HTTP|location)'
 
 ## 2. Create the database
 
+All in the dashboard — no terminal, no `wrangler` install.
+
+1. Cloudflare → **Storage & Databases** → **D1** → **Create database**. Name it
+   exactly `hornet-waitlist`.
+2. Open it → **Console** tab → paste the contents of `schema.sql` (comments and
+   all; SQLite ignores them) → **Execute**.
+3. **Tables** tab should now list `waitlist` and `rate_limit`, both empty.
+
+There is deliberately no `[[d1_databases]]` block in `wrangler.toml`. The
+binding is made in the Pages dashboard in step 5, which is what production
+reads; a placeholder id in the file would fail the build before it ever
+deployed.
+
+If you later want `wrangler dev` locally, the terminal equivalents are:
+
 ```bash
-cd projects/hornet-drones
 npx wrangler login
-npx wrangler d1 create hornet-waitlist
-```
-
-Copy the `database_id` it prints into `wrangler.toml`, replacing
-`PASTE_DATABASE_ID_HERE`. Then create the tables:
-
-```bash
+npx wrangler d1 create hornet-waitlist          # prints a database_id
 npx wrangler d1 execute hornet-waitlist --file=./schema.sql --remote
 ```
 
-Verify:
-
-```bash
-npx wrangler d1 execute hornet-waitlist --command="SELECT name FROM sqlite_master WHERE type='table'" --remote
-```
-
-You should see `waitlist` and `rate_limit`.
+and add the `[[d1_databases]]` block back with that id — it is an identifier,
+not a secret.
 
 > **Backups.** D1 has Time Travel: any point in the last 30 days can be
 > restored with `wrangler d1 time-travel restore`. That covers the "daily
