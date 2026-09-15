@@ -18,7 +18,9 @@ export default {
         },
         signal: '#FFFFFF', // accent: CTAs, active state, live indicators
         silver: '#A8ADB8', // secondary: technical labels, eyebrows, sub-heads
-        slate: '#6B7280', // tertiary: muted detail
+        // 4.04:1 on the page ground — under AA for body text. Large or bold
+        // text only; never small copy. Use `silver` (8.69:1) for muted text.
+        slate: '#6B7280',
       },
       fontFamily: {
         // Space Grotesk = geometric/technical display. Inter = UI + body.

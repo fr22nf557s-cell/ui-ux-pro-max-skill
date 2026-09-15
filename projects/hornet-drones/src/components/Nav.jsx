@@ -109,7 +109,7 @@ export default function Nav() {
             </li>
           ))}
         </ul>
-        <div className="flex items-center gap-2 px-8 pb-5 font-mono text-[10px] uppercase tracking-wide2 text-white/40">
+        <div className="flex items-center gap-2 px-8 pb-5 font-mono text-[10px] uppercase tracking-wide2 text-white/55">
           <StatusDot />
           All systems operational
         </div>

@@ -122,7 +122,7 @@ export default function FooterCTA() {
                       }}
                       aria-invalid={status === 'error'}
                       aria-describedby={status === 'error' ? 'waitlist-error' : undefined}
-                      className={`h-14 w-full rounded-full border bg-white/[0.04] px-6 font-mono text-sm text-white placeholder:text-white/25 transition-colors duration-200 focus:bg-white/[0.07] ${
+                      className={`h-14 w-full rounded-full border bg-white/[0.04] px-6 font-mono text-sm text-white placeholder:text-white/55 transition-colors duration-200 focus:bg-white/[0.07] ${
                         status === 'error' ? 'border-red-500/70' : 'border-white/15 hover:border-white/30'
                       }`}
                     />
@@ -158,7 +158,7 @@ export default function FooterCTA() {
               )}
             </AnimatePresence>
 
-            <p className="mt-4 pl-6 font-mono text-[10px] uppercase tracking-wide2 text-white/25">
+            <p className="mt-4 pl-6 font-mono text-[10px] uppercase tracking-wide2 text-white/55">
               No spam · Unsubscribe anytime · Data stays in-region
             </p>
           </motion.div>
@@ -168,14 +168,14 @@ export default function FooterCTA() {
         <div className="mt-24 grid grid-cols-2 gap-10 border-t border-white/8 py-14 sm:grid-cols-2 lg:grid-cols-5">
           <div className="col-span-2">
             <Logo variant="stacked" className="max-w-[210px]" />
-            <p className="mt-7 max-w-xs text-sm leading-relaxed text-white/40">
+            <p className="mt-7 max-w-xs text-sm leading-relaxed text-white/55">
               Autonomous aerial protection for the private perimeter. Designed and assembled in-house.
             </p>
           </div>
 
           {FOOTER_LINKS.map((col) => (
             <nav key={col.title} aria-label={col.title}>
-              <h3 className="font-mono text-[10px] uppercase tracking-label text-white/35">{col.title}</h3>
+              <h3 className="font-mono text-[10px] uppercase tracking-label text-white/55">{col.title}</h3>
               <ul className="mt-5 space-y-3">
                 {col.links.map((l) => (
                   <li key={l}>
@@ -191,7 +191,7 @@ export default function FooterCTA() {
 
         {/* ── Status bar ── */}
         <div className="flex flex-col items-start justify-between gap-4 border-t border-white/8 py-8 sm:flex-row sm:items-center">
-          <p className="font-mono text-[11px] text-white/30">
+          <p className="font-mono text-[11px] text-white/55">
             © {new Date().getFullYear()} Hornet Drones Ltd. All rights reserved.
           </p>
           <p className="flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-wide2 text-white/55">

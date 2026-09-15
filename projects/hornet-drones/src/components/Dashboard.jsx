@@ -138,11 +138,11 @@ export default function Dashboard() {
                   <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
                   <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
                   <span className="h-2.5 w-2.5 rounded-full bg-white/70" />
-                  <span className="ml-3 font-mono text-[10px] uppercase tracking-wide2 text-white/40">
+                  <span className="ml-3 font-mono text-[10px] uppercase tracking-wide2 text-white/55">
                     Hornet Drones Command · HRN-01
                   </span>
                 </div>
-                <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wide2 text-white/40">
+                <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wide2 text-white/55">
                   <StatusDot />
                   Live
                 </span>
@@ -152,8 +152,8 @@ export default function Dashboard() {
                 {/* ── Radar / geofence ── */}
                 <div className="relative flex flex-col overflow-hidden rounded-xl border border-white/10 bg-void/60 p-4 md:col-span-2">
                   <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-wide2">
-                    <p className="text-white/40">Perimeter</p>
-                    <p className="text-white/30">Range 120 m</p>
+                    <p className="text-white/55">Perimeter</p>
+                    <p className="text-white/55">Range 120 m</p>
                   </div>
 
                   <div className="relative mx-auto mt-3 aspect-square w-full max-w-[220px]">
@@ -283,7 +283,7 @@ export default function Dashboard() {
                   <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10 sm:grid-cols-4">
                     {TELEMETRY.map(([k, v]) => (
                       <div key={k} className="bg-void/70 px-3 py-3">
-                        <dt className="font-mono text-[9px] uppercase tracking-wide2 text-white/35">{k}</dt>
+                        <dt className="font-mono text-[9px] uppercase tracking-wide2 text-white/55">{k}</dt>
                         <dd className="mt-1 font-mono text-sm text-white">{v}</dd>
                       </div>
                     ))}
@@ -300,7 +300,7 @@ export default function Dashboard() {
                         transition={{ duration: 0.4, ease: EASE, delay: 0.1 + i * 0.08 }}
                         className="flex items-center gap-3 font-mono text-[10px]"
                       >
-                        <span className="text-white/30">{e.t}</span>
+                        <span className="text-white/55">{e.t}</span>
                         <span
                           className={`h-1 w-1 flex-none rounded-full ${
                             e.tone === 'alert' ? 'bg-white' : e.tone === 'ok' ? 'bg-white/45' : 'bg-white/20'

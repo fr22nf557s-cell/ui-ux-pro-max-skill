@@ -65,7 +65,7 @@ function Spec({ spec, index }) {
         }`}
       >
         {spec.text ?? (spec.decimals ? counted.toFixed(spec.decimals) : Math.round(counted))}
-        {spec.unit && <span className="ml-1 font-mono text-xl font-medium text-white/40">{spec.unit}</span>}
+        {spec.unit && <span className="ml-1 font-mono text-xl font-medium text-white/55">{spec.unit}</span>}
       </p>
 
       <h3 className="mt-5 font-mono text-[11px] uppercase tracking-wide2 text-white">{spec.label}</h3>
@@ -87,7 +87,7 @@ export default function SpecGrid() {
 
           <motion.div variants={revealUp(reduce)} className="mt-6 flex flex-wrap items-end justify-between gap-6">
             <h2 className="max-w-2xl font-display text-section font-bold">Engineered to the edge of the envelope.</h2>
-            <p className="font-mono text-[11px] uppercase tracking-wide2 text-white/35">
+            <p className="font-mono text-[11px] uppercase tracking-wide2 text-white/55">
               Verified · HRN-01 · rev. 4
             </p>
           </motion.div>

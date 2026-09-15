@@ -137,7 +137,7 @@ function Layer({ part, index, progress, active }) {
       {/* Corner pins + part code, laid flat on the slab */}
       <span className="absolute left-4 top-3 font-mono text-[10px] tracking-wide2 text-white/45">{part.code}</span>
       <span className={`absolute right-4 top-3 h-1.5 w-1.5 rounded-full ${active ? 'bg-white' : 'bg-white/20'}`} />
-      <span className="absolute bottom-3 left-4 font-mono text-[9px] uppercase tracking-label text-white/25">
+      <span className="absolute bottom-3 left-4 font-mono text-[9px] uppercase tracking-label text-white/55">
         {String(index + 1).padStart(2, '0')}
       </span>
     </motion.div>
@@ -152,7 +152,7 @@ function StaticBreakdown() {
         <li key={p.id} className="rounded-2xl border border-white/12 bg-steel-900/70 p-6">
           <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-wide2 text-silver">
             <span>{String(i + 1).padStart(2, '0')}</span>
-            <span className="text-white/35">{p.code}</span>
+            <span className="text-white/55">{p.code}</span>
           </div>
           <h3 className="mt-4 font-display text-xl font-semibold leading-snug">{p.name}</h3>
           <p className="mt-3 text-sm leading-relaxed text-white/55">{p.copy}</p>
@@ -231,7 +231,7 @@ export default function ExplodedView() {
                     )}
                     <span
                       className={`mt-0.5 font-mono text-[11px] transition-colors duration-300 ${
-                        i === active ? 'text-white' : 'text-white/25'
+                        i === active ? 'text-white' : 'text-white/55'
                       }`}
                     >
                       {String(i + 1).padStart(2, '0')}
@@ -239,7 +239,7 @@ export default function ExplodedView() {
                     <div>
                       <h3
                         className={`font-display text-lg font-semibold leading-snug transition-colors duration-300 ${
-                          i === active ? 'text-white' : 'text-white/35'
+                          i === active ? 'text-white' : 'text-white/55'
                         }`}
                       >
                         {p.name}

@@ -67,7 +67,7 @@ export default function Hero() {
           ].map((pos) => (
             <span key={pos} className={`absolute h-7 w-7 border-white/25 ${pos}`} />
           ))}
-          <span className="absolute bottom-1 right-10 font-mono text-[9px] uppercase tracking-label text-white/30">
+          <span className="absolute bottom-1 right-10 font-mono text-[9px] uppercase tracking-label text-white/55">
             HRN-01 · Live telemetry
           </span>
         </div>
@@ -143,7 +143,7 @@ export default function Hero() {
             ].map(([v, k]) => (
               <div key={k} className="bg-ink/90 px-4 py-4">
                 <dt className="font-mono text-lg font-medium text-white">{v}</dt>
-                <dd className="mt-1 font-mono text-[10px] uppercase tracking-wide2 text-white/40">{k}</dd>
+                <dd className="mt-1 font-mono text-[10px] uppercase tracking-wide2 text-white/55">{k}</dd>
               </div>
             ))}
           </motion.dl>
@@ -159,7 +159,7 @@ export default function Hero() {
         style={{ opacity: copyOpacity }}
         className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-3 lg:flex"
       >
-        <span className="font-mono text-[9px] uppercase tracking-label text-white/35">Scroll</span>
+        <span className="font-mono text-[9px] uppercase tracking-label text-white/55">Scroll</span>
         {/* The line "drains" downward on a loop: transform-origin trick, GPU only */}
         <span className="relative h-12 w-px overflow-hidden bg-white/10">
           <span className="absolute inset-x-0 top-0 h-1/2 bg-white animate-scanline" />
