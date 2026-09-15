@@ -96,9 +96,6 @@ dig +short NS hornetdrones.com
 That gives you forced HTTPS, a free certificate, and the ability to serve the
 `_headers` file — three items off the launch checklist.
 
-Then under **SSL/TLS → Overview** set the mode to **Full (strict)**, and under
-**Edge Certificates** turn on **Always Use HTTPS**.
-
 ### Pick one hostname and redirect the other
 
 Every canonical tag in this repo points at the **apex**
