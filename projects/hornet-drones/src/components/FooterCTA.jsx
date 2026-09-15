@@ -74,6 +74,7 @@ export default function FooterCTA() {
   const [status, setStatus] = useState('idle') // idle | error | pending | done
   const [error, setError] = useState('')
   const turnstileToken = useRef(null)
+  const turnstileRef = useRef(null)
   const honeypot = useRef(null)
 
   async function submitEmail(e) {
@@ -118,6 +119,9 @@ export default function FooterCTA() {
         const body = await res.json().catch(() => ({}))
         setError(body.error || 'Something went wrong. Please try again.')
         setStatus('error')
+        // The token we just sent is spent whether or not the server accepted
+        // it. Without a reset the retry re-sends the same dead token.
+        turnstileRef.current?.reset()
         return
       }
       setStatus('done')
@@ -125,6 +129,7 @@ export default function FooterCTA() {
       // Network failure, offline, blocked request.
       setError('Could not reach the server. Check your connection and try again.')
       setStatus('error')
+      turnstileRef.current?.reset()
     }
   }
 
@@ -266,6 +271,7 @@ export default function FooterCTA() {
 
                   <div className="pl-6">
                     <Turnstile
+                      ref={turnstileRef}
                       siteKey={TURNSTILE_SITE_KEY}
                       onToken={(t) => {
                         turnstileToken.current = t

@@ -73,6 +73,14 @@ export async function onRequestPost({ request, env }) {
   await pruneUnconfirmed(db)
 
   // ── 6. Turnstile. Last gate before any write.
+  //    A missing secret is a deployment mistake, not a failed human. Saying
+  //    "verification failed" here would send everyone hunting bots instead
+  //    of the dashboard. Reveals nothing an attacker can use: whether the
+  //    site is configured is visible from the outside anyway.
+  if (!env.TURNSTILE_SECRET_KEY) {
+    console.error('TURNSTILE_SECRET_KEY is not set for this deployment')
+    return json({ error: 'Signups are not switched on yet. (Server is missing its verification key.)' }, 503)
+  }
   const ok = await verifyTurnstile(env.TURNSTILE_SECRET_KEY, payload.turnstileToken, ip)
   if (!ok) return json({ error: 'Verification failed. Please try again.', field: 'turnstile' }, 400)
 

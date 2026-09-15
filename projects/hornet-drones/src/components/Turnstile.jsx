@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
 /*
  * Cloudflare Turnstile, loaded lazily.
@@ -12,6 +12,10 @@ import { useEffect, useRef, useState } from 'react'
  *
  * Tokens expire after ~300s, so the widget refreshes itself rather than
  * letting a user who filled the form slowly hit a confusing failure.
+ *
+ * Every token is single-use: once the server has sent it to siteverify it is
+ * spent, pass or fail. So the form must call reset() after any failed submit,
+ * otherwise the retry re-sends the spent token and fails forever.
  */
 
 const SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
@@ -32,10 +36,23 @@ function loadScript() {
   return scriptPromise
 }
 
-export default function Turnstile({ siteKey, onToken, onError }) {
+const Turnstile = forwardRef(function Turnstile({ siteKey, onToken, onError }, ref) {
   const hostRef = useRef(null)
   const widgetId = useRef(null)
   const [failed, setFailed] = useState(false)
+
+  useImperativeHandle(ref, () => ({
+    reset() {
+      onToken(null)
+      if (widgetId.current && window.turnstile) {
+        try {
+          window.turnstile.reset(widgetId.current)
+        } catch {
+          /* widget gone; the next mount renders a fresh one */
+        }
+      }
+    },
+  }))
 
   useEffect(() => {
     if (!siteKey) return undefined
@@ -94,4 +111,6 @@ export default function Turnstile({ siteKey, onToken, onError }) {
       )}
     </div>
   )
-}
+})
+
+export default Turnstile
