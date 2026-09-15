@@ -141,21 +141,18 @@ All in the dashboard — no terminal, no `wrangler` install.
    all; SQLite ignores them) → **Execute**.
 3. **Tables** tab should now list `waitlist` and `rate_limit`, both empty.
 
-There is deliberately no `[[d1_databases]]` block in `wrangler.toml`. The
-binding is made in the Pages dashboard in step 5, which is what production
-reads; a placeholder id in the file would fail the build before it ever
-deployed.
+4. Copy the **database ID** shown on the database's Overview page into the
+   `[[d1_databases]]` block in `wrangler.toml` (it is already there for the
+   database created on launch day). Once a Pages project has a
+   `wrangler.toml`, bindings come from that file, not the dashboard, so this
+   block is what makes `env.DB` exist. The id is an identifier, not a secret.
 
-If you later want `wrangler dev` locally, the terminal equivalents are:
+If you later want `wrangler dev` locally:
 
 ```bash
 npx wrangler login
-npx wrangler d1 create hornet-waitlist          # prints a database_id
 npx wrangler d1 execute hornet-waitlist --file=./schema.sql --remote
 ```
-
-and add the `[[d1_databases]]` block back with that id — it is an identifier,
-not a secret.
 
 > **Backups.** D1 has Time Travel: any point in the last 30 days can be
 > restored with `wrangler d1 time-travel restore`. That covers the "daily
@@ -175,11 +172,16 @@ You get two keys:
 
 | Key | Where it goes | Public? |
 | --- | --- | --- |
-| Site key | `VITE_TURNSTILE_SITE_KEY` build variable | Yes — it is embedded in the page by design |
-| Secret key | `TURNSTILE_SECRET_KEY` encrypted env var | **No. Never commit it.** |
+| Site key | `VITE_TURNSTILE_SITE_KEY` in `.env.production` (committed) | Yes — it is embedded in the page by design |
+| Secret key | `TURNSTILE_SECRET_KEY`, a **Secret** in the Pages dashboard | **No. Never commit it, never paste it anywhere else.** |
 
 The secret must never be given a `VITE_` prefix. Vite inlines every `VITE_`
 variable into the client bundle, so prefixing it would publish it.
+
+If the secret is ever exposed — pasted into a chat, shown in a screenshot,
+committed by mistake — rotate it: Turnstile → the widget → **Settings** →
+**Rotate secret key**, then update the Pages secret with the new value. The
+old one stops working immediately, which is the point.
 
 ---
 
@@ -257,26 +259,21 @@ Build settings:
 | Output directory | `dist` |
 | Root directory | `projects/hornet-drones` |
 
-### Environment variables
+### Secrets
 
-Settings → **Environment variables** → Production:
+Workers & Pages → `hornet-drones` → **Settings** → **Variables and Secrets** →
+**Add** → type **Secret**:
 
-| Name | Value | Encrypt? |
-| --- | --- | --- |
-| `VITE_TURNSTILE_SITE_KEY` | your Turnstile site key | No |
-| `TURNSTILE_SECRET_KEY` | your Turnstile secret | **Yes** |
-| `RESEND_API_KEY` | your Resend key | **Yes** |
-| `SITE_URL` | `https://hornetdrones.com` (no trailing slash) | No |
-| `MAIL_FROM` | `Hornet Drones <alpha@hornetdrones.com>` | No |
+| Name | Value |
+| --- | --- |
+| `TURNSTILE_SECRET_KEY` | the Turnstile secret key |
+| `RESEND_API_KEY` | the Resend API key |
 
-### D1 binding
-
-Settings → **Functions** → **D1 database bindings** → add:
-
-- Variable name: `DB`
-- Database: `hornet-waitlist`
-
-This binding is what makes `env.DB` exist. Without it every API call 500s.
+Secrets are the only thing configured in the dashboard. `SITE_URL`,
+`MAIL_FROM` and the `DB` binding come from `wrangler.toml`, and the public
+Turnstile site key comes from `.env.production` at build time. Adding a new
+secret does not rebuild the site; trigger a redeploy afterwards
+(Deployments → latest → **Retry deployment**) so the Functions pick it up.
 
 ---
 

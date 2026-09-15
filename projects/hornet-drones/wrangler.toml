@@ -1,11 +1,14 @@
 # Cloudflare Pages configuration.
 #
-# Secrets are NEVER listed here — set them in the Pages dashboard under
-# Settings → Environment variables, marked "Encrypt":
+# Once this file exists, Pages takes bindings and plain variables from HERE,
+# not from the dashboard — so the database binding lives below. Secrets are
+# the one thing that can never go in this file; they are set in the Pages
+# dashboard under Settings → Variables and Secrets, type "Secret":
 #   TURNSTILE_SECRET_KEY
 #   RESEND_API_KEY
 #
-# The plain vars below are safe to commit; they are not credentials.
+# Everything below is safe to commit: identifiers and public values, not
+# credentials.
 
 name = "hornet-drones"
 compatibility_date = "2026-09-15"
@@ -15,12 +18,10 @@ pages_build_output_dir = "dist"
 SITE_URL = "https://hornetdrones.com"   # no trailing slash — API builds links from this
 MAIL_FROM = "Hornet Drones <alpha@hornetdrones.com>"
 
-# No [[d1_databases]] block on purpose.
-#
-# The database is bound in the Pages dashboard (Settings → Functions → D1
-# database bindings, variable name DB), which is what production actually
-# reads. Leaving a placeholder database_id here would fail the Pages build
-# before it ever got to the site.
-#
-# If you later want `wrangler dev` locally, add the block back with the real id
-# from the dashboard — it is an identifier, not a secret.
+# The waitlist database (created in the dashboard, Western Europe). The
+# database_id is an identifier, not a secret. This block is what makes
+# `env.DB` exist inside the Functions; without it every API call 500s.
+[[d1_databases]]
+binding = "DB"
+database_name = "hornet-waitlist"
+database_id = "7f69a4be-a6b3-45cc-982b-69c91cd1dd65"
