@@ -117,7 +117,10 @@ export default function FooterCTA() {
 
       if (!res.ok) {
         const body = await res.json().catch(() => ({}))
-        setError(body.error || 'Something went wrong. Please try again.')
+        // A non-JSON failure did not come from our API (the Function never
+        // ran, or something in front of it answered). Surfacing the status
+        // is the difference between a five-minute fix and a blind guess.
+        setError(body.error || `Something went wrong. Please try again. (HTTP ${res.status})`)
         setStatus('error')
         // The token we just sent is spent whether or not the server accepted
         // it. Without a reset the retry re-sends the same dead token.
