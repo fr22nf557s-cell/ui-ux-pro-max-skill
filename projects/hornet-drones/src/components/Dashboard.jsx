@@ -139,7 +139,7 @@ export default function Dashboard() {
                   <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
                   <span className="h-2.5 w-2.5 rounded-full bg-white/70" />
                   <span className="ml-3 font-mono text-[10px] uppercase tracking-wide2 text-white/40">
-                    Hornet Command · HRN-01
+                    Hornet Drones Command · HRN-01
                   </span>
                 </div>
                 <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wide2 text-white/40">

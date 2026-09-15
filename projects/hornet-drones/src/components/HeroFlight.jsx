@@ -29,6 +29,15 @@ const DroneScene = lazy(() => import('./DroneScene'))
  *
  * Fallbacks, in order: video → WebGL drone → animated SVG drone.
  */
+/*
+ * Fraction of the section's scroll the clip is mapped across. Below 1 the
+ * footage finishes before the section does, so the same flick of the wheel
+ * covers more of the flight — this is the dial that sets how fast the drone
+ * appears to move, NOT the clip's own duration (scroll maps proportionally,
+ * so re-timing the file changes nothing here).
+ */
+const SCRUB_SPAN = 0.55
+
 export default function HeroFlight({ progress, className = '', fullBleed = false }) {
   const reduce = useReducedMotion()
   const videoRef = useRef(null)
@@ -49,9 +58,10 @@ export default function HeroFlight({ progress, className = '', fullBleed = false
     const v = videoRef.current
     if (!v || !Number.isFinite(v.duration)) return
     const clamped = Math.min(Math.max(p, 0), 1)
+    const scrubbed = Math.min(clamped / SCRUB_SPAN, 1)
     // Stop a hair short of the end: seeking to exactly duration can park the
     // element on a blank frame in some browsers.
-    target.current = clamped * (v.duration - 0.05)
+    target.current = scrubbed * (v.duration - 0.05)
   })
 
   useEffect(() => {
@@ -64,7 +74,7 @@ export default function HeroFlight({ progress, className = '', fullBleed = false
       // stops the queue of pending seeks from building up.
       if (v && v.readyState >= 2 && !v.seeking && Number.isFinite(v.duration)) {
         const cur = v.currentTime
-        const next = cur + (target.current - cur) * 0.16
+        const next = cur + (target.current - cur) * 0.26
         // Below half a frame the move is invisible but still costs a seek.
         if (Math.abs(next - cur) > 1 / 120) v.currentTime = next
       }

@@ -62,7 +62,7 @@ export function HornetMark({ size = 30, className = '' }) {
 /**
  * Full lockup.
  *
- * `inline` — mark + HORNET on one line, for the nav bar.
+ * `inline` — mark + the HORNET / DRONES lockup stacked, for the nav bar.
  * `stacked` — mark above HORNET with DRONES letterspaced beneath it between
  *   two tapered rules, matching the brand lockup.
  */
@@ -84,11 +84,16 @@ export default function Logo({ variant = 'inline', className = '' }) {
     )
   }
 
+  // The brand is "Hornet Drones", so the nav carries the whole lockup, not just
+  // the first word — stacked rather than inline so it still fits the bar height.
   return (
     <span className={`flex items-center gap-2.5 ${className}`}>
       <HornetMark size={30} className="text-white" />
-      <span className="font-brand text-[17px] font-bold italic leading-none tracking-[-0.01em] text-white">
-        HORNET
+      <span className="flex flex-col leading-none">
+        <span className="font-brand text-[15px] font-bold italic tracking-[-0.01em] text-white">HORNET</span>
+        <span className="mt-[3px] font-brand text-[7.5px] font-semibold tracking-[0.34em] text-white/55">
+          DRONES
+        </span>
       </span>
     </span>
   )
