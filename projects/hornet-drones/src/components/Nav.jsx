@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useMotionValueEvent, useScroll, useReducedMotion } from 'framer-motion'
 import { EASE, DURATION } from '../lib/motion'
 import { StatusDot } from './Primitives'
@@ -55,11 +55,21 @@ export default function Nav() {
   // value keeps this off React's render path until the boolean actually flips.
   useMotionValueEvent(scrollY, 'change', (v) => setCondensed(v > 64))
 
-  // Lock body scroll while the mobile sheet is open.
+  // Lock body scroll while the mobile sheet is open, and let Escape close it
+  // with focus back on the button that opened it.
+  const toggleRef = useRef(null)
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
+    if (!open) return () => { document.body.style.overflow = '' }
+    const onKey = (e) => {
+      if (e.key !== 'Escape') return
+      setOpen(false)
+      toggleRef.current?.focus()
+    }
+    window.addEventListener('keydown', onKey)
     return () => {
       document.body.style.overflow = ''
+      window.removeEventListener('keydown', onKey)
     }
   }, [open])
 
@@ -118,6 +128,7 @@ export default function Nav() {
             Reserve
           </a>
           <button
+            ref={toggleRef}
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
