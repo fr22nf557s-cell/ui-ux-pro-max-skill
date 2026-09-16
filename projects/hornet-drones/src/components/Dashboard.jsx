@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useMotionValue, useSpring, useTransform, useRe
 import { EASE, DURATION, VIEWPORT, revealUp, stagger } from '../lib/motion'
 import { SectionLabel, StatusDot } from './Primitives'
 import FeedScene from './FeedScene'
+import SitePlan, { DEFAULT_FENCE } from './SitePlan'
 
 /*
  * SECTION 03 — COMMAND VIEW
@@ -26,10 +27,6 @@ const FEED = {
 
 const ZOOM = [1, 1.5, 2]
 
-// The patrol route the aircraft flies, in site-plan units (viewBox 0 0 200 150).
-const ROUTE =
-  'M 58 40 C 100 22, 150 26, 168 52 C 184 76, 176 110, 140 124 C 104 138, 52 130, 34 104 C 18 80, 26 52, 58 40 Z'
-
 function useClock() {
   const [now, setNow] = useState(() => new Date())
   useEffect(() => {
@@ -48,6 +45,7 @@ export default function Dashboard() {
   const [mode, setMode] = useState('thermal')
   const [zoom, setZoom] = useState(0)
   const [tab, setTab] = useState('live')
+  const [fence, setFence] = useState(DEFAULT_FENCE)
   const [trigger, setTrigger] = useState('idle') // idle | arming | deployed | returning
   const panelRef = useRef(null)
 
@@ -203,7 +201,7 @@ export default function Dashboard() {
                 {/* Feed */}
                 <div
                   className={`relative flex flex-col overflow-hidden rounded-xl border border-white/10 bg-black md:col-span-3 ${
-                    tab === 'events' ? 'hidden md:flex' : ''
+                    tab === 'live' ? '' : 'hidden'
                   }`}
                 >
                   <div className="relative aspect-[16/10] w-full overflow-hidden md:aspect-auto md:min-h-[300px] md:flex-1">
@@ -311,78 +309,43 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                {/* Site plan + telemetry */}
-                <div className={`flex flex-col gap-3 md:col-span-2 ${tab === 'events' ? 'hidden md:flex' : ''}`}>
+                {/* Site plan + telemetry. On the Site tab the plan takes the whole
+                    panel and the geofence handles become draggable. */}
+                <div
+                  className={`flex flex-col gap-3 ${
+                    tab === 'map' ? 'md:col-span-5' : tab === 'live' ? 'md:col-span-2' : 'hidden'
+                  }`}
+                >
                   <div className="relative flex-1 overflow-hidden rounded-xl border border-white/10 bg-black/60 p-3">
                     <div className="flex items-center justify-between font-mono text-[9px] uppercase tracking-wide2 text-white/55">
                       <span>Site plan</span>
-                      <span>Geofence · 1 : 400</span>
+                      {tab === 'map' ? (
+                        <span className="flex items-center gap-3">
+                          <span className="hidden text-white/70 sm:inline">Drag the handles to redraw the geofence</span>
+                          <button
+                            type="button"
+                            onClick={() => setFence(DEFAULT_FENCE)}
+                            className="rounded border border-white/25 px-2 py-0.5 text-[9px] uppercase tracking-wide2 text-white/80 hover:border-white/50 hover:text-white"
+                          >
+                            Reset
+                          </button>
+                        </span>
+                      ) : (
+                        <span>Geofence · 1 : 400</span>
+                      )}
                     </div>
-
-                    <svg viewBox="0 0 200 150" className="mt-2 w-full" role="img" aria-label="Site plan: geofence around the property, the house, the nest and the aircraft on its patrol route">
-                      <defs>
-                        <pattern id="plan-grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                          <path d="M10 0H0V10" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="0.5" />
-                        </pattern>
-                      </defs>
-                      <rect width="200" height="150" fill="url(#plan-grid)" />
-
-                      {/* Geofence */}
-                      <path
-                        d="M 18 30 L 120 12 L 186 44 L 190 118 L 126 142 L 24 128 Z"
-                        fill="rgba(255,255,255,0.03)"
-                        stroke="rgba(255,255,255,0.7)"
-                        strokeWidth="1"
-                        strokeDasharray="4 3"
-                      />
-                      {['18,30', '120,12', '186,44', '190,118', '126,142', '24,128'].map((p) => (
-                        <circle key={p} cx={p.split(',')[0]} cy={p.split(',')[1]} r="2" fill="#0d0f14" stroke="rgba(255,255,255,0.8)" strokeWidth="1" />
-                      ))}
-
-                      {/* House + drive */}
-                      <rect x="72" y="52" width="58" height="46" rx="1.5" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.35)" strokeWidth="0.8" />
-                      <path d="M 101 98 L 101 142" stroke="rgba(255,255,255,0.25)" strokeWidth="6" strokeLinecap="round" />
-                      <text x="101" y="78" textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize="6" fontFamily="JetBrains Mono, monospace" letterSpacing="1">HOUSE</text>
-
-                      {/* Gates */}
-                      <text x="101" y="148" textAnchor="middle" fill="rgba(255,255,255,0.55)" fontSize="5.5" fontFamily="JetBrains Mono, monospace">S GATE</text>
-
-                      {/* Patrol route */}
-                      <path d={ROUTE} fill="none" stroke="rgba(255,255,255,0.28)" strokeWidth="0.8" strokeDasharray="2 2.5" />
-
-                      {/* Nest */}
-                      <g transform="translate(140 108)">
-                        <rect x="-4" y="-4" width="8" height="8" transform="rotate(45)" fill="rgba(255,255,255,0.15)" stroke="#fff" strokeWidth="0.9" />
-                        <text x="7" y="2.5" fill="rgba(255,255,255,0.7)" fontSize="5.5" fontFamily="JetBrains Mono, monospace">NEST</text>
-                      </g>
-
-                      {/* Contacts */}
-                      <circle cx="46" cy="70" r="2.2" fill="rgba(255,255,255,0.4)" />
-                      <circle cx="160" cy="66" r="2.2" fill="rgba(255,255,255,0.4)" />
-                      <g transform="translate(112 136)">
-                        <circle r="6" fill="none" stroke="#fff" strokeWidth="0.8" className="animate-ping" style={{ transformBox: 'fill-box', transformOrigin: 'center' }} />
-                        <circle r="2.6" fill="#fff" />
-                      </g>
-
-                      {/* Aircraft on route (CSS motion path) */}
-                      <g
-                        className={reduce ? '' : 'animate-patrol'}
-                        style={reduce ? { transform: 'translate(58px, 40px)' } : { offsetPath: `path("${ROUTE}")`, offsetRotate: 'auto' }}
-                      >
-                        <circle r="7" fill="rgba(255,255,255,0.12)" />
-                        <path d="M -4 -4 L 4 4 M -4 4 L 4 -4" stroke="#fff" strokeWidth="1.4" strokeLinecap="round" />
-                        <circle r="1.6" fill="#0d0f14" stroke="#fff" strokeWidth="1" />
-                      </g>
-                    </svg>
-
-                    <div className="mt-1 flex items-center justify-between font-mono text-[9px] uppercase tracking-wide2">
-                      <span className="text-white/55">3 contacts · 1 flagged</span>
-                      <span className="text-white">{airborne ? 'Intercept' : 'Patrol'}</span>
-                    </div>
+                    <SitePlan
+                      fence={fence}
+                      onFenceChange={setFence}
+                      editable={tab === 'map'}
+                      reduce={Boolean(reduce)}
+                      airborne={airborne}
+                      className={`mt-2 ${tab === 'map' ? 'mx-auto max-w-[640px]' : ''}`}
+                    />
                   </div>
 
                   {/* Telemetry */}
-                  <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10">
+                  <dl className={`grid gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10 ${tab === 'map' ? 'grid-cols-2 md:grid-cols-4' : 'grid-cols-2'}`}>
                     {[
                       ['Altitude', airborne ? '38.0 m' : '31.4 m'],
                       ['Battery', '92%'],
@@ -405,7 +368,11 @@ export default function Dashboard() {
                 </div>
 
                 {/* Event log */}
-                <div className={`rounded-xl border border-white/10 bg-black/50 md:col-span-3 lg:ml-[8.5rem] ${tab === 'events' ? '' : 'hidden md:block'}`}>
+                <div
+                  className={`rounded-xl border border-white/10 bg-black/50 ${
+                    tab === 'events' ? 'md:col-span-5' : tab === 'live' ? 'hidden md:col-span-3 md:block lg:ml-[8.5rem]' : 'hidden'
+                  }`}
+                >
                   <div className="flex items-center justify-between border-b border-white/10 px-3 py-2 font-mono text-[9px] uppercase tracking-wide2 text-white/55">
                     <span>Events · today</span>
                     <span className="text-white/35">Stored on-premise</span>
@@ -431,7 +398,7 @@ export default function Dashboard() {
                 </div>
 
                 {/* Actions */}
-                <div className="flex flex-col gap-2 md:col-span-2">
+                <div className={`flex gap-2 ${tab === 'live' ? 'flex-col md:col-span-2' : 'flex-col sm:flex-row md:col-span-5'}`}>
                   <button
                     type="button"
                     onClick={() => trigger === 'idle' && setTrigger('arming')}
@@ -476,6 +443,7 @@ export default function Dashboard() {
             </motion.div>
 
             {/* Companion phone, floating proud of the desktop window */}
+            {tab === 'live' && (
             <motion.div
               initial={{ opacity: 0, y: reduce ? 0 : 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -496,6 +464,7 @@ export default function Dashboard() {
                 </div>
               </div>
             </motion.div>
+            )}
           </div>
         </motion.div>
       </div>
