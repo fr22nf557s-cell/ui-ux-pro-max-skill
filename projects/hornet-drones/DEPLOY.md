@@ -185,64 +185,85 @@ old one stops working immediately, which is the point.
 
 ---
 
-## 4. Email sending
+## 4. Email
 
-In Resend, add and verify your domain. It will give you DNS records to add in
-Cloudflare:
+Two separate systems, and they must not be confused:
 
-- **SPF** — a TXT record authorising Resend to send as you.
-- **DKIM** — a TXT (or CNAME) record carrying the signing key.
-- **DMARC** — add this yourself if Resend doesn't:
-  `_dmarc` TXT → `v=DMARC1; p=none; rua=mailto:dmarc@hornetdrones.com`
+- **Resend sends** the confirmation and update emails from the site.
+- **The 123-reg / GoDaddy "Professional Email" mailbox receives** mail at
+  @hornetdrones.com. It was set up on launch day, and its records live in
+  Cloudflare DNS (Cloudflare is authoritative; 123-reg's own DNS is ignored).
 
-  Start at `p=none`, watch the reports for a couple of weeks, then tighten to
-  `p=quarantine` and eventually `p=reject`. Going straight to `p=reject` on a
-  new domain is how people silently lose their own mail.
+### Sending — Resend
 
-That covers three more checklist items. Then create an API key in Resend for
-`RESEND_API_KEY`.
+Resend → **Domains** → **Add Domain** → `hornetdrones.com`, region
+**Europe (Ireland)**. Choose **Manual setup**, not Auto configure: the
+automatic path writes into Cloudflare DNS itself and can replace the DMARC
+record below. Leave **Enable Receiving** switched off; receiving is the
+mailbox's job.
 
-### One SPF record, not two
+Add the three records it shows, in Cloudflare, all **DNS only**:
 
-A domain may publish **exactly one** SPF TXT record. Two is not "both apply" —
-it is a permanent error, and receivers may then fail everything you send.
+| Type | Name | Content |
+| --- | --- | --- |
+| TXT | `resend._domainkey` | the DKIM key (`p=MIGf…`, several hundred characters) |
+| CNAME | `rsend` | the `…rmta.net` target Resend shows |
+| CNAME | `send` | the `…rmta.net` target Resend shows |
 
-If you end up needing more than one sender, merge the includes into a single
-record rather than adding a second:
+Every one of them is on its own sub-name, so nothing collides with the
+mailbox records at the apex. Copy the values with Resend's copy button:
+its table shows long values collapsed with `[...]`, and pasting the
+collapsed display text is the classic way to get a record that looks right
+and never verifies.
 
-```
-v=spf1 include:_spf.mx.cloudflare.net include:amazonses.com ~all
-```
+Then **API keys** → **Create API key**, permission **Sending access** (never
+Full access, which can read and manage the whole account), domain
+`hornetdrones.com`. Copy it once into the Pages secret `RESEND_API_KEY`
+(step 5). Never screenshot the key screen.
 
-Use whatever `include:` Resend's dashboard actually shows you — if it puts its
-records on a subdomain such as `send.hornetdrones.com`, there is no conflict
-with the apex at all and you can leave the apex SPF alone.
+### Receiving — the Professional Email mailbox
 
-### Receiving mail — Cloudflare Email Routing
+The GoDaddy setup wizard for the mailbox lists the records it needs. As
+added on launch day, all DNS only:
 
-Resend **sends**; it does not receive. But the site publishes addresses that
-have to work:
+| Type | Name | Content |
+| --- | --- | --- |
+| TXT | `@` | the verification value the wizard shows (`T…`) |
+| TXT | `@` | `v=spf1 include:secureserver.net -all` |
+| TXT | `_dmarc` | `v=DMARC1; p=reject; rua=mailto:dmarc_rua@onsecureserver.net; adkim=r; aspf=r;` |
+| CNAME | `email` | `email.secureserver.net` |
+| CNAME | `secureserver1._domainkey` | `s1.dkim.hornetdrones_com.2c0.onsecureserver.net` |
+| CNAME | `secureserver2._domainkey` | `s2.dkim.hornetdrones_com.2c0.onsecureserver.net` |
+| MX | `@` | `smtp.secureserver.net`, priority 0 |
+| MX | `@` | `mailstore1.secureserver.net`, priority 10 |
+| SRV | `_autodiscover._tcp` | priority 100, weight 1, port 443, `autodiscover.secureserver.net` |
 
-- `privacy@hornetdrones.com` — named in the privacy notice, and a UK GDPR
+Two things that bit during setup and will bite again if touched:
+
+- **CNAMEs default to Proxied (orange cloud) in Cloudflare.** A proxied mail
+  record silently breaks. Every record in both tables must show **DNS only**.
+- **One SPF record at the apex, ever.** The mailbox owns it
+  (`include:secureserver.net`). Resend's SPF lives on `send.hornetdrones.com`,
+  so there is no conflict; if a future sender wants the apex too, merge its
+  `include:` into the existing record rather than adding a second.
+
+DMARC is `p=reject` with relaxed alignment. Resend signs with
+`resend._domainkey.hornetdrones.com`, so its mail aligns on DKIM and passes.
+Do not switch on Cloudflare's "DMARC Management": it rewrites the record.
+
+### Addresses the site publishes
+
+These must exist on the mailbox as aliases (or the site must be changed to
+an address that does), otherwise mail to them bounces:
+
+- `privacy@hornetdrones.com` — in the privacy notice; a UK GDPR
   subject-access request sent there must reach you.
-- `hello@hornetdrones.com` — the contact address on the About, Press, Careers,
-  Terms and Airspace pages, and the footer's Contact link.
-- `dmarc@hornetdrones.com` — where DMARC reports land.
-- Replies to `alpha@hornetdrones.com`, because people reply to everything.
+- `hello@hornetdrones.com` — the contact address on the About, Press,
+  Careers, Terms and Airspace pages, and the footer's Contact link.
+- `alpha@hornetdrones.com` — `MAIL_FROM`; people reply to everything.
 
-Cloudflare **Email Routing** does this free, and it forwards to any inbox you
-already have:
-
-Dashboard → your domain → **Email** → **Email Routing** → **Get started**
-
-Add a custom address for each of the four above, pointing at your real
-mailbox. Cloudflare adds the MX records for you.
-
-> If you bought a 123-reg mailbox with the domain, switching nameservers in
-> step 1 **breaks it**, because the MX records live at 123-reg and Cloudflare
-> will not know about them. Either copy those MX records into Cloudflare DNS
-> by hand, or drop the 123-reg mailbox and use Email Routing instead. Decide
-> before you switch, not after the first bounce.
+`dmarc_rua@onsecureserver.net` in the DMARC record is GoDaddy's own report
+collector, so no `dmarc@` alias is needed.
 
 ---
 
@@ -273,7 +294,11 @@ Secrets are the only thing configured in the dashboard. `SITE_URL`,
 `MAIL_FROM` and the `DB` binding come from `wrangler.toml`, and the public
 Turnstile site key comes from `.env.production` at build time. Adding a new
 secret does not rebuild the site; trigger a redeploy afterwards
-(Deployments → latest → **Retry deployment**) so the Functions pick it up.
+(Deployments → latest → ⋯ → **Retry deployment**) so the Functions pick it up.
+
+If either secret is ever exposed (pasted in a chat, shown in a screenshot),
+rotate it: Turnstile → widget → **Rotate secret key**; Resend → **API keys**
+→ delete and create a new one. Then edit the Pages secret and redeploy.
 
 ---
 
@@ -295,8 +320,19 @@ curl -s -X POST https://hornetdrones.com/api/waitlist \
   -d '{"email":"test@example.com","consent":true,"consentText":"test"}'
 ```
 
-Then do it by hand: submit the form with a real address, confirm the email
-arrives, click the link, and check the row:
+Then do it by hand: submit the form with a real address. The form's message
+tells you exactly how far the request got:
+
+| Message | Meaning |
+| --- | --- |
+| Check your email | everything works |
+| Signups are not switched on yet (…missing its verification key) | `TURNSTILE_SECRET_KEY` not set for this deployment |
+| Signups are not switched on yet (…no database connection) | the `DB` binding is missing |
+| Verification failed | the Turnstile secret is wrong |
+| Your address is saved, but we couldn't send the confirmation email | row written; Resend key missing, wrong, or domain unverified |
+| Something went wrong (HTTP nnn) | a non-JSON answer: something in front of the Function replied |
+
+Confirm the email arrives, click the link, and check the row:
 
 ```bash
 npx wrangler d1 execute hornet-waitlist --remote \
