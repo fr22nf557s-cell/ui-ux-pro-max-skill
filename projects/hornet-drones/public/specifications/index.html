@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0B0C10" />
+    <title>Specifications — Hornet Drones</title>
+    <meta name="description" content="Full technical specifications for the Hornet Drones HRN-01 system: aircraft, sensors, propulsion, processing, nest and encrypted link." />
+    <link rel="canonical" href="https://hornetdrones.com/specifications" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/pages.css" />
+  </head>
+  <body class="product">
+    <div class="wrap">
+      <a class="mark" href="/">HORNET<span>DRONES</span></a>
+
+      <p class="eyebrow">System · 04</p>
+      <h1>Specifications</h1>
+      <p class="lede">
+        Every figure the site quotes, in one place, with what it means.
+      </p>
+
+      <h2 id="performance">Performance</h2>
+      <table>
+        <thead><tr><th>Spec</th><th>Value</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td>0 to 30 mph</td><td>1.8 s</td><td>Standing start to intercept speed. Ducted rotors spool in under 400 ms.</td></tr>
+          <tr><td>Flight time</td><td>45 min</td><td>Continuous patrol on a single charge, at 12 °C with a full sensor payload.</td></tr>
+          <tr><td>Noise</td><td>&lt;18 dB at 30 m</td><td>Quieter than a suburban street at night.</td></tr>
+          <tr><td>Patrol</td><td>24/7</td><td>Autonomous, with the nest recharging between sorties.</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="sensors">Sensors (SNS-4K)</h2>
+      <table>
+        <thead><tr><th>Spec</th><th>Value</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td>Optical</td><td>4K</td><td>Stabilised on a 3-axis gimbal.</td></tr>
+          <tr><td>Thermal</td><td>640×512 LWIR</td><td>Body-heat signature through hedgerows at 120 m.</td></tr>
+          <tr><td>Low light</td><td>0.0001 lux</td><td>Starlight-level sensitivity.</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="propulsion">Propulsion (WHD-II)</h2>
+      <table>
+        <thead><tr><th>Spec</th><th>Value</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td>Rotor</td><td>Toroidal</td><td>Half the tip speed of a conventional quad.</td></tr>
+          <tr><td>Mounts</td><td>Magnetically damped</td><td>Vibration isolation for the sensor head and for noise.</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="processing">Processing (AI-TC7)</h2>
+      <table>
+        <thead><tr><th>Spec</th><th>Value</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td>On-board NPU</td><td>42 TOPS</td><td>All classification runs on the aircraft.</td></tr>
+          <tr><td>Classification</td><td>0.4 s</td><td>Per moving body: cat, fox, courier, intruder.</td></tr>
+          <tr><td>Data leaving the property</td><td>None</td><td>No frame is uploaded to make a decision.</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="nest">Charging Nest (NST-01)</h2>
+      <table>
+        <thead><tr><th>Spec</th><th>Value</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td>Recharge</td><td>80% in 22 min</td><td>Heated dock; opens on command.</td></tr>
+          <tr><td>Ingress rating</td><td>IP67</td><td>Sealed against dust and 30 minutes under one metre of water.</td></tr>
+          <tr><td>Recovery</td><td>Self-seating</td><td>Launches, patrols and re-seats without a person.</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="link">Link and storage</h2>
+      <table>
+        <thead><tr><th>Spec</th><th>Value</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td>Radio link</td><td>AES-256, local mesh</td><td>Sub-second live feed. Keys are generated on the nest and never leave it.</td></tr>
+          <tr><td>Event history</td><td>On-premise</td><td>Nothing is stored in a cloud account.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="todo">
+        <p>
+          ⚠ Pre-production. The figures on this page describe the system as it is being developed and
+          are targets, not measured results. They may change before release. See our
+          <a href="/terms#information">terms</a>.
+        </p>
+      </div>
+      <div class="cta-row">
+        <a class="cta" href="/#reserve">Join the alpha waitlist</a>
+        <a class="cta-ghost" href="/#command">Try the command view</a>
+      </div>
+      <footer>
+        © 2026 Hornet Drones. <a href="/">Back to the site</a>
+        <nav aria-label="Site pages">
+          <a href="/hrn-01">HRN-01 Drone</a>
+          <a href="/charging-nest">Charging Nest</a>
+          <a href="/command-view">Command View</a>
+          <a href="/specifications">Specifications</a>
+          <a href="/about">About</a>
+          <a href="/press">Press</a>
+          <a href="/careers">Careers</a>
+          <a href="/privacy">Privacy</a>
+          <a href="/terms">Terms</a>
+          <a href="/airspace">Airspace &amp; regulation</a>
+        </nav>
+      </footer>
+    </div>
+  </body>
+</html>

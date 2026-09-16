@@ -41,10 +41,10 @@ const FOOTER_LINKS = [
   {
     title: 'System',
     links: [
-      { label: 'HRN-01 Drone', href: '#hardware' },
-      { label: 'Charging Nest', href: '#hardware' },
-      { label: 'Command View', href: '#command' },
-      { label: 'Specifications', href: '#specs' },
+      { label: 'HRN-01 Drone', href: '/hrn-01' },
+      { label: 'Charging Nest', href: '/charging-nest' },
+      { label: 'Command View', href: '/command-view' },
+      { label: 'Specifications', href: '/specifications' },
     ],
   },
   {

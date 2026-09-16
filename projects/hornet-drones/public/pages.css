@@ -43,3 +43,20 @@ footer nav a:hover, footer nav a:focus-visible { color: #fff; }
   th { display: none; }
   td { border: 0; border-bottom: 1px solid var(--hair); padding: 8px 0; }
 }
+
+/* ── Product pages ── */
+.product .wrap { max-width: 860px; }
+.hero-img { display: block; width: 100%; aspect-ratio: 16 / 7; object-fit: cover; object-position: 50% 40%; border-radius: 14px; border: 1px solid var(--hair); margin: 28px 0 8px; filter: grayscale(1) contrast(1.05); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--hair); border: 1px solid var(--hair); border-radius: 12px; overflow: hidden; margin: 28px 0; }
+.stats > div { background: var(--ink); padding: 18px 16px; }
+.stats b { display: block; font-size: 26px; line-height: 1; letter-spacing: -.02em; color: #fff; }
+.stats b small { font-size: 13px; color: var(--silver); margin-left: 4px; font-weight: 400; }
+.stats span { display: block; margin-top: 8px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--silver); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 12px 0 0; list-style: none; }
+.chips li { margin: 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: rgba(255,255,255,.8); border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.06); border-radius: 999px; padding: 4px 12px; }
+.part { border-top: 1px solid var(--hair); padding: 24px 0 8px; }
+.part .code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: .2em; color: var(--silver); }
+.part h2 { margin-top: 6px; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 36px; }
+.cta-ghost { display: inline-block; color: #fff; text-decoration: none; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; padding: 12px 22px; border: 1px solid rgba(255,255,255,.35); border-radius: 999px; }
+.cta-ghost:hover, .cta:hover { opacity: .85; }
