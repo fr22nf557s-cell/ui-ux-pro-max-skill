@@ -42,7 +42,7 @@ const QA = [
   },
   {
     q: 'What happens to my data?',
-    a: 'The only data this site collects is the email address you give us for the waitlist, with your consent, and we send one confirmation email before anything else. Everything we do with it is in the privacy notice.',
+    a: 'The only personal data this site collects is the email address you give us for the waitlist, with your consent, and we send one confirmation email before anything else. Beyond that we keep cookie-free, aggregated page counts, nothing tied to you. Everything we do with it is in the privacy notice.',
     link: ['/privacy', 'Privacy notice'],
   },
 ]
