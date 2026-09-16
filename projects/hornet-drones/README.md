@@ -100,25 +100,44 @@ host.
 
 ### Performance
 
-- `three.js` is `React.lazy()`-loaded and split into its own chunk, so the
-  ~820 KB 3D vendor payload never blocks first paint. Initial JS is ~97 KB gzip.
-- The canvas caps DPR at 1.75 and switches to `frameloop="demand"` for
-  reduced-motion users (one frame, then idle).
-- Animations are limited to `transform` and `opacity`; the radar sweep and
-  status pulses are composited CSS keyframes, not per-frame JS.
-- A cached WebGL probe (`src/lib/webgl.js`) skips the 3D chunk entirely on
-  devices that cannot render it.
+- The hero badge, headline and intro are plain HTML in `index.html`
+  (`#lcp-copy`), painted with the first frame, with invisible layout-only
+  stand-ins for the buttons and stats. `Hero.jsx` renders the same markup with
+  the same Tailwind classes and removes the shell after it mounts, so the swap
+  is pixel-identical. **Keep the two in sync**: any class change to the hero
+  copy, buttons or stats must be made in both files, and the shell keeps no
+  entrance animation on the text (Chrome records a composited fade as painted
+  only when it ends, which put the LCP a second late).
+- Fonts are self-hosted from `public/fonts` and declared in `src/index.css`;
+  `index.html` preloads the two faces the hero is set in, so there is no
+  font-swap shift.
+- Everything below the second section is a lazy chunk fetched on idle and
+  rendered through Suspense with sized placeholders; deep links to those
+  sections are handled in `App.jsx`, which jumps to the target once it mounts.
+- `three.js` only ever loads through the hero's WebGL fallback, when the
+  footage cannot play. Data Saver users get the poster and no clip.
+- Animations are limited to `transform` and `opacity`; the command feed is a
+  single canvas that pauses off-screen and under reduced motion. Its tracking
+  lock is a DOM overlay positioned from the canvas box each frame, so it stays
+  crisp at 2x zoom.
+- Never bind a Framer motion value in `style` on an element that also animates
+  the same property: Framer animates the shared value itself. The hero's scroll
+  fade and the scroll cue's delayed entrance live on separate elements for this
+  reason.
 
 ### Accessibility
 
 - `prefers-reduced-motion` is honoured everywhere. The exploded view drops its
   pinning entirely and renders a static, fully-readable four-card breakdown;
-  hovers, springs and loops collapse to their end state.
+  hovers, springs and loops collapse to their end state; the command feed
+  pauses and zoom applies directly.
 - Semantic landmarks, a skip link, one high-contrast focus ring site-wide,
-  `aria-checked` on the feed toggle, `role="alert"` on form validation, and an
-  `sr-only` copy of the hardware breakdown so the choreography never hides content.
-- Amber `#F59E0B` on `#0B0C10` clears 4.5:1; the amber-filled buttons use black
-  text rather than white.
+  `aria-current` on the active nav link, a radiogroup for the feed mode,
+  `role="alert"` on form validation with `aria-invalid` scoped to the control
+  the error belongs to, Escape closes the mobile menu and returns focus, and an
+  `sr-only` copy of the hardware breakdown so the choreography never hides
+  content. axe reports zero violations at 1440 and 390 on every page.
+- The palette is monochrome; every text tone on the dark ground clears WCAG AA.
 
 ## Wiring the waitlist
 
