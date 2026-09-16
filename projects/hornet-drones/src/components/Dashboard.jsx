@@ -86,6 +86,27 @@ export default function Dashboard() {
 
   const airborne = trigger === 'deployed' || trigger === 'returning'
 
+  // Keyboard: T thermal, O optical, + / - zoom, 1-3 tabs. Only while the
+  // pointer is over the panel, so the page's own shortcuts are untouched.
+  const hover = useRef(false)
+  useEffect(() => {
+    const onKey = (e) => {
+      if (!hover.current || e.metaKey || e.ctrlKey || e.altKey) return
+      const k = e.key.toLowerCase()
+      if (k === 't') setMode('thermal')
+      else if (k === 'o') setMode('optical')
+      else if (k === '+' || k === '=') setZoom((z) => Math.min(ZOOM.length - 1, z + 1))
+      else if (k === '-' || k === '_') setZoom((z) => Math.max(0, z - 1))
+      else if (k === '1') setTab('live')
+      else if (k === '2') setTab('map')
+      else if (k === '3') setTab('events')
+      else return
+      e.preventDefault()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
   return (
     <section id="command" className="relative overflow-hidden py-28 sm:py-36">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -140,7 +161,13 @@ export default function Dashboard() {
             <motion.div
               ref={panelRef}
               onPointerMove={handlePointer}
-              onPointerLeave={resetPointer}
+              onPointerEnter={() => {
+                hover.current = true
+              }}
+              onPointerLeave={() => {
+                hover.current = false
+                resetPointer()
+              }}
               style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
               className="gpu relative overflow-hidden rounded-2xl border border-white/10 bg-[#0d0f14] shadow-panel"
             >
@@ -190,6 +217,9 @@ export default function Dashboard() {
                   <span className="hidden items-center gap-2 sm:flex">
                     <StatusDot />
                     Live
+                  </span>
+                  <span className="hidden text-white/35 lg:inline" title="Keyboard: T thermal · O optical · + − zoom · 1 2 3 tabs">
+                    T · O · ± · 1 2 3
                   </span>
                   <time className="whitespace-nowrap tabular-nums text-white" dateTime={now.toISOString()}>
                     {hhmmss(now)}
