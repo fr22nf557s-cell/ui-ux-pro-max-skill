@@ -223,7 +223,7 @@ export default function Dashboard() {
                     <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
                     <span className="h-2.5 w-2.5 rounded-full bg-white/60" />
                   </div>
-                  <span className="hidden font-mono text-[10px] uppercase tracking-wide2 text-white/60 sm:inline">
+                  <span className="hidden whitespace-nowrap font-mono text-[10px] uppercase tracking-wide2 text-white/60 sm:inline">
                     Hornet Command
                   </span>
                   <span className="hidden text-white/20 sm:inline">/</span>
@@ -262,7 +262,7 @@ export default function Dashboard() {
                     <StatusDot />
                     Live
                   </span>
-                  <span className="hidden text-white/35 lg:inline" title="Keyboard: T thermal · O optical · + − zoom · 1 2 3 tabs">
+                  <span className="hidden whitespace-nowrap text-white/35 xl:inline" title="Keyboard: T thermal · O optical · + − zoom · 1 2 3 tabs">
                     T · O · ± · 1 2 3
                   </span>
                   <time className="whitespace-nowrap tabular-nums text-white" dateTime={now.toISOString()}>
@@ -406,7 +406,7 @@ export default function Dashboard() {
                           </button>
                         </span>
                       ) : (
-                        <span>Geofence · 1 : 400</span>
+                        <span className="whitespace-nowrap">Geofence · 1 : 400</span>
                       )}
                     </div>
                     <SitePlan
@@ -449,8 +449,8 @@ export default function Dashboard() {
                   }`}
                 >
                   <div className="flex items-center justify-between border-b border-white/10 px-3 py-2 font-mono text-[9px] uppercase tracking-wide2 text-white/55">
-                    <span>Events · today</span>
-                    <span className="text-white/35">Stored on-premise</span>
+                    <span className="whitespace-nowrap">Events · today</span>
+                    <span className="hidden whitespace-nowrap text-white/35 xl:inline">Stored on-premise</span>
                   </div>
                   {tab === 'events' && (
                     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/[0.06] px-3 py-2">

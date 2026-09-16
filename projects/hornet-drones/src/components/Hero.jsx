@@ -83,7 +83,7 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="relative mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-10 px-5 sm:px-8 lg:grid-cols-12 lg:gap-6 lg:px-12">
+      <div className="relative mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-10 px-5 sm:px-8 md:min-h-[calc(100svh-8rem)] lg:grid-cols-12 lg:gap-6 lg:px-12">
         {/* ── Copy, overlaid on the footage ── */}
         <motion.div
           style={{ y: copyY, opacity: copyOpacity }}

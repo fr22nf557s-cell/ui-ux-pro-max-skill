@@ -153,11 +153,11 @@ export default function SitePlan({ fence, onFenceChange, editable = false, reduc
         ))}
       </svg>
 
-      <div className="mt-1 flex items-center justify-between font-mono text-[9px] uppercase tracking-wide2">
-        <span className="text-white/55">
+      <div className="mt-1 flex flex-wrap items-center justify-between gap-x-3 font-mono text-[9px] uppercase tracking-wide2">
+        <span className="whitespace-nowrap text-white/55">
           {CONTACTS.length} contacts · {flagged.length} flagged
         </span>
-        <span className="text-white">{airborne ? 'Intercept' : flagged.length ? 'Patrol · alert' : 'Patrol'}</span>
+        <span className="whitespace-nowrap text-white">{airborne ? 'Intercept' : flagged.length ? 'Patrol · alert' : 'Patrol'}</span>
       </div>
     </div>
   )
