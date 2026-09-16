@@ -27,7 +27,9 @@
      description  your own copy (never paste another retailer's text)
      contents     items separated by " | "
      specs        key=value pairs separated by " | "   e.g. Language=English | Packs=9
-     image        file name or path; with --images <dir> a bare file name is resolved there
+     brand        optional manufacturer shown instead of the game (Dragon Shield, Ultra Pro…)
+     image        file name, path or URL; with --images <dir> a bare file name is resolved there.
+                  Left empty, the importer looks for <dir>/<id>.webp|.jpg|.jpeg|.png automatically
      grader, grade, gradeLabel, cert, artLabel   graded singles only
 
    Images: put product photos in assets/img/products/ (4:5 ratio, ~800x1000, WebP or JPG)
@@ -95,6 +97,10 @@ rows.forEach((r, i) => {
   if (seen.has(id)) { let n = 2; while (seen.has(`${id}-${n}`)) n++; id = `${id}-${n}`; }
   seen.add(id);
   let image = r.image || null;
+  if (!image && imagesDir) {
+    const hit = ['webp', 'jpg', 'jpeg', 'png'].map((ext) => join(imagesDir, `${id}.${ext}`)).find((f) => existsSync(resolve(root, f)));
+    if (hit) image = hit.replace(/\\/g, '/');
+  }
   if (image) {
     if (imagesDir && !image.includes('/')) image = join(imagesDir, image).replace(/\\/g, '/');
     if (!image.startsWith('http') && !existsSync(resolve(root, image))) errors.push(`line ${line}: image not found: ${image}`);
@@ -115,6 +121,7 @@ rows.forEach((r, i) => {
     specs: Object.fromEntries((r.specs || '').split('|').map((s) => s.split('=').map((x) => x.trim())).filter(([k, v]) => k && v)),
     image
   };
+  if (r.brand) p.brand = r.brand;
   if (type === 'single') {
     p.artLabel = r.artLabel || p.set;
     p.grade = { grader: r.grader || 'PSA', grade: num(r.grade) ?? 10, label: r.gradeLabel || 'Gem Mint', cert: r.cert || '' };

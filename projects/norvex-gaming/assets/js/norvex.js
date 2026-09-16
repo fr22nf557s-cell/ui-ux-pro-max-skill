@@ -16,6 +16,8 @@
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const money = new Intl.NumberFormat(config.locale, { style: 'currency', currency: config.currency });
   const fmt = (n) => money.format(n);
+  const money0 = new Intl.NumberFormat(config.locale, { style: 'currency', currency: config.currency, maximumFractionDigits: 0 });
+  const fmt0 = (n) => (Number.isInteger(n) ? money0 : money).format(n);
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const byId = Object.fromEntries(products.map((p) => [p.id, p]));
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -61,7 +63,21 @@
   ];
 
   /* ---------------------------------------------------- product helpers */
-  const gameOf = (p) => games[p.game] || games.norvex;
+  /* accessory brands get their own packaging palette; sleeve colour variants tint the art */
+  const BRAND_PALETTES = {
+    'dragon shield': { a: '#9f1239', b: '#1c1917', c: '#e11d48' },
+    'ultra pro': { a: '#1d4ed8', b: '#0f172a', c: '#60a5fa' },
+    'gamegenic': { a: '#0f766e', b: '#0b1a1a', c: '#2dd4bf' },
+    'ultimate guard': { a: '#52525b', b: '#18181b', c: '#a1a1aa' }
+  };
+  const COLOUR_HEX = { black: '#3f3f46', red: '#b91c1c', blue: '#1d4ed8', white: '#d4d4d8', green: '#15803d', purple: '#6d28d9', pink: '#db2777', gold: '#d9b75b', silver: '#a1a1aa', onyx: '#3f3f46', 'jet black': '#27272a' };
+  const gameOf = (p) => {
+    const base = games[p.game] || games.norvex;
+    const brand = p.brand && BRAND_PALETTES[p.brand.toLowerCase()];
+    const colour = p.specs && p.specs.Colour && COLOUR_HEX[String(p.specs.Colour).toLowerCase()];
+    if (!brand && !colour) return base;
+    return Object.assign({}, base, brand || {}, colour ? { a: colour } : {});
+  };
   const typeOf = (p) => types[p.type] || types.accessory;
   const availability = (p) =>
     p.preorder ? { key: 'pre', label: 'Pre-order' }
@@ -69,7 +85,7 @@
         : p.stock <= 5 ? { key: 'low', label: `Only ${p.stock} left` }
           : { key: 'in', label: 'In stock' };
   const productHref = (p) => `product.html?id=${encodeURIComponent(p.id)}`;
-  const haystack = (p) => `${p.name} ${p.set} ${gameOf(p).name} ${typeOf(p).name} ${p.grade ? p.grade.grader + ' ' + p.grade.grade : ''}`.toLowerCase();
+  const haystack = (p) => `${p.name} ${p.set} ${p.brand || ''} ${gameOf(p).name} ${typeOf(p).name} ${p.grade ? p.grade.grader + ' ' + p.grade.grade : ''}`.toLowerCase();
   const matches = (p, q) => { const h = haystack(p); return q.toLowerCase().split(/\s+/).filter(Boolean).every((t) => h.includes(t)); };
 
   function badges(p) {
@@ -83,14 +99,17 @@
     return b.join('');
   }
 
-  /* Stylised packaging art. Swap for a real photo by setting `image` on the product. */
+  /* Packaging art. The CSS mock always renders; a product photo (p.image) is layered on top and
+     fades in when it loads. If the photo fails, it is removed and the mock stays. */
   function art(p, opts = {}) {
+    const mock = artMock(p);
+    if (!p.image) return mock;
+    return `${mock}<img class="art__photo" src="${esc(p.image)}" alt="${esc(p.name)}" loading="${opts.eager ? 'eager' : 'lazy'}" decoding="async" width="800" height="1000" data-art-fallback="${esc(p.id)}">`;
+  }
+  function artMock(p) {
     const g = gameOf(p);
     const t = typeOf(p);
     const style = `--a:${g.a};--b:${g.b};--c:${g.c}`;
-    if (p.image) {
-      return `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="${opts.eager ? 'eager' : 'lazy'}" decoding="async" width="800" height="1000">`;
-    }
     if (t.art === 'slab') {
       const gr = p.grade || { grader: 'PSA', grade: 10 };
       const label = p.artLabel || p.name;
@@ -100,7 +119,7 @@
       </div></div>`;
     }
     const isBox = t.art === 'box';
-    const gameLine = p.game === 'norvex' ? 'Norvex' : g.name;
+    const gameLine = p.brand || (p.game === 'norvex' ? 'Norvex' : g.name);
     return `<div class="art art--${t.art}" style="${style}" aria-hidden="true"><div class="art__box">
       <div class="art__top"></div><div class="art__side"></div>
       <div class="art__front">
@@ -123,7 +142,7 @@
         ${art(p)}
       </div>
       <div class="product__body">
-        <span class="product__game">${esc(g.short)} · ${esc(t.singular)}</span>
+        <span class="product__game">${esc(p.brand || g.short)} · ${esc(t.singular)}</span>
         <h3 class="product__name"><a href="${productHref(p)}">${esc(p.name)}</a></h3>
         <div class="product__row">
           <span class="price product__price">${fmt(p.price)}${p.compareAt ? `<span class="price--compare">${fmt(p.compareAt)}</span>` : ''}</span>
@@ -299,7 +318,7 @@
           <div class="line__media" style="--a:${g.a}">${art(p)}</div>
           <div class="line__info">
             <a class="line__name" href="${productHref(p)}">${esc(p.name)}</a>
-            <span class="line__meta">${esc(g.short)} · ${p.preorder ? 'Pre-order · ships on release' : 'In stock'}</span>
+            <span class="line__meta">${esc(p.brand || g.short)} · ${p.preorder ? 'Pre-order · ships on release' : 'In stock'}</span>
             <div class="line__controls">
               <div class="stepper stepper--sm" role="group" aria-label="Quantity for ${esc(p.name)}">
                 <button type="button" data-line-step="-1" aria-label="Decrease quantity">${icon('minus')}</button>
@@ -375,7 +394,7 @@
       if (!hits.length) { results.innerHTML = hint(`No products found for “${esc(q)}”.`); return; }
       results.innerHTML = hits.map((p) => {
         const g = gameOf(p); const t = typeOf(p);
-        return `<a class="hit" href="${productHref(p)}"><div class="hit__media" style="--a:${g.a}">${art(p)}</div><div><div class="hit__name">${esc(p.name)}</div><div class="hit__meta">${esc(g.short)} · ${esc(t.singular)} · ${esc(availability(p).label)}</div></div><span class="price small">${fmt(p.price)}</span></a>`;
+        return `<a class="hit" href="${productHref(p)}"><div class="hit__media" style="--a:${g.a}">${art(p)}</div><div><div class="hit__name">${esc(p.name)}</div><div class="hit__meta">${esc(p.brand || g.short)} · ${esc(t.singular)} · ${esc(availability(p).label)}</div></div><span class="price small">${fmt(p.price)}</span></a>`;
       }).join('') + `<a class="hit" href="shop.html?q=${encodeURIComponent(q)}"><div></div><div class="hit__name gold">See all results for “${esc(q)}”</div><span class="gold">${icon('arrowRight')}</span></a>`;
     }
     input.addEventListener('input', () => render(input.value));
@@ -443,7 +462,7 @@
     const gc = counts('game'); const tc = counts('type');
     const cb = (group, key, label, n) => `<label class="checkbox"><input type="checkbox" name="${group}" value="${esc(key)}"${state[group].includes(key) ? ' checked' : ''}><span>${esc(label)}</span><span class="checkbox__count">${n}</span></label>`;
     filtersEl.innerHTML = `
-      <div class="filters__group"><div class="filters__title">Game</div>${Object.entries(games).filter(([k]) => gc[k]).map(([k, g]) => cb('game', k, g.name, gc[k])).join('')}</div>
+      <div class="filters__group"><div class="filters__title">Game</div>${Object.entries(games).filter(([k]) => gc[k] && k !== 'norvex').map(([k, g]) => cb('game', k, g.name, gc[k])).join('')}</div>
       <div class="filters__group"><div class="filters__title">Product type</div>${Object.entries(types).filter(([k]) => tc[k]).map(([k, t]) => cb('type', k, t.name, tc[k])).join('')}</div>
       <div class="filters__group"><div class="filters__title">Availability</div>${cb('avail', 'instock', 'In stock', products.filter((p) => !p.preorder && p.stock > 0).length)}${cb('avail', 'preorder', 'Pre-order', products.filter((p) => p.preorder).length)}</div>
       <div class="filters__group"><div class="filters__title">Price</div><div class="filters__price">
@@ -577,7 +596,7 @@
       </div>
       <div class="pdp__info">
         <div class="stack reveal" style="gap:.85rem">
-          <span class="eyebrow eyebrow--plain">${esc(g.name)} · ${esc(t.singular)}</span>
+          <span class="eyebrow eyebrow--plain">${esc(p.brand || g.name)} · ${esc(t.singular)}</span>
           <h1 class="pdp__title">${esc(p.name)}</h1>
           <div class="cluster">${stars}</div>
         </div>
@@ -589,14 +608,14 @@
         </div>
         <ul class="pdp__perks reveal" style="--i:4">
           <li>${icon('shield')}100% authentic · factory-sealed or slab-verified</li>
-          <li>${icon('truck')}Insured, tracked shipping · free over ${fmt(config.freeShippingThreshold)}</li>
+          <li>${icon('truck')}Insured, tracked shipping · free over ${fmt0(config.freeShippingThreshold)}</li>
           <li>${icon('package')}Double-boxed with corner protection</li>
           <li>${icon('refresh')}30-day returns on unopened product</li>
         </ul>
         <div class="acc reveal" style="--i:5">
           <details open><summary>What's inside ${icon('plus')}</summary><div class="acc__body"><ul>${(p.contents || []).map((c) => `<li>${esc(c)}</li>`).join('')}</ul></div></details>
           <details><summary>Details ${icon('plus')}</summary><div class="acc__body"><dl class="spec">${Object.entries(p.specs || {}).map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}${p.grade ? `<div><dt>Certification</dt><dd>${esc(p.grade.grader)} #${esc(p.grade.cert)}</dd></div>` : ''}</dl></div></details>
-          <details><summary>Shipping &amp; returns ${icon('plus')}</summary><div class="acc__body"><p>In-stock orders dispatch within 48 hours, fully insured and tracked. Free shipping over ${fmt(config.freeShippingThreshold)}. Pre-orders ship on release day. Unopened sealed product can be returned within 30 days; graded singles are final sale unless the certification does not match.</p></div></details>
+          <details><summary>Shipping &amp; returns ${icon('plus')}</summary><div class="acc__body"><p>In-stock orders dispatch within 48 hours, fully insured and tracked. Free shipping over ${fmt0(config.freeShippingThreshold)}. Pre-orders ship on release day. Unopened sealed product can be returned within 30 days; graded singles are final sale unless the certification does not match.</p></div></details>
           <details><summary>Authenticity guarantee ${icon('plus')}</summary><div class="acc__body"><p>Every sealed product is sourced directly from official distributors and tamper-checked before it enters the vault. Graded singles ship in their original slab with a certification number you can verify on the grader's registry. If anything ever falls short, we refund in full.</p></div></details>
         </div>
       </div>`;
@@ -639,6 +658,15 @@
 
   /* --------------------------------------------------------------- init */
   function init() {
+    document.addEventListener('error', (e) => {
+      const img = e.target;
+      if (img instanceof HTMLImageElement && img.dataset.artFallback) img.remove();
+    }, true);
+    document.addEventListener('load', (e) => {
+      const img = e.target;
+      if (img instanceof HTMLImageElement && img.dataset.artFallback) img.classList.add('is-loaded');
+    }, true);
+    $$('[data-free-ship]').forEach((el) => { el.textContent = fmt0(config.freeShippingThreshold); });
     Cart.load();
     Cart.mount();
     initMenu();

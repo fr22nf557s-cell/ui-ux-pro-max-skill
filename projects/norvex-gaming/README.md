@@ -1,9 +1,15 @@
 # Norvex Gaming — storefront
 
 A premium, dark-luxury e-commerce front end for **Norvex Gaming**: sealed TCG product
-(booster boxes, booster bundles, Elite Trainer Boxes, premium collections), graded singles and
-pre-orders across Pokémon, Magic: The Gathering, One Piece, Yu-Gi-Oh!, Disney Lorcana,
-Star Wars: Unlimited and Riftbound.
+(booster boxes, bundles, packs, Elite Trainer Boxes, decks, premium collections), graded singles,
+pre-orders and accessories across Pokémon, Magic: The Gathering, One Piece, Yu-Gi-Oh!, Disney
+Lorcana, Star Wars: Unlimited, Flesh and Blood, Riftbound, Digimon and Dragon Ball Super.
+
+The catalogue (144 products, priced in GBP) is modelled on a full UK TCG retailer's range: every
+major game, sealed product in every format, PSA 10 singles and the big accessory brands (Dragon
+Shield, Ultra Pro, Gamegenic, Ultimate Guard). Product names follow the publishers' real lines;
+**prices are estimated UK RRP / market prices and stock levels are placeholders**, so verify both
+against your live inventory before launch.
 
 Zero build step, zero runtime dependencies. Open `index.html` in a browser or serve the folder:
 
@@ -86,9 +92,34 @@ All colours, spacing, radii and easings are CSS custom properties at the top of 
    `norvex.js` (`[data-checkout]`).
 5. **Newsletter** — `initNewsletter()` in `norvex.js` validates the email client-side; POST it to
    Klaviyo / Mailchimp / Resend where the `TODO` comment sits.
-6. **Placeholder content to replace before launch** — the four stats in the strip under the hero
-   (orders shipped, rating, games, dispatch time), the three sample reviews, the pre-order items and
-   any product names/prices that don't match your real allocations. Footer links marked `#` need pages.
+6. **Placeholder content to replace before launch** — every price and stock figure in the catalogue,
+   the four stats in the strip under the hero (orders shipped, rating, games, dispatch time), the three
+   sample reviews, the pre-order items (they reflect the newest sets at the time of writing) and the
+   graded-single cert numbers. Footer links marked `#` need pages.
+
+## Getting official product images
+
+Publisher and accessory-brand packshots are supplied to retailers through their trade channels, not
+scraped from consumer sites. Where to ask:
+
+| Publisher / brand | Where retailers get packshots |
+|---|---|
+| Pokémon TCG | Your Pokémon distributor's retailer resources (the same kit that ships with each set's sell sheet) |
+| Magic: The Gathering | Wizards Play Network (WPN) retailer portal → Marketing Materials |
+| One Piece, Digimon, Dragon Ball Super | Bandai retailer assets via your Bandai distributor |
+| Yu-Gi-Oh! | Konami OTS (Official Tournament Store) portal |
+| Disney Lorcana | Ravensburger retailer programme via your distributor |
+| Star Wars: Unlimited | Fantasy Flight Games / Asmodee retailer assets |
+| Flesh and Blood | Legend Story Studios retailer resources |
+| Riftbound | Riot Games retailer programme |
+| Dragon Shield, Ultra Pro, Gamegenic, Ultimate Guard | Each brand's B2B / dealer portal (image packs per SKU) |
+
+Name each file `<product id>.webp` (ids are in `catalog.js` and in every product URL), drop it in
+`assets/img/products/`, and re-run the importer — it matches images to products by id automatically.
+
+Graded singles currently point at the public Pokémon TCG card-image CDN (`images.pokemontcg.io`);
+if any image fails to load the storefront swaps in the slab art on its own. For launch, replace those
+URLs with your own photos of the actual slabs, cert label visible — buyers expect to see the real card.
 
 ## Accessibility & performance notes
 
@@ -97,7 +128,7 @@ All colours, spacing, radii and easings are CSS custom properties at the top of 
 * Text contrast ≥ 4.5:1 everywhere (muted text 9.6:1, tertiary labels 5.1:1, gold on black 10:1).
 * No layout shift: product media uses a fixed 4:5 ratio; images are `loading="lazy"` with dimensions.
 * Works without JavaScript (content and links render; cart/search/filters need JS).
-* No third-party scripts. Only external requests are the two Google Fonts families.
+* No third-party scripts. External requests are the two Google Fonts families and, for graded singles, the card images noted above.
 
 ## Trademarks
 
