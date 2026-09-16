@@ -62,6 +62,7 @@ export default function SitePlan({ fence, onFenceChange, editable = false, reduc
   }
 
   const flagged = CONTACTS.filter((c) => !c.known && inside([c.x, c.y], fence))
+  const hold = airborne ? flagged[0] || CONTACTS[2] : null
   const fenceD = fence.map(([x, y], i) => `${i ? 'L' : 'M'} ${x} ${y}`).join(' ') + ' Z'
 
   return (
@@ -120,10 +121,17 @@ export default function SitePlan({ fence, onFenceChange, editable = false, reduc
           )
         })}
 
-        {/* Aircraft on route */}
+        {/* Aircraft: rides the route on patrol, holds over the flagged
+            contact while an intercept is on station */}
         <g
-          className={reduce ? '' : 'animate-patrol'}
-          style={reduce ? { transform: 'translate(58px, 40px)' } : { offsetPath: `path("${ROUTE}")`, offsetRotate: 'auto' }}
+          className={reduce || hold ? '' : 'animate-patrol'}
+          style={
+            hold
+              ? { transform: `translate(${hold.x}px, ${hold.y - 9}px)`, transition: 'transform 0.6s ease' }
+              : reduce
+                ? { transform: 'translate(58px, 40px)' }
+                : { offsetPath: `path("${ROUTE}")`, offsetRotate: 'auto' }
+          }
         >
           <circle r="7" fill="rgba(255,255,255,0.12)" />
           <path d="M -4 -4 L 4 4 M -4 4 L 4 -4" stroke="#fff" strokeWidth="1.4" strokeLinecap="round" />

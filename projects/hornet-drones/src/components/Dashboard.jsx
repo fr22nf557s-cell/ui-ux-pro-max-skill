@@ -27,6 +27,34 @@ const FEED = {
 
 const ZOOM = [1, 1.5, 2]
 
+/*
+ * A patrol day, newest first, as seconds before the live clock. Kinds drive
+ * the Events tab filters; tones drive the row weight. Everything in it is a
+ * thing the page says the system does: sweeps, on-aircraft classification,
+ * a breach, docking and charging, the link check.
+ */
+const LOG = [
+  [84, 'Perimeter sweep complete · sector NW', 'ok', 'patrol'],
+  [219, 'Motion classified: domestic cat · ignored', 'muted', 'patrol'],
+  [361, 'Geofence breach · south gate', 'alert', 'alert'],
+  [402, 'Motion detected · south gate · classifying', 'muted', 'patrol'],
+  [902, 'Recharged to 92% · ready', 'muted', 'nest'],
+  [1340, 'Docked · charging', 'muted', 'nest'],
+  [1412, 'Perimeter sweep complete · sector SE', 'ok', 'patrol'],
+  [2210, 'Motion classified: fox · ignored', 'muted', 'patrol'],
+  [2790, 'Perimeter sweep complete · sector NE', 'ok', 'patrol'],
+  [3350, 'Wind 14 km/h · inside patrol envelope', 'muted', 'system'],
+  [4180, 'Perimeter sweep complete · sector SW', 'ok', 'patrol'],
+  [5400, 'Link check · AES-256 · mesh nominal', 'muted', 'system'],
+]
+
+const FILTERS = [
+  ['all', 'All'],
+  ['alert', 'Alerts'],
+  ['patrol', 'Patrol'],
+  ['nest', 'Nest'],
+]
+
 function useClock() {
   const [now, setNow] = useState(() => new Date())
   useEffect(() => {
@@ -47,6 +75,10 @@ export default function Dashboard() {
   const [tab, setTab] = useState('live')
   const [fence, setFence] = useState(DEFAULT_FENCE)
   const [trigger, setTrigger] = useState('idle') // idle | arming | deployed | returning
+  const [filter, setFilter] = useState('all')
+  // Entries the reader's own actions add to the log, newest first.
+  const [added, setAdded] = useState([])
+  const logEvent = (text, tone, kind) => setAdded((l) => [{ t: new Date(), text, tone, kind, key: Date.now() + text }, ...l])
   const panelRef = useRef(null)
 
   // ── Pointer tilt ────────────────────────────────────────────────────────
@@ -71,18 +103,30 @@ export default function Dashboard() {
   useEffect(() => {
     if (trigger === 'idle' || trigger === 'deployed') return undefined
     const ms = trigger === 'arming' ? 900 : 2200
-    const id = setTimeout(() => setTrigger(trigger === 'arming' ? 'deployed' : 'idle'), ms)
+    const id = setTimeout(() => {
+      if (trigger === 'arming') {
+        setTrigger('deployed')
+        logEvent('Intercept on station · south gate · eyes on', 'alert', 'alert')
+      } else {
+        setTrigger('idle')
+        logEvent('Returned to nest · charging', 'muted', 'nest')
+      }
+    }, ms)
     return () => clearTimeout(id)
   }, [trigger])
 
   // Events are timestamped relative to the live clock so the log never
   // shows a time that is obviously in the past or future.
   const events = [
-    { t: minus(now, 84), text: 'Perimeter sweep complete · sector NW', tone: 'ok' },
-    { t: minus(now, 219), text: 'Motion classified: domestic cat · ignored', tone: 'muted' },
-    { t: minus(now, 361), text: 'Geofence breach · south gate', tone: 'alert' },
-    { t: minus(now, 902), text: 'Recharged to 92% · ready', tone: 'muted' },
+    ...added,
+    ...LOG.map(([s, text, tone, kind]) => ({ t: minus(now, s), text, tone, kind, key: text })),
   ]
+  const shown = tab === 'events' ? events.filter((e) => filter === 'all' || e.kind === filter) : events.slice(0, 4)
+  const counts = {
+    sweeps: events.filter((e) => e.text.startsWith('Perimeter sweep')).length,
+    classified: events.filter((e) => e.text.startsWith('Motion classified')).length,
+    alerts: events.filter((e) => e.kind === 'alert').length,
+  }
 
   const airborne = trigger === 'deployed' || trigger === 'returning'
 
@@ -408,9 +452,31 @@ export default function Dashboard() {
                     <span>Events · today</span>
                     <span className="text-white/35">Stored on-premise</span>
                   </div>
-                  <ul className="divide-y divide-white/[0.06]">
-                    {events.map((e) => (
-                      <li key={e.text} className="flex items-center gap-3 px-3 py-2 font-mono text-[10px]">
+                  {tab === 'events' && (
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/[0.06] px-3 py-2">
+                      <div role="group" aria-label="Filter events" className="flex gap-1">
+                        {FILTERS.map(([key, label]) => (
+                          <button
+                            key={key}
+                            type="button"
+                            aria-pressed={filter === key}
+                            onClick={() => setFilter(key)}
+                            className={`rounded-md px-2 py-1 font-mono text-[9px] uppercase tracking-wide2 transition-colors ${
+                              filter === key ? 'bg-white text-void' : 'text-white/55 hover:text-white'
+                            }`}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                      <span className="font-mono text-[9px] uppercase tracking-wide2 text-white/45">
+                        {counts.sweeps} sweeps · {counts.classified} classified · {counts.alerts} {counts.alerts === 1 ? 'alert' : 'alerts'}
+                      </span>
+                    </div>
+                  )}
+                  <ul className="divide-y divide-white/[0.06]" aria-live={tab === 'events' ? 'polite' : undefined}>
+                    {shown.map((e) => (
+                      <li key={e.key} className="flex items-center gap-3 px-3 py-2 font-mono text-[10px]">
                         <time className="tabular-nums text-white/45">{hhmmss(e.t)}</time>
                         <span
                           className={`h-1.5 w-1.5 flex-none rounded-full ${
@@ -419,12 +485,19 @@ export default function Dashboard() {
                         />
                         <span className={`truncate ${e.tone === 'alert' ? 'text-white' : 'text-white/55'}`}>{e.text}</span>
                         {e.tone === 'alert' && (
-                          <span className="ml-auto rounded border border-white/30 px-1.5 py-0.5 text-[8px] uppercase tracking-wide2 text-white/80">
+                          <button
+                            type="button"
+                            onClick={() => setTab('live')}
+                            className="ml-auto rounded border border-white/30 px-1.5 py-0.5 text-[8px] uppercase tracking-wide2 text-white/80 transition-colors hover:border-white hover:text-white"
+                          >
                             Review
-                          </span>
+                          </button>
                         )}
                       </li>
                     ))}
+                    {shown.length === 0 && (
+                      <li className="px-3 py-6 text-center font-mono text-[10px] uppercase tracking-wide2 text-white/40">Nothing logged</li>
+                    )}
                   </ul>
                 </div>
 
@@ -432,7 +505,11 @@ export default function Dashboard() {
                 <div className={`flex gap-2 ${tab === 'live' ? 'flex-col md:col-span-2' : 'flex-col sm:flex-row md:col-span-5'}`}>
                   <button
                     type="button"
-                    onClick={() => trigger === 'idle' && setTrigger('arming')}
+                    onClick={() => {
+                      if (trigger !== 'idle') return
+                      setTrigger('arming')
+                      logEvent('Intercept launched · south gate', 'ok', 'alert')
+                    }}
                     aria-live="polite"
                     className={`relative flex-1 overflow-hidden rounded-xl px-5 py-4 font-mono text-[12px] font-bold uppercase tracking-wide2 transition-colors duration-200 ${
                       trigger === 'idle' ? 'bg-white text-void hover:bg-white/90' : 'bg-white/75 text-void'
@@ -463,7 +540,11 @@ export default function Dashboard() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => trigger === 'deployed' && setTrigger('returning')}
+                    onClick={() => {
+                      if (trigger !== 'deployed') return
+                      setTrigger('returning')
+                      logEvent('Return to nest · en route', 'muted', 'nest')
+                    }}
                     disabled={trigger !== 'deployed'}
                     className="rounded-xl border border-white/20 px-5 py-3 font-mono text-[11px] uppercase tracking-wide2 text-white/80 transition-colors hover:border-white/40 hover:text-white disabled:opacity-35"
                   >
