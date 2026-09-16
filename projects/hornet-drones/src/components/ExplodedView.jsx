@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { EASE, DURATION } from '../lib/motion'
 import { SectionLabel } from './Primitives'
@@ -103,8 +103,24 @@ function Glyph({ kind }) {
  * the parts separate. It is what the slabs add up to: without it the stack
  * reads as circuit boards, with it the boards read as a drone.
  */
-function Airframe({ progress }) {
-  const z = useTransform(progress, [0, 0.55], [22, 124])
+/*
+ * The lift is in pixels, so it is scaled with the stack: at 250 px wide a
+ * desktop-sized separation runs the lower slabs off the bottom of a phone
+ * screen. One factor for the whole rig, read from the viewport width.
+ */
+function useLiftScale() {
+  const read = () => (typeof window === 'undefined' ? 1 : window.innerWidth < 640 ? 0.42 : window.innerWidth < 1024 ? 0.6 : 1)
+  const [k, setK] = useState(read)
+  useEffect(() => {
+    const onResize = () => setK(read())
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+  return k
+}
+
+function Airframe({ progress, k = 1 }) {
+  const z = useTransform(progress, [0, 0.55], [22 * k, 124 * k])
   const opacity = useTransform(progress, [0, 0.14, 0.9, 1], [0.18, 0.9, 0.9, 0.9])
   return (
     <motion.div style={{ z, opacity }} className="pointer-events-none absolute inset-0">
@@ -132,13 +148,13 @@ function Airframe({ progress }) {
 }
 
 /** One slab in the isometric stack. */
-function Layer({ part, index, progress, active }) {
+function Layer({ part, index, progress, active, k = 1 }) {
   // Layer i starts stacked (z = -i * 14) and separates to (z = -i * 130).
   // Each layer reaches full separation at a slightly different point, which
   // gives the stack a cascading "unlatch" feel instead of one rigid move.
   const start = index * 0.06
-  const z = useTransform(progress, [start, start + 0.55], [-index * 14, -index * 132])
-  const spread = useTransform(progress, [start, start + 0.55], [0, index * 18])
+  const z = useTransform(progress, [start, start + 0.55], [-index * 14 * k, -index * 132 * k])
+  const spread = useTransform(progress, [start, start + 0.55], [0, index * 18 * k])
 
   return (
     <motion.div
@@ -206,6 +222,7 @@ export default function ExplodedView() {
   const reduce = useReducedMotion()
   const ref = useRef(null)
   const [active, setActive] = useState(0)
+  const k = useLiftScale()
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
 
@@ -366,9 +383,9 @@ export default function ExplodedView() {
                   className="absolute inset-0 [transform-style:preserve-3d]"
                   style={{ transform: 'rotateX(58deg) rotateZ(-38deg)' }}
                 >
-                  <Airframe progress={scrollYProgress} />
+                  <Airframe progress={scrollYProgress} k={k} />
                   {PARTS.map((p, i) => (
-                    <Layer key={p.id} part={p} index={i} progress={scrollYProgress} active={i === active} />
+                    <Layer key={p.id} part={p} index={i} progress={scrollYProgress} active={i === active} k={k} />
                   ))}
                 </div>
               </motion.div>
