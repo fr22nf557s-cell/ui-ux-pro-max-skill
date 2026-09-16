@@ -224,6 +224,10 @@ export default function ExplodedView() {
       <section id="hardware" className="mx-auto max-w-[1400px] px-5 py-28 sm:px-8 lg:px-12">
         <SectionLabel index="02">Exploded View</SectionLabel>
         <h2 className="mt-6 max-w-3xl font-display text-section font-bold">Four systems. One airframe.</h2>
+            <p className="mt-5 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[11px] uppercase tracking-wide2">
+              <a href="/hrn-01" className="text-white/60 transition-colors hover:text-white">HRN-01 drone →</a>
+              <a href="/charging-nest" className="text-white/60 transition-colors hover:text-white">Charging nest →</a>
+            </p>
         <div className="mt-14">
           <StaticBreakdown />
         </div>
@@ -245,6 +249,10 @@ export default function ExplodedView() {
               One airframe.
             </h2>
 
+            <p className="mt-5 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[11px] uppercase tracking-wide2">
+              <a href="/hrn-01" className="text-white/60 transition-colors hover:text-white">HRN-01 drone →</a>
+              <a href="/charging-nest" className="text-white/60 transition-colors hover:text-white">Charging nest →</a>
+            </p>
             {/* Desktop: full list with the active row lit */}
             <ol className="mt-10 hidden space-y-1 lg:block">
               {PARTS.map((p, i) => (

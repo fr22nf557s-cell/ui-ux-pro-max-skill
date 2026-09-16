@@ -122,8 +122,9 @@ export default function Dashboard() {
               ),
             )}
           </motion.ul>
-          <motion.p variants={revealUp(reduce)} className="mt-8 font-mono text-[10px] uppercase tracking-wide2 text-white/40">
-            Working mock · try the controls
+          <motion.p variants={revealUp(reduce)} className="mt-8 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[10px] uppercase tracking-wide2 text-white/55">
+            <span>Working mock · try the controls</span>
+            <a href="/command-view" className="text-white/70 transition-colors hover:text-white">About the command view →</a>
           </motion.p>
         </motion.div>
 

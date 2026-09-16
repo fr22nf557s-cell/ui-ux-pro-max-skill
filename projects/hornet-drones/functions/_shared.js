@@ -243,3 +243,24 @@ ${cta ? `<tr><td style="padding-top:28px"><a href="${cta.href}" style="display:i
 </td></tr>
 </table></td></tr></table></body></html>`
 }
+
+/**
+ * Full-page HTML for the endpoints an email link opens directly (confirm,
+ * unsubscribe). Same stylesheet, header and footer as the static pages, so
+ * the last thing a signup sees looks like the site they signed up on.
+ */
+export function htmlPage(title, body, status = 200) {
+  return new Response(
+    `<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark"><meta name="theme-color" content="#0B0C10"><meta name="robots" content="noindex">
+<title>${escapeHtml(title)} — Hornet Drones</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/pages.css">
+</head><body><div class="wrap">
+<header class="pagehead"><a class="mark" href="/">HORNET<span>DRONES</span></a><nav aria-label="Site"><a href="/#hardware">Hardware</a><a href="/#how">How it works</a><a href="/#command">Command</a><a href="/#faq">FAQ</a><a class="pill" href="/#reserve">Reserve</a></nav></header>
+<main>${body}</main>
+<footer>© 2026 Hornet Drones. <a href="/">Back to the site</a><nav aria-label="Site pages"><a href="/about">About</a><a href="/press">Press</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a></nav></footer>
+</div></body></html>`,
+    { status, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' } },
+  )
+}

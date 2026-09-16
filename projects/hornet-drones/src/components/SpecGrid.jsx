@@ -87,9 +87,15 @@ export default function SpecGrid() {
 
           <motion.div variants={revealUp(reduce)} className="mt-6 flex flex-wrap items-end justify-between gap-6">
             <h2 className="max-w-2xl font-display text-section font-bold">Engineered to the edge of the envelope.</h2>
-            <p className="font-mono text-[11px] uppercase tracking-wide2 text-white/55">
-              Verified · HRN-01 · rev. 4
-            </p>
+            {/* Honest label: these are targets for a pre-production system, not
+                third-party verified figures. "Verified" would be a claim. */}
+            <a
+              href="/specifications"
+              className="group inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wide2 text-white/70 transition-colors hover:text-white"
+            >
+              Pre-production targets · full specifications
+              <span aria-hidden="true" className="transition-transform group-hover:translate-x-0.5">→</span>
+            </a>
           </motion.div>
 
           <div className="mt-16 grid grid-cols-1 gap-y-12 md:grid-cols-2 md:gap-y-16 lg:grid-cols-4 lg:gap-y-0">
