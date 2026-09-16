@@ -14,7 +14,7 @@ const LINKS = [
 
 export default function Nav() {
   const reduce = useReducedMotion()
-  const { scrollY } = useScroll()
+  const { scrollY, scrollYProgress } = useScroll()
   const [condensed, setCondensed] = useState(false)
   const [open, setOpen] = useState(false)
 
@@ -39,6 +39,13 @@ export default function Nav() {
         condensed ? 'border-b border-white/10 bg-ink/80 backdrop-blur-xl' : 'border-b border-transparent'
       }`}
     >
+      {/* Reading progress: a hairline across the top of the bar that fills as
+          the page is scrolled. Transform-only, so it never causes layout. */}
+      <motion.span
+        aria-hidden="true"
+        style={{ scaleX: scrollYProgress }}
+        className="absolute inset-x-0 top-0 h-px origin-left bg-white/70"
+      />
       <nav
         aria-label="Primary"
         className="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-4 sm:px-8 lg:px-12"
