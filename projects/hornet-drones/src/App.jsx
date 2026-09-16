@@ -37,6 +37,41 @@ export default function App() {
     return () => (window.cancelIdleCallback || clearTimeout)(id)
   }, [])
 
+  // Deep links into lazy sections (/#specs from another page, a shared
+  // /#faq link). The browser tries the hash before the chunk has mounted and
+  // finds nothing, so: jump as soon as the target exists, and keep it pinned
+  // while the sections above it swap their placeholders for real content.
+  // Stops the moment the reader scrolls themselves.
+  useEffect(() => {
+    const id = window.location.hash.slice(1)
+    if (!id || id === 'top') return undefined
+    let stopped = false
+    let settle = 0
+    const stop = () => {
+      stopped = true
+      mo.disconnect()
+      clearTimeout(settle)
+    }
+    const jump = () => {
+      if (stopped) return
+      const el = document.getElementById(id)
+      if (!el) return
+      el.scrollIntoView({ block: 'start', behavior: 'auto' })
+      clearTimeout(settle)
+      settle = setTimeout(stop, 1500)
+    }
+    const mo = new MutationObserver(jump)
+    mo.observe(document.body, { childList: true, subtree: true })
+    jump()
+    window.addEventListener('wheel', stop, { passive: true, once: true })
+    window.addEventListener('touchstart', stop, { passive: true, once: true })
+    const giveUp = setTimeout(stop, 8000)
+    return () => {
+      stop()
+      clearTimeout(giveUp)
+    }
+  }, [])
+
   return (
     <>
       {/* Keyboard users land here first. */}

@@ -44,6 +44,9 @@ export default function HeroFlight({ progress, className = '', fullBleed = false
   const target = useRef(0)
   const [failed, setFailed] = useState(false)
   const [ready, setReady] = useState(false)
+  // Data Saver on: the poster alone carries the section. A 750 KB clip that
+  // only exists to be scrubbed is not what someone on a metered link asked for.
+  const [saveData] = useState(() => typeof navigator !== 'undefined' && Boolean(navigator.connection?.saveData))
 
   // As a contained plate the clip needs its edges feathered so it does not read
   // as a pasted-in rectangle. Full-bleed it runs to the viewport edge instead,
@@ -65,7 +68,7 @@ export default function HeroFlight({ progress, className = '', fullBleed = false
   })
 
   useEffect(() => {
-    if (reduce || failed) return undefined
+    if (reduce || failed || saveData) return undefined
 
     let raf = 0
     const tick = () => {
@@ -82,7 +85,7 @@ export default function HeroFlight({ progress, className = '', fullBleed = false
     }
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
-  }, [reduce, failed])
+  }, [reduce, failed, saveData])
 
   // iOS Safari refuses to seek a video that has never been activated, even a
   // muted inline one. A single play/pause on the first interaction unlocks it.
@@ -100,6 +103,19 @@ export default function HeroFlight({ progress, className = '', fullBleed = false
       window.removeEventListener('touchstart', prime)
     }
   }, [])
+
+  if (saveData) {
+    return (
+      <div className={className}>
+        <img
+          src="hornet-flight-poster.jpg"
+          alt="A single Hornet drone hovering at dusk, with the rest of the swarm behind it"
+          className="h-full w-full object-cover object-[50%_38%]"
+          style={maskStyle}
+        />
+      </div>
+    )
+  }
 
   if (failed) {
     return (
