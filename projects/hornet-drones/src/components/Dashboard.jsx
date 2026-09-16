@@ -104,7 +104,7 @@ export default function Dashboard() {
           className="lg:col-span-4"
         >
           <motion.div variants={revealUp(reduce)}>
-            <SectionLabel index="03">Command</SectionLabel>
+            <SectionLabel index="04">Command</SectionLabel>
           </motion.div>
           <motion.h2 variants={revealUp(reduce)} className="mt-6 font-display text-section font-bold">
             Your perimeter, on one pane of glass.

@@ -1,8 +1,11 @@
 import Nav from './components/Nav'
 import Hero from './components/Hero'
 import ExplodedView from './components/ExplodedView'
+import HowItWorks from './components/HowItWorks'
 import Dashboard from './components/Dashboard'
 import SpecGrid from './components/SpecGrid'
+import WhyDrone from './components/WhyDrone'
+import FAQ from './components/FAQ'
 import FooterCTA from './components/FooterCTA'
 
 export default function App() {
@@ -21,8 +24,11 @@ export default function App() {
       <main id="main">
         <Hero />
         <ExplodedView />
+        <HowItWorks />
         <Dashboard />
         <SpecGrid />
+        <WhyDrone />
+        <FAQ />
       </main>
 
       <FooterCTA />

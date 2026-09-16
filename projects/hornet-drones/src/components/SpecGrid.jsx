@@ -82,7 +82,7 @@ export default function SpecGrid() {
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
         <motion.div variants={stagger(reduce)} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
           <motion.div variants={revealUp(reduce)}>
-            <SectionLabel index="04">Performance</SectionLabel>
+            <SectionLabel index="05">Performance</SectionLabel>
           </motion.div>
 
           <motion.div variants={revealUp(reduce)} className="mt-6 flex flex-wrap items-end justify-between gap-6">

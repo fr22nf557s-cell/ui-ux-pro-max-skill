@@ -148,7 +148,7 @@ export default function FooterCTA() {
         <motion.div variants={stagger(reduce)} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
           <motion.div variants={revealUp(reduce)} className="flex items-center gap-3">
             <span className="h-px w-8 bg-white/45" aria-hidden="true" />
-            <span className="eyebrow">05 / Alpha access</span>
+            <span className="eyebrow">08 / Alpha access</span>
           </motion.div>
 
           {/* The finale headline: full-bleed, tight leading, amber second line */}

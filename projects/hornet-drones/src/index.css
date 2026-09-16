@@ -65,6 +65,16 @@
     @apply border border-white/10 bg-white/[0.045] backdrop-blur-xl;
   }
 
+  /* FAQ accordion: grid-rows transition, no measured heights (see ExplodedView). */
+  .faq .faq-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .faq[open] .faq-body {
+    grid-template-rows: 1fr;
+  }
+
   /* Hairline rule that fades at both ends — reads as a HUD divider, not a border. */
   .hairline {
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
