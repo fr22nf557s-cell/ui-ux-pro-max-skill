@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 48" width="260" height="48" role="img" aria-label="Norvex Gaming">
+  <path d="M24 3.5 42.2 14v21L24 45.5 5.8 35V14Z" fill="none" stroke="#d9b75b" stroke-width="1.8"/>
+  <path d="M16.5 33V15l15 18V15" fill="none" stroke="#f3d98b" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="58" y="27" font-family="Montserrat, Helvetica, Arial, sans-serif" font-weight="700" font-size="19" letter-spacing="6" fill="#f4f2ee">NORVEX</text>
+  <text x="59" y="40" font-family="Montserrat, Helvetica, Arial, sans-serif" font-weight="600" font-size="8" letter-spacing="7" fill="#d9b75b">GAMING</text>
+</svg>
