@@ -93,8 +93,7 @@ export default function SpecGrid() {
               href="/specifications"
               className="group inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wide2 text-white/70 transition-colors hover:text-white"
             >
-              Pre-production targets · full specifications
-              <span aria-hidden="true" className="transition-transform group-hover:translate-x-0.5">→</span>
+              <span>Pre-production targets · <span className="whitespace-nowrap">full specifications <span aria-hidden="true" className="inline-block transition-transform group-hover:translate-x-0.5">→</span></span></span>
             </a>
           </motion.div>
 

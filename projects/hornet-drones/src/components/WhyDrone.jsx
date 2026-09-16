@@ -83,7 +83,7 @@ export default function WhyDrone() {
                   <th
                     key={c}
                     scope="col"
-                    className={`px-2 py-4 text-center font-mono text-[10px] uppercase tracking-wide2 sm:px-4 ${
+                    className={`px-2 py-4 text-center font-mono text-[10px] uppercase tracking-wide2 sm:px-4 ${i === COLS.length - 1 ? 'whitespace-nowrap ' : ''}${
                       i === COLS.length - 1 ? 'bg-white/[0.04] font-semibold text-white' : 'font-normal text-white/55'
                     }`}
                   >

@@ -263,7 +263,7 @@ export default function Dashboard() {
                       {/* Top-left: recording + camera */}
                       <span className="absolute left-7 top-3 flex items-center gap-2">
                         <span className="h-1.5 w-1.5 rounded-full bg-white animate-breathe" />
-                        REC · CAM-01 · HRN-01
+                        REC · CAM-01<span className="hidden sm:inline"> · HRN-01</span>
                       </span>
                       {/* Top-right: mode + format */}
                       <span className="absolute right-7 top-3 text-right">

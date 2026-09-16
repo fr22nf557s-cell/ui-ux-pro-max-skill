@@ -67,6 +67,13 @@ const FOOTER_LINKS = [
   },
 ]
 
+const ALPHA_GETS = [
+  ['An install slot', 'The alpha programme opens to the waitlist first, and joining it is the only way in.'],
+  ['Pricing before anyone else', 'No charge to join the list and no obligation to buy.'],
+  ['The full technical dossier', 'Every figure on the specifications page, and what each one means.'],
+  ['One confirmation email, then silence', 'You hear from us when there is something to say. Unsubscribe in one click.'],
+]
+
 export default function FooterCTA() {
   const reduce = useReducedMotion()
   const [email, setEmail] = useState('')
@@ -161,7 +168,9 @@ export default function FooterCTA() {
             <span className="text-silver">Reimagined.</span>
           </motion.h2>
 
-          <motion.p variants={revealUp(reduce)} className="mt-8 max-w-xl text-[17px] leading-relaxed text-white/55">
+          <div className="mt-8 grid gap-12 lg:grid-cols-12 lg:gap-10">
+          <div className="lg:col-span-7">
+          <motion.p variants={revealUp(reduce)} className="max-w-xl text-[17px] leading-relaxed text-white/55">
             The Alpha programme opens with 500 systems. Join the waitlist for an install slot, pricing and the full
             technical dossier.
           </motion.p>
@@ -325,6 +334,37 @@ export default function FooterCTA() {
               No spam · Unsubscribe anytime · Data stays in-region
             </p>
           </motion.div>
+          </div>
+
+          {/* What joining actually gets you. Every line is something the page
+              or the privacy notice already promises; nothing here is a perk
+              invented for the layout. */}
+          <motion.aside
+            variants={revealUp(reduce)}
+            aria-labelledby="alpha-gets-heading"
+            className="lg:col-span-5 lg:self-end"
+          >
+            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-7">
+              <p id="alpha-gets-heading" className="font-mono text-[10px] uppercase tracking-label text-silver">
+                What the list gets you
+              </p>
+              <ul className="mt-5 divide-y divide-white/[0.07]">
+                {ALPHA_GETS.map(([title, body]) => (
+                  <li key={title} className="flex gap-4 py-3.5 first:pt-0 last:pb-0">
+                    <span aria-hidden="true" className="mt-[7px] h-1.5 w-1.5 flex-none rounded-full bg-white" />
+                    <div>
+                      <p className="text-[15px] font-medium text-white">{title}</p>
+                      <p className="mt-0.5 text-[13.5px] leading-relaxed text-white/50">{body}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-5 border-t border-white/[0.07] pt-4 font-mono text-[10px] uppercase tracking-wide2 text-white/45">
+                500 alpha systems · no charge to join · no obligation
+              </p>
+            </div>
+          </motion.aside>
+          </div>
         </motion.div>
 
         {/* ── Footer body ── */}
