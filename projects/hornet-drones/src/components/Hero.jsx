@@ -53,6 +53,9 @@ export default function Hero() {
           footage and fail contrast at unpredictable frames.
         */}
         <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/25 lg:to-transparent" />
+        {/* Film grain over the footage: a static noise tile at low alpha, so the
+            plate reads as photographed rather than rendered. */}
+        <div className="absolute inset-0 bg-grain opacity-[0.16] mix-blend-overlay" />
         {/* Top and bottom falloff ties the section into the nav and the next one */}
         <div className="absolute inset-0 bg-gradient-to-b from-ink/90 via-transparent to-void" />
         {/* Tactical grid, masked to fade toward the edges */}
