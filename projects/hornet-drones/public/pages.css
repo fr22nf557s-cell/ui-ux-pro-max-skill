@@ -34,6 +34,12 @@ li { margin-bottom: 8px; }
 a { color: #fff; }
 code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em; }
 table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14.5px; }
+/* Specifications page only: the same column rhythm on every table, so the
+   Spec and Value columns line up from section to section. */
+.specs table { table-layout: fixed; }
+.specs th:first-child, .specs td:first-child { width: 26%; }
+.specs th:nth-child(2), .specs td:nth-child(2) { width: 22%; }
+@media (max-width: 560px) { .specs th:first-child, .specs td:first-child, .specs th:nth-child(2), .specs td:nth-child(2) { width: auto; } }
 th, td { text-align: left; padding: 10px 12px; border: 1px solid var(--hair); vertical-align: top; color: var(--silver); }
 th { color: #fff; font-weight: 600; background: rgba(255, 255, 255, .04); }
 dl { margin: 16px 0; }
