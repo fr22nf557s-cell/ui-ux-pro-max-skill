@@ -60,3 +60,5 @@ footer nav a:hover, footer nav a:focus-visible { color: #fff; }
 .cta-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 36px; }
 .cta-ghost { display: inline-block; color: #fff; text-decoration: none; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; padding: 12px 22px; border: 1px solid rgba(255,255,255,.35); border-radius: 999px; }
 .cta-ghost:hover, .cta:hover { opacity: .85; }
+
+.illus { display: block; width: 100%; height: auto; color: #fff; border: 1px solid var(--hair); border-radius: 14px; background: linear-gradient(180deg, #101217, #0b0c10); margin: 28px 0 8px; padding: 12px; box-sizing: border-box; }
