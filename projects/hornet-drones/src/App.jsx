@@ -7,6 +7,7 @@ import SpecGrid from './components/SpecGrid'
 import WhyDrone from './components/WhyDrone'
 import FAQ from './components/FAQ'
 import FooterCTA from './components/FooterCTA'
+import MobileCTA from './components/MobileCTA'
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
       </main>
 
       <FooterCTA />
+      <MobileCTA />
     </>
   )
 }

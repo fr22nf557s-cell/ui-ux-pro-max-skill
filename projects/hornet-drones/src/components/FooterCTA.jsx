@@ -176,16 +176,36 @@ export default function FooterCTA() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: DURATION.ui, ease: EASE }}
-                  className="flex items-center gap-4 rounded-full border border-white/50 bg-white/[0.08] px-6 py-4"
+                  className="rounded-2xl border border-white/40 bg-white/[0.06] p-6"
+                  role="status"
                 >
-                  <span className="grid h-7 w-7 flex-none place-items-center rounded-full bg-white text-void">
-                    <svg width="13" height="13" viewBox="0 0 14 14" aria-hidden="true">
-                      <path d="M2 7.5l3.5 3.5L12 3.5" fill="none" stroke="currentColor" strokeWidth="2" />
-                    </svg>
-                  </span>
-                  <p className="font-mono text-[12px] uppercase tracking-wide2 text-white">
-                    Check your email — dossier inbound.
-                  </p>
+                  <div className="flex items-center gap-4">
+                    <span className="grid h-7 w-7 flex-none place-items-center rounded-full bg-white text-void">
+                      <svg width="13" height="13" viewBox="0 0 14 14" aria-hidden="true">
+                        <path d="M2 7.5l3.5 3.5L12 3.5" fill="none" stroke="currentColor" strokeWidth="2" />
+                      </svg>
+                    </span>
+                    <p className="font-mono text-[12px] uppercase tracking-wide2 text-white">Check your email</p>
+                  </div>
+                  {/* What happens next, because "check your email" alone leaves
+                      people wondering whether it worked. */}
+                  <ol className="mt-5 space-y-2.5 text-[14px] leading-relaxed text-white/60">
+                    <li className="flex gap-3">
+                      <span className="font-mono text-[11px] text-white/45">01</span>
+                      <span>
+                        A confirmation is on its way to <span className="text-white">{email.trim()}</span> from
+                        alpha@hornetdrones.com.
+                      </span>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="font-mono text-[11px] text-white/45">02</span>
+                      <span>Click the button in it. Nothing is confirmed until you do, and the address is removed if you never do.</span>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="font-mono text-[11px] text-white/45">03</span>
+                      <span>Not there in a few minutes? Check your spam folder, then submit again for a fresh link.</span>
+                    </li>
+                  </ol>
                 </motion.div>
               ) : (
                 <motion.form
