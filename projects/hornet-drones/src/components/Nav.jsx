@@ -17,6 +17,39 @@ export default function Nav() {
   const { scrollY, scrollYProgress } = useScroll()
   const [condensed, setCondensed] = useState(false)
   const [open, setOpen] = useState(false)
+  const [active, setActive] = useState('')
+
+  // Which section is under the reader. One observer over the five anchors;
+  // the section crossing a band a third of the way down the viewport wins.
+  // Sections below the fold arrive as lazy chunks, so the anchors are
+  // re-scanned whenever <main> gains children. aria-current tells assistive
+  // tech the same thing the underline shows.
+  useEffect(() => {
+    const band = { rootMargin: '-35% 0px -60% 0px' }
+    const seen = new Set()
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) setActive(e.target.id === 'top' ? '' : '#' + e.target.id)
+      })
+    }, band)
+    const scan = () => {
+      ;['#top', ...LINKS.map((l) => l.href)].forEach((sel) => {
+        const el = document.querySelector(sel)
+        if (el && !seen.has(el)) {
+          seen.add(el)
+          io.observe(el)
+        }
+      })
+    }
+    scan()
+    const main = document.getElementById('main')
+    const mo = main && new MutationObserver(scan)
+    mo?.observe(main, { childList: true, subtree: true })
+    return () => {
+      io.disconnect()
+      mo?.disconnect()
+    }
+  }, [])
 
   // Condense the bar past the hero fold. Reading scrollY through a motion
   // value keeps this off React's render path until the boolean actually flips.
@@ -60,11 +93,18 @@ export default function Nav() {
             <li key={l.href}>
               <a
                 href={l.href}
-                className="group relative font-mono text-[11px] uppercase tracking-wide2 text-white/60 transition-colors duration-200 hover:text-white"
+                aria-current={active === l.href ? 'true' : undefined}
+                className={`group relative font-mono text-[11px] uppercase tracking-wide2 transition-colors duration-200 hover:text-white ${
+                  active === l.href ? 'text-white' : 'text-white/60'
+                }`}
               >
                 {l.label}
-                {/* Underline wipes in from the left on hover — scaleX only, no reflow */}
-                <span className="absolute -bottom-1.5 left-0 h-px w-full origin-left scale-x-0 bg-white transition-transform duration-300 ease-out group-hover:scale-x-100 motion-reduce:transition-none" />
+                {/* Underline wipes in from the left on hover, and stays while the section is on screen — scaleX only, no reflow */}
+                <span
+                  className={`absolute -bottom-1.5 left-0 h-px w-full origin-left bg-white transition-transform duration-300 ease-out group-hover:scale-x-100 motion-reduce:transition-none ${
+                    active === l.href ? 'scale-x-100' : 'scale-x-0'
+                  }`}
+                />
               </a>
             </li>
           ))}
