@@ -207,21 +207,39 @@ export async function sendMail(env, { to, subject, html, text, listUnsubscribe }
   return true
 }
 
-/** Plain-text-first email shell. Dark, minimal, matches the brand. */
+/**
+ * Email shell. Dark, minimal, matches the site.
+ *
+ * The mark is a hosted PNG (email clients cannot render inline SVG). Gmail
+ * and Outlook hide remote images until the reader allows them, so the
+ * wordmark is real text beside it and the message reads fine without it.
+ * The image URL is the production domain by design: emails are opened
+ * long after a preview deploy has gone, so it must never point at one.
+ */
+const MARK_URL = 'https://hornetdrones.com/press/hornet-mark.png'
+
 export function mailShell(heading, bodyHtml, cta) {
-  return `<!doctype html><html><body style="margin:0;background:#0b0c10;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark"><title>${heading}</title></head>
+<body style="margin:0;background:#0b0c10;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0b0c10;padding:40px 16px">
 <tr><td align="center">
 <table role="presentation" width="100%" style="max-width:520px" cellpadding="0" cellspacing="0">
-<tr><td style="padding-bottom:28px">
-  <span style="color:#fff;font-size:17px;font-weight:700;letter-spacing:-.01em">HORNET</span>
-  <span style="color:#a8adb8;font-size:9px;letter-spacing:.34em;padding-left:8px">DRONES</span>
+<tr><td style="padding-bottom:32px">
+  <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+    <td style="padding-right:12px;vertical-align:middle"><img src="${MARK_URL}" width="44" height="44" alt="" style="display:block;width:44px;height:44px;border-radius:8px"></td>
+    <td style="vertical-align:middle;line-height:1">
+      <div style="color:#fff;font-size:18px;font-weight:700;font-style:italic;letter-spacing:-.01em">HORNET</div>
+      <div style="color:#a8adb8;font-size:9px;font-weight:700;letter-spacing:.42em;padding-top:4px">DRONES</div>
+    </td>
+  </tr></table>
 </td></tr>
-<tr><td style="color:#fff;font-size:22px;font-weight:600;line-height:1.3;padding-bottom:16px">${heading}</td></tr>
+<tr><td style="color:#fff;font-size:24px;font-weight:700;line-height:1.25;letter-spacing:-.02em;padding-bottom:16px">${heading}</td></tr>
 <tr><td style="color:#a8adb8;font-size:15px;line-height:1.65">${bodyHtml}</td></tr>
-${cta ? `<tr><td style="padding-top:28px"><a href="${cta.href}" style="display:inline-block;background:#fff;color:#000;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:14px 28px;border-radius:999px">${cta.label}</a></td></tr>` : ''}
-<tr><td style="color:#6b7280;font-size:12px;line-height:1.6;padding-top:36px;border-top:1px solid rgba(255,255,255,.1);margin-top:36px">
-  You are receiving this because this address was entered on the Hornet Drones alpha waitlist.
+${cta ? `<tr><td style="padding-top:28px"><a href="${cta.href}" style="display:inline-block;background:#fff;color:#000;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:14px 28px;border-radius:999px">${cta.label}</a></td></tr>
+<tr><td style="color:#a8adb8;font-size:12px;line-height:1.6;padding-top:18px">If the button does not work, open this link:<br><a href="${cta.href}" style="color:#fff;word-break:break-all">${cta.href}</a></td></tr>` : ''}
+<tr><td style="color:#a8adb8;font-size:12px;line-height:1.6;padding-top:36px;margin-top:36px;border-top:1px solid #262a33">
+  You are receiving this because this address was entered on the Hornet Drones alpha waitlist.<br>
+  <a href="https://hornetdrones.com/" style="color:#a8adb8">hornetdrones.com</a> · <a href="https://hornetdrones.com/privacy" style="color:#a8adb8">Privacy notice</a>
 </td></tr>
 </table></td></tr></table></body></html>`
 }

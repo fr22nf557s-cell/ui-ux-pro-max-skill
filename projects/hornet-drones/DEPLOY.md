@@ -29,6 +29,7 @@ If it ever changes, those are the five files to update together:
 | `public/robots.txt` | the `Sitemap:` line |
 | `public/sitemap.xml` | both `<loc>` values |
 | `public/privacy/index.html` | canonical and the contact address |
+| `functions/_shared.js` | `MARK_URL` (the logo in every email) and the footer links |
 
 Verify with:
 
