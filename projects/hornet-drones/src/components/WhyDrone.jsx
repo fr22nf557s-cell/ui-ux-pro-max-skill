@@ -78,14 +78,14 @@ export default function WhyDrone() {
           <table className="w-full border-collapse text-left">
             <thead>
               <tr className="border-b border-white/10 bg-white/[0.03]">
-                <th scope="col" className="px-4 py-4 font-mono text-[10px] font-normal uppercase tracking-label text-silver sm:px-6">
+                <th scope="col" className="px-3 py-4 font-mono text-[10px] font-normal uppercase tracking-label text-silver sm:px-6">
                   Against an intruder
                 </th>
                 {COLS.map((c, i) => (
                   <th
                     key={c}
                     scope="col"
-                    className={`px-2 py-4 text-center font-mono text-[10px] uppercase tracking-wide2 sm:px-4 ${i === COLS.length - 1 ? 'whitespace-nowrap ' : ''}${
+                    className={`px-1 py-4 text-center font-mono text-[9px] uppercase tracking-wide2 sm:px-4 sm:text-[10px] ${i === COLS.length - 1 ? 'whitespace-nowrap ' : ''}${
                       i === COLS.length - 1 ? 'bg-white/[0.04] font-semibold text-white' : 'font-normal text-white/55'
                     }`}
                   >
@@ -97,11 +97,11 @@ export default function WhyDrone() {
             <tbody>
               {ROWS.map(([label, ...vals]) => (
                 <tr key={label} className="border-b border-white/[0.06] last:border-0">
-                  <th scope="row" className="px-4 py-4 text-[15px] font-normal text-white/80 sm:px-6">
+                  <th scope="row" className="px-3 py-4 text-[14px] font-normal text-white/80 sm:px-6 sm:text-[15px]">
                     {label}
                   </th>
                   {vals.map((v, i) => (
-                    <td key={i} className={`px-2 py-4 sm:px-4 ${i === vals.length - 1 ? 'bg-white/[0.04]' : ''}`}>
+                    <td key={i} className={`px-1 py-4 sm:px-4 ${i === vals.length - 1 ? 'bg-white/[0.04]' : ''}`}>
                       <div className="flex justify-center">
                         <Mark v={v} />
                       </div>
