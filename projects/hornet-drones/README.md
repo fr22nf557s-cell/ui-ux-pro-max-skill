@@ -16,9 +16,10 @@ npm run build    # production bundle in dist/
 npm run preview  # serve the built bundle
 ```
 
-Requires Node 18+. No API keys, no external assets — every visual is drawn in
-code (SVG, CSS or three.js primitives), so the page works fully offline once
-the Google Fonts stylesheet is cached.
+Requires Node 18+. No API keys, no external assets: every visual is drawn in
+code (SVG, CSS or three.js primitives) and the fonts are served from
+`public/fonts` (latin subsets, declared in `src/index.css`), so nothing on the
+page is fetched from a third-party origin.
 
 ## Design system
 
