@@ -6,8 +6,10 @@ import Logo from './Logo'
 
 const LINKS = [
   { href: '#hardware', label: 'Hardware' },
+  { href: '#how', label: 'How it works' },
   { href: '#command', label: 'Command' },
   { href: '#specs', label: 'Specs' },
+  { href: '#faq', label: 'FAQ' },
 ]
 
 export default function Nav() {
@@ -46,7 +48,7 @@ export default function Nav() {
           <span className="sr-only">Hornet Drones home</span>
         </a>
 
-        <ul className="hidden items-center gap-9 md:flex">
+        <ul className="hidden items-center gap-7 md:flex lg:gap-9">
           {LINKS.map((l) => (
             <li key={l.href}>
               <a

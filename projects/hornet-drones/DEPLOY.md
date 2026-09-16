@@ -379,3 +379,9 @@ These are not code problems, so they are not done:
    requires its number and registered office on the site.
 5. **Error tracking** is not wired up. Cloudflare's Workers logs cover the API;
    add Sentry if you want client-side errors too.
+6. **Rotate both secrets.** The Turnstile secret and the Resend API key were
+   each shown on screen during setup. Turnstile → widget → Rotate secret
+   key; Resend → API keys → delete and recreate (Sending access). Update the
+   two Pages secrets, retry the deployment, submit the form once.
+7. **Mailbox aliases.** `privacy@`, `hello@` and `alpha@hornetdrones.com` must
+   exist on the Professional Email mailbox or mail to them bounces.
