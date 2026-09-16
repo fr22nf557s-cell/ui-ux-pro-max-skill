@@ -98,6 +98,39 @@ function Glyph({ kind }) {
   )
 }
 
+/**
+ * The assembled aircraft, as line art, lifting off the top of the stack as
+ * the parts separate. It is what the slabs add up to: without it the stack
+ * reads as circuit boards, with it the boards read as a drone.
+ */
+function Airframe({ progress }) {
+  const z = useTransform(progress, [0, 0.55], [22, 124])
+  const opacity = useTransform(progress, [0, 0.14, 0.9, 1], [0.18, 0.9, 0.9, 0.9])
+  return (
+    <motion.div style={{ z, opacity }} className="pointer-events-none absolute inset-0">
+      <svg viewBox="0 0 100 100" className="h-full w-full text-white" fill="none" stroke="currentColor" strokeWidth="0.9" strokeLinejoin="round" strokeLinecap="round" aria-hidden="true">
+        {/* Rotor discs at the four corners, with a faint blur ring for motion */}
+        {[[22, 22], [78, 22], [22, 78], [78, 78]].map(([x, y]) => (
+          <g key={x + '-' + y}>
+            <circle cx={x} cy={y} r="14" strokeOpacity="0.25" strokeDasharray="1.5 2.5" />
+            <circle cx={x} cy={y} r="9.5" strokeOpacity="0.7" />
+            <circle cx={x} cy={y} r="2.2" fill="currentColor" stroke="none" fillOpacity="0.9" />
+            <path d={`M ${x - 9} ${y} L ${x + 9} ${y}`} strokeOpacity="0.5" />
+          </g>
+        ))}
+        {/* Arms from the body to each rotor */}
+        <path d="M 40 42 L 26 26 M 60 42 L 74 26 M 40 58 L 26 74 M 60 58 L 74 74" strokeWidth="2.2" strokeOpacity="0.85" />
+        {/* Body: faceted, nose to the top */}
+        <path d="M 50 30 L 61 40 L 61 60 L 50 70 L 39 60 L 39 40 Z" fill="currentColor" fillOpacity="0.08" />
+        <path d="M 50 34 L 57 41 L 57 59 L 50 66 L 43 59 L 43 41 Z" strokeOpacity="0.5" />
+        {/* Sensor head at the nose */}
+        <circle cx="50" cy="42" r="3.2" strokeOpacity="0.9" />
+        <circle cx="50" cy="42" r="1.2" fill="currentColor" stroke="none" />
+      </svg>
+    </motion.div>
+  )
+}
+
 /** One slab in the isometric stack. */
 function Layer({ part, index, progress, active }) {
   // Layer i starts stacked (z = -i * 14) and separates to (z = -i * 130).
@@ -325,6 +358,7 @@ export default function ExplodedView() {
                   className="absolute inset-0 [transform-style:preserve-3d]"
                   style={{ transform: 'rotateX(58deg) rotateZ(-38deg)' }}
                 >
+                  <Airframe progress={scrollYProgress} />
                   {PARTS.map((p, i) => (
                     <Layer key={p.id} part={p} index={i} progress={scrollYProgress} active={i === active} />
                   ))}
