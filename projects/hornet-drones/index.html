@@ -101,7 +101,7 @@
       the headline never has to wait for a bundle. Same classes as Hero.jsx,
       so the swap is exact; only the buttons and stats play an entrance.
     -->
-    <div id="lcp-copy" aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 pt-24 sm:pt-32">
+    <div id="lcp-copy" aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 pt-24 sm:pt-32 md:[@media(max-height:780px)]:pt-20">
       <div class="mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-10 px-5 sm:px-8 md:min-h-[calc(100svh-8rem)] lg:grid-cols-12 lg:gap-6 lg:px-12">
         <div class="lg:col-span-7 xl:col-span-6">
           <div class="mb-6 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2">
@@ -113,7 +113,7 @@
             <span class="block pb-[0.06em]">Protection.</span>
             <span class="block pb-[0.06em]"><span class="text-silver">Unseen.</span> Unmatched.</span>
           </div>
-          <p class="mt-6 max-w-xl text-[17px] leading-relaxed text-white/60">
+          <p class="mt-6 max-w-xl text-[17px] leading-relaxed text-white/60 md:[@media(max-height:780px)]:mt-4">
             The ultra-quiet, AI-powered perimeter drone system that patrols, detects, and deters threats before they
             reach your doorstep.
           </p>
@@ -121,11 +121,11 @@
                the React ones), so the block is the same height and the text
                above lands on the same pixel. They stay invisible; the real
                ones play their entrance when React mounts. -->
-          <div class="invisible mt-9 flex flex-wrap items-center gap-4">
+          <div class="invisible mt-9 flex flex-wrap items-center gap-4 md:[@media(max-height:780px)]:mt-6">
             <button type="button" tabindex="-1" class="relative rounded-full border border-white/70 px-8 py-4 font-mono text-[12px] uppercase tracking-wide2">Reserve System</button>
             <button type="button" tabindex="-1" class="glass inline-flex items-center gap-3 rounded-full px-8 py-4 font-mono text-[12px] uppercase tracking-wide2">Explore Command View<span class="h-6 w-6"></span></button>
           </div>
-          <div class="invisible mt-11 grid max-w-lg grid-cols-3 gap-px rounded-xl border border-white/10">
+          <div class="invisible mt-11 grid max-w-lg grid-cols-3 gap-px rounded-xl border border-white/10 md:[@media(max-height:780px)]:mt-7">
             <div class="px-4 py-4"><div class="font-mono text-lg font-medium">24/7</div><div class="mt-1 font-mono text-[10px] uppercase tracking-wide2">Autonomous patrol</div></div>
             <div class="px-4 py-4"><div class="font-mono text-lg font-medium">&lt;18 dB</div><div class="mt-1 font-mono text-[10px] uppercase tracking-wide2">At 30 m altitude</div></div>
             <div class="px-4 py-4"><div class="font-mono text-lg font-medium">0.4 s</div><div class="mt-1 font-mono text-[10px] uppercase tracking-wide2">Threat classify</div></div>

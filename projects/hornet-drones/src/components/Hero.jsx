@@ -32,7 +32,7 @@ export default function Hero() {
     <section
       id="top"
       ref={sectionRef}
-      className="relative min-h-[100svh] overflow-hidden pt-24 sm:pt-32"
+      className="relative min-h-[100svh] overflow-hidden pt-24 sm:pt-32 md:[@media(max-height:780px)]:pt-20"
       aria-labelledby="hero-heading"
     >
       {/*
@@ -117,12 +117,12 @@ export default function Hero() {
           </h1>
 
           <p
-            className="mt-6 max-w-xl text-[17px] leading-relaxed text-white/60">
+            className="mt-6 max-w-xl text-[17px] leading-relaxed text-white/60 md:[@media(max-height:780px)]:mt-4">
             The ultra-quiet, AI-powered perimeter drone system that patrols, detects, and deters threats before they
             reach your doorstep.
           </p>
 
-          <motion.div variants={revealUp(reduce, 0.1)} className="mt-9 flex flex-wrap items-center gap-4">
+          <motion.div variants={revealUp(reduce, 0.1)} className="mt-9 flex flex-wrap items-center gap-4 md:[@media(max-height:780px)]:mt-6">
             <GlowButton onClick={() => document.querySelector('#reserve')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' })}>
               Reserve System
             </GlowButton>
@@ -138,7 +138,7 @@ export default function Hero() {
 
           <motion.dl
             variants={revealUp(reduce, 0.2)}
-            className="mt-11 grid max-w-lg grid-cols-3 gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10"
+            className="mt-11 grid max-w-lg grid-cols-3 gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10 md:[@media(max-height:780px)]:mt-7"
           >
             {[
               ['24/7', 'Autonomous patrol'],
@@ -162,7 +162,7 @@ export default function Hero() {
           copy at opacity 0 for the first 1.7 s of every visit. */}
       <motion.div
         style={{ opacity: copyOpacity }}
-        className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 lg:block"
+        className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 lg:block [@media(max-height:780px)]:lg:hidden"
       >
       <motion.div
         initial={{ opacity: 0 }}
