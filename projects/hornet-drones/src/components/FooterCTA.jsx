@@ -80,6 +80,8 @@ export default function FooterCTA() {
   const [consent, setConsent] = useState(false)
   const [status, setStatus] = useState('idle') // idle | error | pending | done
   const [error, setError] = useState('')
+  // Which control the error belongs to, so only that one is marked invalid.
+  const [errorField, setErrorField] = useState('form') // email | consent | form
   const turnstileToken = useRef(null)
   const turnstileRef = useRef(null)
   const honeypot = useRef(null)
@@ -89,11 +91,13 @@ export default function FooterCTA() {
 
     if (!EMAIL_RE.test(email.trim())) {
       setError('Enter a valid email address.')
+      setErrorField('email')
       setStatus('error')
       return
     }
     if (!consent) {
       setError('Please tick the box so we know we can email you.')
+      setErrorField('consent')
       setStatus('error')
       return
     }
@@ -101,6 +105,7 @@ export default function FooterCTA() {
     // otherwise local development would be unusable.
     if (TURNSTILE_SITE_KEY && !turnstileToken.current) {
       setError('Still verifying you are human — give it a second and try again.')
+      setErrorField('form')
       setStatus('error')
       return
     }
@@ -128,6 +133,7 @@ export default function FooterCTA() {
         // ran, or something in front of it answered). Surfacing the status
         // is the difference between a five-minute fix and a blind guess.
         setError(body.error || `Something went wrong. Please try again. (HTTP ${res.status})`)
+        setErrorField(body.field === 'email' ? 'email' : 'form')
         setStatus('error')
         // The token we just sent is spent whether or not the server accepted
         // it. Without a reset the retry re-sends the same dead token.
@@ -138,6 +144,7 @@ export default function FooterCTA() {
     } catch {
       // Network failure, offline, blocked request.
       setError('Could not reach the server. Check your connection and try again.')
+      setErrorField('form')
       setStatus('error')
       turnstileRef.current?.reset()
     }
@@ -243,10 +250,10 @@ export default function FooterCTA() {
                         setEmail(e.target.value)
                         if (status === 'error') setStatus('idle')
                       }}
-                      aria-invalid={status === 'error'}
+                      aria-invalid={status === 'error' && errorField === 'email'}
                       aria-describedby={status === 'error' ? 'waitlist-error' : undefined}
                       className={`h-14 w-full rounded-full border bg-white/[0.04] px-6 font-mono text-sm text-white placeholder:text-white/55 transition-colors duration-200 focus:bg-white/[0.07] ${
-                        status === 'error' ? 'border-red-500/70' : 'border-white/15 hover:border-white/30'
+                        status === 'error' && errorField === 'email' ? 'border-red-500/70' : 'border-white/15 hover:border-white/30'
                       }`}
                     />
                   </div>
@@ -290,7 +297,11 @@ export default function FooterCTA() {
                       setConsent(e.target.checked)
                       if (status === 'error') setStatus('idle')
                     }}
-                    className="mt-0.5 h-4 w-4 flex-none cursor-pointer rounded border-white/30 bg-white/[0.06] accent-white"
+                    aria-invalid={status === 'error' && errorField === 'consent'}
+                    aria-describedby={status === 'error' && errorField === 'consent' ? 'waitlist-error' : undefined}
+                    className={`mt-0.5 h-4 w-4 flex-none cursor-pointer rounded border-white/30 bg-white/[0.06] accent-white ${
+                      status === 'error' && errorField === 'consent' ? 'ring-2 ring-red-500/70 ring-offset-2 ring-offset-void' : ''
+                    }`}
                   />
                   <label htmlFor="waitlist-consent" className="cursor-pointer text-[13px] leading-relaxed text-white/55">
                     {CONSENT_TEXT}{' '}
