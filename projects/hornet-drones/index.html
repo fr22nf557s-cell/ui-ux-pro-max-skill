@@ -10,6 +10,9 @@
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <!-- The hero poster is the LCP element; ask for it before the bundle parses. -->
     <link rel="preload" as="image" href="/hornet-flight-poster.jpg" fetchpriority="high" />
+    <!-- The two faces the hero text is set in, so the first paint is already in the brand type. -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/space-grotesk-latin-700-normal.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-latin-400-normal.woff2" crossorigin />
     <title>Hornet Drones — Autonomous Aerial Protection</title>
     <meta
       name="description"
@@ -91,6 +94,32 @@
       decoding="async"
       style="position:fixed;inset:0;width:100%;height:100vh;height:100svh;object-fit:cover;object-position:50% 38%;filter:brightness(.42);pointer-events:none"
     />
+    <!--
+      The hero copy, as plain HTML, painted with the first frame. The real hero
+      takes over in place with the text already where it is, so the largest
+      text on screen is on screen seconds before React is on a slow link, and
+      the headline never has to wait for a bundle. Same classes as Hero.jsx,
+      so the swap is exact; only the buttons and stats play an entrance.
+    -->
+    <div id="lcp-copy" aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 pt-24 sm:pt-32">
+      <div class="mx-auto grid max-w-[1400px] grid-cols-1 gap-10 px-5 sm:px-8 lg:grid-cols-12 lg:gap-6 lg:px-12">
+        <div class="lg:col-span-7 xl:col-span-6">
+          <div class="mb-6 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2">
+            <span class="flex h-2 w-2 rounded-full bg-white"></span>
+            <span class="font-mono text-[10px] uppercase tracking-label text-white/70">Alpha waitlist open · 500 systems</span>
+          </div>
+          <div class="font-display text-hero font-bold">
+            <span class="block pb-[0.06em]">Autonomous Aerial</span>
+            <span class="block pb-[0.06em]">Protection.</span>
+            <span class="block pb-[0.06em]"><span class="text-silver">Unseen.</span> Unmatched.</span>
+          </div>
+          <p class="mt-6 max-w-xl text-[17px] leading-relaxed text-white/60">
+            The ultra-quiet, AI-powered perimeter drone system that patrols, detects, and deters threats before they
+            reach your doorstep.
+          </p>
+        </div>
+      </div>
+    </div>
     <div id="root" style="position:relative"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

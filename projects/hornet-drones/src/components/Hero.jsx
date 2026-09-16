@@ -14,6 +14,7 @@ export default function Hero() {
   // screen. Remove it after commit so there is never a frame with neither.
   useEffect(() => {
     document.getElementById('lcp-shell')?.remove()
+    document.getElementById('lcp-copy')?.remove()
   }, [])
 
   // Scroll-linked hero exit. Mapping the section's own progress (0 -> 1 across
@@ -91,43 +92,37 @@ export default function Hero() {
           animate="visible"
           className="z-10 lg:col-span-7 xl:col-span-6"
         >
-          <motion.div variants={revealUp(reduce)} className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 backdrop-blur-md">
+          <div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 backdrop-blur-md">
             <StatusDot />
             <span className="font-mono text-[10px] uppercase tracking-label text-white/70">
               Alpha waitlist open · 500 systems
             </span>
-          </motion.div>
+          </div>
 
+          {/* The text is static on purpose: the paint-first shell in index.html
+              has already drawn it, and this hero takes over in place. Entrance
+              motion belongs to the buttons and stats below. */}
           <h1 id="hero-heading" className="font-display text-hero font-bold">
-            {/* Each line masks its own reveal, so the headline "unfolds" rather
-                than fading as a single block. overflow-hidden + y:100% is the
-                classic award-site line-mask, done with zero extra libraries. */}
             {HEADLINE.map((line, i) => (
-              <span key={line} className="block overflow-hidden pb-[0.06em]">
-                <motion.span
-                  className="block"
-                  initial={reduce ? { opacity: 0 } : { y: '110%' }}
-                  animate={reduce ? { opacity: 1 } : { y: '0%' }}
-                  transition={{ duration: DURATION.hero, ease: EASE, delay: 0.18 + i * 0.1 }}
-                >
-                  {i === 2 ? (
-                    <>
-                      <span className="text-silver">Unseen.</span> Unmatched.
-                    </>
-                  ) : (
-                    line
-                  )}
-                </motion.span>
+              <span key={line} className="block pb-[0.06em]">
+                {i === 2 ? (
+                  <>
+                    <span className="text-silver">Unseen.</span> Unmatched.
+                  </>
+                ) : (
+                  line
+                )}
               </span>
             ))}
           </h1>
 
-          <motion.p variants={revealUp(reduce, 0.3)} className="mt-6 max-w-xl text-[17px] leading-relaxed text-white/60">
+          <p
+            className="mt-6 max-w-xl text-[17px] leading-relaxed text-white/60">
             The ultra-quiet, AI-powered perimeter drone system that patrols, detects, and deters threats before they
             reach your doorstep.
-          </motion.p>
+          </p>
 
-          <motion.div variants={revealUp(reduce, 0.42)} className="mt-9 flex flex-wrap items-center gap-4">
+          <motion.div variants={revealUp(reduce, 0.1)} className="mt-9 flex flex-wrap items-center gap-4">
             <GlowButton onClick={() => document.querySelector('#reserve')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' })}>
               Reserve System
             </GlowButton>
@@ -142,7 +137,7 @@ export default function Hero() {
           </motion.div>
 
           <motion.dl
-            variants={revealUp(reduce, 0.54)}
+            variants={revealUp(reduce, 0.2)}
             className="mt-11 grid max-w-lg grid-cols-3 gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10"
           >
             {[
@@ -160,19 +155,27 @@ export default function Hero() {
 
       </div>
 
-      {/* Scroll affordance */}
+      {/* Scroll affordance. The scroll-linked fade and the delayed entrance
+          sit on separate elements on purpose: binding `copyOpacity` in
+          `style` while also animating `opacity` on the same element makes
+          Framer animate the shared motion value itself, which held the hero
+          copy at opacity 0 for the first 1.7 s of every visit. */}
+      <motion.div
+        style={{ opacity: copyOpacity }}
+        className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 lg:block"
+      >
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 0.6 }}
-        style={{ opacity: copyOpacity }}
-        className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-3 lg:flex"
+        className="flex flex-col items-center gap-3"
       >
         <span className="font-mono text-[9px] uppercase tracking-label text-white/55">Scroll</span>
         {/* The line "drains" downward on a loop: transform-origin trick, GPU only */}
         <span className="relative h-12 w-px overflow-hidden bg-white/10">
           <span className="absolute inset-x-0 top-0 h-1/2 bg-white animate-scanline" />
         </span>
+      </motion.div>
       </motion.div>
     </section>
   )
