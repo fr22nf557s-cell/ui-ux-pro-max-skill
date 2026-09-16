@@ -33,7 +33,12 @@ projects/norvex-gaming/
 │   ├── css/norvex.css     # design tokens + components (dark luxury, liquid glass, gold accent)
 │   ├── js/catalog.js      # ALL product / game / type data + store config
 │   ├── js/norvex.js       # storefront runtime (cart, search, filters, PDP, motion, a11y)
-│   └── img/               # favicon.svg, logo.svg
+│   └── img/
+│       ├── favicon.svg · logo.svg
+│       └── products/      # drop product photos here (4:5, ~800x1000, WebP/JPG)
+├── scripts/
+│   ├── import-catalog.mjs # CSV → assets/js/catalog.js (validates rows + image paths)
+│   └── catalog-template.csv
 └── README.md
 ```
 
@@ -57,11 +62,24 @@ All colours, spacing, radii and easings are CSS custom properties at the top of 
 
 ## Make it yours
 
-1. **Inventory** — replace the `products` array in `assets/js/catalog.js` (the field reference is at the
-   top of that file). Or fetch your live catalogue and assign it to `window.NORVEX_DATA.products`
-   before `norvex.js` runs.
-2. **Photos** — set `image: 'assets/img/products/<file>.webp'` on any product; the stylised CSS packaging
-   mock is only rendered when `image` is `null`. Use 4:5 images (800 × 1000 recommended).
+1. **Inventory** — the fastest route is the importer. Export your products to CSV (distributor feed,
+   Shopify/WooCommerce export, or a spreadsheet; columns documented in `scripts/catalog-template.csv`
+   and at the top of `scripts/import-catalog.mjs`), then:
+
+   ```bash
+   node scripts/import-catalog.mjs my-products.csv --images assets/img/products --dry-run   # validate
+   node scripts/import-catalog.mjs my-products.csv --images assets/img/products             # write catalog.js
+   ```
+
+   The importer keeps `config`, `games` and `types`, generates ids, derives the set name, and refuses to
+   write if a row has an unknown game/type, a bad price, or a photo that isn't on disk. You can also edit
+   the `products` array in `assets/js/catalog.js` by hand, or fetch a live catalogue and assign it to
+   `window.NORVEX_DATA.products` before `norvex.js` runs.
+2. **Photos** — put files in `assets/img/products/` and reference them in the CSV `image` column (or set
+   `image` on a product). The stylised CSS packaging mock is only rendered when `image` is empty.
+   Use 4:5 images (800 × 1000 recommended). Source them legitimately: official packshots from your
+   distributor / publisher retailer portals, the Pokémon TCG API or Scryfall for card images on singles,
+   your own photos of graded slabs. Do not copy another retailer's photos or descriptions.
 3. **Currency / thresholds / support email** — `config` block in `catalog.js`.
 4. **Checkout** — the "Secure checkout" button currently shows a toast. Wire it to Shopify (Storefront
    API / cart permalink), Stripe Checkout, Snipcart, Medusa, etc. in `initGlobalClicks()` inside
