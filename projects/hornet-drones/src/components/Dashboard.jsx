@@ -45,7 +45,7 @@ const minus = (d, s) => new Date(d.getTime() - s * 1000)
 export default function Dashboard() {
   const reduce = useReducedMotion()
   const now = useClock()
-  const [mode, setMode] = useState('optical')
+  const [mode, setMode] = useState('thermal')
   const [zoom, setZoom] = useState(0)
   const [tab, setTab] = useState('live')
   const [trigger, setTrigger] = useState('idle') // idle | arming | deployed | returning

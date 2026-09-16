@@ -3,50 +3,49 @@ import { useEffect, useRef } from 'react'
 /*
  * FEED SCENE — the aircraft's own camera, rendered live on a canvas.
  *
- * An oblique view down onto a garden at night: lawn, paved path, hedge,
- * fence with a gate, and the house wall at the top. A person comes through
- * the gate and walks up the path towards the house, on a loop.
+ * A high-oblique view down onto a garden at night: lawn, paved path, hedge,
+ * fence with an open gate, and the house wall at the top of frame. A person
+ * comes through the gate and walks up the path towards the house, on a loop.
  *
- * Two palettes, same geometry:
- *  - thermal: LWIR in white-hot. Warm = bright. The person is the hottest
- *    thing in frame (head > torso > limbs), the paving holds a little day
- *    heat, the hedge and lawn are cold, the house wall is warm and its
- *    windows warmer. No shadows — thermal cameras do not see them.
- *  - optical: starlight low-light. Grainy, low contrast, the person a dark
- *    figure with a faint edge, and a soft shadow on the ground.
+ * What makes it read as a sensor rather than a drawing:
+ *  - Thermal is rendered at half resolution and upscaled, then bloomed. A
+ *    640 × 512 LWIR core at 30 m gives a soft image; sharp edges are the
+ *    give-away of a fake. The person is a filled silhouette with a heat
+ *    gradient (core hottest), not outlined limbs.
+ *  - Optical (starlight) has heavy grain, a slight blur, an IR-illuminator
+ *    hotspot in the centre of frame, and a soft ground shadow.
+ *  - Hover drift, a rolling exposure flicker, and per-frame grain.
  *
- * The tracking lock is drawn here too, from the figure's real bounding
- * box, so it follows the person exactly and zooms with the picture.
- *
- * Deliberately low resolution (384 × 240) and upscaled: a 640 × 512 thermal
- * core does not produce a crisp image, and the softness is what makes it
- * read as a sensor rather than a drawing.
+ * The tracking lock is drawn from the figure's real bounding box, so it
+ * follows the person exactly and zooms with the picture.
  */
 
 const W = 384
 const H = 240
-const FAR = 44 // y of the fence line: everything above is "far"
-const LOOP = 16 // seconds for one walk from gate to house
+const FAR = 46 // y of the fence line
+const LOOP = 17 // seconds per walk from gate to house
 
-// Depth scale: 1 at the bottom of frame, ~0.4 at the fence.
-const depth = (y) => 0.4 + 0.6 * Math.max(0, Math.min(1, (y - FAR) / (H - FAR)))
+// Depth scale: 1 at the bottom of frame, ~0.42 at the fence.
+const depth = (y) => 0.42 + 0.58 * Math.max(0, Math.min(1, (y - FAR) / (H - FAR)))
 
-// The path the person walks, in scene coords: through the gate, up the paving.
+// The person's track: through the gate (top right), up the paving, to the door.
 function walkPoint(t) {
-  const u = (t % LOOP) / LOOP // 0 → 1
-  const x = 262 - u * 70 + Math.sin(u * Math.PI * 2) * 6
-  const y = FAR + 8 + u * 175
-  return { x, y, u }
+  const u = (t % LOOP) / LOOP
+  return {
+    x: 260 - u * 74 + Math.sin(u * Math.PI * 2) * 5,
+    y: FAR + 10 + u * 176,
+    u,
+  }
 }
 
-function makeNoise() {
+function makeNoise(size = 128) {
   const c = document.createElement('canvas')
-  c.width = 128
-  c.height = 128
+  c.width = size
+  c.height = size
   const ctx = c.getContext('2d')
-  const img = ctx.createImageData(128, 128)
+  const img = ctx.createImageData(size, size)
   for (let i = 0; i < img.data.length; i += 4) {
-    const v = 90 + Math.random() * 120
+    const v = 80 + Math.random() * 130
     img.data[i] = img.data[i + 1] = img.data[i + 2] = v
     img.data[i + 3] = 255
   }
@@ -54,202 +53,267 @@ function makeNoise() {
   return c
 }
 
-function drawGround(ctx, mode, noise, t) {
-  const th = mode === 'thermal'
-  // Lawn: cold and flat in thermal, mid-dark in starlight.
-  const g = ctx.createLinearGradient(0, 0, 0, H)
-  g.addColorStop(0, th ? '#1c1c1c' : '#2a2d33')
-  g.addColorStop(1, th ? '#262626' : '#33373e')
-  ctx.fillStyle = g
-  ctx.fillRect(0, 0, W, H)
-
-  // Lawn texture: the noise tile at low alpha, drifting slightly so it never
-  // reads as a fixed pattern.
-  ctx.globalAlpha = th ? 0.08 : 0.16
-  ctx.drawImage(noise, -((t * 2) % 128), 0, 128, 128)
-  for (let x = -128; x < W + 128; x += 128) for (let y = 0; y < H; y += 128) ctx.drawImage(noise, x + ((t * 1.5) % 128) - 128, y)
+/** Lawn texture: two octaves of noise so it has both grain and mottling. */
+function makeLawn() {
+  const c = document.createElement('canvas')
+  c.width = 256
+  c.height = 256
+  const ctx = c.getContext('2d')
+  ctx.fillStyle = '#808080'
+  ctx.fillRect(0, 0, 256, 256)
+  const fine = makeNoise(256)
+  const coarse = makeNoise(32)
+  ctx.globalAlpha = 0.35
+  ctx.drawImage(coarse, 0, 0, 256, 256)
+  ctx.globalAlpha = 0.25
+  ctx.drawImage(fine, 0, 0)
   ctx.globalAlpha = 1
+  return c
+}
 
-  // House wall along the top, warm in thermal, with two windows.
-  ctx.fillStyle = th ? '#4a4a4a' : '#1d1f24'
-  ctx.fillRect(0, 0, W, FAR - 16)
-  ctx.fillStyle = th ? '#8a8a8a' : '#2b2e35'
-  ctx.fillRect(70, 6, 34, 18)
-  ctx.fillRect(196, 6, 34, 18)
+function ground(ctx, mode, lawn, t) {
+  const th = mode === 'thermal'
+
+  // Lawn. Thermal: cold, flat, slightly warmer near the house wall. Optical:
+  // mid-dark with mottling.
+  ctx.fillStyle = th ? '#222' : '#2b2e34'
+  ctx.fillRect(0, 0, W, H)
+  ctx.globalAlpha = th ? 0.18 : 0.42
+  const dx = (t * 1.2) % 256
+  for (let x = -256; x < W + 256; x += 256) for (let y = -256; y < H + 256; y += 256) ctx.drawImage(lawn, x + dx, y)
+  ctx.globalAlpha = 1
   if (th) {
-    // Window glow: heat leaking through glass.
-    ctx.fillStyle = 'rgba(255,255,255,0.35)'
-    ctx.fillRect(76, 10, 22, 10)
-    ctx.fillRect(202, 10, 22, 10)
+    const g = ctx.createLinearGradient(0, 0, 0, H)
+    g.addColorStop(0, 'rgba(255,255,255,0.10)')
+    g.addColorStop(0.35, 'rgba(255,255,255,0)')
+    ctx.fillStyle = g
+    ctx.fillRect(0, 0, W, H)
   }
-  // Step / threshold strip below the wall.
-  ctx.fillStyle = th ? '#3a3a3a' : '#262930'
-  ctx.fillRect(0, FAR - 16, W, 4)
 
-  // Paved path: a trapezoid from the gate (top right) widening to the bottom.
+  // House wall, warm in thermal, with two windows leaking heat.
+  ctx.fillStyle = th ? '#4e4e4e' : '#1c1e23'
+  ctx.fillRect(0, 0, W, FAR - 18)
+  for (const wx of [66, 198]) {
+    ctx.fillStyle = th ? '#9a9a9a' : '#2a2d34'
+    ctx.fillRect(wx, 5, 36, 19)
+    if (th) {
+      const g = ctx.createRadialGradient(wx + 18, 14, 2, wx + 18, 14, 22)
+      g.addColorStop(0, 'rgba(255,255,255,0.55)')
+      g.addColorStop(1, 'rgba(255,255,255,0)')
+      ctx.fillStyle = g
+      ctx.fillRect(wx - 6, 0, 48, 30)
+    }
+  }
+  ctx.fillStyle = th ? '#3c3c3c' : '#24272d'
+  ctx.fillRect(0, FAR - 18, W, 5)
+
+  // Paved path: retains a little day heat, so a touch lighter than the lawn.
   ctx.beginPath()
-  ctx.moveTo(248, FAR - 12)
-  ctx.lineTo(282, FAR - 12)
-  ctx.lineTo(262, H)
-  ctx.lineTo(126, H)
+  ctx.moveTo(246, FAR - 13)
+  ctx.lineTo(284, FAR - 13)
+  ctx.lineTo(266, H)
+  ctx.lineTo(118, H)
   ctx.closePath()
-  ctx.fillStyle = th ? '#3b3b3b' : '#3b3f47'
+  ctx.fillStyle = th ? '#3a3a3a' : '#383c44'
   ctx.fill()
-  // Paving joints
-  ctx.strokeStyle = th ? 'rgba(0,0,0,0.25)' : 'rgba(0,0,0,0.35)'
+  ctx.strokeStyle = th ? 'rgba(0,0,0,0.22)' : 'rgba(0,0,0,0.3)'
   ctx.lineWidth = 1
-  for (let i = 0; i < 9; i++) {
-    const y = FAR - 12 + ((i + 0.5) / 9) ** 1.6 * (H - FAR + 12)
-    const s = depth(y)
-    const cx = 265 - ((y - FAR) / (H - FAR)) * 70
-    const half = (17 + ((y - FAR) / (H - FAR)) * 51) * 0.5 + 8
+  for (let i = 0; i < 10; i++) {
+    const y = FAR - 13 + ((i + 0.5) / 10) ** 1.55 * (H - FAR + 13)
+    const k = (y - FAR) / (H - FAR)
+    const cx = 265 - k * 74
+    const half = 19 + k * 55
     ctx.beginPath()
-    ctx.moveTo(cx - half * s * 2, y)
-    ctx.lineTo(cx + half * s * 2, y)
+    ctx.moveTo(cx - half, y)
+    ctx.lineTo(cx + half, y)
     ctx.stroke()
   }
 
-  // Hedge down the left: cold, lumpy.
-  for (let i = 0; i < 9; i++) {
-    const y = FAR + 4 + i * 24
+  // Hedge down the left: cold, lumpy, overlapping ellipses.
+  for (let i = 0; i < 10; i++) {
+    const y = FAR + 2 + i * 22
     const s = depth(y)
     ctx.beginPath()
-    ctx.ellipse(28 + Math.sin(i * 1.7) * 6, y, 30 * s + 8, 14 * s + 4, 0, 0, Math.PI * 2)
-    ctx.fillStyle = th ? '#151515' : '#1a1c21'
+    ctx.ellipse(26 + Math.sin(i * 1.7) * 7, y, 32 * s + 8, 15 * s + 4, 0, 0, Math.PI * 2)
+    ctx.fillStyle = th ? '#161616' : '#181a1f'
     ctx.fill()
   }
 
-  // Fence line with posts, and a gap for the gate where the path starts.
-  ctx.strokeStyle = th ? '#5a5a5a' : '#454a54'
+  // Fence with posts and a gap for the gate; the gate swung inward.
+  ctx.strokeStyle = th ? '#5c5c5c' : '#444953'
   ctx.lineWidth = 2
   ctx.beginPath()
-  ctx.moveTo(60, FAR)
-  ctx.lineTo(244, FAR)
-  ctx.moveTo(288, FAR)
+  ctx.moveTo(58, FAR)
+  ctx.lineTo(242, FAR)
+  ctx.moveTo(290, FAR)
   ctx.lineTo(W, FAR)
   ctx.stroke()
-  for (let x = 60; x <= W; x += 23) {
-    if (x > 244 && x < 288) continue
-    ctx.fillStyle = th ? '#6a6a6a' : '#50555f'
-    ctx.fillRect(x - 1, FAR - 6, 2, 8)
-  }
-  // The open gate, swung inward.
-  ctx.strokeStyle = th ? '#7a7a7a' : '#5a606b'
+  ctx.fillStyle = th ? '#6c6c6c' : '#4f545e'
+  for (let x = 58; x <= W; x += 23) if (x < 242 || x > 290) ctx.fillRect(x - 1, FAR - 7, 2, 9)
+  ctx.strokeStyle = th ? '#7c7c7c' : '#5a606b'
   ctx.beginPath()
-  ctx.moveTo(244, FAR)
-  ctx.lineTo(236, FAR + 22)
+  ctx.moveTo(242, FAR)
+  ctx.lineTo(233, FAR + 24)
   ctx.stroke()
 }
 
-function drawPerson(ctx, mode, p, t) {
+/**
+ * The person, as a filled silhouette. Returns the bounding box.
+ *
+ * Thermal draws it twice: a wide soft bloom underneath, then the body with a
+ * radial heat gradient (chest hottest, extremities cooler). Optical draws a
+ * dark body with a faint rim and a ground shadow.
+ */
+function person(ctx, mode, p, t) {
   const th = mode === 'thermal'
-  const s = depth(p.y) * 1.15
-  const swing = Math.sin(t * 5.2) // walking cycle
-  const bob = Math.abs(Math.cos(t * 5.2)) * 1.2 * s
+  const s = depth(p.y) * 1.2
+  const cyc = t * 5.4
+  const swing = Math.sin(cyc)
+  const bob = Math.abs(Math.cos(cyc)) * 1.1 * s
 
-  // Proportions in scene units at s = 1.
-  const headR = 5.2 * s
-  const torsoW = 11 * s
-  const torsoH = 17 * s
-  const legL = 15 * s
-  const armL = 12 * s
+  const headR = 5 * s
+  const shoulderW = 15 * s
+  const torsoH = 18 * s
+  const legL = 16 * s
   const cx = p.x
   const feetY = p.y
   const hipY = feetY - legL
-  const shoulderY = hipY - torsoH
-  const headY = shoulderY - headR - 1.5 * s - bob
+  const shoulderY = hipY - torsoH - bob
+  const headY = shoulderY - headR - 1.2 * s
 
-  if (!th) {
-    // Ground shadow, only in optical.
-    ctx.fillStyle = 'rgba(0,0,0,0.35)'
+  const body = () => {
+    // Legs: two tapered capsules with a knee bend.
+    for (const side of [-1, 1]) {
+      const k = swing * side
+      const hipX = cx + side * 3.2 * s
+      const kneeX = hipX + k * 4 * s
+      const kneeY = hipY + legL * 0.5 - Math.max(0, k) * 2 * s
+      const footX = hipX + k * 7 * s
+      ctx.lineWidth = 5 * s
+      ctx.beginPath()
+      ctx.moveTo(hipX, hipY)
+      ctx.lineTo(kneeX, kneeY)
+      ctx.lineTo(footX, feetY)
+      ctx.stroke()
+    }
+    // Arms: capsules swinging opposite to the legs.
+    for (const side of [-1, 1]) {
+      const k = -swing * side
+      const sx = cx + side * (shoulderW / 2 - 1.5 * s)
+      ctx.lineWidth = 4 * s
+      ctx.beginPath()
+      ctx.moveTo(sx, shoulderY + 3 * s)
+      ctx.lineTo(sx + side * 2 * s + k * 3.5 * s, shoulderY + 10 * s)
+      ctx.lineTo(sx + side * 1.5 * s + k * 6 * s, shoulderY + 15 * s)
+      ctx.stroke()
+    }
+    // Torso: shoulders wider than hips.
     ctx.beginPath()
-    ctx.ellipse(cx + 6 * s, feetY + 1, 14 * s, 4 * s, 0, 0, Math.PI * 2)
+    ctx.moveTo(cx - shoulderW / 2, shoulderY + 2 * s)
+    ctx.quadraticCurveTo(cx, shoulderY - 2 * s, cx + shoulderW / 2, shoulderY + 2 * s)
+    ctx.lineTo(cx + shoulderW / 2 - 3 * s, hipY + 2 * s)
+    ctx.quadraticCurveTo(cx, hipY + 4 * s, cx - shoulderW / 2 + 3 * s, hipY + 2 * s)
+    ctx.closePath()
+    ctx.fill()
+    // Neck + head.
+    ctx.fillRect(cx - 1.6 * s, headY + headR - 1, 3.2 * s, 3 * s)
+    ctx.beginPath()
+    ctx.arc(cx, headY, headR, 0, Math.PI * 2)
     ctx.fill()
   }
 
   ctx.lineCap = 'round'
   ctx.lineJoin = 'round'
 
-  const limb = (x1, y1, x2, y2, w, color) => {
-    ctx.strokeStyle = color
-    ctx.lineWidth = w
-    ctx.beginPath()
-    ctx.moveTo(x1, y1)
-    ctx.lineTo(x2, y2)
-    ctx.stroke()
-  }
-
   if (th) {
-    // Heat bloom around the whole figure, then the parts hottest last.
-    ctx.shadowColor = 'rgba(255,255,255,0.85)'
-    ctx.shadowBlur = 7 * s
+    // Bloom: the whole figure, blurred wide and faint.
+    ctx.save()
+    ctx.shadowColor = 'rgba(255,255,255,0.9)'
+    ctx.shadowBlur = 14 * s
+    ctx.fillStyle = 'rgba(255,255,255,0.35)'
+    ctx.strokeStyle = 'rgba(255,255,255,0.35)'
+    body()
+    ctx.restore()
+    // Body: heat gradient centred on the chest, limbs a touch cooler.
+    const g = ctx.createRadialGradient(cx, shoulderY + torsoH * 0.35, 1, cx, shoulderY + torsoH * 0.35, torsoH * 1.4)
+    g.addColorStop(0, '#ffffff')
+    g.addColorStop(0.45, '#f0f0f0')
+    g.addColorStop(1, '#c4c4c4')
+    ctx.save()
+    ctx.shadowColor = 'rgba(255,255,255,0.7)'
+    ctx.shadowBlur = 3.5 * s
+    ctx.fillStyle = g
+    ctx.strokeStyle = '#d2d2d2'
+    body()
+    ctx.restore()
   } else {
-    ctx.shadowColor = 'rgba(0,0,0,0)'
-    ctx.shadowBlur = 0
-  }
-
-  const limbColor = th ? '#b9b9b9' : '#1f2227'
-  const torsoColor = th ? '#e6e6e6' : '#23262c'
-  const headColor = th ? '#ffffff' : '#262930'
-
-  // Legs
-  limb(cx - 2 * s, hipY, cx - 2 * s + swing * 6 * s, feetY, 4.2 * s, limbColor)
-  limb(cx + 2 * s, hipY, cx + 2 * s - swing * 6 * s, feetY, 4.2 * s, limbColor)
-  // Torso
-  ctx.fillStyle = torsoColor
-  ctx.beginPath()
-  ctx.roundRect(cx - torsoW / 2, shoulderY - bob, torsoW, torsoH + bob, 4 * s)
-  ctx.fill()
-  // Arms
-  limb(cx - torsoW / 2, shoulderY + 2 * s - bob, cx - torsoW / 2 - 3 * s - swing * 5 * s, shoulderY + armL - bob, 3.4 * s, limbColor)
-  limb(cx + torsoW / 2, shoulderY + 2 * s - bob, cx + torsoW / 2 + 3 * s + swing * 5 * s, shoulderY + armL - bob, 3.4 * s, limbColor)
-  // Head
-  ctx.fillStyle = headColor
-  ctx.beginPath()
-  ctx.arc(cx, headY, headR, 0, Math.PI * 2)
-  ctx.fill()
-
-  if (!th) {
-    // Faint rim light on the figure so it separates from the lawn.
-    ctx.strokeStyle = 'rgba(255,255,255,0.16)'
+    // Ground shadow from the IR illuminator, then the dark body.
+    ctx.fillStyle = 'rgba(0,0,0,0.38)'
+    ctx.beginPath()
+    ctx.ellipse(cx + 7 * s, feetY + 1, 15 * s, 4.5 * s, 0, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.save()
+    ctx.shadowColor = 'rgba(0,0,0,0.6)'
+    ctx.shadowBlur = 2 * s
+    ctx.fillStyle = '#20232a'
+    ctx.strokeStyle = '#1d2026'
+    body()
+    ctx.restore()
+    // Rim light on the head and shoulder facing the illuminator.
+    ctx.strokeStyle = 'rgba(255,255,255,0.14)'
     ctx.lineWidth = 1
     ctx.beginPath()
-    ctx.arc(cx, headY, headR, Math.PI * 1.1, Math.PI * 1.9)
+    ctx.arc(cx, headY, headR, Math.PI * 1.05, Math.PI * 1.95)
     ctx.stroke()
   }
-  ctx.shadowBlur = 0
 
   return {
-    x: cx - torsoW / 2 - 8 * s,
-    y: headY - headR - 3 * s,
-    w: torsoW + 16 * s,
-    h: feetY - (headY - headR) + 5 * s,
-    range: Math.round(34 - depth(p.y) * 20), // metres, roughly
+    x: cx - shoulderW / 2 - 7 * s,
+    y: headY - headR - 4 * s,
+    w: shoulderW + 14 * s,
+    h: feetY - (headY - headR) + 6 * s,
+    range: Math.round(34 - depth(p.y) * 20),
   }
 }
 
-function drawLock(ctx, box, confidence) {
-  ctx.strokeStyle = 'rgba(255,255,255,0.9)'
+function lock(ctx, box, confidence) {
+  const x = Math.round(box.x) + 0.5
+  const y = Math.round(box.y) + 0.5
+  const w = Math.round(box.w)
+  const h = Math.round(box.h)
+  ctx.strokeStyle = 'rgba(255,255,255,0.92)'
   ctx.lineWidth = 1
-  ctx.strokeRect(Math.round(box.x) + 0.5, Math.round(box.y) + 0.5, Math.round(box.w), Math.round(box.h))
-  // Label chip
+  // Corner-only brackets read as a tracker; a full box reads as a crop.
+  const c = Math.max(4, Math.min(w, h) * 0.28)
+  for (const [px, py, dx, dy] of [
+    [x, y, 1, 1],
+    [x + w, y, -1, 1],
+    [x, y + h, 1, -1],
+    [x + w, y + h, -1, -1],
+  ]) {
+    ctx.beginPath()
+    ctx.moveTo(px, py + dy * c)
+    ctx.lineTo(px, py)
+    ctx.lineTo(px + dx * c, py)
+    ctx.stroke()
+  }
   const label = `HUMAN ${confidence}%`
   ctx.font = 'bold 8px "JetBrains Mono", ui-monospace, monospace'
+  ctx.textBaseline = 'middle'
   const tw = ctx.measureText(label).width + 8
   ctx.fillStyle = '#fff'
-  ctx.fillRect(Math.round(box.x), Math.round(box.y) - 12, tw, 11)
+  ctx.fillRect(x - 0.5, y - 13, tw, 11)
   ctx.fillStyle = '#000'
-  ctx.textBaseline = 'middle'
-  ctx.fillText(label, Math.round(box.x) + 4, Math.round(box.y) - 6.5)
-  // Range, under the box
-  ctx.fillStyle = 'rgba(255,255,255,0.8)'
+  ctx.fillText(label, x + 3.5, y - 7.5)
+  ctx.fillStyle = 'rgba(255,255,255,0.85)'
   ctx.font = '8px "JetBrains Mono", ui-monospace, monospace'
-  ctx.fillText(`${box.range} m`, Math.round(box.x) + Math.round(box.w) - ctx.measureText(`${box.range} m`).width, Math.round(box.y + box.h) + 8)
+  const r = `${box.range} m`
+  ctx.fillText(r, x + w - ctx.measureText(r).width, y + h + 8)
 }
 
-function drawGrain(ctx, mode, noise) {
+function grain(ctx, mode, noise) {
   ctx.globalCompositeOperation = 'overlay'
-  ctx.globalAlpha = mode === 'thermal' ? 0.22 : 0.5
+  ctx.globalAlpha = mode === 'thermal' ? 0.2 : 0.55
   const ox = Math.floor(Math.random() * 128)
   const oy = Math.floor(Math.random() * 128)
   for (let x = -128; x < W; x += 128) for (let y = -128; y < H; y += 128) ctx.drawImage(noise, x + ox, y + oy)
@@ -265,24 +329,26 @@ export default function FeedScene({ mode, paused = false, className = '' }) {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return undefined
-    const ctx = canvas.getContext('2d')
+    const out = canvas.getContext('2d')
     const noise = makeNoise()
+    const lawn = makeLawn()
+    // Scene is drawn full size, then thermal is passed through a half-size
+    // buffer on the way out. That resample is the sensor's softness.
+    const scene = document.createElement('canvas')
+    scene.width = W
+    scene.height = H
+    const sctx = scene.getContext('2d')
+    const low = document.createElement('canvas')
+    low.width = W / 2
+    low.height = H / 2
+    const lctx = low.getContext('2d')
+
     let raf = 0
     let last = 0
     let visible = true
     const t0 = performance.now()
 
-    // Draw only while on screen. Off screen the loop parks itself and the
-    // observer restarts it, so a reader further down the page pays nothing.
-    const io = new IntersectionObserver(([entry]) => {
-      const wasVisible = visible
-      visible = entry.isIntersecting
-      if (visible && !wasVisible && !paused) raf = requestAnimationFrame(frame)
-    })
-    io.observe(canvas)
-
     const frame = (now) => {
-      // ~24 fps is plenty for a "sensor" and keeps the panel cheap to run.
       if (now - last < 40) {
         raf = requestAnimationFrame(frame)
         return
@@ -290,23 +356,48 @@ export default function FeedScene({ mode, paused = false, className = '' }) {
       last = now
       const t = (now - t0) / 1000
       const m = modeRef.current
+      const th = m === 'thermal'
 
-      ctx.save()
+      sctx.save()
+      sctx.clearRect(0, 0, W, H)
       // Hover drift: the aircraft is never perfectly still.
-      ctx.translate(Math.sin(t * 0.45) * 2.5, Math.cos(t * 0.32) * 1.8)
-      drawGround(ctx, m, noise, t)
+      sctx.translate(Math.sin(t * 0.45) * 2.5, Math.cos(t * 0.32) * 1.8)
+      ground(sctx, m, lawn, t)
       const p = walkPoint(t)
-      // Fade the figure in at the gate and out at the door so the loop has no cut.
-      const fade = Math.min(1, p.u * 12, (1 - p.u) * 12)
-      ctx.globalAlpha = fade
-      const box = drawPerson(ctx, m, p, t)
-      ctx.globalAlpha = 1
-      if (fade > 0.6) drawLock(ctx, box, 97 - Math.round((1 - fade) * 20))
-      ctx.restore()
-      drawGrain(ctx, m, noise)
+      const fade = Math.min(1, p.u * 14, (1 - p.u) * 14)
+      sctx.globalAlpha = fade
+      const box = person(sctx, m, p, t)
+      sctx.globalAlpha = 1
+      sctx.restore()
+
+      if (th) {
+        lctx.drawImage(scene, 0, 0, W / 2, H / 2)
+        out.imageSmoothingEnabled = true
+        out.drawImage(low, 0, 0, W, H)
+      } else {
+        out.drawImage(scene, 0, 0)
+        // IR illuminator: a soft hotspot in the centre, falling off to the edges.
+        const g = out.createRadialGradient(W / 2, H / 2, 10, W / 2, H / 2, W * 0.62)
+        g.addColorStop(0, 'rgba(255,255,255,0.10)')
+        g.addColorStop(1, 'rgba(0,0,0,0.35)')
+        out.fillStyle = g
+        out.fillRect(0, 0, W, H)
+      }
+      // Exposure flicker, barely there.
+      out.fillStyle = `rgba(255,255,255,${0.012 + Math.random() * 0.018})`
+      out.fillRect(0, 0, W, H)
+      grain(out, m, noise)
+      if (fade > 0.6) lock(out, box, 97 - Math.round((1 - fade) * 20))
 
       if (!paused && visible) raf = requestAnimationFrame(frame)
     }
+
+    const io = new IntersectionObserver(([entry]) => {
+      const was = visible
+      visible = entry.isIntersecting
+      if (visible && !was && !paused) raf = requestAnimationFrame(frame)
+    })
+    io.observe(canvas)
     raf = requestAnimationFrame(frame)
     return () => {
       cancelAnimationFrame(raf)
