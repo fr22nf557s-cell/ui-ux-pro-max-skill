@@ -16,12 +16,12 @@ import { useEffect, useRef } from 'react'
  *    hotspot in the centre of frame, and a soft ground shadow.
  *  - Hover drift, a rolling exposure flicker, and per-frame grain.
  *
- * The tracking lock is drawn from the figure's real bounding box, so it
+ * The tracking lock is positioned from the figure's real bounding box, so it
  * follows the person exactly and zooms with the picture.
  */
 
-const W = 384
-const H = 240
+export const W = 384
+export const H = 240
 const FAR = 46 // y of the fence line
 const LOOP = 17 // seconds per walk from gate to house
 
@@ -276,41 +276,6 @@ function person(ctx, mode, p, t) {
   }
 }
 
-function lock(ctx, box, confidence) {
-  const x = Math.round(box.x) + 0.5
-  const y = Math.round(box.y) + 0.5
-  const w = Math.round(box.w)
-  const h = Math.round(box.h)
-  ctx.strokeStyle = 'rgba(255,255,255,0.92)'
-  ctx.lineWidth = 1
-  // Corner-only brackets read as a tracker; a full box reads as a crop.
-  const c = Math.max(4, Math.min(w, h) * 0.28)
-  for (const [px, py, dx, dy] of [
-    [x, y, 1, 1],
-    [x + w, y, -1, 1],
-    [x, y + h, 1, -1],
-    [x + w, y + h, -1, -1],
-  ]) {
-    ctx.beginPath()
-    ctx.moveTo(px, py + dy * c)
-    ctx.lineTo(px, py)
-    ctx.lineTo(px + dx * c, py)
-    ctx.stroke()
-  }
-  const label = `HUMAN ${confidence}%`
-  ctx.font = 'bold 8px "JetBrains Mono", ui-monospace, monospace'
-  ctx.textBaseline = 'middle'
-  const tw = ctx.measureText(label).width + 8
-  ctx.fillStyle = '#fff'
-  ctx.fillRect(x - 0.5, y - 13, tw, 11)
-  ctx.fillStyle = '#000'
-  ctx.fillText(label, x + 3.5, y - 7.5)
-  ctx.fillStyle = 'rgba(255,255,255,0.85)'
-  ctx.font = '8px "JetBrains Mono", ui-monospace, monospace'
-  const r = `${box.range} m`
-  ctx.fillText(r, x + w - ctx.measureText(r).width, y + h + 8)
-}
-
 function grain(ctx, mode, noise) {
   ctx.globalCompositeOperation = 'overlay'
   ctx.globalAlpha = mode === 'thermal' ? 0.2 : 0.55
@@ -321,10 +286,12 @@ function grain(ctx, mode, noise) {
   ctx.globalCompositeOperation = 'source-over'
 }
 
-export default function FeedScene({ mode, paused = false, className = '' }) {
+export default function FeedScene({ mode, paused = false, onTrack, className = '' }) {
   const canvasRef = useRef(null)
   const modeRef = useRef(mode)
   modeRef.current = mode
+  const trackRef = useRef(onTrack)
+  trackRef.current = onTrack
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -387,7 +354,14 @@ export default function FeedScene({ mode, paused = false, className = '' }) {
       out.fillStyle = `rgba(255,255,255,${0.012 + Math.random() * 0.018})`
       out.fillRect(0, 0, W, H)
       grain(out, m, noise)
-      if (fade > 0.6) lock(out, box, 97 - Math.round((1 - fade) * 20))
+      // The tracking lock is a DOM overlay drawn by the parent, so it stays
+      // crisp and the same size at any zoom. Box is in frame coordinates,
+      // including the hover drift the scene was drawn with.
+      trackRef.current?.(
+        fade > 0.6
+          ? { x: box.x + Math.sin(t * 0.45) * 2.5, y: box.y + Math.cos(t * 0.32) * 1.8, w: box.w, h: box.h, range: box.range, confidence: 97 - Math.round((1 - fade) * 20) }
+          : null,
+      )
 
       if (!paused && visible) raf = requestAnimationFrame(frame)
     }

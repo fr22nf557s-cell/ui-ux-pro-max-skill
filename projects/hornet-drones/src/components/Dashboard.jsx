@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform, useReducedMotion } from 'framer-motion'
 import { EASE, DURATION, VIEWPORT, revealUp, stagger } from '../lib/motion'
 import { SectionLabel, StatusDot } from './Primitives'
-import FeedScene from './FeedScene'
+import FeedScene, { W as FEED_W, H as FEED_H } from './FeedScene'
 import SitePlan, { DEFAULT_FENCE } from './SitePlan'
 
 /*
@@ -80,6 +80,54 @@ export default function Dashboard() {
   const [added, setAdded] = useState([])
   const logEvent = (text, tone, kind) => setAdded((l) => [{ t: new Date(), text, tone, kind, key: Date.now() + text }, ...l])
   const panelRef = useRef(null)
+
+  // ── Tracking lock overlay ──────────────────────────────────────────────
+  // FeedScene reports the figure's box every frame; the lock is DOM, placed
+  // over the picture with the same object-cover mapping and zoom the picture
+  // uses, so its text stays crisp and its brackets the same size at 2×. The
+  // zoom itself is eased here, per frame, so picture and lock never drift.
+  const feedRef = useRef(null)
+  const zoomWrapRef = useRef(null)
+  const lockRef = useRef(null)
+  const zoomTarget = useRef(ZOOM[0])
+  const zoomNow = useRef(ZOOM[0])
+  zoomTarget.current = ZOOM[zoom]
+  // With the feed paused (reduced motion) no frame drives the easing, so
+  // the zoom is applied directly.
+  useEffect(() => {
+    if (!reduce || !zoomWrapRef.current) return
+    zoomNow.current = ZOOM[zoom]
+    zoomWrapRef.current.style.transform = `scale(${ZOOM[zoom]})`
+  }, [zoom, reduce])
+  const onTrack = useCallback((box) => {
+    const c = feedRef.current
+    const wrap = zoomWrapRef.current
+    const el = lockRef.current
+    if (!c || !wrap || !el) return
+    const zt = zoomTarget.current
+    zoomNow.current += (zt - zoomNow.current) * 0.18
+    if (Math.abs(zt - zoomNow.current) < 0.002) zoomNow.current = zt
+    const z = zoomNow.current
+    wrap.style.transform = `scale(${z})`
+    if (!box) {
+      el.style.opacity = '0'
+      return
+    }
+    const cw = c.clientWidth
+    const ch = c.clientHeight
+    const s = Math.max(cw / FEED_W, ch / FEED_H)
+    const ox = (cw - FEED_W * s) / 2
+    const oy = (ch - FEED_H * s) / 2
+    const map = (x, y) => [(x * s + ox - cw / 2) * z + cw / 2, (y * s + oy - ch / 2) * z + ch / 2]
+    const [x1, y1] = map(box.x, box.y)
+    const [x2, y2] = map(box.x + box.w, box.y + box.h)
+    el.style.opacity = '1'
+    el.style.transform = `translate(${x1.toFixed(1)}px, ${y1.toFixed(1)}px)`
+    el.style.width = `${(x2 - x1).toFixed(1)}px`
+    el.style.height = `${(y2 - y1).toFixed(1)}px`
+    el.firstElementChild.textContent = `Human ${box.confidence}%`
+    el.lastElementChild.textContent = `${box.range} m`
+  }, [])
 
   // ── Pointer tilt ────────────────────────────────────────────────────────
   const px = useMotionValue(0)
@@ -279,12 +327,19 @@ export default function Dashboard() {
                     tab === 'live' ? '' : 'hidden'
                   }`}
                 >
-                  <div className="relative aspect-[16/10] w-full overflow-hidden md:aspect-auto md:min-h-[300px] md:flex-1">
-                    <div
-                      className="h-full w-full transition-transform duration-500"
-                      style={{ transform: `scale(${ZOOM[zoom]})` }}
-                    >
-                      <FeedScene mode={mode} paused={Boolean(reduce)} className="h-full w-full object-cover" />
+                  <div ref={feedRef} className="relative aspect-[16/10] w-full overflow-hidden md:aspect-auto md:min-h-[300px] md:flex-1">
+                    <div ref={zoomWrapRef} className="h-full w-full">
+                      <FeedScene mode={mode} paused={Boolean(reduce)} onTrack={onTrack} className="h-full w-full object-cover" />
+                    </div>
+
+                    {/* Tracking lock: corner brackets, class + confidence, range */}
+                    <div ref={lockRef} aria-hidden="true" className="pointer-events-none absolute left-0 top-0 opacity-0 will-change-transform">
+                      <span className="absolute -top-[15px] left-0 whitespace-nowrap bg-white px-1 font-mono text-[8px] font-bold uppercase leading-[11px] tracking-wide2 text-black">Human 97%</span>
+                      <span className="absolute left-0 top-0 h-2.5 w-2.5 border-l border-t border-white/90" />
+                      <span className="absolute right-0 top-0 h-2.5 w-2.5 border-r border-t border-white/90" />
+                      <span className="absolute bottom-0 left-0 h-2.5 w-2.5 border-b border-l border-white/90" />
+                      <span className="absolute bottom-0 right-0 h-2.5 w-2.5 border-b border-r border-white/90" />
+                      <span className="absolute -bottom-[14px] right-0 whitespace-nowrap font-mono text-[8px] tabular-nums text-white/85">22 m</span>
                     </div>
 
                     {/* Sensor noise + vignette, so the footage reads as a camera, not a video player */}
