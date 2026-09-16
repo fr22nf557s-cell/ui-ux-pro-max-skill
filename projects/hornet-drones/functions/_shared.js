@@ -219,7 +219,7 @@ export async function sendMail(env, { to, subject, html, text, listUnsubscribe }
 const MARK_URL = 'https://hornetdrones.com/press/hornet-mark.png'
 
 export function mailShell(heading, bodyHtml, cta) {
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark"><title>${heading}</title></head>
+  return `<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark"><title>${heading}</title></head>
 <body style="margin:0;background:#0b0c10;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0b0c10;padding:40px 16px">
 <tr><td align="center">
@@ -251,7 +251,7 @@ ${cta ? `<tr><td style="padding-top:28px"><a href="${cta.href}" style="display:i
  */
 export function htmlPage(title, body, status = 200) {
   return new Response(
-    `<!doctype html><html lang="en"><head>
+    `<!doctype html><html lang="en-GB"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark"><meta name="theme-color" content="#0B0C10"><meta name="robots" content="noindex">
 <title>${escapeHtml(title)} — Hornet Drones</title>
