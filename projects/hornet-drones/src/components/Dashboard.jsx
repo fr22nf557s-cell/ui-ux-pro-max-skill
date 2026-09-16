@@ -532,14 +532,14 @@ export default function Dashboard() {
                   )}
                   <ul className="divide-y divide-white/[0.06]" aria-live={tab === 'events' ? 'polite' : undefined}>
                     {shown.map((e) => (
-                      <li key={e.key} className="flex items-center gap-3 px-3 py-2 font-mono text-[10px]">
-                        <time className="tabular-nums text-white/45">{hhmmss(e.t)}</time>
+                      <li key={e.key} className="flex items-start gap-3 px-3 py-2 font-mono text-[10px] sm:items-center">
+                        <time className="flex-none tabular-nums text-white/45">{hhmmss(e.t)}</time>
                         <span
-                          className={`h-1.5 w-1.5 flex-none rounded-full ${
+                          className={`mt-[3px] h-1.5 w-1.5 flex-none rounded-full sm:mt-0 ${
                             e.tone === 'alert' ? 'bg-white' : e.tone === 'ok' ? 'bg-white/50' : 'bg-white/20'
                           }`}
                         />
-                        <span className={`truncate ${e.tone === 'alert' ? 'text-white' : 'text-white/55'}`}>{e.text}</span>
+                        <span className={`min-w-0 leading-snug sm:truncate ${e.tone === 'alert' ? 'text-white' : 'text-white/55'}`}>{e.text}</span>
                         {e.tone === 'alert' && (
                           <button
                             type="button"
