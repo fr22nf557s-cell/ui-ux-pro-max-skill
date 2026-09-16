@@ -60,40 +60,38 @@ export function HornetMark({ size = 30, className = '' }) {
 }
 
 /**
- * Full lockup.
+ * Full lockup: the mark, then HORNET with DRONES directly beneath it as one
+ * word-block. DRONES is letter-spaced to sit the full width of HORNET, so the
+ * two words read as a single unit rather than a title and a caption.
  *
- * `inline` — mark + the HORNET / DRONES lockup stacked, for the nav bar.
- * `stacked` — mark above HORNET with DRONES letterspaced beneath it between
- *   two tapered rules, matching the brand lockup.
+ * `variant="stacked"` is the same lockup at footer size.
  */
 export default function Logo({ variant = 'inline', className = '' }) {
-  if (variant === 'stacked') {
-    return (
-      <div className={`flex flex-col items-start ${className}`}>
-        <HornetMark size={64} className="text-white" />
-        <span className="mt-3 font-brand text-3xl font-bold italic leading-none tracking-[-0.01em] text-white">
+  const big = variant === 'stacked'
+  return (
+    <span className={`inline-flex items-center ${big ? 'gap-4' : 'gap-2.5'} ${className}`}>
+      <HornetMark size={big ? 72 : 30} className="flex-none text-white" />
+      <span className="flex flex-col leading-none">
+        <span
+          className={`font-brand font-bold italic tracking-[-0.01em] text-white ${
+            big ? 'text-[2.6rem]' : 'text-[15px]'
+          }`}
+        >
           HORNET
         </span>
-        {/* DRONES sits between two rules that taper away from the word */}
-        <span className="mt-2 flex w-full items-center gap-2.5">
-          <span className="h-px flex-1 bg-gradient-to-l from-white/45 to-transparent" aria-hidden="true" />
-          <span className="font-brand text-[11px] font-semibold tracking-[0.42em] text-white/70">DRONES</span>
-          <span className="h-px flex-1 bg-gradient-to-r from-white/45 to-transparent" aria-hidden="true" />
+        {/* Justified under HORNET: flex + space-between spreads the letters
+            edge to edge whatever the rendered width of the word above. */}
+        <span
+          aria-hidden="true"
+          className={`flex w-full justify-between font-brand font-semibold text-white/75 ${
+            big ? 'mt-1.5 text-[0.95rem]' : 'mt-[3px] text-[7.5px]'
+          }`}
+        >
+          {'DRONES'.split('').map((ch, i) => (
+            <span key={i}>{ch}</span>
+          ))}
         </span>
-      </div>
-    )
-  }
-
-  // The brand is "Hornet Drones", so the nav carries the whole lockup, not just
-  // the first word — stacked rather than inline so it still fits the bar height.
-  return (
-    <span className={`flex items-center gap-2.5 ${className}`}>
-      <HornetMark size={30} className="text-white" />
-      <span className="flex flex-col leading-none">
-        <span className="font-brand text-[15px] font-bold italic tracking-[-0.01em] text-white">HORNET</span>
-        <span className="mt-[3px] font-brand text-[7.5px] font-semibold tracking-[0.34em] text-white/55">
-          DRONES
-        </span>
+        <span className="sr-only">Hornet Drones</span>
       </span>
     </span>
   )

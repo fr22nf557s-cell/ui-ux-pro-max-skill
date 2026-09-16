@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform, useReducedMotion } from 'framer-motion'
 import { EASE, DURATION, VIEWPORT, revealUp, stagger } from '../lib/motion'
 import { SectionLabel, StatusDot } from './Primitives'
+import FeedScene from './FeedScene'
 
 /*
  * SECTION 03 — COMMAND VIEW
@@ -10,25 +11,17 @@ import { SectionLabel, StatusDot } from './Primitives'
  * real (the footage, the clock, the state machines) or drawn to scale from
  * the same data the page already quotes. Nothing is a blurred stand-in.
  *
- *  - Feed: the flight footage on a loop, with a HUD. "Thermal" is the same
- *    footage as a white-hot inversion, which is what a LWIR camera in
- *    white-hot mode actually looks like — not an orange colour wash.
+ *  - Feed: the aircraft's own camera looking down at the garden, rendered
+ *    live by FeedScene: a person walks in from the gate, and the tracking
+ *    lock follows them. Thermal is white-hot LWIR, optical is starlight.
  *  - Site plan: geofence, house, nest, patrol route with the aircraft moving
  *    along it (CSS offset-path, one composited layer), and contacts.
  *  - Clock, zoom, feed mode, intercept and return-to-nest all respond.
  */
 
 const FEED = {
-  optical: {
-    label: 'Optical',
-    filter: 'grayscale(1) contrast(1.08) brightness(0.92)',
-  },
-  thermal: {
-    label: 'Thermal',
-    // White-hot: warm = bright. Inverting the monochrome footage puts the
-    // motors and body (the hot parts) at the top of the scale.
-    filter: 'grayscale(1) invert(1) contrast(1.45) brightness(1.02)',
-  },
+  optical: { label: 'Optical', hud: 'Optical · Starlight' },
+  thermal: { label: 'Thermal', hud: 'LWIR · White hot' },
 }
 
 const ZOOM = [1, 1.5, 2]
@@ -57,7 +50,6 @@ export default function Dashboard() {
   const [tab, setTab] = useState('live')
   const [trigger, setTrigger] = useState('idle') // idle | arming | deployed | returning
   const panelRef = useRef(null)
-  const videoRef = useRef(null)
 
   // ── Pointer tilt ────────────────────────────────────────────────────────
   const px = useMotionValue(0)
@@ -84,11 +76,6 @@ export default function Dashboard() {
     const id = setTimeout(() => setTrigger(trigger === 'arming' ? 'deployed' : 'idle'), ms)
     return () => clearTimeout(id)
   }, [trigger])
-
-  // Slow the loop so the 3 s clip reads as a steady feed rather than a GIF.
-  useEffect(() => {
-    if (videoRef.current) videoRef.current.playbackRate = 0.55
-  }, [])
 
   // Events are timestamped relative to the live clock so the log never
   // shows a time that is obviously in the past or future.
@@ -220,34 +207,15 @@ export default function Dashboard() {
                   }`}
                 >
                   <div className="relative aspect-[16/10] w-full overflow-hidden md:aspect-auto md:min-h-[300px] md:flex-1">
-                    {reduce ? (
-                      <img
-                        src="hornet-flight-poster.jpg"
-                        alt="Nest camera view of the HRN-01 outbound at dusk"
-                        className="h-full w-full object-cover transition-[filter] duration-500"
-                        style={{ filter: FEED[mode].filter, transform: `scale(${ZOOM[zoom]})` }}
-                      />
-                    ) : (
-                      <video
-                        ref={videoRef}
-                        className="h-full w-full object-cover object-[50%_40%] transition-[filter,transform] duration-500"
-                        style={{ filter: FEED[mode].filter, transform: `scale(${ZOOM[zoom]})` }}
-                        poster="hornet-flight-poster.jpg"
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        disablePictureInPicture
-                        aria-label="Nest camera: live feed of the HRN-01 outbound"
-                      >
-                        <source src="hornet-flight.webm" type="video/webm" />
-                        <source src="hornet-flight.mp4" type="video/mp4" />
-                      </video>
-                    )}
+                    <div
+                      className="h-full w-full transition-transform duration-500"
+                      style={{ transform: `scale(${ZOOM[zoom]})` }}
+                    >
+                      <FeedScene mode={mode} paused={Boolean(reduce)} className="h-full w-full object-cover" />
+                    </div>
 
                     {/* Sensor noise + vignette, so the footage reads as a camera, not a video player */}
                     <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(0,0,0,0.55)_100%)]" />
-                    <span aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.07] mix-blend-overlay bg-grid [background-size:3px_3px]" />
 
                     {/* HUD */}
                     <div aria-hidden="true" className="pointer-events-none absolute inset-0 font-mono text-[9px] uppercase tracking-wide2 text-white/80">
@@ -266,22 +234,11 @@ export default function Dashboard() {
                       {/* Top-left: recording + camera */}
                       <span className="absolute left-7 top-3 flex items-center gap-2">
                         <span className="h-1.5 w-1.5 rounded-full bg-white animate-breathe" />
-                        REC · CAM-02 · Nest
+                        REC · CAM-01 · HRN-01
                       </span>
                       {/* Top-right: mode + format */}
                       <span className="absolute right-7 top-3 text-right">
-                        {mode === 'thermal' ? 'LWIR · White hot' : 'Optical · 4K'}
-                      </span>
-
-                      {/* Tracking box on the lead aircraft. It sits in a layer that
-                          zooms with the picture, so the lock stays on the target. */}
-                      <span className="absolute inset-0 transition-transform duration-500" style={{ transform: `scale(${ZOOM[zoom]})` }}>
-                        <span className="absolute left-[41%] top-[26%] h-[38%] w-[22%] border border-white/80">
-                          <span className="absolute -top-5 left-0 whitespace-nowrap bg-white px-1.5 py-0.5 text-[9px] font-bold normal-case tracking-normal text-void">
-                            HRN-01 · 12 m
-                          </span>
-                          <span className="absolute -bottom-5 right-0 whitespace-nowrap text-white/70">outbound</span>
-                        </span>
+                        {FEED[mode].hud}
                       </span>
 
                       {/* Bottom-left: zoom readout / bottom-right: clock */}
