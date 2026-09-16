@@ -452,6 +452,7 @@ export default function Dashboard() {
                       {tab === 'map' ? (
                         <span className="flex items-center gap-3">
                           <span className="hidden text-white/70 sm:inline">Drag the handles to redraw the geofence</span>
+                          <span className="text-white/70 sm:hidden">Drag the corners</span>
                           <button
                             type="button"
                             onClick={() => setFence(DEFAULT_FENCE)}
