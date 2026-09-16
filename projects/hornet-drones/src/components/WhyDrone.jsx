@@ -51,16 +51,18 @@ export default function WhyDrone() {
   return (
     <section id="why" className="relative py-28 sm:py-36">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
-        <motion.div variants={stagger(reduce)} initial="hidden" whileInView="visible" viewport={VIEWPORT} className="max-w-2xl">
+        <motion.div variants={stagger(reduce)} initial="hidden" whileInView="visible" viewport={VIEWPORT} className="max-w-3xl">
           <motion.div variants={revealUp(reduce)}>
             <SectionLabel index="06">Why a drone</SectionLabel>
           </motion.div>
           <motion.h2 variants={revealUp(reduce)} className="mt-6 font-display text-section font-bold">
-            Cameras watch. Alarms react.
+            Cameras watch. <span className="whitespace-nowrap">Alarms react.</span>
             <br />
-            <span className="text-silver">This one goes and looks.</span>
+            <span className="text-silver">
+              This one <span className="whitespace-nowrap">goes and looks.</span>
+            </span>
           </motion.h2>
-          <motion.p variants={revealUp(reduce)} className="mt-6 text-[17px] leading-relaxed text-white/60">
+          <motion.p variants={revealUp(reduce)} className="mt-6 max-w-2xl text-[17px] leading-relaxed text-white/60">
             A fixed camera covers one angle and tells you afterwards. An alarm waits for a door. A patrol aircraft
             covers the whole boundary and puts eyes on the thing that moved, before it reaches the house.
           </motion.p>
