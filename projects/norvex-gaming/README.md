@@ -43,8 +43,12 @@ projects/norvex-gaming/
 │       ├── favicon.svg · logo.svg
 │       └── products/      # drop product photos here (4:5, ~800x1000, WebP/JPG)
 ├── scripts/
+│   ├── fetch-gallery.mjs  # download every packshot from a publisher gallery page (+ manifest)
+│   ├── match-images.mjs   # pair downloaded images with products by name, wire them in
 │   ├── import-catalog.mjs # CSV → assets/js/catalog.js (validates rows + image paths)
+│   ├── catalog-io.mjs     # shared load/write helpers
 │   └── catalog-template.csv
+├── package.json           # npm run fetch | match | import | serve (Playwright is the only dev dep)
 └── README.md
 ```
 
@@ -116,6 +120,39 @@ scraped from consumer sites. Where to ask:
 
 Name each file `<product id>.webp` (ids are in `catalog.js` and in every product URL), drop it in
 `assets/img/products/`, and re-run the importer — it matches images to products by id automatically.
+
+### Pulling packshots from the publishers' public galleries
+
+You do not need thousands of images — one per product you list (a few hundred for a full range).
+Two scripts do the legwork; run them on your own machine, where the publisher sites are reachable:
+
+```bash
+cd projects/norvex-gaming
+npm install                                   # once: Playwright + a headless Chromium
+
+# 1. Walk a gallery page: scrolls, clicks "load more", downloads every packshot + writes manifest.csv
+npm run fetch -- "https://www.pokemon.com/uk/pokemon-tcg/product-gallery"
+npm run fetch -- "https://magic.wizards.com/en/products"
+npm run fetch -- "https://en.onepiece-cardgame.com/products/"
+npm run fetch -- "https://www.yugioh-card.com/uk/products/"
+npm run fetch -- "https://www.disneylorcana.com/en-GB/products"
+npm run fetch -- "https://starwarsunlimited.com/products"
+npm run fetch -- "https://fabtcg.com/products/"
+#   options: --selector <css> to scope to the product grid, --paginate <css> for "next page" links,
+#            --headed to watch it work (and click through any wall the script can't)
+
+# 2. Pair the downloaded files with catalogue products by name, then copy them in and set `image`
+npm run match                                 # dry run → assets/img/gallery/match-report.csv
+npm run match -- --apply                      # copies to assets/img/products/<id>.<ext> + updates catalog.js
+```
+
+The matcher scores titles against product names (it understands "ETB", "Booster Display", set
+prefixes like "Scarlet & Violet—") and refuses cross-format matches (a bundle never gets a box photo).
+Check `match-report.csv`, rename any stragglers to `<id>.<ext>` by hand, and re-run. Downloaded
+galleries live in `assets/img/gallery/` (git-ignored); only the matched `products/` files ship with
+the site. Both scripts were verified against a local fixture gallery; the real sites change their
+markup from time to time, so if a fetch comes back empty run it with `--headed` and pass the grid's
+selector with `--selector`.
 
 Graded singles currently point at the public Pokémon TCG card-image CDN (`images.pokemontcg.io`);
 if any image fails to load the storefront swaps in the slab art on its own. For launch, replace those

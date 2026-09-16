@@ -57,3 +57,6 @@ ui-ux-pro-max-website/*
 
 cli/playwright-report/
 cli/test-results/
+
+# Norvex storefront: downloaded publisher galleries stay local; matched product images ship
+projects/norvex-gaming/assets/img/gallery/

@@ -1,0 +1,17 @@
+{
+  "name": "norvex-gaming-storefront",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Norvex Gaming storefront — static site plus catalogue and image tooling",
+  "type": "module",
+  "scripts": {
+    "serve": "python3 -m http.server 8080",
+    "fetch": "node scripts/fetch-gallery.mjs",
+    "match": "node scripts/match-images.mjs",
+    "import": "node scripts/import-catalog.mjs",
+    "postinstall": "playwright install chromium"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.0"
+  }
+}
