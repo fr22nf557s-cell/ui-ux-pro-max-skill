@@ -12,10 +12,11 @@
 
   # Vite emits no inline script, so script-src needs no 'unsafe-inline'.
   # style-src does: Tailwind is a static file, but Framer Motion writes inline
-  # styles for every animated element.
+  # styles for every animated element. Fonts are self-hosted, so no Google
+  # origin appears anywhere in the policy.
   # frame-ancestors 'none' replaces X-Frame-Options; both are sent because
   # some older scanners still look for the latter.
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self'; connect-src 'self'; frame-src https://challenges.cloudflare.com; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self'; connect-src 'self'; frame-src https://challenges.cloudflare.com; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
 
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
