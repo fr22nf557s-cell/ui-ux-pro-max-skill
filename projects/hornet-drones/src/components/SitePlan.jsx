@@ -89,7 +89,7 @@ export default function SitePlan({ fence, onFenceChange, editable = false, reduc
 
         {/* House + drive + gate */}
         <rect x="72" y="52" width="58" height="46" rx="1.5" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.35)" strokeWidth="0.8" />
-        <path d="M 101 98 L 101 142" stroke="rgba(255,255,255,0.25)" strokeWidth="6" strokeLinecap="round" />
+        <path d="M 101 98 L 101 137" stroke="rgba(255,255,255,0.25)" strokeWidth="6" strokeLinecap="round" />
         <text x="101" y="78" textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize="6" fontFamily="JetBrains Mono, monospace" letterSpacing="1">
           HOUSE
         </text>
