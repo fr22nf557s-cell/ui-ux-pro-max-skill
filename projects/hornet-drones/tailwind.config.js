@@ -60,12 +60,15 @@ export default {
         },
         breathe: { '0%,100%': { opacity: '1' }, '50%': { opacity: '0.35' } },
         scanline: { '0%': { transform: 'translateY(-100%)' }, '100%': { transform: 'translateY(400%)' } },
+        // The aircraft marker riding the patrol route on the site plan.
+        patrol: { from: { offsetDistance: '0%' }, to: { offsetDistance: '100%' } },
       },
       animation: {
         sweep: 'sweep 4s linear infinite',
         ping: 'ping 2.8s cubic-bezier(0.2,0.7,0.3,1) infinite',
         breathe: 'breathe 2.4s ease-in-out infinite',
         scanline: 'scanline 5.5s linear infinite',
+        patrol: 'patrol 28s linear infinite',
       },
     },
   },
