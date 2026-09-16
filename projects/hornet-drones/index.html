@@ -72,7 +72,22 @@
 
   </head>
   <body>
-    <div id="root"></div>
+    <!--
+      Paint-first shell. The hero's backdrop, as plain HTML, so the largest
+      element on screen is painted before the bundle has even parsed. Hero.jsx
+      removes it the moment the real hero has committed; on a fast connection
+      nobody sees the handover, on a slow one they see the site instead of a
+      black screen.
+    -->
+    <img
+      id="lcp-shell"
+      src="/hornet-flight-poster.jpg"
+      alt=""
+      fetchpriority="high"
+      decoding="async"
+      style="position:fixed;inset:0;width:100%;height:100vh;height:100svh;object-fit:cover;object-position:50% 38%;filter:brightness(.42);pointer-events:none"
+    />
+    <div id="root" style="position:relative"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

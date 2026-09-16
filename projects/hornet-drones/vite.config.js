@@ -4,17 +4,10 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    // The three.js vendor chunk is ~820KB raw, but it is lazy-loaded and never
-    // touches first paint, so the default 500KB warning is not meaningful here.
+    // three.js only ever loads through the React.lazy() DroneScene import (the
+    // hero's fallback when the footage cannot play). Left to Rollup it lands in
+    // that lazy chunk and is never preloaded; a manualChunks entry for it made
+    // Vite emit a <link rel="modulepreload"> for the whole 800 KB on every visit.
     chunkSizeWarningLimit: 900,
-    // three.js is heavy and only needed by the hero canvas, which is React.lazy()'d.
-    // Splitting it keeps the above-the-fold JS payload small.
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          three: ['three', '@react-three/fiber'],
-        },
-      },
-    },
   },
 })

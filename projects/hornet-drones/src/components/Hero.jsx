@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { EASE, DURATION, stagger, revealUp } from '../lib/motion'
 import { GlowButton, GlassButton, StatusDot } from './Primitives'
@@ -9,6 +9,12 @@ const HEADLINE = ['Autonomous Aerial', 'Protection.', 'Unseen. Unmatched.']
 export default function Hero() {
   const reduce = useReducedMotion()
   const sectionRef = useRef(null)
+
+  // The paint-first shell in index.html has done its job once we are on
+  // screen. Remove it after commit so there is never a frame with neither.
+  useEffect(() => {
+    document.getElementById('lcp-shell')?.remove()
+  }, [])
 
   // Scroll-linked hero exit. Mapping the section's own progress (0 -> 1 across
   // one viewport) means the copy drifts up and dims as the next section takes
@@ -113,12 +119,12 @@ export default function Hero() {
             ))}
           </h1>
 
-          <motion.p variants={revealUp(reduce, 0.5)} className="mt-6 max-w-xl text-[17px] leading-relaxed text-white/60">
+          <motion.p variants={revealUp(reduce, 0.3)} className="mt-6 max-w-xl text-[17px] leading-relaxed text-white/60">
             The ultra-quiet, AI-powered perimeter drone system that patrols, detects, and deters threats before they
             reach your doorstep.
           </motion.p>
 
-          <motion.div variants={revealUp(reduce, 0.62)} className="mt-9 flex flex-wrap items-center gap-4">
+          <motion.div variants={revealUp(reduce, 0.42)} className="mt-9 flex flex-wrap items-center gap-4">
             <GlowButton onClick={() => document.querySelector('#reserve')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' })}>
               Reserve System
             </GlowButton>
@@ -133,7 +139,7 @@ export default function Hero() {
           </motion.div>
 
           <motion.dl
-            variants={revealUp(reduce, 0.74)}
+            variants={revealUp(reduce, 0.54)}
             className="mt-11 grid max-w-lg grid-cols-3 gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10"
           >
             {[
