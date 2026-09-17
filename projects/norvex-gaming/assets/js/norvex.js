@@ -58,7 +58,7 @@
     { label: 'Yu-Gi-Oh!', href: 'shop.html?game=yugioh' },
     { label: 'Disney Lorcana', href: 'shop.html?game=lorcana' },
     { label: 'Pre-orders', href: 'shop.html?avail=preorder' },
-    { label: 'Graded vault', href: 'shop.html?type=single' },
+    ...(products.some((p) => p.type === 'single') ? [{ label: 'Graded vault', href: 'shop.html?type=single' }] : []),
     { label: 'Accessories', href: 'shop.html?type=accessory' }
   ];
 
@@ -386,7 +386,7 @@
     menuEl.innerHTML = `
       <div class="menu__top">${BRAND}<button class="btn btn--icon btn--ghost" type="button" data-close-menu aria-label="Close menu">${icon('x')}</button></div>
       <nav class="menu__links" aria-label="Mobile">${NAV.map((l) => `<a href="${l.href}">${esc(l.label)}${icon('arrowRight')}</a>`).join('')}</nav>
-      <div class="menu__foot"><a href="#">Account</a><a href="#">Order tracking</a><span>${esc(config.supportEmail)}</span></div>`;
+      <div class="menu__foot"><a href="help.html">Help &amp; delivery</a><a href="help.html#track">Order tracking</a><a href="mailto:${esc(config.supportEmail)}">${esc(config.supportEmail)}</a></div>`;
     document.body.appendChild(menuEl);
   }
   function openMenu(btn) {
@@ -456,6 +456,34 @@
     $$('[data-marquee]').forEach((track) => { track.innerHTML += track.innerHTML; });
   }
 
+  function mailto(subject, body) {
+    return `mailto:${config.supportEmail || 'hello@norvexgaming.com'}?subject=${encodeURIComponent(subject)}${body ? '&body=' + encodeURIComponent(body) : ''}`;
+  }
+
+  /* business details, contact email and social links all come from the catalogue config,
+     so the help/legal pages never go out of date when the config changes */
+  function initBusiness() {
+    const b = config.business || {}; const email = config.supportEmail;
+    $$('[data-business]').forEach((el) => {
+      const rows = [];
+      if (b.legalName) rows.push(`<b>${esc(b.legalName)}</b>${b.tradingName && b.tradingName !== b.legalName ? ` trading as ${esc(b.tradingName)}` : ''}`);
+      (b.address || []).forEach((line) => rows.push(esc(line)));
+      if (b.country && !(b.address || []).includes(b.country)) rows.push(esc(b.country));
+      if (b.companyNumber) rows.push(`Company number ${esc(b.companyNumber)}`);
+      if (b.vatNumber) rows.push(`VAT number ${esc(b.vatNumber)}`);
+      if (email) rows.push(`<a href="mailto:${esc(email)}">${esc(email)}</a>`);
+      if (b.hours) rows.push(`Email replies ${esc(b.hours)}`);
+      el.innerHTML = rows.map((r) => `<span>${r}</span>`).join('');
+    });
+    if (email) $$('[data-email]').forEach((a) => { a.href = `mailto:${email}`; a.textContent = email; });
+    $$('[data-social]').forEach((el) => {
+      const links = Object.entries(config.social || {}).filter(([, url]) => url);
+      if (!links.length) return;
+      el.innerHTML = links.map(([name, url]) => `<a href="${esc(url)}" rel="me noopener" target="_blank">${esc(name)}</a>`).join('');
+      el.hidden = false;
+    });
+  }
+
   function initNewsletter() {
     $$('[data-newsletter]').forEach((form) => {
       form.addEventListener('submit', (e) => {
@@ -465,8 +493,8 @@
         form.classList.toggle('is-invalid', !ok);
         input.setAttribute('aria-invalid', String(!ok));
         if (!ok) { input.focus(); return; }
-        // TODO: POST to your email provider (Klaviyo, Mailchimp, Resend…) here.
         form.closest('.newsletter').classList.add('is-done');
+        location.href = mailto('Allocation list', `Please add ${input.value.trim()} to the Norvex allocation list.`);
       });
     });
   }
@@ -600,9 +628,11 @@
     const gameCrumb = $('[data-pdp-game]');
     if (gameCrumb) { gameCrumb.textContent = g.short; gameCrumb.href = `shop.html?game=${encodeURIComponent(p.game)}`; }
     const stars = p.rating
-      ? `<span class="testimonial__stars" role="img" aria-label="Rated ${p.rating} out of 5">${icon('star').repeat(5)}</span><span class="small muted">${p.rating.toFixed(1)} · ${plural(p.reviews, 'review')}</span>`
-      : `<span class="small muted-2">New release · no reviews yet</span>`;
-    const stockNote = p.preorder ? ' · ships insured on release day' : av.key === 'out' ? '' : ' · dispatched within 48 hours';
+      ? `<div class="cluster"><span class="testimonial__stars" role="img" aria-label="Rated ${p.rating} out of 5">${icon('star').repeat(5)}</span><span class="small muted">${p.rating.toFixed(1)} · ${plural(p.reviews, 'review')}</span></div>`
+      : '';
+    const dispatchHours = (config.shipping && config.shipping.dispatchHours) || 48;
+    const returnsDays = config.returnsDays || 14;
+    const stockNote = p.preorder ? ' · charged now, dispatched insured on release day' : av.key === 'out' ? '' : ` · dispatched within ${dispatchHours} hours`;
     const buy = av.key === 'out'
       ? `<button class="btn btn--ghost btn--lg btn--block" type="button" disabled style="grid-column:1/-1">Sold out</button><button class="btn btn--outline btn--block" type="button" style="grid-column:1/-1" data-notify>Notify me when restocked</button>`
       : `<div class="stepper" role="group" aria-label="Quantity">
@@ -620,7 +650,7 @@
         <div class="stack reveal" style="gap:.85rem">
           <span class="eyebrow eyebrow--plain">${esc(p.brand || g.name)} · ${esc(t.singular)}</span>
           <h1 class="pdp__title">${esc(p.name)}</h1>
-          <div class="cluster">${stars}</div>
+          ${stars}
         </div>
         <div class="pdp__price reveal" style="--i:1"><span class="price">${fmt(p.price)}</span>${p.compareAt ? `<span class="price price--compare">${fmt(p.compareAt)}</span><span class="save">Save ${fmt(p.compareAt - p.price)}</span>` : ''}</div>
         <p class="lede reveal" style="--i:2;font-size:1rem">${esc(p.description)}</p>
@@ -632,13 +662,13 @@
           <li>${icon('shield')}100% authentic · factory-sealed or slab-verified</li>
           <li>${icon('truck')}Insured, tracked shipping · free over ${fmt0(config.freeShippingThreshold)}</li>
           <li>${icon('package')}Double-boxed with corner protection</li>
-          <li>${icon('refresh')}30-day returns on unopened product</li>
+          <li>${icon('refresh')}${returnsDays}-day returns on sealed product</li>
         </ul>
         <div class="acc reveal" style="--i:5">
           <details open><summary>What's inside ${icon('plus')}</summary><div class="acc__body"><ul>${(p.contents || []).map((c) => `<li>${esc(c)}</li>`).join('')}</ul></div></details>
           <details><summary>Details ${icon('plus')}</summary><div class="acc__body"><dl class="spec">${Object.entries(p.specs || {}).map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}${p.grade ? `<div><dt>Certification</dt><dd>${esc(p.grade.grader)} #${esc(p.grade.cert)}</dd></div>` : ''}</dl></div></details>
-          <details><summary>Shipping &amp; returns ${icon('plus')}</summary><div class="acc__body"><p>In-stock orders dispatch within 48 hours, fully insured and tracked. Free shipping over ${fmt0(config.freeShippingThreshold)}. Pre-orders ship on release day. Unopened sealed product can be returned within 30 days; graded singles are final sale unless the certification does not match.</p></div></details>
-          <details><summary>Authenticity guarantee ${icon('plus')}</summary><div class="acc__body"><p>Every sealed product is sourced directly from official distributors and tamper-checked before it enters the vault. Graded singles ship in their original slab with a certification number you can verify on the grader's registry. If anything ever falls short, we refund in full.</p></div></details>
+          <details><summary>Shipping &amp; returns ${icon('plus')}</summary><div class="acc__body"><p>In-stock orders are dispatched within ${dispatchHours} hours, tracked and insured, across the UK. Standard delivery is ${fmt(config.shipping ? config.shipping.standard : 4.99)}, free over ${fmt0(config.freeShippingThreshold)}; next working day is ${fmt(config.shipping ? config.shipping.express : 9.99)}. Pre-orders are dispatched on release day. Change your mind within ${returnsDays} days of delivery for a full refund on sealed product with its seals intact and on graded singles still in their undamaged slab. <a href="help.html#returns">Full returns policy</a>.</p></div></details>
+          <details><summary>Authenticity guarantee ${icon('plus')}</summary><div class="acc__body"><p>Every sealed product is bought directly from official UK distributors and checked for intact factory seals before it is listed and before it ships. Graded singles ship in their original slab with a certification number you can verify on the grader's registry. If anything ever falls short, we refund in full, postage included. <a href="help.html#authenticity">Read the guarantee</a>.</p></div></details>
         </div>
       </div>`;
 
@@ -651,7 +681,10 @@
         if (next === qty && next === max) toast(`Only ${max} available`, 'lock');
         qty = next; out.value = qty; out.textContent = qty; addBtn.dataset.qty = qty;
       }
-      if (e.target.closest('[data-notify]')) toast("We'll email you the moment it's back in stock", 'check');
+      if (e.target.closest('[data-notify]')) {
+        location.href = mailto('Restock alert: ' + p.name, `Please email me when "${p.name}" is back in stock.\n\nProduct: ${location.href}`);
+        toast('Your email app should open. Send it and we reply when it is back.', 'check');
+      }
     });
     if (related) renderGrid(related, select('related:' + p.id).slice(0, 4));
     observe(root);
@@ -794,6 +827,7 @@
     initHero();
     initMarquee();
     initNewsletter();
+    initBusiness();
     $$('[data-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
     observe(document);
   }

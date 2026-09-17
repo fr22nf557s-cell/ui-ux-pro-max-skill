@@ -33,6 +33,7 @@ const catalogPath = resolve(root, opt('--catalog', 'assets/js/catalog.js'));
 const imgDir = resolve(root, opt('--images', 'assets/img/products'));
 const overridesPath = resolve(root, opt('--overrides', 'scripts/catalog-overrides.json'));
 const apply = args.includes('--apply');
+const photosOnly = args.includes('--photos-only');   // customer-facing rule: no photo, no listing (graded singles keep their card images)
 const SEALED = new Set(['etb', 'box', 'bundle', 'pack', 'deck', 'collection', 'accessory']);
 const FEATURED_PER_GAME = 3;
 const PRI = { etb: 0, box: 1, bundle: 2, deck: 3, collection: 4, pack: 5 };
@@ -87,6 +88,12 @@ for (const p of products) {
   if (!existsSync(f)) { console.log(`· photo missing on disk, cleared: ${p.name} (${p.image})`); p.image = null; stats.photosRemoved++; continue; }
   if (statSync(f).size < MIN_IMAGE_BYTES) { console.log(`· photo is a placeholder (${statSync(f).size} B), removed: ${p.name}`); deleted.add(f); p.image = null; stats.photosRemoved++; }
 }
+
+/* 3b. photos only ------------------------------------------------------------- */
+if (photosOnly) products = products.filter((p) => {
+  if (p.image || p.type === 'single') return true;
+  console.log(`− drop (no photo): ${p.name}`); stats.dropped++; return false;
+});
 
 /* 4. duplicates ------------------------------------------------------------- */
 const groups = new Map();

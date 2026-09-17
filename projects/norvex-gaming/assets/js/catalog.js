@@ -38,6 +38,25 @@ window.NORVEX_DATA = {
     "locale": "en-GB",
     "freeShippingThreshold": 100,
     "supportEmail": "hello@norvexgaming.com",
+    "business": {
+      "legalName": "Norvex Gaming",
+      "tradingName": "Norvex Gaming",
+      "country": "United Kingdom",
+      "address": [],
+      "companyNumber": "",
+      "vatNumber": "",
+      "hours": "Monday to Friday, 9am to 6pm (UK)"
+    },
+    "shipping": {
+      "standard": 4.99,
+      "express": 9.99,
+      "freeOver": 100,
+      "countries": [
+        "GB"
+      ],
+      "dispatchHours": 48
+    },
+    "returnsDays": 14,
     "checkout": {
       "provider": "stripe",
       "endpoint": "https://norvexgaming.gohilan2003.workers.dev/session"
@@ -180,8 +199,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": "new",
       "featured": true,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Avatar: The Last Airbender booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
         "30 Avatar: The Last Airbender booster packs",
@@ -207,8 +226,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Edge of Eternities booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
         "36 Edge of Eternities booster packs",
@@ -234,8 +253,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Tarkir: Dragonstorm booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
         "36 Tarkir: Dragonstorm booster packs",
@@ -261,8 +280,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Aetherdrift booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
         "36 Aetherdrift booster packs",
@@ -288,8 +307,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Foundations booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
         "36 Foundations booster packs",
@@ -315,8 +334,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Duskmourn: House of Horror booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
         "36 Duskmourn: House of Horror booster packs",
@@ -342,8 +361,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Bloomburrow booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
         "36 Bloomburrow booster packs",
@@ -366,10 +385,10 @@ window.NORVEX_DATA = {
       "price": 139.99,
       "compareAt": null,
       "stock": 0,
-      "preorder": true,
+      "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 0,
+      "rating": null,
       "reviews": 0,
       "description": "A full sealed Lorwyn Eclipsed booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
@@ -396,8 +415,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "Twelve Edge of Eternities Collector Boosters with guaranteed foils, borderless and extended-art treatments and the set's serialized chase cards. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
         "12 Edge of Eternities booster packs",
@@ -423,8 +442,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": "new",
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "Twelve Avatar: The Last Airbender Collector Boosters with guaranteed foils, borderless and extended-art treatments and the set's serialized chase cards. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
         "12 Avatar: The Last Airbender booster packs",
@@ -450,8 +469,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "Twelve Tarkir: Dragonstorm Collector Boosters with guaranteed foils, borderless and extended-art treatments and the set's serialized chase cards. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
         "12 Tarkir: Dragonstorm booster packs",
@@ -477,8 +496,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "Twelve Bloomburrow Collector Boosters with guaranteed foils, borderless and extended-art treatments and the set's serialized chase cards. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
         "12 Bloomburrow booster packs",
@@ -493,35 +512,6 @@ window.NORVEX_DATA = {
       "image": "assets/img/products/magic-bloomburrow-collector-booster-box.webp"
     },
     {
-      "id": "magic-edge-of-eternities-bundle",
-      "name": "Edge of Eternities Bundle",
-      "set": "Edge of Eternities",
-      "game": "magic",
-      "type": "bundle",
-      "price": 49.99,
-      "compareAt": null,
-      "stock": 20,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
-      "description": "Sealed Edge of Eternities booster packs in the official bundle. The efficient way into the chase without committing to a box.",
-      "contents": [
-        "9 Edge of Eternities Play Booster packs",
-        "1 traditional foil promo card",
-        "40 basic lands (20 foil, 20 non-foil)",
-        "Oversized spindown die and storage box"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Booster Bundle",
-        "Packs": "9",
-        "Condition": "Factory sealed"
-      },
-      "image": null
-    },
-    {
       "id": "magic-avatar-the-last-airbender-bundle",
       "name": "Avatar: The Last Airbender Bundle",
       "set": "Avatar: The Last Airbender",
@@ -533,8 +523,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "Sealed Avatar: The Last Airbender booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "9 Avatar: The Last Airbender Play Booster packs",
@@ -562,8 +552,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "Sealed Tarkir: Dragonstorm booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "9 Tarkir: Dragonstorm Play Booster packs",
@@ -591,8 +581,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "Sealed Bloomburrow booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "9 Bloomburrow Play Booster packs",
@@ -620,8 +610,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Foundations deck with everything you need for your first games.",
       "contents": [
         "Over 350 cards including 2 pre-built decks",
@@ -646,8 +636,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Foundations booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
         "18 Foundations booster packs",
@@ -673,8 +663,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Edge of Eternities booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Edge of Eternities booster pack"
@@ -699,8 +689,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Avatar: The Last Airbender booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Avatar: The Last Airbender booster pack"
@@ -725,8 +715,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Yamato deck with everything you need for your first games.",
       "contents": [
         "51-card ready-to-play deck",
@@ -751,8 +741,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed A Fist of Divine Speed booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 A Fist of Divine Speed booster pack"
@@ -774,10 +764,10 @@ window.NORVEX_DATA = {
       "price": 4.99,
       "compareAt": null,
       "stock": 0,
-      "preorder": true,
+      "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 0,
+      "rating": null,
       "reviews": 0,
       "description": "A single factory-sealed Legacy of the Master booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
@@ -803,8 +793,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": "new",
       "featured": true,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Justice Hunters booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
         "24 Justice Hunters booster packs (1st Edition)",
@@ -830,8 +820,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Doom of Dimensions booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
         "24 Doom of Dimensions booster packs (1st Edition)",
@@ -857,8 +847,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Alliance Insight booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
         "24 Alliance Insight booster packs (1st Edition)",
@@ -884,8 +874,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Duelist's Advance booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
         "24 Duelist's Advance booster packs (1st Edition)",
@@ -911,8 +901,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Supreme Darkness booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
         "24 Supreme Darkness booster packs (1st Edition)",
@@ -938,8 +928,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Quarter Century Bonanza booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
         "24 Quarter Century Bonanza booster packs (1st Edition)",
@@ -965,8 +955,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete : Blue-Eyes White Destiny deck with everything you need for your first games.",
       "contents": [
         "46-card pre-built deck",
@@ -991,8 +981,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "25th Anniversary Tin: Dueling Mirrors: a premium sealed collection with exclusive promos and accessories, sealed at the factory. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
       "contents": [
         "3 Dueling Mirrors mega-packs",
@@ -1018,8 +1008,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Justice Hunters booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Justice Hunters booster pack"
@@ -1044,8 +1034,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Alliance Insight booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Alliance Insight booster pack"
@@ -1059,865 +1049,6 @@ window.NORVEX_DATA = {
       "image": "assets/img/products/yugioh-alliance-insight-booster-pack.webp"
     },
     {
-      "id": "fab-super-slam-booster-box",
-      "name": "Super Slam Booster Box",
-      "set": "Super Slam",
-      "game": "fab",
-      "type": "box",
-      "price": 89.99,
-      "compareAt": null,
-      "stock": 9,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
-      "description": "A full sealed Super Slam booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
-      "contents": [
-        "24 Super Slam booster packs",
-        "Official sealed display box"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Booster Box",
-        "Packs": "24",
-        "Condition": "Factory sealed"
-      },
-      "image": null
-    },
-    {
-      "id": "fab-high-seas-booster-box",
-      "name": "High Seas Booster Box",
-      "set": "High Seas",
-      "game": "fab",
-      "type": "box",
-      "price": 89.99,
-      "compareAt": null,
-      "stock": 8,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
-      "description": "A full sealed High Seas booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
-      "contents": [
-        "24 High Seas booster packs",
-        "Official sealed display box"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Booster Box",
-        "Packs": "24",
-        "Condition": "Factory sealed"
-      },
-      "image": null
-    },
-    {
-      "id": "fab-hunted-booster-box",
-      "name": "Hunted Booster Box",
-      "set": "Hunted",
-      "game": "fab",
-      "type": "box",
-      "price": 89.99,
-      "compareAt": null,
-      "stock": 6,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
-      "description": "A full sealed Hunted booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
-      "contents": [
-        "24 Hunted booster packs",
-        "Official sealed display box"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Booster Box",
-        "Packs": "24",
-        "Condition": "Factory sealed"
-      },
-      "image": null
-    },
-    {
-      "id": "fab-rosetta-booster-box",
-      "name": "Rosetta Booster Box",
-      "set": "Rosetta",
-      "game": "fab",
-      "type": "box",
-      "price": 84.99,
-      "compareAt": null,
-      "stock": 5,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
-      "description": "A full sealed Rosetta booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
-      "contents": [
-        "24 Rosetta booster packs",
-        "Official sealed display box"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Booster Box",
-        "Packs": "24",
-        "Condition": "Factory sealed"
-      },
-      "image": null
-    },
-    {
-      "id": "riftbound-riftbound-origins-booster-box",
-      "name": "Riftbound Origins Booster Box",
-      "set": "Origins",
-      "game": "riftbound",
-      "type": "box",
-      "price": 139.99,
-      "compareAt": null,
-      "stock": 6,
-      "preorder": false,
-      "badge": "new",
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
-      "description": "The League of Legends trading card game, first set. Twenty-four sealed Origins booster packs with alternate-art Legends. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
-      "contents": [
-        "24 Origins booster packs",
-        "Official sealed display box"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Booster Box",
-        "Packs": "24",
-        "Condition": "Factory sealed"
-      },
-      "image": null
-    },
-    {
-      "id": "riftbound-riftbound-origins-booster-pack",
-      "name": "Riftbound Origins Booster Pack",
-      "set": "Riftbound Origins",
-      "game": "riftbound",
-      "type": "pack",
-      "price": 5.99,
-      "compareAt": null,
-      "stock": 160,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
-      "description": "A single factory-sealed Riftbound Origins booster pack, straight from an unopened display. Sold loose, never weighed.",
-      "contents": [
-        "1 Riftbound Origins booster pack"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Booster Pack",
-        "Packs": "1",
-        "Condition": "Factory sealed"
-      },
-      "image": null
-    },
-    {
-      "id": "pokemon-charizard-ex-199-165-special-illustration-rare-psa-10",
-      "name": "Charizard ex 199/165 Special Illustration Rare · PSA 10",
-      "set": "Pokémon 151",
-      "game": "pokemon",
-      "type": "single",
-      "price": 1350,
-      "compareAt": null,
-      "stock": 1,
-      "preorder": false,
-      "badge": null,
-      "featured": true,
-      "rating": 5,
-      "reviews": 3,
-      "description": "Charizard ex from Pokémon 151, graded PSA 10 Gem Mint. Certification number verifiable before you buy. Ships in a sealed slab sleeve inside a padded, insured box.",
-      "contents": [
-        "1 graded card in tamper-evident PSA slab",
-        "Certification verifiable on the PSA registry",
-        "Norvex authenticity certificate"
-      ],
-      "specs": {
-        "Grader": "PSA",
-        "Grade": "10 Gem Mint",
-        "Set": "Pokémon 151",
-        "Number": "199/165"
-      },
-      "image": "https://images.pokemontcg.io/sv3pt5/199_hires.png",
-      "grade": {
-        "grader": "PSA",
-        "grade": 10,
-        "label": "Gem Mint",
-        "cert": "92 431 067"
-      },
-      "artLabel": "Charizard ex"
-    },
-    {
-      "id": "pokemon-umbreon-vmax-215-203-alternate-art-psa-10",
-      "name": "Umbreon VMAX 215/203 Alternate Art · PSA 10",
-      "set": "Evolving Skies",
-      "game": "pokemon",
-      "type": "single",
-      "price": 2400,
-      "compareAt": null,
-      "stock": 1,
-      "preorder": false,
-      "badge": null,
-      "featured": true,
-      "rating": 5,
-      "reviews": 3,
-      "description": "Umbreon VMAX from Evolving Skies, graded PSA 10 Gem Mint. Certification number verifiable before you buy. Ships in a sealed slab sleeve inside a padded, insured box.",
-      "contents": [
-        "1 graded card in tamper-evident PSA slab",
-        "Certification verifiable on the PSA registry",
-        "Norvex authenticity certificate"
-      ],
-      "specs": {
-        "Grader": "PSA",
-        "Grade": "10 Gem Mint",
-        "Set": "Evolving Skies",
-        "Number": "215/203"
-      },
-      "image": "https://images.pokemontcg.io/swsh7/215_hires.png",
-      "grade": {
-        "grader": "PSA",
-        "grade": 10,
-        "label": "Gem Mint",
-        "cert": "88 120 554"
-      },
-      "artLabel": "Umbreon VMAX"
-    },
-    {
-      "id": "pokemon-umbreon-ex-161-131-special-illustration-rare-psa-10",
-      "name": "Umbreon ex 161/131 Special Illustration Rare · PSA 10",
-      "set": "Prismatic Evolutions",
-      "game": "pokemon",
-      "type": "single",
-      "price": 1100,
-      "compareAt": null,
-      "stock": 2,
-      "preorder": false,
-      "badge": null,
-      "featured": true,
-      "rating": 5,
-      "reviews": 3,
-      "description": "Umbreon ex from Prismatic Evolutions, graded PSA 10 Gem Mint. Certification number verifiable before you buy. Ships in a sealed slab sleeve inside a padded, insured box.",
-      "contents": [
-        "1 graded card in tamper-evident PSA slab",
-        "Certification verifiable on the PSA registry",
-        "Norvex authenticity certificate"
-      ],
-      "specs": {
-        "Grader": "PSA",
-        "Grade": "10 Gem Mint",
-        "Set": "Prismatic Evolutions",
-        "Number": "161/131"
-      },
-      "image": "https://images.pokemontcg.io/sv8pt5/161_hires.png",
-      "grade": {
-        "grader": "PSA",
-        "grade": 10,
-        "label": "Gem Mint",
-        "cert": "95 018 442"
-      },
-      "artLabel": "Umbreon ex"
-    },
-    {
-      "id": "pokemon-pikachu-ex-238-191-special-illustration-rare-psa-10",
-      "name": "Pikachu ex 238/191 Special Illustration Rare · PSA 10",
-      "set": "Surging Sparks",
-      "game": "pokemon",
-      "type": "single",
-      "price": 450,
-      "compareAt": null,
-      "stock": 3,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 5,
-      "reviews": 3,
-      "description": "Pikachu ex from Surging Sparks, graded PSA 10 Gem Mint. Certification number verifiable before you buy. Ships in a sealed slab sleeve inside a padded, insured box.",
-      "contents": [
-        "1 graded card in tamper-evident PSA slab",
-        "Certification verifiable on the PSA registry",
-        "Norvex authenticity certificate"
-      ],
-      "specs": {
-        "Grader": "PSA",
-        "Grade": "10 Gem Mint",
-        "Set": "Surging Sparks",
-        "Number": "238/191"
-      },
-      "image": "https://images.pokemontcg.io/sv8/238_hires.png",
-      "grade": {
-        "grader": "PSA",
-        "grade": 10,
-        "label": "Gem Mint",
-        "cert": "93 776 210"
-      },
-      "artLabel": "Pikachu ex"
-    },
-    {
-      "id": "pokemon-pikachu-with-grey-felt-hat-085-promo-psa-10",
-      "name": "Pikachu with Grey Felt Hat 085 Promo · PSA 10",
-      "set": "SVP Black Star Promos",
-      "game": "pokemon",
-      "type": "single",
-      "price": 380,
-      "compareAt": null,
-      "stock": 2,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 5,
-      "reviews": 3,
-      "description": "Pikachu from SVP Black Star Promos, graded PSA 10 Gem Mint. Certification number verifiable before you buy. Ships in a sealed slab sleeve inside a padded, insured box.",
-      "contents": [
-        "1 graded card in tamper-evident PSA slab",
-        "Certification verifiable on the PSA registry",
-        "Norvex authenticity certificate"
-      ],
-      "specs": {
-        "Grader": "PSA",
-        "Grade": "10 Gem Mint",
-        "Set": "SVP Black Star Promos",
-        "Number": "085"
-      },
-      "image": "https://images.pokemontcg.io/svp/85_hires.png",
-      "grade": {
-        "grader": "PSA",
-        "grade": 10,
-        "label": "Gem Mint",
-        "cert": "79 905 210"
-      },
-      "artLabel": "Pikachu"
-    },
-    {
-      "id": "pokemon-iono-269-193-special-illustration-rare-psa-10",
-      "name": "Iono 269/193 Special Illustration Rare · PSA 10",
-      "set": "Paldea Evolved",
-      "game": "pokemon",
-      "type": "single",
-      "price": 240,
-      "compareAt": null,
-      "stock": 2,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 5,
-      "reviews": 3,
-      "description": "Iono from Paldea Evolved, graded PSA 10 Gem Mint. Certification number verifiable before you buy. Ships in a sealed slab sleeve inside a padded, insured box.",
-      "contents": [
-        "1 graded card in tamper-evident PSA slab",
-        "Certification verifiable on the PSA registry",
-        "Norvex authenticity certificate"
-      ],
-      "specs": {
-        "Grader": "PSA",
-        "Grade": "10 Gem Mint",
-        "Set": "Paldea Evolved",
-        "Number": "269/193"
-      },
-      "image": "https://images.pokemontcg.io/sv2/269_hires.png",
-      "grade": {
-        "grader": "PSA",
-        "grade": 10,
-        "label": "Gem Mint",
-        "cert": "90 122 087"
-      },
-      "artLabel": "Iono"
-    },
-    {
-      "id": "onepiece-monkey-d-luffy-op05-119-manga-rare-psa-10",
-      "name": "Monkey.D.Luffy OP05-119 Manga Rare · PSA 10",
-      "set": "Awakening of the New Era",
-      "game": "onepiece",
-      "type": "single",
-      "price": 1700,
-      "compareAt": null,
-      "stock": 1,
-      "preorder": false,
-      "badge": null,
-      "featured": true,
-      "rating": 5,
-      "reviews": 3,
-      "description": "Monkey.D.Luffy from Awakening of the New Era, graded PSA 10 Gem Mint. Certification number verifiable before you buy. Ships in a sealed slab sleeve inside a padded, insured box.",
-      "contents": [
-        "1 graded card in tamper-evident PSA slab",
-        "Certification verifiable on the PSA registry",
-        "Norvex authenticity certificate"
-      ],
-      "specs": {
-        "Grader": "PSA",
-        "Grade": "10 Gem Mint",
-        "Set": "Awakening of the New Era",
-        "Number": "OP05-119"
-      },
-      "image": "https://en.onepiece-cardgame.com/images/cardlist/card/OP05-119.png",
-      "grade": {
-        "grader": "PSA",
-        "grade": 10,
-        "label": "Gem Mint",
-        "cert": "90 776 318"
-      },
-      "artLabel": "Monkey.D.Luffy"
-    },
-    {
-      "id": "magic-ragavan-nimble-pilferer-showcase-psa-10",
-      "name": "Ragavan, Nimble Pilferer Showcase · PSA 10",
-      "set": "Modern Horizons 2",
-      "game": "magic",
-      "type": "single",
-      "price": 320,
-      "compareAt": null,
-      "stock": 3,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 5,
-      "reviews": 3,
-      "description": "Ragavan from Modern Horizons 2, graded PSA 10 Gem Mint. Certification number verifiable before you buy. Ships in a sealed slab sleeve inside a padded, insured box.",
-      "contents": [
-        "1 graded card in tamper-evident PSA slab",
-        "Certification verifiable on the PSA registry",
-        "Norvex authenticity certificate"
-      ],
-      "specs": {
-        "Grader": "PSA",
-        "Grade": "10 Gem Mint",
-        "Set": "Modern Horizons 2",
-        "Number": "338"
-      },
-      "image": "https://api.scryfall.com/cards/named?exact=Ragavan%2C%20Nimble%20Pilferer&set=mh2&format=image&version=large",
-      "grade": {
-        "grader": "PSA",
-        "grade": 10,
-        "label": "Gem Mint",
-        "cert": "85 302 991"
-      },
-      "artLabel": "Ragavan"
-    },
-    {
-      "id": "norvex-dragon-shield-matte-sleeves-black-100",
-      "name": "Dragon Shield Matte Sleeves · Black (100)",
-      "set": "Matte Sleeves",
-      "game": "norvex",
-      "type": "accessory",
-      "price": 11.99,
-      "compareAt": null,
-      "stock": 120,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.9,
-      "reviews": 140,
-      "description": "The tournament standard. Textured matte back, glare-free front, built to survive a thousand shuffles.",
-      "contents": [
-        "100 standard-size matte sleeves (63 × 88 mm)"
-      ],
-      "specs": {
-        "Size": "Standard",
-        "Finish": "Matte",
-        "Quantity": "100",
-        "Colour": "Black"
-      },
-      "image": null,
-      "brand": "Dragon Shield"
-    },
-    {
-      "id": "norvex-dragon-shield-matte-sleeves-red-100",
-      "name": "Dragon Shield Matte Sleeves · Red (100)",
-      "set": "Matte Sleeves",
-      "game": "norvex",
-      "type": "accessory",
-      "price": 11.99,
-      "compareAt": null,
-      "stock": 120,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.9,
-      "reviews": 140,
-      "description": "The tournament standard. Textured matte back, glare-free front, built to survive a thousand shuffles.",
-      "contents": [
-        "100 standard-size matte sleeves (63 × 88 mm)"
-      ],
-      "specs": {
-        "Size": "Standard",
-        "Finish": "Matte",
-        "Quantity": "100",
-        "Colour": "Red"
-      },
-      "image": null,
-      "brand": "Dragon Shield"
-    },
-    {
-      "id": "norvex-dragon-shield-matte-sleeves-blue-100",
-      "name": "Dragon Shield Matte Sleeves · Blue (100)",
-      "set": "Matte Sleeves",
-      "game": "norvex",
-      "type": "accessory",
-      "price": 11.99,
-      "compareAt": null,
-      "stock": 120,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.9,
-      "reviews": 140,
-      "description": "The tournament standard. Textured matte back, glare-free front, built to survive a thousand shuffles.",
-      "contents": [
-        "100 standard-size matte sleeves (63 × 88 mm)"
-      ],
-      "specs": {
-        "Size": "Standard",
-        "Finish": "Matte",
-        "Quantity": "100",
-        "Colour": "Blue"
-      },
-      "image": null,
-      "brand": "Dragon Shield"
-    },
-    {
-      "id": "norvex-dragon-shield-matte-sleeves-white-100",
-      "name": "Dragon Shield Matte Sleeves · White (100)",
-      "set": "Matte Sleeves",
-      "game": "norvex",
-      "type": "accessory",
-      "price": 11.99,
-      "compareAt": null,
-      "stock": 120,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.9,
-      "reviews": 140,
-      "description": "The tournament standard. Textured matte back, glare-free front, built to survive a thousand shuffles.",
-      "contents": [
-        "100 standard-size matte sleeves (63 × 88 mm)"
-      ],
-      "specs": {
-        "Size": "Standard",
-        "Finish": "Matte",
-        "Quantity": "100",
-        "Colour": "White"
-      },
-      "image": null,
-      "brand": "Dragon Shield"
-    },
-    {
-      "id": "norvex-dragon-shield-matte-japanese-size-sleeves-black-60",
-      "name": "Dragon Shield Matte Japanese Size Sleeves · Black (60)",
-      "set": "Matte Japanese Sleeves",
-      "game": "norvex",
-      "type": "accessory",
-      "price": 7.99,
-      "compareAt": null,
-      "stock": 80,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.9,
-      "reviews": 140,
-      "description": "Dragon Shield protection sized for Yu-Gi-Oh! and other small-format cards.",
-      "contents": [
-        "60 Japanese-size matte sleeves (59 × 86 mm)"
-      ],
-      "specs": {
-        "Size": "Japanese (Yu-Gi-Oh!)",
-        "Finish": "Matte",
-        "Quantity": "60"
-      },
-      "image": null,
-      "brand": "Dragon Shield"
-    },
-    {
-      "id": "norvex-dragon-shield-card-codex-zipster-binder-xl-black",
-      "name": "Dragon Shield Card Codex Zipster Binder Xl · Black",
-      "set": "Card Codex Zipster",
-      "game": "norvex",
-      "type": "accessory",
-      "price": 34.99,
-      "compareAt": null,
-      "stock": 25,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.9,
-      "reviews": 140,
-      "description": "Side-loading, zip-closed and padded. The binder serious collectors graduate to.",
-      "contents": [
-        "Zip binder with 20 side-loading 9-pocket pages (360 cards)"
-      ],
-      "specs": {
-        "Capacity": "360 cards",
-        "Pages": "20 side-loading",
-        "Closure": "Zip"
-      },
-      "image": null,
-      "brand": "Dragon Shield"
-    },
-    {
-      "id": "norvex-ultra-pro-9-pocket-pro-binder-black",
-      "name": "Ultra Pro 9-Pocket PRO-Binder · Black",
-      "set": "PRO-Binder",
-      "game": "norvex",
-      "type": "accessory",
-      "price": 24.99,
-      "compareAt": null,
-      "stock": 40,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.9,
-      "reviews": 140,
-      "description": "Ultra Pro 9-Pocket PRO-Binder · Black. Archival-grade protection chosen by our own vault team.",
-      "contents": [
-        "Elastic-strap binder with 20 side-loading 9-pocket pages (360 cards)"
-      ],
-      "specs": {
-        "Capacity": "360 cards",
-        "Pages": "20 side-loading",
-        "Closure": "Elastic strap"
-      },
-      "image": null,
-      "brand": "Ultra Pro"
-    },
-    {
-      "id": "norvex-ultra-pro-regular-toploaders-25",
-      "name": "Ultra Pro Regular Toploaders (25)",
-      "set": "Toploaders",
-      "game": "norvex",
-      "type": "accessory",
-      "price": 4.49,
-      "compareAt": null,
-      "stock": 300,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.9,
-      "reviews": 140,
-      "description": "Crystal-clear rigid toploaders. The last stop before a card goes to grading.",
-      "contents": [
-        "25 rigid toploaders (35 pt)"
-      ],
-      "specs": {
-        "Thickness": "35 pt",
-        "Quantity": "25"
-      },
-      "image": null,
-      "brand": "Ultra Pro"
-    },
-    {
-      "id": "norvex-ultra-pro-pokemon-pikachu-deck-protector-sleeves-65",
-      "name": "Ultra Pro Pokémon Pikachu Deck Protector Sleeves (65)",
-      "set": "Pokémon Deck Protectors",
-      "game": "norvex",
-      "type": "accessory",
-      "price": 8.99,
-      "compareAt": null,
-      "stock": 90,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.9,
-      "reviews": 140,
-      "description": "Ultra Pro Pokémon Pikachu Deck Protector Sleeves (65). Archival-grade protection chosen by our own vault team.",
-      "contents": [
-        "65 standard-size sleeves with official Pikachu artwork"
-      ],
-      "specs": {
-        "Size": "Standard",
-        "Quantity": "65",
-        "Licence": "Official Pokémon"
-      },
-      "image": null,
-      "brand": "Ultra Pro"
-    },
-    {
-      "id": "norvex-ultra-pro-eclipse-gloss-sleeves-jet-black-100",
-      "name": "Ultra Pro Eclipse Gloss Sleeves · Jet Black (100)",
-      "set": "Eclipse Gloss Sleeves",
-      "game": "norvex",
-      "type": "accessory",
-      "price": 12.99,
-      "compareAt": null,
-      "stock": 70,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.9,
-      "reviews": 140,
-      "description": "Ultra Pro Eclipse Gloss Sleeves · Jet Black (100). Archival-grade protection chosen by our own vault team.",
-      "contents": [
-        "100 standard-size gloss sleeves"
-      ],
-      "specs": {
-        "Size": "Standard",
-        "Finish": "Gloss",
-        "Quantity": "100"
-      },
-      "image": null,
-      "brand": "Ultra Pro"
-    },
-    {
-      "id": "norvex-game-genic-squire-100-xl-convertible-deck-box-black",
-      "name": "Game Genic Squire 100+ Xl Convertible Deck Box · Black",
-      "set": "Squire 100+ XL",
-      "game": "norvex",
-      "type": "accessory",
-      "price": 9.99,
-      "compareAt": null,
-      "stock": 60,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.9,
-      "reviews": 140,
-      "description": "Gamegenic Squire 100+ XL Convertible Deck Box · Black. Archival-grade protection chosen by our own vault team.",
-      "contents": [
-        "Convertible deck box for 100+ double-sleeved cards"
-      ],
-      "specs": {
-        "Capacity": "100+ double-sleeved",
-        "Closure": "Magnetic"
-      },
-      "image": null,
-      "brand": "Gamegenic"
-    },
-    {
-      "id": "norvex-game-genic-watchtower-100-xl-convertible-black",
-      "name": "Game Genic Watchtower 100+ Xl Convertible · Black",
-      "set": "Watchtower 100+ XL",
-      "game": "norvex",
-      "type": "accessory",
-      "price": 21.99,
-      "compareAt": null,
-      "stock": 30,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.9,
-      "reviews": 140,
-      "description": "Gamegenic Watchtower 100+ XL Convertible · Black. Archival-grade protection chosen by our own vault team.",
-      "contents": [
-        "Premium convertible deck box with card compartment and dice tray"
-      ],
-      "specs": {
-        "Capacity": "100+ double-sleeved",
-        "Closure": "Magnetic"
-      },
-      "image": null,
-      "brand": "Gamegenic"
-    },
-    {
-      "id": "norvex-ultimate-guard-boulder-100-deck-case-onyx",
-      "name": "Ultimate Guard Boulder 100+ Deck Case · Onyx",
-      "set": "Boulder 100+",
-      "game": "norvex",
-      "type": "accessory",
-      "price": 6.99,
-      "compareAt": null,
-      "stock": 80,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.9,
-      "reviews": 140,
-      "description": "Ultimate Guard Boulder 100+ Deck Case · Onyx. Archival-grade protection chosen by our own vault team.",
-      "contents": [
-        "Deck case for 100+ double-sleeved cards"
-      ],
-      "specs": {
-        "Capacity": "100+ double-sleeved",
-        "Material": "Polypropylene"
-      },
-      "image": null,
-      "brand": "Ultimate Guard"
-    },
-    {
-      "id": "norvex-ultimate-guard-katana-sleeves-black-100",
-      "name": "Ultimate Guard Katana Sleeves · Black (100)",
-      "set": "Katana Sleeves",
-      "game": "norvex",
-      "type": "accessory",
-      "price": 9.99,
-      "compareAt": null,
-      "stock": 75,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.9,
-      "reviews": 140,
-      "description": "Ultimate Guard Katana Sleeves · Black (100). Archival-grade protection chosen by our own vault team.",
-      "contents": [
-        "100 standard-size sleeves"
-      ],
-      "specs": {
-        "Size": "Standard",
-        "Finish": "Matte",
-        "Quantity": "100"
-      },
-      "image": null,
-      "brand": "Ultimate Guard"
-    },
-    {
-      "id": "norvex-norvex-vault-sleeves-100-pack",
-      "name": "Norvex Vault Sleeves · 100 pack",
-      "set": "Vault Sleeves",
-      "game": "norvex",
-      "type": "accessory",
-      "price": 12.99,
-      "compareAt": null,
-      "stock": 200,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.9,
-      "reviews": 140,
-      "description": "Our own archival-grade, acid-free matte sleeves. Zero PVC, zero glare, perfect shuffle feel.",
-      "contents": [
-        "100 standard-size matte sleeves (66 × 91 mm)"
-      ],
-      "specs": {
-        "Size": "Standard",
-        "Finish": "Matte",
-        "Material": "Acid-free polypropylene",
-        "Quantity": "100"
-      },
-      "image": null,
-      "brand": "Norvex"
-    },
-    {
-      "id": "norvex-norvex-signature-playmat",
-      "name": "Norvex Signature Playmat",
-      "set": "Signature Playmat",
-      "game": "norvex",
-      "type": "accessory",
-      "price": 34.99,
-      "compareAt": null,
-      "stock": 80,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.9,
-      "reviews": 140,
-      "description": "Stitched-edge, 3 mm rubber base, sublimation-printed obsidian and gold artwork. Tournament size.",
-      "contents": [
-        "1 playmat (61 × 35 cm) with carrying tube"
-      ],
-      "specs": {
-        "Size": "61 × 35 cm",
-        "Thickness": "3 mm",
-        "Edge": "Stitched",
-        "Base": "Non-slip rubber"
-      },
-      "image": null,
-      "brand": "Norvex"
-    },
-    {
       "id": "lorcana-curator-s-collection-heroines-edition",
       "name": "Curator’s Collection: Heroines Edition",
       "set": "Curator’s",
@@ -1929,8 +1060,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Curator’s Collection: Heroines Edition: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -1955,8 +1086,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Hyperia City Illumineer’s Trove: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -1981,8 +1112,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Hyperia City booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "Factory-sealed product",
@@ -2007,8 +1138,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Premium Card Collection: Ace & Sabo & Luffy: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -2033,8 +1164,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Premium Card Collection: 6 Assort Vol. 2: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -2059,8 +1190,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Premium Card Collection: Live Action Edition Vol. 2 Baroque Works: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -2085,8 +1216,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Premium Card Collection: Live Action Edition Vol. 2 Straw Hat Crew: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -2111,8 +1242,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete SD-01 Set Sail Deck Set deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -2137,8 +1268,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Yellow Eustass \"Captain\" Kid deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -2163,8 +1294,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Red/Black Sabo deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -2189,8 +1320,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Purple Charlotte Katakuri deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -2215,8 +1346,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Blue Kuzan deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -2241,8 +1372,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Green Roronoa Zoro deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -2267,8 +1398,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Red Monkey D. Luffy deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -2293,8 +1424,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Luffy & Ace deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -2319,8 +1450,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Egghead deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -2345,8 +1476,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Learn Together deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -2371,8 +1502,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Ace & Newgate deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -2397,8 +1528,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed The World’s Strongest Warriors booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 The World’s Strongest Warriors booster pack"
@@ -2422,8 +1553,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed The Time of Battle booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 The Time of Battle booster pack"
@@ -2447,8 +1578,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Adventure on Kami’s Island booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Adventure on Kami’s Island booster pack"
@@ -2472,8 +1603,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed One Piece Heroines Edition booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 One Piece Heroines Edition booster pack"
@@ -2497,8 +1628,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed The Azure Sea’s Seven booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 The Azure Sea’s Seven booster pack"
@@ -2522,8 +1653,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Carrying on His Will booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Carrying on His Will booster pack"
@@ -2547,8 +1678,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed One Piece Card The Best Vol. 2 booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 One Piece Card The Best Vol. 2 booster pack"
@@ -2572,8 +1703,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Anime 25th Collection booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Anime 25th Collection booster pack"
@@ -2597,8 +1728,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Royal Blood booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Royal Blood booster pack"
@@ -2622,8 +1753,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Premium Card Collection: Flame-Flame Fruit Coliseum Edition: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -2648,8 +1779,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Secrets of Strixhaven deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -2674,8 +1805,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Secrets of Strixhaven deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -2700,8 +1831,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Secrets of Strixhaven deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -2726,8 +1857,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Secrets of Strixhaven deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -2752,8 +1883,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Secrets of Strixhaven deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -2778,8 +1909,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Sealed Secrets of Strixhaven booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "Factory-sealed product",
@@ -2804,8 +1935,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Sealed Secrets of Strixhaven booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "Factory-sealed product",
@@ -2830,8 +1961,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Factory-sealed Mega Evolution — Pitch Black Elite Trainer Box: booster packs, an exclusive promo, sleeves, dice and the collector's box. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "Factory-sealed product",
@@ -2856,8 +1987,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Factory-sealed Mega Evolution — Pitch Black Elite Trainer Box: booster packs, an exclusive promo, sleeves, dice and the collector's box. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "Factory-sealed product",
@@ -2882,8 +2013,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Sealed Mega Evolution — Pitch Black booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "Factory-sealed product",
@@ -2908,8 +2039,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Mega Forces Tin: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -2934,8 +2065,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "30th Celebration Tech Sticker Collection: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -2960,8 +2091,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "30th Celebration Poster Collection: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -2986,8 +2117,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "30th Celebration Sylveon ex Box & Greninja ex Box: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -3012,8 +2143,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Factory-sealed 30th Celebration Elite Trainer Box: booster packs, an exclusive promo, sleeves, dice and the collector's box. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "Factory-sealed product",
@@ -3038,8 +2169,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Factory-sealed 30th Celebration Elite Trainer Box: booster packs, an exclusive promo, sleeves, dice and the collector's box. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "Factory-sealed product",
@@ -3064,8 +2195,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "30th Celebration Binder Collection: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -3090,8 +2221,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete 30th Celebration deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -3116,8 +2247,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "30th Celebration Ultra-Premium Collection: Day & Night: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -3142,8 +2273,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "30th Celebration Figure Collection: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -3168,8 +2299,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "First Partner Illustration Collection—Series 3: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -3194,8 +2325,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Mega Greninja ex Premium Collection: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -3220,8 +2351,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "First Partner Illustration Collection—Series 2: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -3246,8 +2377,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Mega Moonlit Tin: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -3272,8 +2403,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Lumiose City Mini Tin: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -3298,8 +2429,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Factory-sealed Mega Evolution — Chaos Rising Elite Trainer Box: booster packs, an exclusive promo, sleeves, dice and the collector's box. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "Factory-sealed product",
@@ -3324,8 +2455,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Factory-sealed Mega Evolution — Chaos Rising Elite Trainer Box: booster packs, an exclusive promo, sleeves, dice and the collector's box. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "Factory-sealed product",
@@ -3350,8 +2481,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Sealed Mega Evolution — Chaos Rising booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "Factory-sealed product",
@@ -3376,8 +2507,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Mega Lucario ex deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -3402,8 +2533,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Mega Zygarde ex Premium Collection: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -3428,8 +2559,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Factory-sealed Mega Evolution — Perfect Order Elite Trainer Box: booster packs, an exclusive promo, sleeves, dice and the collector's box. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "Factory-sealed product",
@@ -3454,8 +2585,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Factory-sealed Mega Evolution — Perfect Order Elite Trainer Box: booster packs, an exclusive promo, sleeves, dice and the collector's box. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "Factory-sealed product",
@@ -3480,8 +2611,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Sealed Mega Evolution — Perfect Order booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "Factory-sealed product",
@@ -3506,8 +2637,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "First Partner Illustration Collection—Series 1: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -3532,8 +2663,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Mega Evolution—Ascended Heroes Collection: Erika & Larry: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -3558,8 +2689,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Mega Charizard Tin: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -3584,8 +2715,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Pokémon Day 2026 Collection: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -3610,8 +2741,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Mega Evolution—Ascended Heroes First Partners Deluxe Pin Collection: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -3636,8 +2767,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Factory-sealed Mega Evolution — Ascended Heroes Elite Trainer Box: booster packs, an exclusive promo, sleeves, dice and the collector's box. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "Factory-sealed product",
@@ -3662,8 +2793,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Factory-sealed Mega Evolution — Ascended Heroes Elite Trainer Box: booster packs, an exclusive promo, sleeves, dice and the collector's box. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "Factory-sealed product",
@@ -3688,8 +2819,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Mega Evolution—Ascended Heroes Tech Sticker Collection: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -3714,8 +2845,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Mega Evolution—Ascended Heroes Mini Tin: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -3740,8 +2871,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Sealed Mega Evolution — Ascended Heroes booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "Factory-sealed product",
@@ -3766,8 +2897,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Mega Evolution—Ascended Heroes Tin: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -3792,8 +2923,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete : Leia Organa deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -3818,8 +2949,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete : Jabba the Hutt deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -3844,8 +2975,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Spark of Rebellion deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -3870,8 +3001,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Shadows of the Galaxy deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -3896,8 +3027,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Rarity Collection V booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Rarity Collection V booster pack"
@@ -3921,8 +3052,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed FB-10 Cross Force booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 FB-10 Cross Force booster pack"
@@ -3946,8 +3077,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Official Playmat & Card Set Limited Edition 01, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -3972,8 +3103,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Official Card Sleeves 04, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -3998,8 +3129,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete FS-12 The Beat of Ki EX deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -4024,8 +3155,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete FS-11 The Phase of Evolution EX deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -4050,8 +3181,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed FB-09 Dual Evolution booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 FB-09 Dual Evolution booster pack"
@@ -4075,8 +3206,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Official Card Sleeves -Illustrations- Special, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -4101,8 +3232,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed FB-08 SAIYAN’s Pride booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 FB-08 SAIYAN’s Pride booster pack"
@@ -4126,8 +3257,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed FB-11 Brightness of Hope booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 FB-11 Brightness of Hope booster pack"
@@ -4151,8 +3282,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Official Card Sleeve Limited Edition 05 -Broly-, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -4177,8 +3308,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Official Card Sleeve Limited Edition 06 -Vegeta-, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -4203,8 +3334,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Official Playmat & Card Set Limited Edition 02, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -4229,8 +3360,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Premium Card Collection 03: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -4255,8 +3386,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed FB-07 Wish for Shenron booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 FB-07 Wish for Shenron booster pack"
@@ -4280,8 +3411,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed SB-01 Manga Booster 01 booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 SB-01 Manga Booster 01 booster pack"
@@ -4305,8 +3436,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed FB-06 Rivals Clash booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 FB-06 Rivals Clash booster pack"
@@ -4330,8 +3461,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed FB-05 New Adventure booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 FB-05 New Adventure booster pack"
@@ -4355,8 +3486,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed FB-04 Ultra Limit booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 FB-04 Ultra Limit booster pack"
@@ -4380,8 +3511,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Attack of the Vine! booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Attack of the Vine! booster pack"
@@ -4405,8 +3536,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Hyperia City deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -4431,8 +3562,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Playmat&Card Set -Luffy&Bonney-, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -4457,8 +3588,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Limited Card Sleeve One Piece Heroines Edition, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -4483,8 +3614,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Official Playmat - Flame-Flame Fruit Coliseum Edition, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -4509,8 +3640,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Limited Card Sleeve - Flame-Flame Fruit Coliseum Edition, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -4535,8 +3666,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Secrets of Strixhaven Commander Decks deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -4561,8 +3692,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete | Teenage Mutant Ninja Turtles deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -4587,8 +3718,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Sealed | Teenage Mutant Ninja Turtles Pizza booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "Factory-sealed product",
@@ -4613,8 +3744,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Lorwyn Eclipsed 60-Card Theme Decks deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -4639,8 +3770,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Sealed | Avatar: The Last Airbender Commander's booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "Factory-sealed product",
@@ -4665,8 +3796,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Sealed Aetherdrift Finish Line booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "Factory-sealed product",
@@ -4691,8 +3822,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Sealed Duskmourn: House of Horror Nightmare booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "Factory-sealed product",
@@ -4717,8 +3848,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Mega Evolution — Pitch Black booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Mega Evolution — Pitch Black booster pack"
@@ -4742,8 +3873,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Mega Evolution — Chaos Rising booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Mega Evolution — Chaos Rising booster pack"
@@ -4767,8 +3898,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Mega Evolution — Perfect Order booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Mega Evolution — Perfect Order booster pack"
@@ -4792,8 +3923,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Jump to Lightspeed deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -4818,8 +3949,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Jump to Lightspeed deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -4844,8 +3975,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Legends of the Force deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -4870,8 +4001,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Legends of the Force deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -4896,8 +4027,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Secrets of Power deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -4922,8 +4053,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Secrets of Power deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -4948,8 +4079,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Ashes of the Empire deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -4974,8 +4105,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Ashes of the Empire deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5000,8 +4131,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete : Chewbacca deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5026,8 +4157,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete : Grand Moff Tarkin deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5049,11 +4180,11 @@ window.NORVEX_DATA = {
       "price": 3.99,
       "compareAt": null,
       "stock": 12,
-      "preorder": false,
+      "preorder": true,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed EX-13 Chivalrous XIII Pack booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 EX-13 Chivalrous XIII Pack booster pack"
@@ -5077,8 +4208,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed EX-12 Digital World Shambala Pack booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 EX-12 Digital World Shambala Pack booster pack"
@@ -5102,8 +4233,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-24 Digimon Data Squad deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5128,8 +4259,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed EX-09 Versus Monsters Pack booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 EX-09 Versus Monsters Pack booster pack"
@@ -5153,8 +4284,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "EX-01 Classic Collection Theme Booster Pack: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -5179,8 +4310,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-23 Digimon Beatbreak deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5205,8 +4336,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-22 Amethyst Mandala deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5231,8 +4362,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-21 Hero of Hope deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5257,8 +4388,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-20 Protector of Light deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5283,8 +4414,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-19 Fable Waltz deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5309,8 +4440,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-18 Guardian Vortex deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5335,8 +4466,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-17 Double Typhoon deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5361,8 +4492,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-16 Wolf of Friendship deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5387,8 +4518,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-15 Dragon of Courage deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5413,8 +4544,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-14 Beelzemon deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5439,8 +4570,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-13 Ragnaloardmon deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5465,8 +4596,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-12 Jesmon deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5491,8 +4622,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-10 Parallel World Tactician deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5517,8 +4648,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-9 Ultimate Ancient Dragon deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5543,8 +4674,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-8 Ulforceveedramon deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5569,8 +4700,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-7 Gallantmon deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5595,8 +4726,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-6 Venomous Violet deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5621,8 +4752,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-5 Machine Black deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5647,8 +4778,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-4 Giga Green deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5673,8 +4804,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-3 Heaven’s Yellow deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5699,8 +4830,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-2 Cocytus Blue deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5725,8 +4856,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete ST-1 Gaia Red deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -5751,8 +4882,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Premium Card Collection Digimon Scramble Set: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -5777,8 +4908,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Digimon Card Gameofficial Card Sleeves Ver. Gallantmon: Crimson Mode, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -5803,8 +4934,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Digimon Card Gameofficial Card Sleeves Ver.Imperialdramon: Paladin Mode, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -5829,8 +4960,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Digimon Card Gameofficial Card Sleeves 03, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -5855,8 +4986,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Digimon Card Gameofficial Card Sleeves 02, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -5881,8 +5012,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Premium Card Collection Digimon Training Set: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -5907,8 +5038,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Digimon Card Gameofficial Card Sleeves Ver. Alphamon, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -5933,8 +5064,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Digimon Card Gameofficial Card Sleeves Ver. Omnimon, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -5959,8 +5090,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Digimon Card Gameofficial Card Sleeves 01, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -5985,8 +5116,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Digimon Card Gameofficial Sleeves 2025 Ver.1.0, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -6011,8 +5142,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Premium Card Collection Memory Boost! Set: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -6037,8 +5168,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Digimon Card Gameofficial Sleeves Digimon Animation Series 25th, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -6063,8 +5194,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Digimon Card Gameofficial Sleeves 2024 Ver.2.0, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -6089,8 +5220,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Digimon Card Gameofficial Sleeves 2024 Ver.1.0, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -6104,32 +5235,6 @@ window.NORVEX_DATA = {
       "image": "assets/img/products/digimon-official-sleeves-2024-ver-1-0.webp"
     },
     {
-      "id": "digimon-official-card-sleeves-gold",
-      "name": "Official Card Sleeves Gold",
-      "set": "Official Card Gold",
-      "game": "digimon",
-      "type": "accessory",
-      "price": 14.99,
-      "compareAt": null,
-      "stock": 12,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
-      "description": "Official Card Sleeves Gold, factory sealed.",
-      "contents": [
-        "Factory-sealed product",
-        "Contents as listed by the publisher"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Accessory",
-        "Condition": "Factory sealed"
-      },
-      "image": null
-    },
-    {
       "id": "digimon-official-card-sleeves-silver",
       "name": "Official Card Sleeves Silver",
       "set": "Official Card Silver",
@@ -6141,8 +5246,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Official Card Sleeves Silver, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -6167,8 +5272,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Official Playmat -Bandai Card Games Fest 23-24 Edition-, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -6193,8 +5298,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Digimon Card Gameofficial Sleeves 2023, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -6219,8 +5324,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Official Sleeves 2022 Ver.2.0, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -6245,8 +5350,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Premium Deck Set PD-01: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -6271,8 +5376,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Official Sleeves 2022, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -6297,8 +5402,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Official Sleeves 2021 Ver.2.0, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -6323,8 +5428,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Official Sleeves 2021, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -6349,8 +5454,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Premium Pack Set 01: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -6375,8 +5480,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Official Sleeves 2020, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -6401,8 +5506,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "PB-23 Premium Heroines Set Ver. 2: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -6427,8 +5532,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Omnimon Binder Set [PB19], factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -6453,8 +5558,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "PB-18 Premium Heroines Set: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -6479,8 +5584,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Premium Binder Set, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -6505,8 +5610,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Deck Box Set / Beelzemon, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -6531,8 +5636,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Royal Knights Binder Set [PB13], factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -6557,8 +5662,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Playmat and Card Set 2floral Fun [PB-09], factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -6583,8 +5688,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Playmat and Card Set 1digimon Tamers [PB-08], factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -6609,8 +5714,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Official Wargreymon Playmat [PB-03], factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -6635,8 +5740,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed BT-26 Timeless Bonds booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 BT-26 Timeless Bonds booster pack"
@@ -6660,8 +5765,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed AD-01 Advanced Booster Digimon Generation booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 AD-01 Advanced Booster Digimon Generation booster pack"
@@ -6685,8 +5790,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed EX-11 Dawn of Liberator Pack booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 EX-11 Dawn of Liberator Pack booster pack"
@@ -6710,8 +5815,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Glorious Victors booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Glorious Victors booster pack"
@@ -6735,8 +5840,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Magnificent Maestros deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -6761,8 +5866,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Beyond the Brave booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Beyond the Brave booster pack"
@@ -6786,8 +5891,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Magnificent Monsters deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -6812,8 +5917,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Legendary Arc-V Decks deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -6838,8 +5943,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Chaos Origins booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Chaos Origins booster pack"
@@ -6863,8 +5968,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Blazing Dominion booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Blazing Dominion booster pack"
@@ -6888,8 +5993,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Legendary Modern Decks 2026 deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -6914,8 +6019,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Burst Protocol booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Burst Protocol booster pack"
@@ -6939,8 +6044,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete The Chronicles Deck: Spirit Charmers (All-Foil Edition) deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -6965,8 +6070,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Phantom Revenge booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Phantom Revenge booster pack"
@@ -6990,8 +6095,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Legendary 5D’s Decks deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -7016,8 +6121,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete The Chronicles Deck: The Fallen & The Virtuous (All-Foil Edition) deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -7042,8 +6147,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "The Chronicles: The Fallen & The Virtuous Card Sleeves, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -7068,8 +6173,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "2025 Mega-Pack Tin: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -7094,8 +6199,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Quarter Century Stampede booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Quarter Century Stampede booster pack"
@@ -7119,8 +6224,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Jaden & Yubel Card Case, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -7145,8 +6250,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Jaden & Yubel Card Sleeves, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -7171,8 +6276,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Jaden & Yubel 9-Pocket Duelist Portfolio, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -7197,8 +6302,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Jaden & Yubel Game Mat, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -7223,8 +6328,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Supreme Darkness booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Supreme Darkness booster pack"
@@ -7248,8 +6353,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Crossover Breakers booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Crossover Breakers booster pack"
@@ -7273,8 +6378,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Quarter Century Bonanza booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Quarter Century Bonanza booster pack"
@@ -7298,8 +6403,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Rage of the Abyss booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Rage of the Abyss booster pack"
@@ -7323,8 +6428,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Grandopolis, The Eternal Golden City – 2013 Wcs Commemorative Card Sleeves, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -7349,8 +6454,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Grandopolis, The Eternal Golden City – 2013 Wcs Commemorative Game Mat, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -7375,8 +6480,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Legendary Dragon Decks deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -7401,8 +6506,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Light of Destruction booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Light of Destruction booster pack"
@@ -7426,8 +6531,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed The Infinite Forbidden booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 The Infinite Forbidden booster pack"
@@ -7451,8 +6556,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Battles of Legend: Terminal Revenge booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Battles of Legend: Terminal Revenge booster pack"
@@ -7476,8 +6581,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete : Realm of Light deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -7502,8 +6607,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "25th Anniversary Rarity Collection II: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -7528,8 +6633,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Legacy of Destruction booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Legacy of Destruction booster pack"
@@ -7553,8 +6658,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Legendary Decks II deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -7579,8 +6684,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Phantom Nightmare booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Phantom Nightmare booster pack"
@@ -7604,8 +6709,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Yugi & Kaiba Quarter Century Card Case, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -7630,8 +6735,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Yugi & Kaiba Quarter Century Game Mat, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -7656,8 +6761,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Yugi & Kaiba Quarter Century 9-Pocket Duelist Portfolio, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -7682,8 +6787,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Yugi & Kaiba Quarter Century Card Sleeves, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -7708,8 +6813,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete 2-Player Starter Set deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -7734,8 +6839,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Maze of Millennia booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Maze of Millennia booster pack"
@@ -7759,8 +6864,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete : Fire Kings deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -7785,8 +6890,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Valiant Smashers booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Valiant Smashers booster pack"
@@ -7810,8 +6915,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "25th Anniversary Rarity Collection: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -7836,8 +6941,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A single factory-sealed Age of Overlord booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
         "1 Age of Overlord booster pack"
@@ -7861,8 +6966,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete : The Crimson King deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -7887,8 +6992,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "25th Anniversary Tin: Dueling Heroes: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -7913,8 +7018,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Gold Pride – Carrie’s Crew Card Sleeves, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -7939,8 +7044,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Gold Pride – Super Fan Card Case, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -7965,8 +7070,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Gold Pride – Photo Finish 9-Pocket Duelist Portfolio, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -7991,8 +7096,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Gold Pride – Chariot Carrie Game Mat, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8017,8 +7122,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Legendary Collection: 25th Anniversary Edition: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -8043,8 +7148,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete : Beware of Traptrix deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -8069,8 +7174,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Dark Magician Girl Card Sleeves, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8095,8 +7200,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Dark Magician Girl 9-Pocket Duelist Portfolio, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8121,8 +7226,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Dark Magician Girl Game Mat, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8147,8 +7252,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Dark Magician Girl Card Case, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8173,8 +7278,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete : Dark World deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -8199,8 +7304,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Magnificent Mavens deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -8225,8 +7330,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete : Legend of the Crystal Beasts deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -8251,8 +7356,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "2022 Tin of the Pharaoh’s Gods: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -8277,8 +7382,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Elemental Hero Card Sleeves, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8303,8 +7408,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Elemental Hero 9-Pocket Duelist Portfolio, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8329,8 +7434,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Elemental Hero Game Mat, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8355,8 +7460,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Elemental Hero Card Case, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8381,8 +7486,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Legendary Duelists: Season 3 deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -8407,8 +7512,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Albaz – Ecclesia – Tri-Brigade Card Case, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8433,8 +7538,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Albaz – Ecclesia – Tri-Brigade Game Mat, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8459,8 +7564,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Albaz – Ecclesia – Tri-Brigade 9-Pocket Duelist Portfolio, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8485,8 +7590,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Albaz – Ecclesia – Tri-Brigade Card Sleeves, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8511,8 +7616,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete : Albaz Strike deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -8537,8 +7642,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Kuriboh Kollection 9-Pocket Duelist Portfolio, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8563,8 +7668,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Kuriboh Kollection Game Mat, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8589,8 +7694,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Kuriboh Kollection Card Sleeves, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8615,8 +7720,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Kuriboh Kollection Card Case, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8641,8 +7746,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "I:p Masquerena Card Sleeves, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8667,8 +7772,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "I:p Masquerena 9-Pocket Duelist Portfolio, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8693,8 +7798,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "I:p Masquerena Game Mat, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8719,8 +7824,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "I:p Masquerena Card Case, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8745,8 +7850,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete : Cyber Strike deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -8771,8 +7876,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "2021 Tin of Ancient Battles: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -8797,8 +7902,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Slifer, Obelisk, & Ra 9-Pocket Duelist Portfolio, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8823,8 +7928,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Slifer, Obelisk, & Ra Game Mat, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8849,8 +7954,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Slifer, Obelisk, & Ra Card Sleeves, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8875,8 +7980,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Slifer, Obelisk, & Ra Card Case, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8901,8 +8006,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Egyptian God Deck: Slifer the Sky Dragon & Obelisk the Tormentor deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -8927,8 +8032,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Ghosts From the Past deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -8953,8 +8058,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Dark Magician Girl the Dragon Knight Card Sleeves, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -8979,8 +8084,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Dark Magician Girl the Dragon Knight 9-Pocket Duelist Portfolio, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -9005,8 +8110,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Dark Magician Girl the Dragon Knight Game Mat, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -9031,8 +8136,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Dark Magician Girl the Dragon Knight Card Case, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -9057,8 +8162,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete : Freezing Chains deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -9083,8 +8188,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ready to play out of the box. A complete Legendary Duelists: Season 2 deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
@@ -9109,8 +8214,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "2020 Tin of Lost Memories: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
@@ -9135,8 +8240,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ash Blossom Card Sleeves, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -9161,8 +8266,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ash Blossom 9-Pocket Duelist Portfolio, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -9187,8 +8292,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ash Blossom Game Mat, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -9213,8 +8318,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Ash Blossom Card Case, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -9239,8 +8344,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Golden Duelist Collection Duelist Portfolio, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -9265,8 +8370,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "Golden Duelist Collection Game Mat, factory sealed.",
       "contents": [
         "Factory-sealed product",
@@ -9291,8 +8396,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed SB-01 Manga Booster 01 booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Manga Booster 01 [SB01] booster packs",
@@ -9317,8 +8422,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed AD-01 Advanced Booster Digimon Generation booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Digimon Card Game Advanced Booster Digimon Generation [AD-01] booster packs",
@@ -9343,8 +8448,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Glorious Victors booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Glorious Victors booster packs",
@@ -9369,8 +8474,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Beyond the Brave booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Beyond the Brave booster packs",
@@ -9395,8 +8500,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Chaos Origins booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Chaos Origins booster packs",
@@ -9421,8 +8526,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Blazing Dominion booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Blazing Dominion booster packs",
@@ -9447,8 +8552,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Burst Protocol booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Burst Protocol booster packs",
@@ -9473,8 +8578,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Phantom Revenge booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Phantom Revenge booster packs",
@@ -9499,8 +8604,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Quarter Century Stampede booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Quarter Century Stampede booster packs",
@@ -9525,8 +8630,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Crossover Breakers booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Crossover Breakers booster packs",
@@ -9551,8 +8656,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Rage of the Abyss booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Rage of the Abyss booster packs",
@@ -9577,8 +8682,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Light of Destruction booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Light of Destruction booster packs",
@@ -9603,8 +8708,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed The Infinite Forbidden booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 The Infinite Forbidden booster packs",
@@ -9629,8 +8734,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Battles of Legend: Terminal Revenge booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Battles of Legend: Terminal Revenge booster packs",
@@ -9655,8 +8760,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Legacy of Destruction booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Legacy of Destruction booster packs",
@@ -9681,8 +8786,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Phantom Nightmare booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Phantom Nightmare booster packs",
@@ -9707,8 +8812,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Maze of Millennia booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Maze of Millennia booster packs",
@@ -9733,8 +8838,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Valiant Smashers booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Valiant Smashers booster packs",
@@ -9759,8 +8864,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Age of Overlord booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Age of Overlord booster packs",
@@ -9785,8 +8890,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 24,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed OP-11 A Fist of Divine Speed Booster Box booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 A Fist of Divine Speed booster packs",
@@ -9809,10 +8914,10 @@ window.NORVEX_DATA = {
       "price": 109.99,
       "compareAt": null,
       "stock": 0,
-      "preorder": true,
+      "preorder": false,
       "badge": null,
-      "featured": false,
-      "rating": 0,
+      "featured": true,
+      "rating": null,
       "reviews": 0,
       "description": "A full sealed OP-12 Legacy of the Master Booster Box booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
@@ -9839,8 +8944,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed OP-17 The World’s Strongest Warriors Booster Box booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 The World’s Strongest Warriors booster packs",
@@ -9864,9 +8969,9 @@ window.NORVEX_DATA = {
       "stock": 12,
       "preorder": false,
       "badge": null,
-      "featured": true,
-      "rating": 4.8,
-      "reviews": 18,
+      "featured": false,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed OP-16 The Time of Battle Booster Box booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 The Time of Battle booster packs",
@@ -9891,8 +8996,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed OP-15 Adventure on Kami’s Island Booster Box booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Adventure on Kami’s Island booster packs",
@@ -9917,8 +9022,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed EB-03 One Piece Heroines Edition Extra Booster Box booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 One Piece Heroines Edition booster packs",
@@ -9943,8 +9048,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed OP-14 The Azure Sea’s Seven Booster Box booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 The Azure Sea’s Seven booster packs",
@@ -9969,8 +9074,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed OP-13 Carrying on His Will Booster Box booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Carrying on His Will booster packs",
@@ -9995,8 +9100,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed PRB-02 One Piece Card The Best Vol. 2 Premium Booster Box booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 One Piece Card The Best Vol. 2 booster packs",
@@ -10021,8 +9126,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed EB-02 Anime 25th Collection Extra Booster Box booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Anime 25th Collection booster packs",
@@ -10047,8 +9152,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed OP-10 Royal Blood Booster Box booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Royal Blood booster packs",
@@ -10073,8 +9178,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Rarity Collection V booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Rarity Collection V booster packs",
@@ -10099,8 +9204,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed FB-10 Cross Force booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 FB-10 Cross Force booster packs",
@@ -10125,8 +9230,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed FB-09 Dual Evolution booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 FB-09 Dual Evolution booster packs",
@@ -10151,8 +9256,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed FB-08 SAIYAN’s Pride booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 FB-08 SAIYAN’s Pride booster packs",
@@ -10177,8 +9282,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed FB-11 Brightness of Hope booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 FB-11 Brightness of Hope booster packs",
@@ -10203,8 +9308,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed FB-07 Wish for Shenron booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 FB-07 Wish for Shenron booster packs",
@@ -10229,8 +9334,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed FB-06 Rivals Clash booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 FB-06 Rivals Clash booster packs",
@@ -10255,8 +9360,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed FB-05 New Adventure booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 FB-05 New Adventure booster packs",
@@ -10281,8 +9386,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed FB-04 Ultra Limit booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 FB-04 Ultra Limit booster packs",
@@ -10307,8 +9412,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed Attack of the Vine! Booster Box booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 Attack of the Vine! booster packs",
@@ -10330,11 +9435,11 @@ window.NORVEX_DATA = {
       "price": 74.99,
       "compareAt": null,
       "stock": 12,
-      "preorder": false,
+      "preorder": true,
       "badge": null,
-      "featured": true,
-      "rating": 4.8,
-      "reviews": 18,
+      "featured": false,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed EX-13 Chivalrous XIII Extra booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 EX-13 Chivalrous XIII Pack booster packs",
@@ -10359,8 +9464,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": true,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed EX-12 Digital World Shambala Extra booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 EX-12 Digital World Shambala Pack booster packs",
@@ -10384,9 +9489,9 @@ window.NORVEX_DATA = {
       "stock": 12,
       "preorder": false,
       "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "featured": true,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed EX-09 Versus Monsters Extra booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 EX-09 Versus Monsters Pack booster packs",
@@ -10411,8 +9516,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed BT-26 Timeless Bonds booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 BT-26 Timeless Bonds booster packs",
@@ -10437,8 +9542,8 @@ window.NORVEX_DATA = {
       "preorder": false,
       "badge": null,
       "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
+      "rating": null,
+      "reviews": 0,
       "description": "A full sealed EX-11 Dawn of Liberator Extra booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "24 EX-11 Dawn of Liberator Pack booster packs",

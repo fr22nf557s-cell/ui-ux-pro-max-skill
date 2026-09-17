@@ -1,226 +1,163 @@
 # Norvex Gaming — storefront
 
-A premium, dark-luxury e-commerce front end for **Norvex Gaming**: sealed TCG product
-(booster boxes, bundles, packs, Elite Trainer Boxes, decks, premium collections), graded singles,
-pre-orders and accessories across Pokémon, Magic: The Gathering, One Piece, Yu-Gi-Oh!, Disney
-Lorcana, Star Wars: Unlimited, Flesh and Blood, Riftbound, Digimon and Dragon Ball Super.
+The online shop for **Norvex Gaming**, an independent UK trading card retailer: factory-sealed
+product (booster boxes, bundles, packs, Elite Trainer Boxes, decks, collections), pre-orders and
+official accessories across Pokémon, Magic: The Gathering, One Piece, Yu-Gi-Oh!, Disney Lorcana,
+Star Wars: Unlimited, Digimon and Dragon Ball Super, with room for graded singles.
 
-The catalogue (144 products, priced in GBP) is modelled on a full UK TCG retailer's range: every
-major game, sealed product in every format, PSA 10 singles and the big accessory brands (Dragon
-Shield, Ultra Pro, Gamegenic, Ultimate Guard). Product names follow the publishers' real lines;
-**prices are estimated UK RRP / market prices and stock levels are placeholders**, so verify both
-against your live inventory before launch.
+It is a static site (no framework, no build tooling at runtime) plus one small Cloudflare Worker
+that creates Stripe Checkout sessions. Every product carries an official publisher packshot.
 
-Zero build step, zero runtime dependencies. Open `index.html` in a browser or serve the folder:
-
-```bash
-cd projects/norvex-gaming
-python3 -m http.server 8080      # then open http://localhost:8080
-```
+**Prices are estimated UK RRP and stock levels are placeholders.** Verify both against your
+inventory before taking orders (see *Before you show customers*).
 
 ## Pages
 
 | File | What it does |
 |------|--------------|
-| `index.html` | Home: hero, stats, brand marquee, new arrivals, category bento, "The Norvex standard", graded vault, pre-orders, reviews, newsletter |
+| `index.html` | Home: hero, what every order gets, brand marquee, new arrivals, category tiles, the Norvex standard, pre-orders, buying guide, allocation list |
 | `shop.html` | Catalogue with live filters (game, product type, availability, price), sort, search, URL-addressable state (`?game=pokemon&type=etb&avail=preorder&sort=price-asc&q=…`) |
-| `product.html?id=<id>` | Product detail: packaging art, price/compare price, stock state, quantity, add to cart / pre-order, contents, specs, shipping, authenticity, related products |
+| `product.html?id=<id>` | Product detail: photo, price, stock, quantity, add to cart / pre-order, contents, details, delivery and returns, authenticity, related products |
+| `order.html?session_id=…` | Order confirmation after Stripe Checkout (items, totals, delivery address, what happens next); `noindex` |
+| `help.html` | Delivery & insurance, returns & refunds, authenticity guarantee, pre-orders, order tracking, contact |
+| `about.html` | Who we are, what we sell, the vault, trade & wholesale, sell your cards |
+| `legal.html` | Terms of sale, privacy, cookies & storage |
+| `404.html` | Not-found page (served by GitHub Pages and by the Worker's `not_found_handling`) |
 
-Shared across every page (injected by `assets/js/norvex.js`): sticky glass header, mobile menu,
-search palette (`/` or `Ctrl/Cmd+K`), slide-in cart drawer with free-shipping progress
-(persisted in `localStorage`), toasts.
+Shared across every page (rendered by `assets/js/norvex.js`): sticky glass header, mobile menu,
+search palette (`/` or `Ctrl/Cmd+K`), cart drawer with free-delivery progress (persisted in
+`localStorage`), toasts, business details and contact links filled from the catalogue config.
 
 ## Structure
 
 ```
 projects/norvex-gaming/
-├── index.html · shop.html · product.html
+├── *.html                    # generated pages (edit scripts/build-pages.py, not these)
 ├── assets/
-│   ├── css/norvex.css     # design tokens + components (dark luxury, liquid glass, gold accent)
-│   ├── js/catalog.js      # ALL product / game / type data + store config
-│   ├── js/norvex.js       # storefront runtime (cart, search, filters, PDP, motion, a11y)
-│   └── img/
-│       ├── favicon.svg · logo.svg
-│       └── products/      # drop product photos here (4:5, ~800x1000, WebP/JPG)
+│   ├── css/norvex.css        # design tokens + components (dark luxury, glass, gold accent)
+│   ├── js/catalog.js         # ALL product / game / type data + store config
+│   ├── js/norvex.js          # storefront runtime (cart, search, filters, PDP, checkout, order page)
+│   └── img/products/         # one official packshot per product, <product id>.webp
+├── checkout/                 # Stripe Checkout Worker (worker.js) + Worker entry that also serves the site
+├── functions/session.js      # the same checkout as a Cloudflare Pages Function, if you host on Pages
 ├── scripts/
-│   ├── fetch-gallery.mjs  # download every packshot from a publisher gallery page (+ manifest)
-│   ├── match-images.mjs   # pair downloaded images with products by name, wire them in
-│   ├── import-catalog.mjs # CSV → assets/js/catalog.js (validates rows + image paths)
-│   ├── catalog-io.mjs     # shared load/write helpers
-│   └── catalog-template.csv
-├── package.json           # npm run fetch | match | import | serve (Playwright is the only dev dep)
-└── README.md
+│   ├── build-pages.py        # HTML generator: python3 scripts/build-pages.py
+│   ├── fetch-gallery.mjs     # download every packshot from a publisher gallery (Playwright)
+│   ├── match-images.mjs      # pair downloaded images with products by name
+│   ├── catalog-from-galleries.mjs · tidy-catalog.mjs · catalog-rules.mjs · catalog-overrides.json
+│   ├── import-catalog.mjs    # CSV → catalog.js (validates rows + image paths)
+│   └── catalog-io.mjs        # shared load/write helpers
+├── build.sh                  # assembles _site/ (pages, assets, CNAME, _headers, robots.txt, sitemap.xml)
+├── wrangler.jsonc            # Cloudflare Worker config: site as static assets + /session checkout
+└── CNAME                     # custom domain for GitHub Pages
 ```
 
-## Design system (generated with the ui-ux-pro-max tooling in this repo)
+## Editing the site
+
+**Pages.** The HTML files are generated. Change copy or layout in `scripts/build-pages.py`, then:
 
 ```bash
-python3 src/ui-ux-pro-max/scripts/search.py "trading card game TCG e-commerce premium gaming store collectibles" \
-  --design-system --variance 7 --motion 7 --density 5 -p "Norvex Gaming"
+python3 scripts/build-pages.py
 ```
 
-* **Pattern** Feature-Rich Showcase (hero → product grid → categories → proof → CTA, sticky CTA repetition)
-* **Style** Liquid Glass / Glassmorphism on an OLED-black base, with Aurora UI mesh gradients and
-  holographic "foil" accents (TCG-native)
-* **Palette** E-commerce Luxury: near-black `#08080a`, warm off-white text `#f4f2ee`,
-  champagne gold accent `#d9b75b` (10:1 on the background), holo gradient for graded/foil moments
-* **Type** Cormorant (display, italics for emphasis) + Montserrat (UI/body), both from Google Fonts
-* **Motion** hover micro-interactions 200–300 ms `power2.out`, scroll reveals + grid stagger
-  (`back.out`-style), 12–16 s aurora drift, all disabled under `prefers-reduced-motion`
+Sections that depend on the catalogue are computed at build time: the game list and count, the brand
+marquee, and everything about graded singles (the nav link, the vault section, the category tile) only
+appears once at least one product with `"type": "single"` exists.
 
-All colours, spacing, radii and easings are CSS custom properties at the top of `norvex.css`.
+**Store settings** live in the `config` block of `assets/js/catalog.js`:
 
-## Make it yours
+| Key | Used for |
+|-----|----------|
+| `storeName`, `supportEmail` | Titles, every "email us" link, the newsletter and restock requests |
+| `business` | Legal name, trading name, address lines, company and VAT numbers, reply hours; rendered on the help and legal pages (empty fields are skipped) |
+| `shipping` | Standard and express prices, free-delivery threshold, countries, dispatch window; shown on product pages. Keep in step with the Worker's `SHIPPING_*` settings |
+| `returnsDays` | Change-of-mind window shown on product pages |
+| `social` | Optional `{ "Instagram": "https://…", "TikTok": "https://…" }`; the footer links render only when set |
+| `checkout.endpoint` | Where the cart is POSTed: the Worker's `/session` URL |
 
-1. **Inventory** — the fastest route is the importer. Export your products to CSV (distributor feed,
-   Shopify/WooCommerce export, or a spreadsheet; columns documented in `scripts/catalog-template.csv`
-   and at the top of `scripts/import-catalog.mjs`), then:
+**Products** are the `products` array. Each needs a unique `id` (used in URLs and image names),
+`game`, `type`, `name`, `set`, `price`, `stock`, `image` (`assets/img/products/<id>.webp`) and
+optionally `preorder`, `releaseDate`, `maxQty`, `compareAt`, `contents`, `specs`, `description`.
 
-   ```bash
-   node scripts/import-catalog.mjs my-products.csv --images assets/img/products --dry-run   # validate
-   node scripts/import-catalog.mjs my-products.csv --images assets/img/products             # write catalog.js
-   ```
+**Graded singles.** Add them by hand with your own photo of the actual slab, cert label visible:
 
-   The importer keeps `config`, `games` and `types`, generates ids, derives the set name, and refuses to
-   write if a row has an unknown game/type, a bad price, or a photo that isn't on disk. You can also edit
-   the `products` array in `assets/js/catalog.js` by hand, or fetch a live catalogue and assign it to
-   `window.NORVEX_DATA.products` before `norvex.js` runs.
-2. **Photos** — put files in `assets/img/products/` and reference them in the CSV `image` column (or set
-   `image` on a product). The stylised CSS packaging mock is only rendered when `image` is empty.
-   Use 4:5 images (800 × 1000 recommended). Source them legitimately: official packshots from your
-   distributor / publisher retailer portals, the Pokémon TCG API or Scryfall for card images on singles,
-   your own photos of graded slabs. Do not copy another retailer's photos or descriptions.
-3. **Currency / thresholds / support email** — `config` block in `catalog.js`.
-4. **Checkout** — the "Secure checkout" button currently shows a toast. Wire it to Shopify (Storefront
-   API / cart permalink), Stripe Checkout, Snipcart, Medusa, etc. in `initGlobalClicks()` inside
-   `norvex.js` (`[data-checkout]`).
-5. **Newsletter** — `initNewsletter()` in `norvex.js` validates the email client-side; POST it to
-   Klaviyo / Mailchimp / Resend where the `TODO` comment sits.
-6. **Placeholder content to replace before launch** — every price and stock figure in the catalogue,
-   the four stats in the strip under the hero (orders shipped, rating, games, dispatch time), the three
-   sample reviews, the pre-order items (they reflect the newest sets at the time of writing) and the
-   graded-single cert numbers. Footer links marked `#` need pages.
+```js
+{ "id": "pokemon-charizard-ex-199-165-psa-10", "game": "pokemon", "type": "single",
+  "name": "Charizard ex 199/165 PSA 10", "set": "Scarlet & Violet 151", "price": 1350, "stock": 1, "maxQty": 1,
+  "grade": { "grader": "PSA", "grade": 10, "label": "Gem Mint", "cert": "12345678" },
+  "image": "assets/img/products/pokemon-charizard-ex-199-165-psa-10.webp", "featured": true }
+```
 
-## Getting official product images
+Then run `python3 scripts/build-pages.py` so the vault sections come back.
 
-Publisher and accessory-brand packshots are supplied to retailers through their trade channels, not
-scraped from consumer sites. Where to ask:
-
-| Publisher / brand | Where retailers get packshots |
-|---|---|
-| Pokémon TCG | Your Pokémon distributor's retailer resources (the same kit that ships with each set's sell sheet) |
-| Magic: The Gathering | Wizards Play Network (WPN) retailer portal → Marketing Materials |
-| One Piece, Digimon, Dragon Ball Super | Bandai retailer assets via your Bandai distributor |
-| Yu-Gi-Oh! | Konami OTS (Official Tournament Store) portal |
-| Disney Lorcana | Ravensburger retailer programme via your distributor |
-| Star Wars: Unlimited | Fantasy Flight Games / Asmodee retailer assets |
-| Flesh and Blood | Legend Story Studios retailer resources |
-| Riftbound | Riot Games retailer programme |
-| Dragon Shield, Ultra Pro, Gamegenic, Ultimate Guard | Each brand's B2B / dealer portal (image packs per SKU) |
-
-Name each file `<product id>.webp` (ids are in `catalog.js` and in every product URL), drop it in
-`assets/img/products/`, and re-run the importer — it matches images to products by id automatically.
-
-### Pulling packshots from the publishers' public galleries
-
-You do not need thousands of images — one per product you list (a few hundred for a full range).
-Two scripts do the legwork; run them on your own machine, where the publisher sites are reachable:
+**Photos.** The catalogue rule is *no photo, no listing* (`tidy-catalog.mjs --photos-only`).
+Publisher packshots are pulled from the publishers' public product galleries:
 
 ```bash
-cd projects/norvex-gaming
-npm install                                   # once: Playwright + a headless Chromium
-
-# 1. Walk a gallery page: scrolls, clicks "load more", downloads every packshot + writes manifest.csv
-npm run fetch -- "https://www.pokemon.com/uk/pokemon-tcg/product-gallery"
-npm run fetch -- "https://magic.wizards.com/en/products" --crawl /en/products/ --max-pages 20
-npm run fetch -- "https://en.onepiece-cardgame.com/products/" --crawl /products/ --max-pages 12
-npm run fetch -- "https://www.yugioh-card.com/eu/products/latest-releases/" --crawl /eu/products/ --max-pages 20
-npm run fetch -- "https://www.disneylorcana.com/en-GB/" --crawl /en-GB/product/ --max-pages 12
-npm run fetch -- "https://starwarsunlimited.com/product-guide" --crawl /products/ --max-pages 12
-npm run fetch -- "https://world.digimoncard.com/products/" --crawl /products/ --max-pages 10
-npm run fetch -- "https://www.dbs-cardgame.com/fw/en/products/" --crawl /fw/en/products/ --max-pages 10
-npm run fetch -- "https://fabtcg.com/products/" --channel chrome
-#   options: --crawl <prefix> walks same-site links under that path breadth-first (category pages lead
-#            to product pages) up to --max-pages; --selector <css> scopes to the product grid; --paginate
-#            <css> for "next page" links; --channel chrome uses an installed Google Chrome (some bot walls
-#            block bundled Chromium); --headed to watch it work (and click through any wall it can't)
-
-# 2. Pair the downloaded files with catalogue products by name, then copy them in and set `image`
-npm run match                                 # dry run → assets/img/gallery/match-report.csv
-npm run match -- --apply                      # copies to assets/img/products/<id>.<ext> + updates catalog.js
-
-# 3. Turn everything else the galleries list into products (current lines with official packshots)
-npm run catalog:galleries                     # dry run
-npm run catalog:galleries -- --apply --replace
-npm run tidy -- --apply                       # house-style names, duplicates, placeholders, featured picks
+npm install                                          # once: Playwright + headless Chromium
+npm run fetch -- "https://www.pokemon.com/uk/pokemon-tcg/product-gallery"   # one gallery
+npm run match -- --apply                             # pair files with products, copy in, set image
+npm run catalog:galleries -- --apply --replace       # everything else the galleries list → products
+npm run tidy -- --apply --photos-only                # house-style names, duplicates, featured picks
 ```
 
-The generator names products the way the storefront does: a title with no format word takes it from
-the page ("Glorious Victors" on Konami's booster page becomes "Glorious Victors Booster Pack"), a
-title with no set name takes it from the page heading ("Illumineer's Trove" on the Hyperia City page
-becomes "Hyperia City Illumineer's Trove"), and for games sold as plain 24-pack displays (Yu-Gi-Oh!,
-One Piece, Digimon, Dragon Ball) each booster pack also gets its booster box, pictured with the pack
-art. A product already in the catalogue is never duplicated; if it has no photo yet it receives one.
+The same pipeline runs in GitHub Actions (*Norvex – fetch product images*, or any push whose commit
+message contains `[fetch-images]`) and commits the results to the branch. Anything the rules cannot
+know goes in `scripts/catalog-overrides.json`, keyed by product id, so it survives the next run.
 
-**No machine to run it on?** The same pipeline runs in GitHub Actions: `Actions` tab → *Norvex – fetch
-product images* → *Run workflow* (pick the branch, keep the default gallery list). The runner walks the
-galleries, matches, converts to WebP and commits the results to the branch. On a fork, GitHub keeps
-Actions disabled until you click *"I understand my workflows, go ahead and enable them"* on the Actions
-tab once.
+## Build & deploy
 
-After a run, `npm run tidy -- --apply` cleans what the galleries dragged in: article photos and key art
-are dropped (`JUNK` in `scripts/catalog-rules.mjs`), titles are rewritten into house style (`OP-17 The
-World's Strongest Warriors Booster Pack`, not `BOOSTER PACK -THE WORLD'S STRONGEST WARRIORS- OP-17`),
-duplicates worded two ways are merged, placeholder-sized photos are removed, ids follow names and each
-game gets up to three featured products with a real photo. Anything the rules can't know (which set a
-generic "Booster Display Box" belongs to, a photo that shows the wrong product) goes in
-`scripts/catalog-overrides.json`, keyed by the id the generator derives, so it survives the next run.
-The Actions workflow runs the same tidy pass automatically.
+```bash
+bash build.sh        # → _site/: pages, assets, CNAME, _headers, robots.txt, sitemap.xml, cache-busted asset URLs
+python3 -m http.server 8080 --directory _site       # preview exactly what ships
+```
 
-The matcher scores titles against product names (it understands "ETB", "Booster Display", set
-prefixes like "Scarlet & Violet—") and refuses cross-format matches (a bundle never gets a box photo).
-Check `match-report.csv`, rename any stragglers to `<id>.<ext>` by hand, and re-run. Downloaded
-galleries live in `assets/img/gallery/` (git-ignored); only the matched `products/` files ship with
-the site. Both scripts were verified against a local fixture gallery; the real sites change their
-markup from time to time, so if a fetch comes back empty run it with `--headed` and pass the grid's
-selector with `--selector`.
+**GitHub Pages** (`.github/workflows/norvex-pages.yml`): every push touching this folder builds
+`_site/` and publishes it to the `gh-pages` branch. Settings → Pages → Source: *Deploy from a branch*
+→ `gh-pages`. The custom domain comes from `CNAME`. DNS at the registrar: A records for the bare
+domain to `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153` and a `CNAME`
+from `www` to `<owner>.github.io`. Tick *Enforce HTTPS* once the certificate is issued.
 
-Graded singles currently point at the public Pokémon TCG card-image CDN (`images.pokemontcg.io`);
-if any image fails to load the storefront swaps in the slab art on its own. For launch, replace those
-URLs with your own photos of the actual slabs, cert label visible — buyers expect to see the real card.
+**Cloudflare Worker** (`wrangler.jsonc`): Workers & Pages → Create → Import a repository, root
+directory `projects/norvex-gaming`, build command `bash build.sh`, deploy command
+`npx wrangler deploy`, production branch = this branch. The Worker serves `_site/` as static assets
+and answers `/session` for checkout. Add `STRIPE_SECRET_KEY` as a **secret** under Settings →
+Variables and Secrets (`SITE_URL` is in `wrangler.jsonc`). When the domain points at Cloudflare,
+set `config.checkout.endpoint` to `/session` and switch the GitHub Pages deploy off.
 
-## Going live
+## Checkout
 
-The storefront is static, so any static host works. The repo ships a GitHub Pages deploy
-(`.github/workflows/norvex-pages.yml`): every push that touches `projects/norvex-gaming/` assembles the
-three pages plus `assets/` (no scripts, no tooling) and pushes them to the `gh-pages` branch, which
-GitHub publishes at `https://<owner>.github.io/<repo>/`. If nothing appears after the first run, pick the
-branch once under *Settings → Pages → Build and deployment → Source: Deploy from a branch → gh-pages*. The custom domain is set by
-`projects/norvex-gaming/CNAME` (currently `norvexgaming.com`); the deploy copies it into the published
-branch, which tells GitHub Pages to serve the site there. DNS at the registrar: four A records on the
-bare domain (`185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`), optionally the
-matching AAAA records (`2606:50c0:8000::153` to `2606:50c0:8003::153`), and a `CNAME` record from `www`
-to `<owner>.github.io` so `www.` redirects to the bare domain. Tick *Enforce HTTPS* under
-*Settings → Pages* once the certificate is issued (up to an hour after DNS propagates).
+`checkout/worker.js` prices every cart line from the catalogue, applies stock limits and delivery
+options, creates a Stripe Checkout Session and sends the shopper to Stripe's hosted page (card,
+Apple Pay, Google Pay, Klarna where enabled). Stripe returns the shopper to `order.html`, which
+reads the paid session back through the same Worker. Full setup and options in `checkout/README.md`.
 
-Payments run through Stripe Checkout via one small server-side function, `checkout/worker.js`
-(a Cloudflare Worker; setup in `checkout/README.md`). The cart's *Secure checkout* button POSTs the
-cart to `config.checkout.endpoint` in `catalog.js`; the function prices every line from the live
-catalogue, creates a Stripe Checkout Session and sends the shopper to Stripe's hosted payment page.
-Until the endpoint is filled in, the button explains that checkout is not connected yet.
+Use a **test** key (`sk_test_…`) until you have placed a test order end to end, then swap in a
+**restricted live** key with only *Checkout Sessions: Write* and *Checkout Sessions: Read*. Never
+paste keys into chat, commits or the front end.
 
-## Accessibility & performance notes
+## Before you show customers
 
-* Skip link, landmarks, visible gold focus rings, 44 px+ touch targets, labelled icon buttons,
-  focus-trapped dialogs (cart, menu, search) with `Esc` and focus restore, `aria-live` cart count.
-* Text contrast ≥ 4.5:1 everywhere (muted text 9.6:1, tertiary labels 5.1:1, gold on black 10:1).
-* No layout shift: product media uses a fixed 4:5 ratio; images are `loading="lazy"` with dimensions.
-* Works without JavaScript (content and links render; cart/search/filters need JS).
-* No third-party scripts. External requests are the two Google Fonts families and, for graded singles, the card images noted above.
+1. Check every price and stock figure in `catalog.js` against your inventory.
+2. Fill in `config.business` (address, company number, VAT number if registered) — the terms of
+   sale and help page print them.
+3. Make sure `hello@norvexgaming.com` (or whatever `supportEmail` is) is a real mailbox you read.
+4. Confirm the delivery prices and windows on `help.html` match what your courier actually offers,
+   and set the Worker's `SHIPPING_*` values to match.
+5. Place a test order with Stripe's test card, then switch the Worker to the live restricted key.
+6. Re-run `bash build.sh` locally after any change and open `_site/` to check.
+
+## Accessibility & performance
+
+Skip link, landmarks, visible gold focus rings, 44 px+ touch targets, labelled icon buttons,
+focus-trapped dialogs (cart, menu, search) with `Esc` and focus restore, `aria-live` cart count,
+text contrast ≥ 4.5:1 throughout, motion disabled under `prefers-reduced-motion`. Product media uses
+a fixed ratio so there is no layout shift; images are lazy-loaded. No analytics or third-party
+scripts; the only external requests are the two Google Fonts families and Stripe at checkout.
 
 ## Trademarks
 
 Pokémon, Magic: The Gathering, Yu-Gi-Oh!, One Piece Card Game, Disney Lorcana, Star Wars: Unlimited,
-Riftbound, PSA and all related names are trademarks of their respective owners. Norvex Gaming is an
-independent retailer. Keep the disclaimer in the footer and avoid using the publishers' logos or card
-artwork without a licence.
+Digimon Card Game, Dragon Ball Super Card Game, PSA and all related names are trademarks of their
+respective owners. Norvex Gaming is an independent retailer. Keep the disclaimer in the footer and do
+not use the publishers' logos or card artwork without a licence.
