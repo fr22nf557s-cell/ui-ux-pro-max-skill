@@ -86,6 +86,8 @@ node scripts/catalog-sheet.mjs import prices.csv             # writes assets/js/
 
 Only those columns are read; names, photos and descriptions are untouched, and a row with an unknown id is skipped rather than added.
 
+Every build runs `node scripts/check-catalog.mjs` first: a catalogue that does not parse, a product with a bad price or stock, an unknown game or type, a duplicate id or a missing photo fails the deploy and the previous version stays live. Run it yourself after editing by hand.
+
 **Products** are the `products` array. Each needs a unique `id` (used in URLs and image names),
 `game`, `type`, `name`, `set`, `price`, `stock`, `image` (`assets/img/products/<id>.webp`) and
 optionally `preorder`, `releaseDate`, `maxQty`, `compareAt`, `contents`, `specs`, `description`.

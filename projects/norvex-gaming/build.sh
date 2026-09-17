@@ -6,6 +6,8 @@ set -euo pipefail
 cd "$(dirname "$0")"
 PAGES="index.html shop.html product.html order.html help.html about.html legal.html 404.html"
 SITE_URL="https://norvexgaming.com"
+# refuse to build from a broken catalogue (a typo in the GitHub editor must not blank the live shop)
+node scripts/check-catalog.mjs
 rm -rf _site
 mkdir -p _site/assets/img
 cp $PAGES _site/
