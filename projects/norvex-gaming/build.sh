@@ -4,7 +4,7 @@
 # GitHub Pages workflow. Run it locally to see exactly what ships.
 set -euo pipefail
 cd "$(dirname "$0")"
-PAGES="index.html shop.html product.html order.html help.html about.html legal.html 404.html"
+PAGES="index.html shop.html product.html order.html help.html about.html legal.html 404.html manage.html"
 SITE_URL="https://norvexgaming.com"
 # refuse to build from a broken catalogue (a typo in the GitHub editor must not blank the live shop)
 node scripts/check-catalog.mjs
@@ -19,12 +19,12 @@ cp -r assets/img/products _site/assets/img/
 # never see a stale catalogue (prices, stock, checkout settings) after a push.
 rev="$(git rev-parse --short HEAD 2>/dev/null || date -u +%Y%m%d%H%M)"
 for f in $PAGES; do
-  sed -i.bak -e "s#assets/css/norvex.css\"#assets/css/norvex.css?v=$rev\"#" -e "s#assets/js/catalog.js\"#assets/js/catalog.js?v=$rev\"#" -e "s#assets/js/norvex.js\"#assets/js/norvex.js?v=$rev\"#" "_site/$f"
+  sed -i.bak -e "s#assets/css/norvex.css\"#assets/css/norvex.css?v=$rev\"#" -e "s#assets/css/manage.css\"#assets/css/manage.css?v=$rev\"#" -e "s#assets/js/catalog.js\"#assets/js/catalog.js?v=$rev\"#" -e "s#assets/js/norvex.js\"#assets/js/norvex.js?v=$rev\"#" -e "s#assets/js/manage.js\"#assets/js/manage.js?v=$rev\"#" "_site/$f"
 done
 rm -f _site/*.bak
 printf '/assets/img/products/*\n  Cache-Control: public, max-age=31536000, immutable\n/assets/*\n  Cache-Control: public, max-age=86400\n/*.html\n  Cache-Control: public, max-age=300\n' > _site/_headers
 # robots + sitemap: every indexable page and every product, nothing private (order pages, 404)
-printf 'User-agent: *\nDisallow: /order.html\nAllow: /\nSitemap: %s/sitemap.xml\n' "$SITE_URL" > _site/robots.txt
+printf 'User-agent: *\nDisallow: /order.html\nDisallow: /manage.html\nAllow: /\nSitemap: %s/sitemap.xml\n' "$SITE_URL" > _site/robots.txt
 {
   echo '<?xml version="1.0" encoding="UTF-8"?>'
   echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'

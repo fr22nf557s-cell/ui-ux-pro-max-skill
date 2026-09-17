@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product manager · Norvex Gaming</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#08080a">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500;1,600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/norvex.css">
+  <link rel="stylesheet" href="assets/css/manage.css">
+</head>
+<body class="mg" data-page="manage">
+  <header class="mg-top">
+    <a class="brand" href="index.html" aria-label="Norvex Gaming home"><svg class="brand__mark" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M20 2.5 35.2 11.25v17.5L20 37.5 4.8 28.75v-17.5Z" stroke="#d9b75b" stroke-width="1.6"/><path d="M13.5 27V13l13 14V13" stroke="#f3d98b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="brand__word"><span class="brand__name">NORVEX</span><span class="brand__sub">Product manager</span></span></a>
+    <div class="mg-top__status" data-status aria-live="polite">Loading…</div>
+    <div class="mg-top__actions">
+      <button class="btn btn--ghost btn--sm" type="button" data-reload>Reload</button>
+      <button class="btn btn--primary btn--sm" type="button" data-publish disabled>Publish</button>
+    </div>
+  </header>
+
+  <main class="mg-main" id="main">
+    <section class="mg-connect glass" data-connect hidden aria-labelledby="connect-title">
+      <span class="eyebrow eyebrow--plain">One-time setup</span>
+      <h1 class="h3" id="connect-title">Connect this page to your GitHub</h1>
+      <p class="muted">Changes you publish here are saved to the shop's repository under your own GitHub account, and the site rebuilds itself within about two minutes. You need a token that lets this page write to that one repository. It is stored only in this browser.</p>
+      <ol class="mg-steps">
+        <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a> (sign in as the account that owns the shop's repository).</li>
+        <li>Token name: <b>Norvex product manager</b>. Expiration: up to a year is fine; you can make a new one later.</li>
+        <li>Repository access: <b>Only select repositories</b> → choose <b data-repo-name>ui-ux-pro-max-skill</b>.</li>
+        <li>Permissions → Repository permissions → <b>Contents</b>: <b>Read and write</b>. Leave everything else at No access.</li>
+        <li>Generate the token, copy it, and paste it below.</li>
+      </ol>
+      <form class="mg-connect__form" data-connect-form>
+        <div class="field"><label class="field__label" for="mg-token">Token</label><input class="input" id="mg-token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…" required></div>
+        <details class="mg-advanced"><summary>Repository details</summary>
+          <div class="mg-advanced__grid">
+            <div class="field"><label class="field__label" for="mg-owner">Owner</label><input class="input" id="mg-owner" data-repo-field="owner"></div>
+            <div class="field"><label class="field__label" for="mg-repo">Repository</label><input class="input" id="mg-repo" data-repo-field="repo"></div>
+            <div class="field"><label class="field__label" for="mg-branch">Branch the site deploys from</label><input class="input" id="mg-branch" data-repo-field="branch"></div>
+          </div>
+        </details>
+        <div class="cluster"><button class="btn btn--primary" type="submit">Connect</button><span class="field__error" data-connect-error></span></div>
+      </form>
+    </section>
+
+    <section class="mg-tools" data-tools hidden>
+      <div class="mg-tools__row">
+        <input class="input mg-search" type="search" placeholder="Search products…" aria-label="Search products" data-filter="q">
+        <select class="input" aria-label="Game" data-filter="game"><option value="">All games</option></select>
+        <select class="input" aria-label="Product type" data-filter="type"><option value="">All types</option></select>
+        <select class="input" aria-label="Stock" data-filter="stock"><option value="">Any stock</option><option value="in">In stock</option><option value="low">Low (3 or fewer)</option><option value="out">Sold out</option><option value="pre">Pre-order</option><option value="changed">Changed</option></select>
+        <button class="btn btn--outline" type="button" data-add>+ Add product</button>
+      </div>
+      <div class="mg-tools__row mg-tools__row--meta">
+        <span class="muted" data-count></span>
+        <div class="mg-pending" data-pending hidden><span data-pending-text></span> <button class="btn btn--link btn--sm" type="button" data-discard>Discard all changes</button></div>
+        <a class="btn btn--link btn--sm" href="assets/js/catalog.js" download="catalog-backup.js">Download a backup</a>
+      </div>
+    </section>
+
+    <section class="mg-list" data-list aria-label="Products"></section>
+  </main>
+
+  <dialog class="mg-dialog" data-editor>
+    <form method="dialog" class="mg-editor" data-editor-form novalidate>
+      <header class="mg-dialog__head"><h2 class="h3" data-editor-title>Edit product</h2><button class="btn btn--icon btn--ghost" type="button" data-close aria-label="Close">✕</button></header>
+      <div class="mg-editor__grid">
+        <div class="mg-editor__photo">
+          <div class="mg-photo" data-photo-preview></div>
+          <label class="btn btn--ghost btn--sm mg-file"><input type="file" accept="image/*" data-photo-input hidden>Choose photo</label>
+          <p class="small muted-2">Any image; it is resized and converted automatically. Use the official packshot on a plain background.</p>
+        </div>
+        <div class="mg-editor__fields">
+          <div class="field"><label class="field__label" for="f-name">Name</label><input class="input" id="f-name" name="name" required placeholder="e.g. Mega Evolution—Pitch Black Elite Trainer Box"></div>
+          <div class="mg-editor__two">
+            <div class="field"><label class="field__label" for="f-game">Game</label><select class="input" id="f-game" name="game" required></select></div>
+            <div class="field"><label class="field__label" for="f-type">Type</label><select class="input" id="f-type" name="type" required></select></div>
+          </div>
+          <div class="field"><label class="field__label" for="f-set">Set or series</label><input class="input" id="f-set" name="set" placeholder="e.g. Mega Evolution"></div>
+          <div class="mg-editor__three">
+            <div class="field"><label class="field__label" for="f-price">Price (£)</label><input class="input" id="f-price" name="price" type="number" min="0.01" step="0.01" required></div>
+            <div class="field"><label class="field__label" for="f-compare">Was price (£)</label><input class="input" id="f-compare" name="compareAt" type="number" min="0" step="0.01" placeholder="optional"></div>
+            <div class="field"><label class="field__label" for="f-stock">Stock</label><input class="input" id="f-stock" name="stock" type="number" min="0" step="1" required></div>
+          </div>
+          <div class="mg-editor__flags">
+            <label class="mg-check"><input type="checkbox" name="preorder"> Pre-order (charged now, ships on release)</label>
+            <label class="mg-check"><input type="checkbox" name="featured"> Featured on the home page</label>
+            <label class="mg-check"><input type="checkbox" name="hidden"> Hidden (only reachable by its link)</label>
+            <label class="mg-check"><input type="checkbox" name="freeShipping"> Free delivery for this item</label>
+          </div>
+          <div class="field"><label class="field__label" for="f-desc">Description</label><textarea class="input" id="f-desc" name="description" rows="3"></textarea></div>
+          <div class="mg-editor__two">
+            <div class="field"><label class="field__label" for="f-contents">What's inside (one per line)</label><textarea class="input" id="f-contents" name="contents" rows="4"></textarea></div>
+            <div class="field"><label class="field__label" for="f-specs">Details (one per line, "Label: value")</label><textarea class="input" id="f-specs" name="specs" rows="4"></textarea></div>
+          </div>
+          <p class="small muted-2" data-editor-id></p>
+          <p class="field__error" data-editor-error></p>
+        </div>
+      </div>
+      <footer class="mg-dialog__foot">
+        <button class="btn btn--ghost" type="button" data-editor-remove hidden>Remove product</button>
+        <span class="mg-grow"></span>
+        <button class="btn btn--ghost" type="button" data-close>Cancel</button>
+        <button class="btn btn--primary" type="submit" data-editor-save>Save</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="mg-dialog mg-dialog--narrow" data-publish-dialog>
+    <div class="mg-editor">
+      <header class="mg-dialog__head"><h2 class="h3" data-publish-title>Publish changes</h2><button class="btn btn--icon btn--ghost" type="button" data-close aria-label="Close">✕</button></header>
+      <div class="mg-publish" data-publish-body></div>
+      <footer class="mg-dialog__foot"><span class="mg-grow"></span><button class="btn btn--ghost" type="button" data-close>Close</button><button class="btn btn--primary" type="button" data-publish-confirm>Publish now</button></footer>
+    </div>
+  </dialog>
+
+  <div class="toast glass" id="mg-toast" role="status" aria-live="polite"></div>
+  <script src="assets/js/catalog.js"></script>
+  <script src="assets/js/manage.js"></script>
+</body>
+</html>

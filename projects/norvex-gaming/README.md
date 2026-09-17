@@ -75,6 +75,17 @@ appears once at least one product with `"type": "single"` exists.
 | `social` | Optional `{ "Instagram": "https://…", "TikTok": "https://…" }`; the footer links render only when set |
 | `checkout.endpoint` | Where the cart is POSTed: the Worker's `/session` URL |
 
+**Product manager (no code).** `manage.html` is an unlisted page on the site (`noindex`, kept out of
+robots and the sitemap) for changing prices and stock, adding a product with a photo, or removing
+one, then publishing in one click. It reads the catalogue straight from GitHub and publishes a
+commit on the deploy branch under the owner's own GitHub account, so the site rebuilds itself. It
+needs a fine-grained personal access token with *Contents: read and write* on this one repository;
+the token is stored only in that browser. Unpublished changes are kept in the browser until
+published or discarded, and every publish is validated with the same rules as the build. Photos are
+resized and converted to WebP in the browser. The repository, branch and folder it targets are
+constants at the top of `assets/js/manage.js` (and can be overridden under "Repository details" on
+the connect screen).
+
 **Prices and stock** are quickest to correct in a spreadsheet:
 
 ```bash
