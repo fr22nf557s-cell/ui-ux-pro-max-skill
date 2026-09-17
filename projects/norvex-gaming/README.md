@@ -203,11 +203,11 @@ matching AAAA records (`2606:50c0:8000::153` to `2606:50c0:8003::153`), and a `C
 to `<owner>.github.io` so `www.` redirects to the bare domain. Tick *Enforce HTTPS* under
 *Settings → Pages* once the certificate is issued (up to an hour after DNS propagates).
 
-What "live" means today: a full catalogue and cart, but no payment step. The cart is stored in the
-shopper's browser and the *Checkout* button is a placeholder. Before taking orders, wire it to a
-checkout: Stripe Payment Links or Shopify Buy Button per product are the smallest change (one URL per
-product in `catalog.js`); a hosted platform (Shopify, WooCommerce) is the larger move and this
-catalogue exports to it via `scripts/catalog-template.csv`.
+Payments run through Stripe Checkout via one small server-side function, `checkout/worker.js`
+(a Cloudflare Worker; setup in `checkout/README.md`). The cart's *Secure checkout* button POSTs the
+cart to `config.checkout.endpoint` in `catalog.js`; the function prices every line from the live
+catalogue, creates a Stripe Checkout Session and sends the shopper to Stripe's hosted payment page.
+Until the endpoint is filled in, the button explains that checkout is not connected yet.
 
 ## Accessibility & performance notes
 

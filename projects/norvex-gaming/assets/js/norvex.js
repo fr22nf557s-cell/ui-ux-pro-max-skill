@@ -668,7 +668,7 @@
       const menuBtn = e.target.closest('[data-open-menu]');
       if (menuBtn) { openMenu(menuBtn); return; }
       if (e.target.closest('[data-close-menu]')) { Layer.close(menuEl); return; }
-      if (e.target.closest('[data-checkout]')) { toast('Secure checkout goes live once payments are connected', 'lock'); return; }
+      if (e.target.closest('[data-checkout]')) { checkout(); return; }
       const step = e.target.closest('[data-line-step]');
       if (step) { const id = step.closest('[data-line]').dataset.line; const line = Cart.items.find((i) => i.id === id); if (line) Cart.setQty(id, line.qty + Number(step.dataset.lineStep)); return; }
       const rm = e.target.closest('[data-line-remove]');
@@ -676,6 +676,34 @@
     });
     // close the mobile menu when a link inside it is followed (same-page anchors)
     document.addEventListener('click', (e) => { if (menuEl && e.target.closest('.menu__links a')) Layer.close(menuEl); });
+  }
+
+  /* ----------------------------------------------------------- checkout */
+  /* The cart is sent to config.checkout.endpoint (see checkout/worker.js), which looks every item up in
+     the catalogue server-side and returns a Stripe Checkout URL. Stripe brings the shopper back with
+     ?checkout=success or ?checkout=cancelled. */
+  async function checkout() {
+    const cfg = config.checkout || {};
+    if (!Cart.items.length) { toast('Your cart is empty', 'lock'); return; }
+    if (!cfg.endpoint) { toast('Secure checkout goes live once payments are connected', 'lock'); return; }
+    const btn = $('[data-checkout]'); const label = btn ? btn.innerHTML : '';
+    if (btn) { btn.disabled = true; btn.innerHTML = `${icon('lock')}Opening secure checkout…`; }
+    try {
+      const res = await fetch(cfg.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: Cart.items.map((i) => ({ id: i.id, qty: i.qty })) }) });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.url) throw new Error(data.error || 'Checkout is unavailable right now');
+      location.assign(data.url);
+    } catch (err) {
+      toast(err.message || 'Checkout is unavailable right now', 'lock');
+      if (btn) { btn.disabled = false; btn.innerHTML = label; }
+    }
+  }
+  function checkoutReturn() {
+    const params = new URLSearchParams(location.search); const state = params.get('checkout'); if (!state) return;
+    if (state === 'success') { Cart.items = []; Cart.save(); Cart.render(); toast('Order received. Your receipt is on its way by email.', 'check'); }
+    else if (state === 'cancelled') toast('Checkout cancelled. Your cart is still here.', 'lock');
+    params.delete('checkout'); params.delete('session_id');
+    const qs = params.toString(); history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + location.hash);
   }
 
   /* --------------------------------------------------------------- init */
@@ -697,6 +725,7 @@
     $$('[data-free-ship]').forEach((el) => { el.textContent = fmt0(config.freeShippingThreshold); });
     Cart.load();
     Cart.mount();
+    checkoutReturn();
     initMenu();
     initSearch();
     initHeader();

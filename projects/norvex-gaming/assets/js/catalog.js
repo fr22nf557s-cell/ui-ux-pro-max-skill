@@ -37,7 +37,11 @@ window.NORVEX_DATA = {
     "currency": "GBP",
     "locale": "en-GB",
     "freeShippingThreshold": 100,
-    "supportEmail": "hello@norvexgaming.com"
+    "supportEmail": "hello@norvexgaming.com",
+    "checkout": {
+      "provider": "stripe",
+      "endpoint": ""
+    }
   },
 
   games: {
