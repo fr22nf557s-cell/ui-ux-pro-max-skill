@@ -593,6 +593,10 @@ select.input { appearance: none; -webkit-appearance: none; padding-right: 2.5rem
 .bento__art .art--slab { width: min(56%, calc(var(--art-w) * 0.72)); }
 .bento__art .art--box { width: min(88%, calc(var(--art-w) * 1.25)); }
 .bento__item:hover .bento__art .art { transform: translateY(-5px) rotate(-1.5deg); }
+.bento__art .photo { position: relative; inset: auto; width: min(86%, calc(var(--art-w) * 1.1)); aspect-ratio: 1 / 1; border-radius: 14px; overflow: hidden; box-shadow: 0 24px 48px -24px rgba(0,0,0,0.9); transition: transform var(--d-slow) var(--ease-out), background-color 450ms var(--ease-out); }
+.bento__item:hover .bento__art .photo { transform: translateY(-4px); }
+.bento__art .photo__img { padding: 4%; }
+.bento__item:hover .bento__art .photo__img { transform: scale(1.04); }
 .bento__text { grid-area: text; display: grid; align-content: end; gap: 0.35rem; min-width: 0; }
 .bento__kicker { font-size: var(--fs-tiny); letter-spacing: 0.16em; text-transform: uppercase; color: var(--nv-text-3); font-weight: 600; }
 .bento__title { font-family: var(--nv-font-display); font-size: clamp(1.5rem, 2.4vw, 2.1rem); line-height: 1; }
