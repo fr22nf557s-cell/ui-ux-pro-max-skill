@@ -1,4 +1,4 @@
-/* Norvex Property — page chrome around the scroll-scrub engine.
+/* Norvex Property: page chrome around the scroll-scrub engine.
    Tokens: ink #0B0C10, spruce #0E1412, ivory #F3EEE4, stone #B4AE9F,
    champagne #E9D6AE, gold #C9A96E, cedar #8A6B4E. */
 
@@ -59,26 +59,54 @@ body {
 .nx-nav__links a:hover { color: var(--nx-champagne); }
 @media (max-width: 860px) { .nx-nav__links { display: none; } }
 
-/* ---------- buttons ---------- */
-.nx-btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  min-height: 46px; padding: 0 22px; border-radius: 999px;
-  font: 500 12px/1 var(--nx-ui); letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none;
-  border: 1px solid transparent; cursor: pointer;
-  transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1), background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+/* ---------- CTA chrome: each call to action has its own identity ---------- */
+.nx-cta-valuation, .nx-cta-send, .nx-cta-facility, .nx-cta-terms, .nx-cta-advisor, .nx-cta-survey, .nx-cta-tour, .nx-cta-listings, .nx-cta-enquire-nav {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  text-decoration: none; cursor: pointer; border: 1px solid transparent;
+  font-family: var(--nx-ui); font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; line-height: 1;
 }
-.nx-btn:hover { transform: translateY(-1px); }
-.nx-btn--gold { background: var(--nx-gold); color: var(--nx-ink); }
-.nx-btn--gold:hover { background: var(--nx-champagne); }
-.nx-btn--ghost { border-color: var(--nx-line); color: var(--nx-ivory); background: rgba(11, 12, 16, 0.35); }
-.nx-btn--ghost:hover { border-color: var(--nx-champagne); }
-.nx-btn--sm { min-height: 38px; padding: 0 16px; font-size: 11px; }
-.nx-link {
-  background: none; border: 0; padding: 0; cursor: pointer;
+/* Book a valuation: solid gold pill that brightens to champagne */
+.nx-cta-valuation { min-height: 48px; padding: 0 26px; border-radius: 999px; background: var(--nx-gold); color: var(--nx-ink); font-size: 12px; transition: background 0.2s ease, transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.nx-cta-valuation:hover { background: var(--nx-champagne); transform: translateY(-1px); }
+/* Send enquiry: wide gold slab, square corners, ink text */
+.nx-cta-send { min-height: 52px; padding: 0 34px; border-radius: 6px; background: var(--nx-gold); color: var(--nx-ink); font-size: 12px; box-shadow: 0 0 0 0 rgba(233, 214, 174, 0.5); transition: box-shadow 0.3s ease, background 0.2s ease; }
+.nx-cta-send:hover { background: var(--nx-champagne); box-shadow: 0 0 0 4px rgba(233, 214, 174, 0.18); }
+/* Check facility size: cedar fill, ivory text, thin champagne hairline */
+.nx-cta-facility { min-height: 48px; padding: 0 24px; border-radius: 999px; background: var(--nx-cedar); border-color: rgba(233, 214, 174, 0.35); color: var(--nx-ivory); font-size: 12px; transition: filter 0.2s ease; }
+.nx-cta-facility:hover { filter: brightness(1.15); }
+/* Request terms: outlined cedar pill */
+.nx-cta-terms { min-height: 46px; padding: 0 22px; border-radius: 999px; border-color: var(--nx-cedar); color: var(--nx-champagne); font-size: 12px; transition: background 0.2s ease, color 0.2s ease; }
+.nx-cta-terms:hover { background: var(--nx-cedar); color: var(--nx-ivory); }
+/* Talk to an advisor: champagne outline with a sliding arrow */
+.nx-cta-advisor { min-height: 48px; padding: 0 22px; border-radius: 999px; border-color: var(--nx-champagne); color: var(--nx-champagne); font-size: 12px; }
+.nx-cta-advisor::after { content: "\2192"; transition: transform 0.25s ease; }
+.nx-cta-advisor:hover::after { transform: translateX(4px); }
+/* Get a survey quote: ivory text with a rising champagne underline */
+.nx-cta-survey { min-height: 44px; padding: 0 4px; color: var(--nx-ivory); font-size: 12px; background: linear-gradient(var(--nx-champagne), var(--nx-champagne)) no-repeat left bottom / 100% 1px; transition: background-size 0.25s ease, color 0.2s ease; }
+.nx-cta-survey:hover { background-size: 100% 3px; color: var(--nx-champagne); }
+/* Begin the tour: frosted ghost pill with a downward chevron */
+.nx-cta-tour { min-height: 48px; padding: 0 22px; border-radius: 999px; border-color: var(--nx-line); background: rgba(11, 12, 16, 0.35); color: var(--nx-ivory); font-size: 12px; transition: border-color 0.2s ease; }
+.nx-cta-tour::after { content: "\2193"; }
+.nx-cta-tour:hover { border-color: var(--nx-champagne); }
+/* View listings: hairline ghost pill, no icon */
+.nx-cta-listings { min-height: 48px; padding: 0 22px; border-radius: 999px; border-color: var(--nx-line); color: var(--nx-ivory); font-size: 12px; transition: background 0.2s ease; }
+.nx-cta-listings:hover { background: rgba(255, 255, 255, 0.06); }
+/* Header enquire: compact gold pill */
+.nx-cta-enquire-nav { min-height: 38px; padding: 0 16px; border-radius: 999px; background: var(--nx-gold); color: var(--nx-ink); font-size: 11px; transition: background 0.2s ease; }
+.nx-cta-enquire-nav:hover { background: var(--nx-champagne); }
+/* Text-link CTAs */
+.nx-cta-rates, .nx-cta-inspected, .nx-cta-viewing, .nx-rate-use {
+  background: none; border: 0; padding: 0; cursor: pointer; text-decoration: none;
   font: 500 12px/1.4 var(--nx-ui); letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--nx-champagne); text-decoration: none; border-bottom: 1px solid var(--nx-line);
 }
-.nx-link:hover { border-bottom-color: var(--nx-champagne); }
+.nx-cta-rates { color: var(--nx-stone); border-bottom: 1px dotted var(--nx-stone); align-self: center; }
+.nx-cta-rates:hover { color: var(--nx-champagne); border-bottom-style: solid; }
+.nx-cta-inspected { color: var(--nx-ivory); border-bottom: 1px solid var(--nx-line); align-self: center; }
+.nx-cta-inspected:hover { border-bottom-color: var(--nx-champagne); }
+.nx-cta-viewing { color: var(--nx-champagne); border-bottom: 1px solid var(--nx-line); }
+.nx-cta-viewing:hover { border-bottom-color: var(--nx-champagne); }
+.nx-rate-use { color: var(--nx-champagne); font-size: 11px; }
+.nx-rate-use:hover { text-decoration: underline; }
 
 /* ---------- film chapters (engine copy) ---------- */
 .scroll-scrub { font-family: var(--nx-ui); }
@@ -179,7 +207,7 @@ body {
 .nx-listing__price small { font: 500 11px/1 var(--nx-ui); letter-spacing: 0.12em; text-transform: uppercase; color: var(--nx-stone); }
 .nx-listing__name { margin: 0; font: 600 16px/1.3 var(--nx-ui); }
 .nx-listing__where, .nx-listing__meta { margin: 0; color: var(--nx-stone); font-size: 13px; }
-.nx-listing__body .nx-link { justify-self: start; margin-top: 8px; }
+.nx-listing__body .nx-cta-viewing { justify-self: start; margin-top: 8px; }
 .nx-empty { grid-column: 1 / -1; color: var(--nx-stone); padding: 32px; text-align: center; border: 1px dashed var(--nx-line); border-radius: 16px; }
 
 /* ---------- calculators ---------- */
@@ -198,7 +226,7 @@ body {
 .nx-product { display: grid; grid-template-columns: 1.4fr 0.7fr 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; border: 1px solid var(--nx-line); border-radius: 10px; font-size: 14px; }
 .nx-product__rate { color: var(--nx-champagne); font-variant-numeric: tabular-nums; }
 .nx-product__monthly { font-variant-numeric: tabular-nums; }
-.nx-calc .nx-btn { justify-self: start; margin-top: 8px; }
+.nx-calc .nx-cta-advisor, .nx-calc .nx-cta-terms { justify-self: start; margin-top: 8px; }
 @media (max-width: 520px) { .nx-product { grid-template-columns: 1fr 1fr; } }
 
 /* ---------- surveys ---------- */
@@ -238,7 +266,7 @@ body {
 .nx-check { display: grid; grid-template-columns: auto 1fr; gap: 10px 12px; align-items: start; color: var(--nx-stone); font-size: 14px; line-height: 1.5; }
 .nx-check input { margin-top: 4px; accent-color: var(--nx-champagne); }
 .nx-check .nx-error { grid-column: 2; }
-.nx-form .nx-btn { justify-self: start; }
+.nx-form .nx-cta-send { justify-self: start; }
 .nx-success { display: grid; gap: 8px; align-content: center; min-height: 260px; }
 
 /* ---------- footer ---------- */

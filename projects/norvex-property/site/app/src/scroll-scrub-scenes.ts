@@ -4,7 +4,7 @@ import type {
 } from "./components/scroll-scrub/scroll-scrub";
 
 /**
- * Norvex Property — the manor film.
+ * Norvex Property: the manor film.
  *
  * ONE continuous 24-second take (no cuts): a dawn aerial above the ridge at
  * Spring Creek Ranch, a descending orbit around the glass-and-cedar manor, a

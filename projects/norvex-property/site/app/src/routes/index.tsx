@@ -7,10 +7,13 @@ import type { ScrollScrubScene } from "../components/scroll-scrub/scroll-scrub";
 import { brand, scenes, theme } from "../scroll-scrub-scenes";
 import "../norvex.css";
 
+const OG_IMAGE =
+  "https://d2ol7oe51mr4n9.cloudfront.net/user_3JSm3zkWdJl0vDJbWVyyAb7NnDy/8945142b-e935-4985-af64-7b8c2de51e52.png";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Norvex Property — Buy, let, sell, finance and survey" },
+      { title: "Norvex Property: Buy, let, sell, finance and survey" },
       {
         name: "description",
         content:
@@ -21,9 +24,24 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "Buy, let, sell, finance and survey with one quiet, exact team.",
       },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: OG_IMAGE },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Norvex Property" },
+      {
+        name: "twitter:description",
+        content: "Buy, let, sell, finance and survey with one quiet, exact team.",
+      },
+      { name: "twitter:image", content: OG_IMAGE },
       { name: "theme-color", content: "#0B0C10" },
     ],
     links: [
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "icon", href: "/favicon.ico", sizes: "32x32" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+      { rel: "manifest", href: "/site.webmanifest" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       {
         rel: "preconnect",
@@ -40,35 +58,35 @@ export const Route = createFileRoute("/")({
 });
 
 /* ------------------------------------------------------------------ */
-/* Chapter CTAs — attached at module scope so the scenes array keeps a  */
+/* Chapter CTAs: attached at module scope so the scenes array keeps a  */
 /* stable identity (the engine rebuilds its controller on a new array). */
 /* ------------------------------------------------------------------ */
 
 const CTA: Record<
   string,
-  { primary: [string, string]; secondary?: [string, string] }
+  { primary: [string, string, string]; secondary?: [string, string, string] }
 > = {
   arrival: {
-    primary: ["Book a valuation", "#enquire"],
-    secondary: ["Begin the tour", "#properties"],
+    primary: ["Book a valuation", "#enquire", "nx-cta-valuation"],
+    secondary: ["Begin the tour", "#properties", "nx-cta-tour"],
   },
   properties: {
-    primary: ["Book a valuation", "#enquire"],
-    secondary: ["View listings", "#listings"],
+    primary: ["Book a valuation", "#enquire", "nx-cta-valuation"],
+    secondary: ["View listings", "#listings", "nx-cta-listings"],
   },
   mortgages: {
-    primary: ["Talk to an advisor", "#enquire"],
-    secondary: ["Compare rates", "#calculators"],
+    primary: ["Talk to an advisor", "#enquire", "nx-cta-advisor"],
+    secondary: ["Compare rates", "#calculators", "nx-cta-rates"],
   },
   surveying: {
-    primary: ["Get a survey quote", "#enquire"],
-    secondary: ["See what's inspected", "#surveys"],
+    primary: ["Get a survey quote", "#enquire", "nx-cta-survey"],
+    secondary: ["See what's inspected", "#surveys", "nx-cta-inspected"],
   },
   bridging: {
-    primary: ["Check facility size", "#bridging-calc"],
+    primary: ["Check facility size", "#bridging-calc", "nx-cta-facility"],
   },
   contact: {
-    primary: ["Send enquiry", "#enquire"],
+    primary: ["Send enquiry", "#enquire", "nx-cta-send"],
   },
 };
 
@@ -81,11 +99,11 @@ const SCENES: ScrollScrubScene[] = scenes.map((scene) => {
     ...scene,
     actions: (
       <>
-        <a className="nx-btn nx-btn--gold" href={cta.primary[1]}>
+        <a className={cta.primary[2]} href={cta.primary[1]}>
           {cta.primary[0]}
         </a>
         {cta.secondary ? (
-          <a className="nx-btn nx-btn--ghost" href={cta.secondary[1]}>
+          <a className={cta.secondary[2]} href={cta.secondary[1]}>
             {cta.secondary[0]}
           </a>
         ) : null}
@@ -153,7 +171,7 @@ function SiteHeader() {
         <a href="#bridging">Bridging</a>
         <a href="#contact">Contact</a>
       </nav>
-      <a className="nx-btn nx-btn--gold nx-btn--sm" href="#enquire">
+      <a className="nx-cta-enquire-nav" href="#enquire">
         Enquire
       </a>
     </header>
@@ -287,7 +305,7 @@ function Listings() {
               <p className="nx-listing__meta">
                 {l.beds} bed · {l.baths} bath · {l.sqft.toLocaleString("en-GB")} sq ft
               </p>
-              <a className="nx-link" href="#enquire">Arrange a viewing</a>
+              <a className="nx-cta-viewing" href="#enquire">Arrange a viewing</a>
             </div>
           </li>
         ))}
@@ -313,7 +331,6 @@ function Calculators() {
   return (
     <section className="nx-section nx-section--tint" id="calculators" aria-labelledby="calc-h">
       <div className="nx-section__head">
-        <p className="nx-eyebrow">Mortgages · Bridging</p>
         <h2 className="nx-h2" id="calc-h">Run the numbers before the viewing</h2>
         <p className="nx-lead">
           Indicative only. An advisor confirms the figures against your circumstances and the live market.
@@ -366,11 +383,11 @@ function MortgageCalculator() {
             <span className="nx-product__name">{name}</span>
             <span className="nx-product__rate">{fmtPct(r)}</span>
             <span className="nx-product__monthly">{fmtGBP(monthlyPayment(loan, r, term, type))}</span>
-            <button type="button" className="nx-link" onClick={() => setRate(r)}>Use rate</button>
+            <button type="button" className="nx-rate-use" onClick={() => setRate(r)}>Use rate</button>
           </li>
         ))}
       </ul>
-      <a className="nx-btn nx-btn--gold" href="#enquire">Talk to an advisor</a>
+      <a className="nx-cta-advisor" href="#enquire">Talk to an advisor</a>
     </form>
   );
 }
@@ -410,7 +427,7 @@ function BridgingCalculator() {
           ? "Retained interest is deducted from the advance, so there are no monthly payments during the term."
           : "Serviced interest is paid monthly, so more of the gross loan reaches you on day one."}
       </p>
-      <a className="nx-btn nx-btn--gold" href="#enquire">Request terms</a>
+      <a className="nx-cta-terms" href="#enquire">Request terms</a>
     </form>
   );
 }
@@ -499,7 +516,6 @@ function Surveys() {
   return (
     <section className="nx-section" id="surveys" aria-labelledby="surveys-h">
       <div className="nx-section__head">
-        <p className="nx-eyebrow">Surveying</p>
         <h2 className="nx-h2" id="surveys-h">Which survey, and what it actually inspects</h2>
         <p className="nx-lead">
           Choose a metric to compare the four reports, then pick one to see the room-by-room scope.
@@ -554,7 +570,7 @@ function Surveys() {
         </div>
 
         <div className="nx-card" aria-live="polite">
-          <p className="nx-eyebrow">{survey.name} · {survey.sub}</p>
+          <h3 className="nx-h3">{survey.name} · {survey.sub}</h3>
           <p className="nx-body">{survey.blurb}</p>
           <ul className="nx-inspect">
             {INSPECT_ITEMS.map(([key, label]) => {
@@ -567,7 +583,7 @@ function Surveys() {
               );
             })}
           </ul>
-          <a className="nx-btn nx-btn--gold" href="#enquire">Get a survey quote</a>
+          <a className="nx-cta-survey" href="#enquire">Get a survey quote</a>
         </div>
       </div>
     </section>
@@ -691,7 +707,7 @@ function Enquire() {
               <label htmlFor="c-consent">I'm happy for Norvex Property to contact me about this enquiry.</label>
               {errors.consent ? <p className="nx-error" id="c-consent-error">{errors.consent}</p> : null}
             </div>
-            <button className="nx-btn nx-btn--gold" type="submit">Send enquiry</button>
+            <button className="nx-cta-send" type="submit">Send enquiry</button>
           </form>
         )}
       </div>
