@@ -8,7 +8,9 @@
 
   const D = window.NORVEX_DATA;
   if (!D) return;
-  const { config, games, types, products } = D;
+  const { config, games, types } = D;
+  // a product marked hidden is reachable by its URL and can be bought, but never listed, searched or related
+  const products = D.products.filter((p) => !p.hidden);
   document.documentElement.classList.remove('no-js');
 
   /* ------------------------------------------------------------ helpers */
@@ -19,7 +21,7 @@
   const money0 = new Intl.NumberFormat(config.locale, { style: 'currency', currency: config.currency, maximumFractionDigits: 0 });
   const fmt0 = (n) => (Number.isInteger(n) ? money0 : money).format(n);
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const byId = Object.fromEntries(products.map((p) => [p.id, p]));
+  const byId = Object.fromEntries(D.products.map((p) => [p.id, p]));
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const finePointer = window.matchMedia('(pointer: fine)');
   const plural = (n, one, many) => `${n} ${n === 1 ? one : many || one + 's'}`;

@@ -27,7 +27,7 @@ printf 'User-agent: *\nDisallow: /order.html\nAllow: /\nSitemap: %s/sitemap.xml\
   echo '<?xml version="1.0" encoding="UTF-8"?>'
   echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
   for f in "" shop.html help.html about.html legal.html; do echo "  <url><loc>$SITE_URL/$f</loc></url>"; done
-  grep -o '"id": "[^"]*"' assets/js/catalog.js | sed -e 's/"id": "//' -e 's/"$//' | sort -u | while read -r id; do echo "  <url><loc>$SITE_URL/product.html?id=$id</loc></url>"; done
+  node -e "const w={}; new Function('window', require('fs').readFileSync('assets/js/catalog.js','utf8'))(w); for (const p of w.NORVEX_DATA.products) if (!p.hidden) console.log('  <url><loc>$SITE_URL/product.html?id=' + p.id + '</loc></url>')" 
   echo '</urlset>'
 } > _site/sitemap.xml
 echo "site: $(du -sh _site | cut -f1), $(find _site -type f | wc -l) files, $(grep -c '<url>' _site/sitemap.xml) sitemap urls"

@@ -9508,6 +9508,31 @@ window.NORVEX_DATA = {
         "Condition": "Factory sealed"
       },
       "image": "assets/img/products/digimon-ex-11-dawn-of-liberator-extra-booster-box.webp"
+    },
+    {
+      "id": "norvex-test-order",
+      "name": "Test order (£1)",
+      "set": "Checkout test",
+      "game": "norvex",
+      "type": "accessory",
+      "price": 1,
+      "compareAt": null,
+      "stock": 5,
+      "preorder": false,
+      "badge": null,
+      "featured": false,
+      "rating": null,
+      "reviews": 0,
+      "hidden": true,
+      "description": "A one pound test purchase used to check that the checkout, the confirmation page and the receipt all work. Nothing is dispatched for this item and the payment is refunded.",
+      "contents": [
+        "Nothing is dispatched"
+      ],
+      "specs": {
+        "Purpose": "Checkout test",
+        "Refund": "Refunded after the test"
+      },
+      "image": "assets/img/apple-touch-icon.png"
     }
   ]
 };
