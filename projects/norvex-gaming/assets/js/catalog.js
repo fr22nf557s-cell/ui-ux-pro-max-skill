@@ -1367,7 +1367,7 @@ window.NORVEX_DATA = {
         "Packs": "36",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-aetherdrift-play-booster-box.webp"
     },
     {
       "id": "magic-foundations-play-booster-box",
@@ -1394,7 +1394,7 @@ window.NORVEX_DATA = {
         "Packs": "36",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-foundations-play-booster-box.webp"
     },
     {
       "id": "magic-duskmourn-house-of-horror-play-booster-box",
@@ -1421,7 +1421,7 @@ window.NORVEX_DATA = {
         "Packs": "36",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-duskmourn-house-of-horror-play-booster-box.webp"
     },
     {
       "id": "magic-bloomburrow-play-booster-box",
@@ -1448,7 +1448,7 @@ window.NORVEX_DATA = {
         "Packs": "36",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-bloomburrow-play-booster-box.webp"
     },
     {
       "id": "magic-lorwyn-eclipsed-play-booster-box",
@@ -1610,7 +1610,7 @@ window.NORVEX_DATA = {
         "Packs": "12",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-bloomburrow-collector-booster-box.webp"
     },
     {
       "id": "magic-final-fantasy-bundle",
@@ -1639,7 +1639,7 @@ window.NORVEX_DATA = {
         "Packs": "9",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-final-fantasy-bundle.gif"
     },
     {
       "id": "magic-edge-of-eternities-bundle",
@@ -1755,7 +1755,7 @@ window.NORVEX_DATA = {
         "Packs": "9",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-bloomburrow-bundle.webp"
     },
     {
       "id": "magic-final-fantasy-commander-deck-counter-blitz",
@@ -2005,7 +2005,7 @@ window.NORVEX_DATA = {
         "Format": "Starter Collection",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-foundations-starter-collection.webp"
     },
     {
       "id": "magic-foundations-jumpstart-booster-box",
@@ -2032,7 +2032,7 @@ window.NORVEX_DATA = {
         "Packs": "18",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-foundations-jumpstart-booster-box.webp"
     },
     {
       "id": "magic-final-fantasy-play-booster-pack",
