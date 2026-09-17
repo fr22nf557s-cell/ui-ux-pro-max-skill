@@ -498,6 +498,7 @@ select.input { appearance: none; -webkit-appearance: none; padding-right: 2.5rem
 /* product photo layered over the CSS mock; fades in on load, removed on error */
 /* Product photo: fills the media area on the packshot's own background (sampled on load) */
 .photo { position: absolute; inset: 0; z-index: 1; margin: 0; display: grid; place-items: center; background: transparent; transition: background-color 450ms var(--ease-out); }
+.photo:not(.is-loaded) { background: var(--nv-surface-2); }   /* quiet placeholder while a lazy photo is still on its way */
 .photo.is-loaded { background: var(--photo-bg, #fff); }
 .photo__img { display: block; width: 100%; height: 100%; object-fit: contain; padding: 5%; opacity: 0; transition: opacity 450ms var(--ease-out), transform var(--d-slow) var(--ease-out); }
 .photo.is-loaded .photo__img { opacity: 1; }
@@ -649,7 +650,7 @@ select.input { appearance: none; -webkit-appearance: none; padding-right: 2.5rem
 @media (min-width: 768px) { .footer__grid { grid-template-columns: 1.4fr repeat(4, 1fr); gap: var(--space-6); } }
 .footer__brand { display: grid; gap: var(--space-4); align-content: start; max-width: 22rem; }
 .footer__brand p { color: var(--nv-text-2); font-size: var(--fs-small); }
-.footer h4 { font-size: var(--fs-tiny); letter-spacing: 0.2em; text-transform: uppercase; color: var(--nv-text-3); font-weight: 700; margin-bottom: 1rem; }
+.footer__title { font-family: var(--nv-font-ui); font-size: var(--fs-tiny); letter-spacing: 0.2em; text-transform: uppercase; color: var(--nv-text-3); font-weight: 700; margin-bottom: 1rem; }
 .footer ul { display: grid; gap: 0.15rem; }
 .footer li a { display: inline-flex; align-items: center; min-height: 2.25rem; color: var(--nv-text-2); font-size: var(--fs-small); transition: color var(--d-fast); }
 .footer li a:hover { color: var(--nv-gold-2); }
@@ -898,3 +899,8 @@ select.input { appearance: none; -webkit-appearance: none; padding-right: 2.5rem
 .notfound { min-height: 50vh; display: grid; justify-items: center; align-content: center; text-align: center; gap: var(--space-4); padding-block: var(--section-y); }
 .notfound .lede { text-align: center; }
 .notfound .cluster { justify-content: center; }
+
+/* ---------------------------------------------------------------- shop paging */
+.shop__more { display: grid; justify-items: center; gap: var(--space-3); padding-top: var(--space-6); }
+.shop__more[hidden] { display: none; }
+.shop__more-count { font-size: var(--fs-small); }

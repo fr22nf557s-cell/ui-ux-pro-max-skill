@@ -56,6 +56,8 @@ def head(title, desc, extra='', canonical=None, pre=''):
   <meta property="og:description" content="{desc}">
   <meta property="og:image" content="https://norvexgaming.com/assets/img/products/pokemon-30th-celebration-elite-trainer-box.webp">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500;1,600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -109,7 +111,7 @@ FOOTER = f'''  <footer class="footer">
           <p>{RANGE[0].upper() + RANGE[1:]} from every major trading card game. Independent, collector-run and obsessive about condition.</p>
           <div class="social" data-social hidden></div>
         </div>
-        <div><h4>Shop</h4><ul>
+        <div><h2 class="footer__title">Shop</h2><ul>
           <li><a href="shop.html">New arrivals</a></li>
           <li><a href="shop.html?avail=preorder">Pre-orders</a></li>
           <li><a href="shop.html?type=box">Booster boxes</a></li>
@@ -120,10 +122,10 @@ FOOTER = f'''  <footer class="footer">
 {'          <li><a href="shop.html?type=single">Graded singles</a></li>' if HAS_SINGLES else ''}
           <li><a href="shop.html?type=accessory">Accessories</a></li>
         </ul></div>
-        <div><h4>Games</h4><ul>
+        <div><h2 class="footer__title">Games</h2><ul>
 {GAME_LINKS}
         </ul></div>
-        <div><h4>Support</h4><ul>
+        <div><h2 class="footer__title">Support</h2><ul>
           <li><a href="help.html#shipping">Delivery &amp; insurance</a></li>
           <li><a href="help.html#returns">Returns &amp; refunds</a></li>
           <li><a href="help.html#authenticity">Authenticity guarantee</a></li>
@@ -131,7 +133,7 @@ FOOTER = f'''  <footer class="footer">
           <li><a href="help.html#track">Track an order</a></li>
           <li><a href="help.html#contact">Contact us</a></li>
         </ul></div>
-        <div><h4>Company</h4><ul>
+        <div><h2 class="footer__title">Company</h2><ul>
           <li><a href="about.html">About Norvex</a></li>
           <li><a href="about.html#vault">The vault</a></li>
           <li><a href="about.html#wholesale">Trade &amp; wholesale</a></li>
@@ -208,9 +210,11 @@ VAULT = f'''    <!-- ========================================================= V
       </div>
     </section>''' if HAS_SINGLES else ''
 
+ORG_JSONLD = '  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://norvexgaming.com/#org", "name": "Norvex Gaming", "legalName": "Norvex Gaming Limited", "url": "https://norvexgaming.com/", "logo": "https://norvexgaming.com/assets/img/logo.svg", "email": "info@norvexgaming.com", "address": {"@type": "PostalAddress", "streetAddress": "302 Harrow Road", "addressLocality": "Wembley", "postalCode": "HA9 6LL", "addressCountry": "GB"}}, {"@type": "WebSite", "@id": "https://norvexgaming.com/#site", "url": "https://norvexgaming.com/", "name": "Norvex Gaming", "publisher": {"@id": "https://norvexgaming.com/#org"}, "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": "https://norvexgaming.com/shop.html?q={search_term_string}"}, "query-input": "required name=search_term_string"}}]}</script>\n'
+
 CANONICAL = ''
 INDEX = head('Norvex Gaming — Sealed TCG product, ' + ('graded singles &amp; pre-orders' if HAS_SINGLES else 'pre-orders &amp; accessories'),
-             f'Norvex Gaming is the vault for serious collectors: factory-sealed booster boxes, bundles and Elite Trainer Boxes{", authenticated graded singles" if HAS_SINGLES else ""} and pre-orders across Pokémon, Magic, One Piece, Yu-Gi-Oh!, Lorcana and more. Tracked, insured UK delivery.') + f'''
+             f'Norvex Gaming is the vault for serious collectors: factory-sealed booster boxes, bundles and Elite Trainer Boxes{", authenticated graded singles" if HAS_SINGLES else ""} and pre-orders across Pokémon, Magic, One Piece, Yu-Gi-Oh!, Lorcana and more. Tracked, insured UK delivery.', extra=ORG_JSONLD) + f'''
 <body data-page="home">
 {header()}
   <main id="main">
@@ -267,7 +271,7 @@ INDEX = head('Norvex Gaming — Sealed TCG product, ' + ('graded singles &amp; p
       <div class="container">
         <div class="section-head">
           <div class="section-head__text">
-            <span class="eyebrow reveal" style="--i:0">This week's drops</span>
+            <span class="eyebrow reveal" style="--i:0">Featured</span>
             <h2 class="h2 reveal" id="new-title" style="--i:1">Fresh from the <em>distributor.</em></h2>
           </div>
           <a class="btn btn--link reveal" href="shop.html" style="--i:2">View all products {ic('arrow')}</a>
@@ -406,6 +410,7 @@ SHOP = head('All products · Norvex Gaming',
             </div>
           </div>
           <div class="active-filters" data-active-filters aria-label="Active filters"></div>
+          <h2 class="sr-only">Products</h2>
           <div class="grid grid--products" data-shop-grid></div>
         </div>
       </div>

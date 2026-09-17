@@ -202,7 +202,7 @@ window.NORVEX_DATA = {
       "compareAt": null,
       "stock": 20,
       "preorder": false,
-      "badge": "new",
+      "badge": null,
       "featured": true,
       "rating": null,
       "reviews": 0,
@@ -445,7 +445,7 @@ window.NORVEX_DATA = {
       "compareAt": null,
       "stock": 9,
       "preorder": false,
-      "badge": "new",
+      "badge": null,
       "featured": false,
       "rating": null,
       "reviews": 0,
@@ -796,7 +796,7 @@ window.NORVEX_DATA = {
       "compareAt": null,
       "stock": 21,
       "preorder": false,
-      "badge": "new",
+      "badge": null,
       "featured": true,
       "rating": null,
       "reviews": 0,
@@ -6729,32 +6729,6 @@ window.NORVEX_DATA = {
       "image": "assets/img/products/yugioh-yugi-kaiba-quarter-century-card-case.webp"
     },
     {
-      "id": "yugioh-yugi-kaiba-quarter-century-game-mat",
-      "name": "Yugi & Kaiba Quarter Century Game Mat",
-      "set": "Yugi & Kaiba Quarter Century Game Mat",
-      "game": "yugioh",
-      "type": "accessory",
-      "price": 14.99,
-      "compareAt": null,
-      "stock": 12,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": null,
-      "reviews": 0,
-      "description": "Yugi & Kaiba Quarter Century Game Mat, factory sealed.",
-      "contents": [
-        "Factory-sealed product",
-        "Contents as listed by the publisher"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Accessory",
-        "Condition": "Factory sealed"
-      },
-      "image": "assets/img/products/yugioh-yugi-kaiba-quarter-century-game-mat.webp"
-    },
-    {
       "id": "yugioh-yugi-kaiba-quarter-century-9-pocket-duelist-portfolio",
       "name": "Yugi & Kaiba Quarter Century 9-Pocket Duelist Portfolio",
       "set": "Yugi & Kaiba Quarter Century 9-Pocket Duelist Portfolio",
@@ -8362,32 +8336,6 @@ window.NORVEX_DATA = {
         "Condition": "Factory sealed"
       },
       "image": "assets/img/products/yugioh-golden-duelist-collection-duelist-portfolio.webp"
-    },
-    {
-      "id": "yugioh-golden-duelist-collection-game-mat",
-      "name": "Golden Duelist Collection Game Mat",
-      "set": "Golden Duelist Collection Game Mat",
-      "game": "yugioh",
-      "type": "accessory",
-      "price": 14.99,
-      "compareAt": null,
-      "stock": 12,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": null,
-      "reviews": 0,
-      "description": "Golden Duelist Collection Game Mat, factory sealed.",
-      "contents": [
-        "Factory-sealed product",
-        "Contents as listed by the publisher"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Accessory",
-        "Condition": "Factory sealed"
-      },
-      "image": "assets/img/products/yugioh-golden-duelist-collection-game-mat.webp"
     },
     {
       "id": "dragonball-sb-01-manga-booster-01-booster-box",

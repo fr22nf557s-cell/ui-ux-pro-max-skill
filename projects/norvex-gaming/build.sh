@@ -10,7 +10,7 @@ rm -rf _site
 mkdir -p _site/assets/img
 cp $PAGES _site/
 cp -r assets/css assets/js _site/assets/
-cp assets/img/*.svg _site/assets/img/
+cp assets/img/*.svg assets/img/*.png _site/assets/img/
 cp -r assets/img/products _site/assets/img/
 [ -f CNAME ] && cp CNAME _site/ || true
 # Cache-busting: every deploy gets a fresh version tag on the stylesheet and scripts, so shoppers

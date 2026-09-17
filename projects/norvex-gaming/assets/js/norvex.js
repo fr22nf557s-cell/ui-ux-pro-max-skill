@@ -106,7 +106,7 @@
      CSS mock is used for products without a photo, and swapped in if a photo fails to load. */
   function art(p, opts = {}) {
     if (!p.image) return artMock(p);
-    return `<figure class="photo"><img class="photo__img" src="${esc(p.image)}" alt="${esc(p.name)}" loading="${opts.eager ? 'eager' : 'lazy'}" decoding="async" width="800" height="1000" data-art-fallback="${esc(p.id)}"></figure>`;
+    return `<figure class="photo"><img class="photo__img" src="${esc(p.image)}" alt="${esc(p.name)}" loading="${opts.eager ? 'eager' : 'lazy'}"${opts.eager ? ' fetchpriority="high"' : ''} decoding="async" width="800" height="1000" data-art-fallback="${esc(p.id)}"></figure>`;
   }
   /* Dominant colour along the photo's edges: the background the packshot was shot on. */
   function photoBackground(img) {
@@ -566,7 +566,23 @@
     };
     const chip = (g, v, label) => `<button class="chip is-active" type="button" data-remove="${g}|${esc(v)}" aria-label="Remove filter: ${esc(label)}">${esc(label)}${icon('x')}</button>`;
 
+    const PAGE = 48; let shown = PAGE; let current = [];
+    const moreEl = document.createElement('div'); moreEl.className = 'shop__more'; moreEl.hidden = true;
+    moreEl.innerHTML = `<p class="shop__more-count muted"></p><button class="btn btn--ghost" type="button" data-show-more>Show more products</button>`;
+    grid.insertAdjacentElement('afterend', moreEl);
+    function renderMore() {
+      const from = shown; shown = Math.min(current.length, shown + PAGE);
+      grid.insertAdjacentHTML('beforeend', current.slice(from, shown).map((p, i) => card(p, i)).join(''));
+      observe(grid); updateMore();
+      const first = grid.children[from]; if (first) { const link = first.querySelector('a'); if (link) link.focus({ preventScroll: true }); }
+    }
+    function updateMore() {
+      moreEl.hidden = shown >= current.length;
+      $('.shop__more-count', moreEl).textContent = `Showing ${Math.min(shown, current.length)} of ${plural(current.length, 'product')}`;
+    }
+    moreEl.addEventListener('click', (e) => { if (e.target.closest('[data-show-more]')) renderMore(); });
     function apply() {
+      shown = PAGE;
       const min = state.min === '' ? -Infinity : Number(state.min);
       const max = state.max === '' ? Infinity : Number(state.max);
       const out = products.filter((p) =>
@@ -576,8 +592,9 @@
         p.price >= min && p.price <= max &&
         (!state.q || matches(p, state.q)));
       out.sort(sorters[state.sort] || sorters.featured);
-      grid.innerHTML = out.length ? out.map(card).join('') : `<div class="empty" style="grid-column:1/-1">${icon('search')}<p>No products match those filters.</p><button class="btn btn--ghost btn--sm" type="button" data-clear-filters>Clear filters</button></div>`;
-      observe(grid);
+      current = out;
+      grid.innerHTML = out.length ? out.slice(0, shown).map(card).join('') : `<div class="empty" style="grid-column:1/-1">${icon('search')}<p>No products match those filters.</p><button class="btn btn--ghost btn--sm" type="button" data-clear-filters>Clear filters</button></div>`;
+      observe(grid); updateMore();
       countEl.textContent = plural(out.length, 'product');
 
       const title = state.q ? `Results for “${state.q}”`
@@ -625,6 +642,7 @@
     const g = gameOf(p); const t = typeOf(p); const av = availability(p); const max = Cart.max(p);
     document.title = `${p.name} · ${config.storeName}`;
     if (crumb) crumb.textContent = p.name;
+    seo(p, g, t, av);
     const gameCrumb = $('[data-pdp-game]');
     if (gameCrumb) { gameCrumb.textContent = g.short; gameCrumb.href = `shop.html?game=${encodeURIComponent(p.game)}`; }
     const stars = p.rating
@@ -688,6 +706,30 @@
     });
     if (related) renderGrid(related, select('related:' + p.id).slice(0, 4));
     observe(root);
+  }
+
+  /* Per-product canonical URL, social preview and Product structured data (JSON-LD), so
+     search engines index each product page on its own rather than as copies of product.html */
+  function seo(p, g, t, av) {
+    const canon = $('link[rel="canonical"]'); const origin = canon ? new URL(canon.href).origin : location.origin;
+    const url = `${origin}/product.html?id=${encodeURIComponent(p.id)}`; const image = `${origin}/${p.image}`;
+    if (canon) canon.href = url;
+    const meta = (sel, value) => { const el = $(sel); if (el) el.setAttribute('content', value); };
+    const desc = `${p.name}: ${p.description}`.slice(0, 300);
+    meta('meta[name="description"]', desc); meta('meta[property="og:title"]', `${p.name} · ${config.storeName}`); meta('meta[property="og:description"]', desc);
+    meta('meta[property="og:url"]', url); meta('meta[property="og:image"]', image); meta('meta[property="og:type"]', 'product');
+    const availability = av.key === 'out' ? 'https://schema.org/OutOfStock' : p.preorder ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock';
+    const data = [
+      { '@context': 'https://schema.org', '@type': 'Product', name: p.name, image: [image], description: p.description, sku: p.id, category: `${g.name} ${t.name}`,
+        brand: { '@type': 'Brand', name: p.brand || g.name },
+        offers: { '@type': 'Offer', url, priceCurrency: config.currency || 'GBP', price: Number(p.price).toFixed(2), availability, itemCondition: 'https://schema.org/NewCondition', seller: { '@type': 'Organization', name: (config.business && config.business.legalName) || config.storeName } } },
+      { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: `${origin}/` },
+        { '@type': 'ListItem', position: 2, name: 'Shop', item: `${origin}/shop.html` },
+        { '@type': 'ListItem', position: 3, name: g.short || g.name, item: `${origin}/shop.html?game=${encodeURIComponent(p.game)}` },
+        { '@type': 'ListItem', position: 4, name: p.name, item: url }] }
+    ];
+    const s = document.createElement('script'); s.type = 'application/ld+json'; s.textContent = JSON.stringify(data); document.head.appendChild(s);
   }
 
   /* ------------------------------------------------ global delegation */
@@ -822,7 +864,7 @@
     initGlobalClicks();
     initProduct();
     $$('[data-products]').forEach((el) => renderGrid(el, select(el.dataset.products).slice(0, Number(el.dataset.limit) || 999)));
-    $$('[data-art-product]').forEach((el) => { const p = byId[el.dataset.artProduct]; if (p) el.innerHTML = art(p); });
+    $$('[data-art-product]').forEach((el) => { const p = byId[el.dataset.artProduct]; if (p) el.innerHTML = art(p, { eager: Boolean(el.closest('[data-stage]')) }); });
     initShop();
     initHero();
     initMarquee();
