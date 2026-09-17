@@ -1,0 +1,41 @@
+name: Norvex film assets
+
+# Pulls the Norvex Property film and posters into the repo so the standalone
+# site under projects/norvex-property/film is fully self-hosted. Run it by hand.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Download the film and posters
+        run: |
+          set -euo pipefail
+          D=projects/norvex-property/film/assets
+          mkdir -p "$D"
+          B=https://d2ol7oe51mr4n9.cloudfront.net/user_3JSm3zkWdJl0vDJbWVyyAb7NnDy
+          curl -fsSL "$B/609658a0-824f-4b6e-beaf-46f9d0aaaa0c.mp4" -o "$D/manor.mp4"
+          curl -fsSL "$B/8265dadf-5560-44c4-a380-bb0bb02b2fb0.mp4" -o "$D/manor-mobile.mp4"
+          curl -fsSL "$B/188f1c75-8e6f-4812-9a8f-d93d90a697b6.jpg" -o "$D/manor-poster.jpg"
+          curl -fsSL "$B/3c0655c8-9fb1-4b02-874b-f2a3a2edfd8d.jpg" -o "$D/manor-mobile-poster.jpg"
+          ls -la "$D"
+          file "$D"/* || true
+
+      - name: Commit to the branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add projects/norvex-property/film/assets
+          git commit -m "chore(projects): self-host the Norvex film and posters
+
+Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01Sx8sA7aUCePdYuBjwL9dLy" || { echo "nothing to commit"; exit 0; }
+          git push origin "HEAD:${{ github.ref_name }}"
