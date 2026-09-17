@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en-GB" data-mode="loading" data-static="false">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Norvex Property</title>
+  <meta name="description" content="Norvex Property: sales, lettings, mortgages, bridging finance and surveying — a scroll-driven walk through the mansion.">
+  <meta name="theme-color" content="#0B0C10">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- GSAP core + ScrollTrigger (all GSAP plugins are free to use since 3.13). Pinned version. -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#properties">Skip to properties</a>
+
+<!-- =====================================================================
+     SCENE SPRITE
+     Every room is a vector "set" made of two layers (far + near) so the
+     camera can push through a doorway with parallax depth. Each layer is
+     a <symbol> here and is instanced with <use> by the stage (cinematic
+     mode) and by each section background (standard mode). Swap these for
+     photography by following README.md › "Using real photography".
+     ===================================================================== -->
+<svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#070A13"/><stop offset=".55" stop-color="#10131C"/><stop offset="1" stop-color="#221E1A"/></linearGradient>
+    <linearGradient id="g-warm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F1DDB0"/><stop offset="1" stop-color="#C79A5A"/></linearGradient>
+    <radialGradient id="g-warm-deep" cx=".5" cy=".45" r=".7"><stop offset="0" stop-color="#F3E2B8"/><stop offset=".55" stop-color="#B98A4B"/><stop offset="1" stop-color="#3A2A18"/></radialGradient>
+    <linearGradient id="g-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22262F"/><stop offset="1" stop-color="#0A0B0E"/></linearGradient>
+    <linearGradient id="g-floor-cool" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1C2029"/><stop offset="1" stop-color="#090A0E"/></linearGradient>
+    <linearGradient id="g-city" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#141B2A"/><stop offset="1" stop-color="#0B0F17"/></linearGradient>
+    <linearGradient id="g-dusk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1B2238"/><stop offset=".5" stop-color="#4A3A45"/><stop offset="1" stop-color="#C98B4F"/></linearGradient>
+    <linearGradient id="g-terrace-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0A0F1F"/><stop offset=".45" stop-color="#2B2536"/><stop offset=".78" stop-color="#9A5E3A"/><stop offset="1" stop-color="#E7B675"/></linearGradient>
+    <linearGradient id="g-pool" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#24506A"/><stop offset="1" stop-color="#0E2836"/></linearGradient>
+    <linearGradient id="g-sun-reflect" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#E9D6AE" stop-opacity="0"/><stop offset=".5" stop-color="#E9D6AE" stop-opacity=".6"/><stop offset="1" stop-color="#E9D6AE" stop-opacity="0"/></linearGradient>
+    <radialGradient id="g-glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#F3E2B8" stop-opacity=".9"/><stop offset=".45" stop-color="#E9D6AE" stop-opacity=".25"/><stop offset="1" stop-color="#E9D6AE" stop-opacity="0"/></radialGradient>
+
+    <pattern id="p-books" width="150" height="80" patternUnits="userSpaceOnUse">
+      <g transform="translate(0 80)">
+        <rect x="4" y="-58" width="14" height="58" fill="#3A2A1E"/><rect x="20" y="-50" width="10" height="50" fill="#1E2A2E"/><rect x="32" y="-62" width="16" height="62" fill="#4A3A2A"/><rect x="50" y="-46" width="9" height="46" fill="#2B2620"/><rect x="61" y="-56" width="12" height="56" fill="#5A3A2E"/><rect x="75" y="-52" width="14" height="52" fill="#1F2A2E"/><rect x="91" y="-60" width="10" height="60" fill="#3A2A1E"/><rect x="103" y="-48" width="16" height="48" fill="#2B2620"/><rect x="121" y="-58" width="11" height="58" fill="#4A3A2A"/><rect x="134" y="-54" width="12" height="54" fill="#1E2A2E"/>
+      </g>
+      <g fill="#C9A96E" opacity=".35"><rect x="8" y="34" width="6" height="1.5"/><rect x="36" y="30" width="8" height="1.5"/><rect x="64" y="36" width="6" height="1.5"/><rect x="94" y="32" width="4" height="1.5"/><rect x="124" y="34" width="5" height="1.5"/></g>
+    </pattern>
+    <pattern id="p-boxes" width="48" height="36" patternUnits="userSpaceOnUse">
+      <rect x="2" y="2" width="44" height="32" fill="#15181F" stroke="#8FA0B5" stroke-opacity=".35"/>
+      <circle cx="24" cy="18" r="3" fill="#C9A96E" opacity=".6"/>
+    </pattern>
+    <pattern id="p-panels" width="160" height="900" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="1" height="900" fill="#C9A96E" opacity=".1"/>
+      <rect x="20" y="130" width="120" height="400" fill="none" stroke="#C9A96E" stroke-opacity=".08"/>
+    </pattern>
+    <pattern id="p-parquet" width="60" height="60" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="30" height="60" fill="#E9D6AE" opacity=".03"/>
+      <line x1="0" y1="0" x2="0" y2="60" stroke="#E9D6AE" stroke-opacity=".06"/>
+    </pattern>
+    <pattern id="p-steel" width="200" height="220" patternUnits="userSpaceOnUse">
+      <rect width="200" height="220" fill="none" stroke="#8FA0B5" stroke-opacity=".12"/>
+      <circle cx="12" cy="12" r="3" fill="#8FA0B5" opacity=".3"/><circle cx="188" cy="12" r="3" fill="#8FA0B5" opacity=".3"/><circle cx="12" cy="208" r="3" fill="#8FA0B5" opacity=".3"/><circle cx="188" cy="208" r="3" fill="#8FA0B5" opacity=".3"/>
+    </pattern>
+    <pattern id="p-balusters" width="60" height="68" patternUnits="userSpaceOnUse">
+      <rect x="24" y="0" width="12" height="68" fill="#171920" stroke="#C9A96E" stroke-opacity=".35"/>
+    </pattern>
+    <pattern id="p-slabs" width="200" height="60" patternUnits="userSpaceOnUse">
+      <rect width="200" height="60" fill="none" stroke="#E9D6AE" stroke-opacity=".08"/>
+    </pattern>
+    <pattern id="p-slats" width="60" height="90" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="22" height="90" fill="#07080B" opacity=".92"/>
+    </pattern>
+  </defs>
+
+  <!-- 1 · EXTERIOR — portal: front door (800 530) -->
+  <symbol id="sc-exterior-far" viewBox="0 0 1600 900">
+    <rect width="1600" height="900" fill="url(#g-sky)"/>
+    <g fill="#E9D6AE" opacity=".55"><circle cx="120" cy="90" r="1.5"/><circle cx="310" cy="160" r="1"/><circle cx="520" cy="60" r="1.3"/><circle cx="740" cy="130" r="1"/><circle cx="960" cy="70" r="1.4"/><circle cx="1140" cy="200" r="1"/><circle cx="1380" cy="90" r="1.5"/><circle cx="1500" cy="230" r="1"/><circle cx="880" cy="220" r="1.1"/><circle cx="400" cy="250" r="1"/></g>
+    <circle cx="1240" cy="150" r="120" fill="url(#g-glow)" opacity=".5"/>
+    <circle cx="1240" cy="150" r="38" fill="#EFE1BF"/>
+    <path d="M0 560 L60 520 L110 545 L170 500 L230 540 L300 505 L360 545 L420 515 L470 540 L540 500 L600 535 L660 515 L720 540 L780 510 L850 540 L920 505 L980 535 L1040 515 L1100 545 L1160 505 L1220 540 L1290 510 L1350 545 L1420 505 L1480 540 L1540 515 L1600 545 L1600 620 L0 620 Z" fill="#0B0D12"/>
+    <rect y="600" width="1600" height="300" fill="#0D0F13"/>
+    <rect x="250" y="440" width="150" height="180" fill="#151820" stroke="#C9A96E" stroke-opacity=".3"/>
+    <rect x="1200" y="440" width="150" height="180" fill="#151820" stroke="#C9A96E" stroke-opacity=".3"/>
+    <rect x="560" y="250" width="480" height="90" fill="#171A22" stroke="#C9A96E" stroke-opacity=".35"/>
+    <rect x="380" y="330" width="840" height="290" fill="#1B1E27" stroke="#C9A96E" stroke-opacity=".4"/>
+    <rect x="360" y="326" width="880" height="6" fill="#C9A96E" opacity=".55"/>
+    <rect x="540" y="246" width="520" height="5" fill="#C9A96E" opacity=".45"/>
+    <g fill="url(#g-warm)" opacity=".85"><rect x="590" y="270" width="80" height="52"/><rect x="700" y="270" width="80" height="52"/><rect x="820" y="270" width="80" height="52"/><rect x="930" y="270" width="80" height="52"/></g>
+    <g fill="url(#g-warm)"><rect x="420" y="370" width="130" height="200"/><rect x="570" y="370" width="110" height="200"/><rect x="920" y="370" width="110" height="200"/><rect x="1050" y="370" width="130" height="200"/><rect x="275" y="470" width="100" height="110" opacity=".8"/><rect x="1225" y="470" width="100" height="110" opacity=".8"/></g>
+    <g stroke="#0E1015" stroke-width="4"><line x1="485" y1="370" x2="485" y2="570"/><line x1="420" y1="470" x2="550" y2="470"/><line x1="625" y1="370" x2="625" y2="570"/><line x1="570" y1="470" x2="680" y2="470"/><line x1="975" y1="370" x2="975" y2="570"/><line x1="920" y1="470" x2="1030" y2="470"/><line x1="1115" y1="370" x2="1115" y2="570"/><line x1="1050" y1="470" x2="1180" y2="470"/><line x1="325" y1="470" x2="325" y2="580"/><line x1="1275" y1="470" x2="1275" y2="580"/></g>
+    <rect x="700" y="400" width="200" height="220" fill="#0A0B0F"/>
+    <rect x="700" y="400" width="200" height="220" fill="none" stroke="#C9A96E" stroke-opacity=".5" stroke-width="2"/>
+    <rect x="752" y="440" width="96" height="180" fill="url(#g-warm-deep)"/>
+    <rect x="752" y="440" width="96" height="180" fill="none" stroke="#E9D6AE" stroke-opacity=".7" stroke-width="2"/>
+    <line x1="800" y1="440" x2="800" y2="620" stroke="#2A2416" stroke-width="3"/>
+    <circle cx="790" cy="540" r="3" fill="#F3EEE4"/><circle cx="810" cy="540" r="3" fill="#F3EEE4"/>
+    <polygon points="752,620 848,620 960,720 640,720" fill="#E9D6AE" opacity=".16"/>
+    <rect x="690" y="620" width="220" height="12" fill="#1E212A"/><rect x="670" y="632" width="260" height="12" fill="#1A1D25"/><rect x="650" y="644" width="300" height="12" fill="#161920"/>
+    <rect x="380" y="700" width="840" height="90" fill="#0E1219"/>
+    <g fill="url(#g-warm)" opacity=".18"><rect x="420" y="700" width="130" height="90"/><rect x="570" y="700" width="110" height="90"/><rect x="920" y="700" width="110" height="90"/><rect x="1050" y="700" width="130" height="90"/></g>
+    <rect x="752" y="700" width="96" height="90" fill="url(#g-warm)" opacity=".3"/>
+    <line x1="380" y1="700" x2="1220" y2="700" stroke="#C9A96E" stroke-opacity=".35"/>
+    <line x1="0" y1="900" x2="640" y2="660" stroke="#C9A96E" stroke-opacity=".12"/><line x1="1600" y1="900" x2="960" y2="660" stroke="#C9A96E" stroke-opacity=".12"/>
+    <g fill="url(#g-glow)" opacity=".35"><circle cx="560" cy="760" r="30"/><circle cx="1040" cy="760" r="30"/><circle cx="460" cy="820" r="30"/><circle cx="1140" cy="820" r="30"/></g>
+    <g fill="#E9D6AE"><circle cx="560" cy="760" r="3"/><circle cx="1040" cy="760" r="3"/><circle cx="460" cy="820" r="3"/><circle cx="1140" cy="820" r="3"/></g>
+  </symbol>
+  <symbol id="sc-exterior-near" viewBox="0 0 1600 900">
+    <path d="M60 900 L60 420 Q80 300 100 180 Q120 300 140 420 L140 900 Z" fill="#05060A"/>
+    <path d="M150 900 L150 520 Q165 430 180 340 Q195 430 210 520 L210 900 Z" fill="#07080C"/>
+    <path d="M1460 900 L1460 420 Q1480 300 1500 180 Q1520 300 1540 420 L1540 900 Z" fill="#05060A"/>
+    <path d="M1390 900 L1390 520 Q1405 430 1420 340 Q1435 430 1450 520 L1450 900 Z" fill="#07080C"/>
+    <path d="M0 900 L0 820 Q100 790 200 815 Q300 840 400 812 Q500 790 600 818 L600 900 Z" fill="#06070A"/>
+    <path d="M1000 900 L1000 818 Q1100 790 1200 812 Q1300 840 1400 815 Q1500 790 1600 820 L1600 900 Z" fill="#06070A"/>
+  </symbol>
+
+  <!-- 2 · GRAND FOYER — portal: rear arch (800 450) -->
+  <symbol id="sc-foyer-far" viewBox="0 0 1600 900">
+    <rect width="1600" height="900" fill="#13151C"/>
+    <rect width="1600" height="900" fill="url(#p-panels)"/>
+    <rect y="96" width="1600" height="4" fill="#C9A96E" opacity=".25"/>
+    <polygon points="0,560 1600,560 1600,900 0,900" fill="url(#g-floor)"/>
+    <g stroke="#E9D6AE" stroke-opacity=".08"><line x1="800" y1="560" x2="-200" y2="900"/><line x1="800" y1="560" x2="200" y2="900"/><line x1="800" y1="560" x2="500" y2="900"/><line x1="800" y1="560" x2="800" y2="900"/><line x1="800" y1="560" x2="1100" y2="900"/><line x1="800" y1="560" x2="1400" y2="900"/><line x1="800" y1="560" x2="1800" y2="900"/><line x1="0" y1="640" x2="1600" y2="640"/><line x1="0" y1="740" x2="1600" y2="740"/><line x1="0" y1="860" x2="1600" y2="860"/></g>
+    <g fill="#1F2531"><rect x="300" y="260" width="110" height="300"/><rect x="1190" y="260" width="110" height="300"/></g>
+    <g stroke="#C9A96E" stroke-opacity=".35" fill="none"><rect x="300" y="260" width="110" height="300"/><rect x="1190" y="260" width="110" height="300"/><line x1="355" y1="260" x2="355" y2="560"/><line x1="1245" y1="260" x2="1245" y2="560"/><line x1="300" y1="410" x2="410" y2="410"/><line x1="1190" y1="410" x2="1300" y2="410"/></g>
+    <path d="M690 560 L690 380 A110 110 0 0 1 910 380 L910 560 Z" fill="url(#g-warm-deep)"/>
+    <path d="M690 560 L690 380 A110 110 0 0 1 910 380 L910 560" fill="none" stroke="#E9D6AE" stroke-opacity=".7" stroke-width="3"/>
+    <path d="M672 560 L672 380 A128 128 0 0 1 928 380 L928 560" fill="none" stroke="#C9A96E" stroke-opacity=".3" stroke-width="10"/>
+    <polygon points="690,560 910,560 1040,720 560,720" fill="#E9D6AE" opacity=".07"/>
+    <g id="stair-l">
+      <path d="M240 600 h40 v-25 h40 v-25 h40 v-25 h40 v-25 h40 v-25 h40 v-25 h40 v-25 h40 v-25 h40 v-25 h40 v-25 L640 600 Z" fill="#1B1E27" stroke="#C9A96E" stroke-opacity=".4"/>
+      <line x1="240" y1="560" x2="640" y2="310" stroke="#C9A96E" stroke-opacity=".6" stroke-width="3"/>
+      <g stroke="#C9A96E" stroke-opacity=".45"><line x1="260" y1="600" x2="260" y2="560"/><line x1="300" y1="575" x2="300" y2="535"/><line x1="340" y1="550" x2="340" y2="510"/><line x1="380" y1="525" x2="380" y2="485"/><line x1="420" y1="500" x2="420" y2="460"/><line x1="460" y1="475" x2="460" y2="435"/><line x1="500" y1="450" x2="500" y2="410"/><line x1="540" y1="425" x2="540" y2="385"/><line x1="580" y1="400" x2="580" y2="360"/><line x1="620" y1="375" x2="620" y2="335"/></g>
+    </g>
+    <use href="#stair-l" transform="matrix(-1 0 0 1 1600 0)"/>
+    <rect x="640" y="342" width="320" height="8" fill="#1B1E27" stroke="#C9A96E" stroke-opacity=".4"/>
+    <line x1="640" y1="310" x2="960" y2="310" stroke="#C9A96E" stroke-opacity=".6" stroke-width="3"/>
+    <g stroke="#C9A96E" stroke-opacity=".45"><line x1="680" y1="342" x2="680" y2="310"/><line x1="720" y1="342" x2="720" y2="310"/><line x1="760" y1="342" x2="760" y2="310"/><line x1="800" y1="342" x2="800" y2="310"/><line x1="840" y1="342" x2="840" y2="310"/><line x1="880" y1="342" x2="880" y2="310"/><line x1="920" y1="342" x2="920" y2="310"/></g>
+    <g><circle cx="520" cy="330" r="40" fill="url(#g-glow)" opacity=".6"/><circle cx="520" cy="330" r="5" fill="#F3E2B8"/><circle cx="1080" cy="330" r="40" fill="url(#g-glow)" opacity=".6"/><circle cx="1080" cy="330" r="5" fill="#F3E2B8"/></g>
+    <circle cx="800" cy="190" r="170" fill="url(#g-glow)" opacity=".55"/>
+    <line x1="800" y1="0" x2="800" y2="120" stroke="#C9A96E" stroke-opacity=".8" stroke-width="2"/>
+    <g fill="none" stroke="#E9D6AE" stroke-opacity=".85" stroke-width="2"><ellipse cx="800" cy="160" rx="150" ry="26"/><ellipse cx="800" cy="205" rx="105" ry="19"/><ellipse cx="800" cy="242" rx="60" ry="12"/></g>
+    <g stroke="#E9D6AE" stroke-opacity=".6"><line x1="650" y1="160" x2="695" y2="205"/><line x1="950" y1="160" x2="905" y2="205"/><line x1="695" y1="205" x2="740" y2="242"/><line x1="905" y1="205" x2="860" y2="242"/></g>
+    <g fill="#F3E2B8"><circle cx="650" cy="160" r="4"/><circle cx="950" cy="160" r="4"/><circle cx="725" cy="184" r="3"/><circle cx="875" cy="184" r="3"/><circle cx="800" cy="186" r="3"/><circle cx="695" cy="205" r="3.5"/><circle cx="905" cy="205" r="3.5"/><circle cx="800" cy="224" r="3"/><circle cx="740" cy="242" r="3"/><circle cx="860" cy="242" r="3"/><circle cx="800" cy="254" r="3"/></g>
+  </symbol>
+  <symbol id="sc-foyer-near" viewBox="0 0 1600 900">
+    <rect x="110" y="0" width="90" height="900" fill="#0A0B10"/>
+    <rect x="96" y="0" width="118" height="40" fill="#0C0D12"/><rect x="96" y="860" width="118" height="40" fill="#0C0D12"/>
+    <g stroke="#C9A96E" stroke-opacity=".14"><line x1="130" y1="40" x2="130" y2="860"/><line x1="155" y1="40" x2="155" y2="860"/><line x1="180" y1="40" x2="180" y2="860"/></g>
+    <rect x="1400" y="0" width="90" height="900" fill="#0A0B10"/>
+    <rect x="1386" y="0" width="118" height="40" fill="#0C0D12"/><rect x="1386" y="860" width="118" height="40" fill="#0C0D12"/>
+    <g stroke="#C9A96E" stroke-opacity=".14"><line x1="1420" y1="40" x2="1420" y2="860"/><line x1="1445" y1="40" x2="1445" y2="860"/><line x1="1470" y1="40" x2="1470" y2="860"/></g>
+    <rect x="230" y="700" width="220" height="8" fill="#0B0C10"/><rect x="240" y="708" width="8" height="120" fill="#0B0C10"/><rect x="432" y="708" width="8" height="120" fill="#0B0C10"/>
+    <rect y="840" width="1600" height="60" fill="#07080B" opacity=".85"/>
+  </symbol>
+
+  <!-- 3 · EXECUTIVE OFFICE — portal: door to the study (715 470) -->
+  <symbol id="sc-office-far" viewBox="0 0 1600 900">
+    <rect width="1600" height="900" fill="#17140F"/>
+    <rect width="1600" height="900" fill="url(#p-panels)"/>
+    <rect y="110" width="1600" height="3" fill="#C9A96E" opacity=".22"/>
+    <rect x="900" y="150" width="440" height="470" fill="url(#g-city)"/>
+    <g fill="#0A0D14"><rect x="910" y="420" width="40" height="200"/><rect x="960" y="380" width="30" height="240"/><rect x="1000" y="440" width="50" height="180"/><rect x="1060" y="340" width="36" height="280"/><rect x="1105" y="400" width="60" height="220"/><rect x="1175" y="360" width="28" height="260"/><rect x="1210" y="430" width="50" height="190"/><rect x="1270" y="390" width="34" height="230"/><rect x="1310" y="450" width="30" height="170"/></g>
+    <g fill="#E9D6AE" opacity=".6"><rect x="918" y="440" width="4" height="4"/><rect x="930" y="470" width="4" height="4"/><rect x="968" y="400" width="4" height="4"/><rect x="1010" y="460" width="4" height="4"/><rect x="1070" y="360" width="4" height="4"/><rect x="1080" y="400" width="4" height="4"/><rect x="1120" y="420" width="4" height="4"/><rect x="1140" y="480" width="4" height="4"/><rect x="1185" y="380" width="4" height="4"/><rect x="1225" y="450" width="4" height="4"/><rect x="1280" y="410" width="4" height="4"/><rect x="1320" y="470" width="4" height="4"/></g>
+    <g fill="none" stroke="#C9A96E" stroke-opacity=".45" stroke-width="3"><rect x="900" y="150" width="440" height="470"/><line x1="1120" y1="150" x2="1120" y2="620"/><line x1="900" y1="385" x2="1340" y2="385"/></g>
+    <rect x="860" y="130" width="50" height="500" fill="#100E0B"/><rect x="1330" y="130" width="50" height="500" fill="#100E0B"/>
+    <rect x="200" y="160" width="380" height="480" fill="#0F0C08" stroke="#C9A96E" stroke-opacity=".3"/>
+    <rect x="210" y="160" width="360" height="480" fill="url(#p-books)"/>
+    <g stroke="#C9A96E" stroke-opacity=".3" stroke-width="3"><line x1="200" y1="240" x2="580" y2="240"/><line x1="200" y1="320" x2="580" y2="320"/><line x1="200" y1="400" x2="580" y2="400"/><line x1="200" y1="480" x2="580" y2="480"/><line x1="200" y1="560" x2="580" y2="560"/></g>
+    <rect x="640" y="300" width="150" height="330" fill="#0A0906"/>
+    <rect x="652" y="312" width="126" height="318" fill="url(#g-warm-deep)"/>
+    <rect x="640" y="300" width="150" height="330" fill="none" stroke="#C9A96E" stroke-opacity=".55" stroke-width="3"/>
+    <circle cx="765" cy="470" r="4" fill="#F3EEE4"/>
+    <rect y="630" width="1600" height="270" fill="url(#g-floor)"/>
+    <rect x="260" y="700" width="1100" height="180" fill="#14110D" stroke="#C9A96E" stroke-opacity=".18"/>
+    <rect x="955" y="470" width="120" height="150" rx="14" fill="#0A0908"/>
+    <rect x="720" y="600" width="560" height="26" fill="#0E0B08" stroke="#C9A96E" stroke-opacity=".4"/>
+    <rect x="740" y="626" width="16" height="120" fill="#0C0A07"/><rect x="1244" y="626" width="16" height="120" fill="#0C0A07"/>
+    <rect x="930" y="490" width="170" height="106" rx="3" fill="#0B0D12" stroke="#C9A96E" stroke-opacity=".4"/>
+    <polyline points="945,580 975,560 1000,566 1030,540 1060,548 1085,516" fill="none" stroke="#C9A96E" stroke-width="2.5"/>
+    <line x1="800" y1="600" x2="800" y2="530" stroke="#C9A96E" stroke-width="3"/>
+    <circle cx="800" cy="560" r="70" fill="url(#g-glow)" opacity=".6"/>
+    <polygon points="760,530 840,530 826,500 774,500" fill="#1F3B2E" stroke="#C9A96E" stroke-opacity=".6"/>
+  </symbol>
+  <symbol id="sc-office-near" viewBox="0 0 1600 900">
+    <path d="M0 900 L0 640 Q0 600 40 600 L420 600 Q460 600 460 640 L460 900 Z" fill="#08090C"/>
+    <path d="M60 600 L60 560 Q60 540 80 540 L380 540 Q400 540 400 560 L400 600 Z" fill="#0A0B0F"/>
+    <g fill="#0A0C0A"><path d="M1420 900 L1400 760 Q1440 700 1480 740 Q1500 660 1540 720 Q1580 680 1600 760 L1600 900 Z"/><path d="M1470 720 Q1430 640 1500 600 Q1520 660 1470 720 Z"/><path d="M1500 700 Q1560 640 1600 660 L1600 720 Q1540 720 1500 700 Z"/></g>
+    <rect y="0" width="1600" height="50" fill="#07080B" opacity=".7"/>
+  </symbol>
+
+  <!-- 4 · ARCHITECTURAL STUDY / LIBRARY — portal: hidden door (800 460) -->
+  <symbol id="sc-library-far" viewBox="0 0 1600 900">
+    <rect width="1600" height="900" fill="#100F0C"/>
+    <rect width="1600" height="120" fill="#0C0B09"/>
+    <g stroke="#C9A96E" stroke-opacity=".18"><line x1="0" y1="60" x2="1600" y2="60"/><line x1="0" y1="120" x2="1600" y2="120"/><line x1="200" y1="0" x2="200" y2="120"/><line x1="400" y1="0" x2="400" y2="120"/><line x1="600" y1="0" x2="600" y2="120"/><line x1="800" y1="0" x2="800" y2="120"/><line x1="1000" y1="0" x2="1000" y2="120"/><line x1="1200" y1="0" x2="1200" y2="120"/><line x1="1400" y1="0" x2="1400" y2="120"/></g>
+    <rect x="80" y="160" width="560" height="480" fill="#0B0A07" stroke="#C9A96E" stroke-opacity=".35"/>
+    <rect x="90" y="160" width="540" height="480" fill="url(#p-books)"/>
+    <rect x="960" y="160" width="560" height="480" fill="#0B0A07" stroke="#C9A96E" stroke-opacity=".35"/>
+    <rect x="970" y="160" width="540" height="480" fill="url(#p-books)"/>
+    <g stroke="#C9A96E" stroke-opacity=".3" stroke-width="3"><line x1="80" y1="240" x2="640" y2="240"/><line x1="80" y1="320" x2="640" y2="320"/><line x1="80" y1="400" x2="640" y2="400"/><line x1="80" y1="480" x2="640" y2="480"/><line x1="80" y1="560" x2="640" y2="560"/><line x1="960" y1="240" x2="1520" y2="240"/><line x1="960" y1="320" x2="1520" y2="320"/><line x1="960" y1="400" x2="1520" y2="400"/><line x1="960" y1="480" x2="1520" y2="480"/><line x1="960" y1="560" x2="1520" y2="560"/></g>
+    <rect x="660" y="160" width="280" height="480" fill="#0B0A07" stroke="#C9A96E" stroke-opacity=".35"/>
+    <rect x="670" y="160" width="260" height="80" fill="url(#p-books)"/>
+    <line x1="660" y1="240" x2="940" y2="240" stroke="#C9A96E" stroke-opacity=".3" stroke-width="3"/>
+    <rect x="700" y="250" width="200" height="390" fill="url(#g-warm-deep)"/>
+    <polygon points="900,250 1000,280 1000,680 900,640" fill="#14110B" stroke="#C9A96E" stroke-opacity=".45"/>
+    <rect x="915" y="300" width="70" height="330" fill="url(#p-books)" opacity=".8"/>
+    <g stroke="#C9A96E" stroke-opacity=".7" stroke-width="4"><line x1="1200" y1="640" x2="1320" y2="140"/><line x1="1260" y1="640" x2="1380" y2="140"/></g>
+    <g stroke="#C9A96E" stroke-opacity=".7" stroke-width="3"><line x1="1212" y1="590" x2="1272" y2="590"/><line x1="1224" y1="540" x2="1284" y2="540"/><line x1="1236" y1="490" x2="1296" y2="490"/><line x1="1248" y1="440" x2="1308" y2="440"/><line x1="1260" y1="390" x2="1320" y2="390"/><line x1="1272" y1="340" x2="1332" y2="340"/><line x1="1284" y1="290" x2="1344" y2="290"/><line x1="1296" y1="240" x2="1356" y2="240"/><line x1="1308" y1="190" x2="1368" y2="190"/></g>
+    <rect y="640" width="1600" height="260" fill="url(#g-floor)"/>
+    <rect y="640" width="1600" height="260" fill="url(#p-parquet)"/>
+    <polygon points="700,640 900,640 980,760 620,760" fill="#E9D6AE" opacity=".08"/>
+    <rect x="280" y="610" width="300" height="14" fill="#0A0806" stroke="#C9A96E" stroke-opacity=".4"/>
+    <rect x="296" y="624" width="12" height="110" fill="#0A0806"/><rect x="552" y="624" width="12" height="110" fill="#0A0806"/>
+    <line x1="430" y1="610" x2="430" y2="560" stroke="#C9A96E" stroke-width="3"/>
+    <circle cx="430" cy="590" r="80" fill="url(#g-glow)" opacity=".55"/>
+    <path d="M380 560 L480 560 L462 530 L398 530 Z" fill="#1F3B2E" stroke="#C9A96E" stroke-opacity=".6"/>
+    <rect x="330" y="596" width="60" height="14" fill="#2A2419"/><rect x="470" y="600" width="50" height="10" fill="#2A2419"/>
+  </symbol>
+  <symbol id="sc-library-near" viewBox="0 0 1600 900">
+    <path d="M40 900 L40 700 Q40 660 80 660 L120 660 L120 600 Q120 570 150 570 L330 570 Q360 570 360 600 L360 660 L400 660 Q440 660 440 700 L440 900 Z" fill="#08090C"/>
+    <circle cx="1380" cy="640" r="90" fill="#0A0B0F" stroke="#C9A96E" stroke-opacity=".35" stroke-width="2"/>
+    <ellipse cx="1380" cy="640" rx="90" ry="28" fill="none" stroke="#C9A96E" stroke-opacity=".25"/>
+    <line x1="1310" y1="580" x2="1450" y2="700" stroke="#C9A96E" stroke-opacity=".35" stroke-width="2"/>
+    <path d="M1380 730 L1380 780 M1340 780 L1420 780 M1330 900 L1380 780 L1430 900" fill="none" stroke="#0A0B0F" stroke-width="10"/>
+    <rect y="0" width="1600" height="70" fill="#07080B" opacity=".8"/>
+  </symbol>
+
+  <!-- 5 · THE VAULT — portal: glass doors to the terrace (410 450) -->
+  <symbol id="sc-vault-far" viewBox="0 0 1600 900">
+    <rect width="1600" height="900" fill="#11131A"/>
+    <rect width="1600" height="660" fill="url(#p-steel)"/>
+    <polygon points="1080,0 1120,0 1400,660 800,660" fill="#E9D6AE" opacity=".05"/>
+    <polygon points="380,0 420,0 620,660 180,660" fill="#E9D6AE" opacity=".05"/>
+    <rect x="640" y="200" width="300" height="440" fill="#0D0F15" stroke="#8FA0B5" stroke-opacity=".35"/>
+    <rect x="644" y="204" width="292" height="432" fill="url(#p-boxes)"/>
+    <rect x="280" y="240" width="260" height="420" fill="url(#g-dusk)"/>
+    <g fill="none" stroke="#C9A96E" stroke-opacity=".6" stroke-width="3"><rect x="280" y="240" width="260" height="420"/><line x1="410" y1="240" x2="410" y2="660"/><line x1="280" y1="450" x2="540" y2="450"/></g>
+    <rect y="660" width="1600" height="240" fill="url(#g-floor-cool)"/>
+    <rect x="300" y="660" width="220" height="140" fill="url(#g-sun-reflect)" opacity=".18"/>
+    <ellipse cx="1160" cy="740" rx="300" ry="30" fill="#C9A96E" opacity=".08"/>
+    <g transform="translate(1160 400)">
+      <circle r="290" fill="#181B23" stroke="#A9B4C4" stroke-opacity=".55" stroke-width="8"/>
+      <circle r="252" fill="none" stroke="#8FA0B5" stroke-opacity=".3" stroke-width="2"/>
+      <circle r="195" fill="#14161D" stroke="#C9A96E" stroke-opacity=".35" stroke-width="2"/>
+      <g stroke="#C9A96E" stroke-opacity=".8" stroke-width="10" stroke-linecap="round"><line x1="0" y1="-175" x2="0" y2="175"/><line x1="-175" y1="0" x2="175" y2="0"/><line x1="-124" y1="-124" x2="124" y2="124"/><line x1="-124" y1="124" x2="124" y2="-124"/></g>
+      <circle r="70" fill="#0E1016" stroke="#C9A96E" stroke-width="3"/>
+      <circle r="52" fill="none" stroke="#C9A96E" stroke-opacity=".5"/>
+      <text y="18" text-anchor="middle" font-size="54" fill="#E9D6AE" font-family="'Cormorant Garamond', Georgia, serif" font-weight="500">N</text>
+      <g fill="#B9C0CC" opacity=".6"><circle cx="0" cy="-270" r="8"/><circle cx="135" cy="-234" r="8"/><circle cx="234" cy="-135" r="8"/><circle cx="270" cy="0" r="8"/><circle cx="234" cy="135" r="8"/><circle cx="135" cy="234" r="8"/><circle cx="0" cy="270" r="8"/><circle cx="-135" cy="234" r="8"/><circle cx="-234" cy="135" r="8"/><circle cx="-270" cy="0" r="8"/><circle cx="-234" cy="-135" r="8"/><circle cx="-135" cy="-234" r="8"/></g>
+    </g>
+  </symbol>
+  <symbol id="sc-vault-near" viewBox="0 0 1600 900">
+    <rect x="1500" y="0" width="100" height="900" fill="#0A0B0F"/>
+    <g fill="#B9C0CC" opacity=".35"><circle cx="1550" cy="80" r="6"/><circle cx="1550" cy="240" r="6"/><circle cx="1550" cy="400" r="6"/><circle cx="1550" cy="560" r="6"/><circle cx="1550" cy="720" r="6"/><circle cx="1550" cy="860" r="6"/></g>
+    <rect x="150" y="560" width="10" height="340" fill="#0A0B0F"/><circle cx="155" cy="556" r="14" fill="#0A0B0F" stroke="#C9A96E" stroke-opacity=".5"/>
+    <path d="M155 590 Q500 700 850 590" fill="none" stroke="#3A2C2C" stroke-width="10"/>
+    <rect x="845" y="560" width="10" height="340" fill="#0A0B0F"/><circle cx="850" cy="556" r="14" fill="#0A0B0F" stroke="#C9A96E" stroke-opacity=".5"/>
+    <rect y="0" width="1600" height="56" fill="#07080B" opacity=".8"/>
+  </symbol>
+
+  <!-- 6 · GARDEN TERRACE — no portal (journey ends here) -->
+  <symbol id="sc-terrace-far" viewBox="0 0 1600 900">
+    <rect width="1600" height="900" fill="url(#g-terrace-sky)"/>
+    <circle cx="1000" cy="520" r="180" fill="url(#g-glow)" opacity=".8"/>
+    <circle cx="1000" cy="520" r="46" fill="#F3E2B8"/>
+    <path d="M0 540 Q200 470 400 520 T800 500 T1200 530 T1600 500 L1600 560 L0 560 Z" fill="#141522"/>
+    <path d="M0 560 Q300 520 600 555 T1200 545 T1600 560 L1600 600 L0 600 Z" fill="#0E0F19"/>
+    <g fill="#E9D6AE" opacity=".7"><rect x="120" y="548" width="3" height="3"/><rect x="260" y="540" width="3" height="3"/><rect x="420" y="552" width="3" height="3"/><rect x="560" y="547" width="3" height="3"/><rect x="700" y="542" width="3" height="3"/><rect x="860" y="550" width="3" height="3"/><rect x="1120" y="548" width="3" height="3"/><rect x="1300" y="541" width="3" height="3"/><rect x="1460" y="552" width="3" height="3"/></g>
+    <rect y="560" width="1600" height="100" fill="#141A2B"/>
+    <rect x="900" y="560" width="200" height="100" fill="url(#g-sun-reflect)" opacity=".5"/>
+    <rect x="0" y="572" width="1600" height="68" fill="url(#p-balusters)"/>
+    <rect x="0" y="560" width="1600" height="12" fill="#1C1E26" stroke="#C9A96E" stroke-opacity=".5"/>
+    <rect x="0" y="640" width="1600" height="14" fill="#1C1E26" stroke="#C9A96E" stroke-opacity=".5"/>
+    <rect y="654" width="1600" height="246" fill="url(#g-floor)"/>
+    <rect y="654" width="1600" height="246" fill="url(#p-slabs)"/>
+    <rect x="880" y="700" width="640" height="130" fill="url(#g-pool)" stroke="#C9A96E" stroke-opacity=".35"/>
+    <g stroke="#E9D6AE" stroke-opacity=".18" fill="none"><path d="M900 740 Q960 730 1020 740 T1140 740 T1260 740 T1380 740 T1500 740"/><path d="M900 780 Q960 770 1020 780 T1140 780 T1260 780 T1380 780 T1500 780"/></g>
+    <rect x="180" y="720" width="420" height="60" rx="6" fill="#111318" stroke="#C9A96E" stroke-opacity=".3"/>
+    <rect x="180" y="690" width="420" height="34" rx="6" fill="#0E1015" stroke="#C9A96E" stroke-opacity=".3"/>
+    <line x1="320" y1="690" x2="320" y2="780" stroke="#C9A96E" stroke-opacity=".2"/><line x1="460" y1="690" x2="460" y2="780" stroke="#C9A96E" stroke-opacity=".2"/>
+    <polygon points="650,760 720,760 710,840 660,840" fill="#101116" stroke="#C9A96E" stroke-opacity=".3"/><line x1="685" y1="760" x2="685" y2="660" stroke="#0B0C10" stroke-width="6"/><circle cx="685" cy="640" r="60" fill="#0E1410"/><circle cx="660" cy="620" r="30" fill="#0E1410"/><circle cx="715" cy="625" r="34" fill="#0E1410"/>
+    <path d="M0 60 Q400 190 800 60 T1600 60" fill="none" stroke="#C9A96E" stroke-opacity=".5"/>
+    <g fill="url(#g-glow)" opacity=".35"><circle cx="100" cy="92" r="22"/><circle cx="220" cy="118" r="22"/><circle cx="340" cy="132" r="22"/><circle cx="460" cy="128" r="22"/><circle cx="580" cy="108" r="22"/><circle cx="700" cy="80" r="22"/><circle cx="900" cy="80" r="22"/><circle cx="1020" cy="108" r="22"/><circle cx="1140" cy="128" r="22"/><circle cx="1260" cy="132" r="22"/><circle cx="1380" cy="118" r="22"/><circle cx="1500" cy="92" r="22"/></g>
+    <g fill="#F3E2B8"><circle cx="100" cy="92" r="4"/><circle cx="220" cy="118" r="4"/><circle cx="340" cy="132" r="4"/><circle cx="460" cy="128" r="4"/><circle cx="580" cy="108" r="4"/><circle cx="700" cy="80" r="4"/><circle cx="900" cy="80" r="4"/><circle cx="1020" cy="108" r="4"/><circle cx="1140" cy="128" r="4"/><circle cx="1260" cy="132" r="4"/><circle cx="1380" cy="118" r="4"/><circle cx="1500" cy="92" r="4"/></g>
+  </symbol>
+  <symbol id="sc-terrace-near" viewBox="0 0 1600 900">
+    <rect width="1600" height="90" fill="url(#p-slats)"/>
+    <rect x="0" y="0" width="60" height="900" fill="#07080B"/>
+    <g fill="#080B09"><path d="M0 900 L0 700 Q60 640 120 700 Q160 620 220 690 Q280 640 300 720 Q360 700 380 780 L380 900 Z"/><path d="M120 700 Q100 600 180 560 Q220 640 160 720 Z"/><path d="M240 700 Q300 600 360 640 Q320 720 240 700 Z"/></g>
+    <rect x="1240" y="760" width="260" height="10" fill="#08090C"/><rect x="1250" y="770" width="8" height="130" fill="#08090C"/><rect x="1482" y="770" width="8" height="130" fill="#08090C"/>
+    <circle cx="1370" cy="720" r="60" fill="url(#g-glow)" opacity=".7"/>
+    <rect x="1340" y="680" width="60" height="80" fill="#0A0B0F" stroke="#C9A96E" stroke-opacity=".6"/>
+    <circle cx="1370" cy="726" r="6" fill="#F3E2B8"/>
+  </symbol>
+
+  <!-- Listing thumbnails (placeholder art, 5:3) -->
+  <symbol id="th-house" viewBox="0 0 400 240">
+    <rect width="400" height="240" fill="url(#g-sky)"/><rect y="170" width="400" height="70" fill="#0D0F13"/>
+    <rect x="90" y="80" width="220" height="100" fill="#1B1E27" stroke="#C9A96E" stroke-opacity=".5"/>
+    <polygon points="80,82 200,30 320,82" fill="#141720" stroke="#C9A96E" stroke-opacity=".5"/>
+    <g fill="url(#g-warm)"><rect x="110" y="100" width="36" height="46"/><rect x="254" y="100" width="36" height="46"/><rect x="182" y="120" width="36" height="60"/></g>
+    <rect x="120" y="50" width="16" height="30" fill="#141720"/><circle cx="330" cy="40" r="14" fill="#EFE1BF"/>
+  </symbol>
+  <symbol id="th-penthouse" viewBox="0 0 400 240">
+    <rect width="400" height="240" fill="url(#g-city)"/>
+    <g fill="#0A0D14"><rect x="20" y="120" width="40" height="120"/><rect x="70" y="90" width="30" height="150"/><rect x="300" y="110" width="50" height="130"/><rect x="360" y="80" width="30" height="160"/></g>
+    <rect x="120" y="60" width="160" height="180" fill="#151A24" stroke="#C9A96E" stroke-opacity=".5"/>
+    <g fill="url(#g-warm)" opacity=".9"><rect x="132" y="72" width="136" height="40"/><rect x="132" y="124" width="60" height="30"/><rect x="208" y="124" width="60" height="30"/></g>
+    <g fill="url(#g-warm)" opacity=".35"><rect x="132" y="166" width="60" height="30"/><rect x="208" y="166" width="60" height="30"/><rect x="132" y="206" width="136" height="34"/></g>
+    <rect x="120" y="56" width="160" height="4" fill="#C9A96E" opacity=".7"/>
+  </symbol>
+  <symbol id="th-lodge" viewBox="0 0 400 240">
+    <rect width="400" height="240" fill="url(#g-terrace-sky)"/>
+    <path d="M0 150 Q100 120 200 150 T400 140 L400 240 L0 240 Z" fill="#0E1210"/>
+    <polygon points="70,150 200,60 330,150" fill="#151410" stroke="#C9A96E" stroke-opacity=".5"/>
+    <rect x="95" y="150" width="210" height="60" fill="#1B1814" stroke="#C9A96E" stroke-opacity=".4"/>
+    <g fill="url(#g-warm)"><rect x="115" y="165" width="34" height="34"/><rect x="250" y="165" width="34" height="34"/><rect x="184" y="160" width="32" height="50"/></g>
+    <circle cx="50" cy="120" r="36" fill="#0E1410"/><circle cx="350" cy="110" r="40" fill="#0E1410"/>
+  </symbol>
+  <symbol id="th-estate" viewBox="0 0 400 240">
+    <rect width="400" height="240" fill="url(#g-sky)"/><rect y="160" width="400" height="80" fill="#0D0F13"/>
+    <rect x="40" y="100" width="90" height="60" fill="#161920" stroke="#C9A96E" stroke-opacity=".4"/><rect x="270" y="100" width="90" height="60" fill="#161920" stroke="#C9A96E" stroke-opacity=".4"/>
+    <rect x="120" y="70" width="160" height="90" fill="#1B1E27" stroke="#C9A96E" stroke-opacity=".5"/><rect x="110" y="66" width="180" height="4" fill="#C9A96E" opacity=".6"/>
+    <g fill="url(#g-warm)"><rect x="135" y="90" width="26" height="40"/><rect x="175" y="90" width="26" height="40"/><rect x="215" y="90" width="26" height="40"/><rect x="60" y="115" width="24" height="30"/><rect x="290" y="115" width="24" height="30"/></g>
+    <rect x="188" y="120" width="24" height="40" fill="url(#g-warm-deep)"/><rect x="100" y="185" width="200" height="14" fill="#0E1219"/>
+  </symbol>
+
+  <!-- UI icons (24px, stroke = currentColor) -->
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.5 3h3l1.5 4.5-2 1.5a11 11 0 0 0 6 6l1.5-2L21 14.5v3A2.5 2.5 0 0 1 18.5 20 15.5 15.5 0 0 1 4 5.5 2.5 2.5 0 0 1 6.5 3Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m3.5 7 8.5 6 8.5-6" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11Z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.2" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor" opacity=".18"/><path d="m7.5 12.5 3 3 6-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-half" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 3a9 9 0 0 1 0 18Z" fill="currentColor" opacity=".5"/></symbol>
+  <symbol id="i-dash" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5"/><path d="M8 12h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity=".7"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-motion" viewBox="0 0 24 24"><path d="M3 12c3-5 6-5 9 0s6 5 9 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19L12 3Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 9v5m0 3v.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+</svg>
+
+<!-- =====================================================================
+     NAVIGATION
+     ===================================================================== -->
+<header class="nav" id="top">
+  <a class="brand" href="#hero" data-room="0" aria-label="Norvex Property — back to the start">
+    <span class="brand-mark" aria-hidden="true">N</span>
+    <span class="brand-name">Norvex<span class="brand-sub"> Property</span></span>
+  </a>
+  <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-menu">
+    <span class="sr-only">Menu</span>
+    <svg class="icon icon-open" aria-hidden="true"><use href="#i-menu"/></svg>
+    <svg class="icon icon-close" aria-hidden="true"><use href="#i-close"/></svg>
+  </button>
+  <nav class="nav-menu" id="nav-menu" aria-label="Primary">
+    <a href="#properties" data-room="1">Properties</a>
+    <a href="#mortgages" data-room="2">Mortgages</a>
+    <a href="#surveying" data-room="3">Surveying</a>
+    <a href="#bridging" data-room="4">Bridging</a>
+    <a href="#contact" data-room="5">Contact</a>
+    <button type="button" class="motion-toggle" id="motion-toggle" aria-pressed="false" title="Switch between the cinematic scroll and a standard page">
+      <svg class="icon" aria-hidden="true"><use href="#i-motion"/></svg>
+      <span class="motion-label">Motion on</span>
+    </button>
+    <a class="btn btn-primary btn-sm" href="#contact" data-room="5" data-service="valuation">Book a valuation</a>
+  </nav>
+</header>
+<div class="progress" aria-hidden="true"><span></span></div>
+
+<!-- =====================================================================
+     THE JOURNEY
+     Cinematic mode: #journey is pinned for ~8 viewport-heights of scroll,
+     the .stage cross-zooms between scenes and the .panels fade in/out.
+     Standard mode (mobile / reduced motion / no GSAP): the .stage is
+     hidden, every .panel is a normal full-height section with its own
+     static scene background.
+     ===================================================================== -->
+<main id="journey" class="journey">
+  <div class="stage" aria-hidden="true">
+    <div class="scene" data-scene="exterior" data-portal="800 530">
+      <svg class="layer layer-far" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><use href="#sc-exterior-far"/></svg>
+      <svg class="layer layer-near" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><use href="#sc-exterior-near"/></svg>
+      <span class="portal-glow"></span>
+    </div>
+    <div class="scene" data-scene="foyer" data-portal="800 450">
+      <svg class="layer layer-far" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><use href="#sc-foyer-far"/></svg>
+      <svg class="layer layer-near" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><use href="#sc-foyer-near"/></svg>
+      <span class="portal-glow"></span>
+    </div>
+    <div class="scene" data-scene="office" data-portal="715 470">
+      <svg class="layer layer-far" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><use href="#sc-office-far"/></svg>
+      <svg class="layer layer-near" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><use href="#sc-office-near"/></svg>
+      <span class="portal-glow"></span>
+    </div>
+    <div class="scene" data-scene="library" data-portal="800 460">
+      <svg class="layer layer-far" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><use href="#sc-library-far"/></svg>
+      <svg class="layer layer-near" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><use href="#sc-library-near"/></svg>
+      <span class="portal-glow"></span>
+    </div>
+    <div class="scene" data-scene="vault" data-portal="410 450">
+      <svg class="layer layer-far" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><use href="#sc-vault-far"/></svg>
+      <svg class="layer layer-near" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><use href="#sc-vault-near"/></svg>
+      <span class="portal-glow"></span>
+    </div>
+    <div class="scene" data-scene="terrace" data-portal="800 450">
+      <svg class="layer layer-far" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><use href="#sc-terrace-far"/></svg>
+      <svg class="layer layer-near" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><use href="#sc-terrace-near"/></svg>
+      <span class="portal-glow"></span>
+    </div>
+  </div>
+
+  <div class="panels">
+
+    <!-- 0 · HERO / ARRIVAL -->
+    <section class="panel panel-hero" id="hero" data-room="0" aria-labelledby="hero-title">
+      <svg class="panel-bg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#sc-exterior-far"/><use href="#sc-exterior-near"/></svg>
+      <div class="panel-inner">
+        <p class="eyebrow reveal">London &amp; the Home Counties · Est. 2026</p>
+        <h1 id="hero-title" class="reveal">Homes of distinction,<br>handled with discretion.</h1>
+        <p class="lede reveal">Sales, lettings, mortgages, bridging finance and surveying under one roof. Scroll to step inside.</p>
+        <div class="actions reveal">
+          <a class="btn btn-primary" href="#properties" data-room="1">Explore properties</a>
+          <a class="btn btn-ghost" href="#contact" data-room="5" data-service="valuation">Book a valuation</a>
+        </div>
+      </div>
+      <a class="scroll-cue" href="#properties" data-room="1"><span>Scroll to enter</span><i aria-hidden="true"></i></a>
+    </section>
+
+    <!-- 1 · GRAND FOYER — BUY, LET & SELL -->
+    <section class="panel" id="properties" data-room="1" aria-labelledby="properties-title">
+      <svg class="panel-bg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#sc-foyer-far"/><use href="#sc-foyer-near"/></svg>
+      <div class="panel-inner">
+        <div class="room-head">
+          <p class="eyebrow reveal">The Grand Foyer · Buy, let &amp; sell</p>
+          <h2 id="properties-title" class="reveal">Find the home, or the buyer, worth waiting for.</h2>
+          <p class="room-copy reveal">From Belgravia townhouses to Cotswold estates, our negotiators handle every sale and let personally, with a valuation that reflects the market rather than a pitch.</p>
+        </div>
+
+        <form class="card search-bar reveal" id="property-search" novalidate aria-label="Search properties">
+          <fieldset class="segmented" aria-label="I want to">
+            <label><input type="radio" name="intent" value="buy" checked><span>Buy</span></label>
+            <label><input type="radio" name="intent" value="let"><span>Rent</span></label>
+          </fieldset>
+          <div class="field">
+            <label for="s-location">Location</label>
+            <input id="s-location" name="location" type="search" list="areas" placeholder="Area, town or postcode" autocomplete="off">
+            <datalist id="areas"><option value="Belgravia"><option value="Hampstead"><option value="Kensington"><option value="Richmond"><option value="Marlow"><option value="Surrey Hills"><option value="Cotswolds"><option value="Bath"></datalist>
+          </div>
+          <div class="field">
+            <label for="s-type">Property type</label>
+            <select id="s-type" name="type"><option value="any">Any type</option><option value="house">House</option><option value="apartment">Apartment</option><option value="penthouse">Penthouse</option><option value="estate">Country estate</option></select>
+          </div>
+          <div class="field">
+            <label for="s-price">Price</label>
+            <select id="s-price" name="price"><option value="any">Any price</option></select>
+          </div>
+          <button type="submit" class="btn btn-primary"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>Search</button>
+        </form>
+        <p class="search-status reveal" id="search-status" role="status" aria-live="polite">Featured this week: three homes our negotiators would buy themselves.</p>
+
+        <div class="listing-grid reveal" id="listing-grid" aria-live="polite"></div>
+
+        <p class="room-links reveal">
+          <a class="link" href="#contact" data-room="5" data-service="valuation">Book a free valuation<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="link" href="#contact" data-room="5" data-service="letting">Landlord &amp; lettings services<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </p>
+      </div>
+    </section>
+
+    <!-- 2 · EXECUTIVE OFFICE — MORTGAGES -->
+    <section class="panel" id="mortgages" data-room="2" aria-labelledby="mortgages-title">
+      <svg class="panel-bg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#sc-office-far"/><use href="#sc-office-near"/></svg>
+      <div class="panel-inner room-grid">
+        <div class="room-intro">
+          <p class="eyebrow reveal">The Executive Office · Mortgages &amp; planning</p>
+          <h2 id="mortgages-title" class="reveal">Borrowing, planned around the life you're building.</h2>
+          <p class="room-copy reveal">Whole-of-market advice, from first-time buyers to private-bank lending above £5m. Model a repayment here, then book a call with an adviser who has already read your numbers.</p>
+          <ul class="ticks reveal">
+            <li>Decision in principle within 24 hours</li>
+            <li>Access to 90+ lenders including private banks</li>
+            <li>No fee until your offer is issued</li>
+          </ul>
+          <div class="actions reveal">
+            <a class="btn btn-primary" href="#contact" data-room="5" data-service="mortgages">Book an adviser call</a>
+          </div>
+          <p class="fineprint reveal">Your home may be repossessed if you do not keep up repayments on your mortgage. Rates and figures shown are illustrative, not an offer.</p>
+        </div>
+
+        <form class="card calc reveal" id="mortgage-calc" novalidate aria-labelledby="mortgage-calc-title">
+          <div class="calc-head">
+            <h3 id="mortgage-calc-title">Repayment calculator</h3>
+            <div class="segmented" role="group" aria-label="Mortgage type">
+              <button type="button" data-mtype="repayment" aria-pressed="true">Repayment</button>
+              <button type="button" data-mtype="interest" aria-pressed="false">Interest-only</button>
+            </div>
+          </div>
+          <div class="calc-grid">
+            <div class="range-field">
+              <div class="range-label"><label for="m-price">Property price</label><output id="m-price-out" for="m-price">£1,250,000</output></div>
+              <input id="m-price" type="range" min="150000" max="5000000" step="5000" value="1250000">
+            </div>
+            <div class="range-field">
+              <div class="range-label"><label for="m-deposit">Deposit</label><output id="m-deposit-out" for="m-deposit">20%</output></div>
+              <input id="m-deposit" type="range" min="5" max="60" step="1" value="20">
+            </div>
+            <div class="range-field">
+              <div class="range-label"><label for="m-rate">Interest rate</label><output id="m-rate-out" for="m-rate">4.35%</output></div>
+              <input id="m-rate" type="range" min="1" max="9" step="0.01" value="4.35">
+            </div>
+            <div class="range-field">
+              <div class="range-label"><label for="m-term">Term</label><output id="m-term-out" for="m-term">25 years</output></div>
+              <input id="m-term" type="range" min="5" max="40" step="1" value="25">
+            </div>
+          </div>
+          <div class="calc-result" aria-live="polite">
+            <div class="stat stat-hero"><span class="stat-label">Monthly payment</span><strong class="stat-value" id="m-monthly">£0</strong></div>
+            <dl class="stat-list">
+              <div><dt>Loan amount</dt><dd id="m-loan">£0</dd></div>
+              <div><dt>Loan to value</dt><dd id="m-ltv">80%</dd></div>
+              <div><dt>Total interest</dt><dd id="m-interest">£0</dd></div>
+              <div><dt>Total repayable</dt><dd id="m-total">£0</dd></div>
+              <div><dt>Monthly if rates rose 3%</dt><dd id="m-stress">£0</dd></div>
+            </dl>
+          </div>
+          <div class="products" aria-label="Compare illustrative products">
+            <div class="product" data-product data-rate="4.19"><span class="product-name">2-year fixed</span><span class="product-rate">4.19%</span><span class="product-monthly">£0</span><button type="button" class="link link-sm" data-use-rate>Use rate</button></div>
+            <div class="product" data-product data-rate="4.02"><span class="product-name">5-year fixed</span><span class="product-rate">4.02%</span><span class="product-monthly">£0</span><button type="button" class="link link-sm" data-use-rate>Use rate</button></div>
+            <div class="product" data-product data-rate="4.70"><span class="product-name">Lifetime tracker</span><span class="product-rate">4.70%</span><span class="product-monthly">£0</span><button type="button" class="link link-sm" data-use-rate>Use rate</button></div>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- 3 · ARCHITECTURAL STUDY — SURVEYING -->
+    <section class="panel" id="surveying" data-room="3" aria-labelledby="surveying-title">
+      <svg class="panel-bg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#sc-library-far"/><use href="#sc-library-near"/></svg>
+      <div class="panel-inner room-grid">
+        <div class="room-intro">
+          <p class="eyebrow reveal">The Architectural Study · Surveying</p>
+          <h2 id="surveying-title" class="reveal">Know the building before you commit to it.</h2>
+          <p class="room-copy reveal">RICS-accredited surveyors inspect what a viewing can't show: roof, structure, damp and services. Compare the survey levels, then see exactly what each one covers.</p>
+          <div class="card breakdown reveal" id="survey-breakdown" aria-live="polite">
+            <p class="eyebrow eyebrow-sm">What's inspected</p>
+            <h3 id="survey-selected-name">Level 2 · HomeBuyer Survey</h3>
+            <p class="breakdown-blurb" id="survey-selected-blurb"></p>
+            <ul class="inspect-list" id="inspect-list"></ul>
+          </div>
+          <div class="actions reveal">
+            <a class="btn btn-primary" href="#contact" data-room="5" data-service="surveying">Request a survey quote</a>
+          </div>
+        </div>
+
+        <div class="card chart reveal" id="survey-chart">
+          <div class="calc-head">
+            <h3>Compare survey levels</h3>
+            <div class="segmented" role="group" aria-label="Compare by" id="survey-metrics">
+              <button type="button" data-metric="fee" aria-pressed="true">Typical fee</button>
+              <button type="button" data-metric="depth" aria-pressed="false">Inspection depth</button>
+              <button type="button" data-metric="days" aria-pressed="false">Turnaround</button>
+            </div>
+          </div>
+          <p class="chart-hint">Select a survey to see what it inspects. Bars show <span id="survey-metric-label">typical fee</span>.</p>
+          <div class="bars" id="survey-bars" role="group" aria-label="Survey levels"></div>
+          <details class="table-view">
+            <summary>View as a table</summary>
+            <div class="table-scroll">
+              <table id="survey-table">
+                <thead><tr><th scope="col">Survey</th><th scope="col">Typical fee</th><th scope="col">Inspection depth</th><th scope="col">Turnaround</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 · THE VAULT — BRIDGING FINANCE -->
+    <section class="panel" id="bridging" data-room="4" aria-labelledby="bridging-title">
+      <svg class="panel-bg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#sc-vault-far"/><use href="#sc-vault-near"/></svg>
+      <div class="panel-inner room-grid">
+        <div class="room-intro">
+          <p class="eyebrow reveal">The Vault · Bridging finance</p>
+          <h2 id="bridging-title" class="reveal">Liquidity in days, not months.</h2>
+          <p class="room-copy reveal">Short-term secured lending from £50,000 to £5m for chain breaks, auction purchases, refurbishments and development exits. Terms in principle within 24 hours; funds typically released in 7 to 14 days.</p>
+          <ol class="steps reveal">
+            <li><strong>Enquiry &amp; terms</strong><span>Indicative terms the same working day, no credit footprint.</span></li>
+            <li><strong>Valuation &amp; legals</strong><span>Our panel valuer and solicitors run in parallel to save a week.</span></li>
+            <li><strong>Drawdown</strong><span>Funds released on completion; interest retained or serviced, your choice.</span></li>
+          </ol>
+          <div class="actions reveal">
+            <a class="btn btn-primary" href="#contact" data-room="5" data-service="bridging">Discuss a facility</a>
+          </div>
+        </div>
+
+        <form class="card calc reveal" id="bridging-calc" novalidate aria-labelledby="bridging-calc-title">
+          <div class="calc-head">
+            <h3 id="bridging-calc-title">Fast liquidity calculator</h3>
+            <div class="segmented" role="group" aria-label="Interest method">
+              <button type="button" data-method="retained" aria-pressed="true">Retained</button>
+              <button type="button" data-method="serviced" aria-pressed="false">Serviced</button>
+            </div>
+          </div>
+          <div class="calc-grid">
+            <div class="range-field">
+              <div class="range-label"><label for="b-gross">Gross loan</label><output id="b-gross-out" for="b-gross">£750,000</output></div>
+              <input id="b-gross" type="range" min="50000" max="5000000" step="10000" value="750000">
+            </div>
+            <div class="range-field">
+              <div class="range-label"><label for="b-term">Term</label><output id="b-term-out" for="b-term">9 months</output></div>
+              <input id="b-term" type="range" min="1" max="24" step="1" value="9">
+            </div>
+            <div class="range-field">
+              <div class="range-label"><label for="b-rate">Monthly rate</label><output id="b-rate-out" for="b-rate">0.79%</output></div>
+              <input id="b-rate" type="range" min="0.45" max="1.5" step="0.01" value="0.79">
+            </div>
+          </div>
+          <div class="calc-result" aria-live="polite">
+            <div class="stat stat-hero"><span class="stat-label">Net funds on day one</span><strong class="stat-value" id="b-net">£0</strong></div>
+            <dl class="stat-list">
+              <div><dt>Monthly interest</dt><dd id="b-monthly">£0</dd></div>
+              <div><dt>Total interest</dt><dd id="b-interest">£0</dd></div>
+              <div><dt>Arrangement fee (2%)</dt><dd id="b-fee">£0</dd></div>
+              <div><dt>Total cost of borrowing</dt><dd id="b-cost">£0</dd></div>
+              <div><dt>Repay at exit</dt><dd id="b-repay">£0</dd></div>
+            </dl>
+          </div>
+          <p class="fineprint" id="b-note">Retained interest is deducted from the advance, so there are no monthly payments during the term.</p>
+        </form>
+      </div>
+    </section>
+
+    <!-- 5 · GARDEN TERRACE — CONTACT + FOOTER -->
+    <section class="panel panel-contact" id="contact" data-room="5" aria-labelledby="contact-title">
+      <svg class="panel-bg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#sc-terrace-far"/><use href="#sc-terrace-near"/></svg>
+      <div class="panel-inner">
+        <div class="room-grid">
+          <div class="room-intro">
+            <p class="eyebrow reveal">The Garden Terrace · Contact us</p>
+            <h2 id="contact-title" class="reveal">Let's talk on the terrace.</h2>
+            <p class="room-copy reveal">Tell us what you're planning and the right specialist will call you back the same working day.</p>
+            <address class="office reveal">
+              <p><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg><span>14 Belgrave Row, London SW1X 8AA</span></p>
+              <p><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><a href="tel:+442079460111">+44 (0)20 7946 0111</a></p>
+              <p><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg><a href="mailto:enquiries@norvex.example">enquiries@norvex.example</a></p>
+              <p class="hours">Monday to Friday 8.30am to 7pm · Saturday 9am to 4pm</p>
+            </address>
+          </div>
+
+          <div class="card reveal">
+            <form id="enquiry-form" novalidate aria-labelledby="enquiry-title">
+              <h3 id="enquiry-title">Quick enquiry</h3>
+              <div class="form-errors" id="form-errors" role="alert" tabindex="-1" aria-labelledby="form-errors-title" hidden>
+                <p id="form-errors-title"><svg class="icon" aria-hidden="true"><use href="#i-warn"/></svg>There is a problem</p>
+                <ul id="form-errors-list"></ul>
+              </div>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="c-name">Full name</label>
+                  <input id="c-name" name="name" type="text" autocomplete="name" required aria-describedby="c-name-error">
+                  <p class="field-error" id="c-name-error" hidden></p>
+                </div>
+                <div class="field">
+                  <label for="c-email">Email</label>
+                  <input id="c-email" name="email" type="email" autocomplete="email" required aria-describedby="c-email-error">
+                  <p class="field-error" id="c-email-error" hidden></p>
+                </div>
+                <div class="field">
+                  <label for="c-phone">Phone <span class="optional">(optional)</span></label>
+                  <input id="c-phone" name="phone" type="tel" autocomplete="tel" aria-describedby="c-phone-error">
+                  <p class="field-error" id="c-phone-error" hidden></p>
+                </div>
+                <div class="field">
+                  <label for="c-service">I'm enquiring about</label>
+                  <select id="c-service" name="service" required aria-describedby="c-service-error">
+                    <option value="">Choose a service</option>
+                    <option value="buying">Buying a property</option>
+                    <option value="valuation">Selling &amp; valuation</option>
+                    <option value="letting">Letting &amp; landlord services</option>
+                    <option value="mortgages">Mortgages &amp; financial planning</option>
+                    <option value="bridging">Bridging finance</option>
+                    <option value="surveying">Surveying &amp; building reports</option>
+                    <option value="other">Something else</option>
+                  </select>
+                  <p class="field-error" id="c-service-error" hidden></p>
+                </div>
+                <div class="field field-full">
+                  <label for="c-message">Message</label>
+                  <textarea id="c-message" name="message" rows="3" required aria-describedby="c-message-hint c-message-error"></textarea>
+                  <p class="field-hint" id="c-message-hint">A line or two on the property or timing is plenty.</p>
+                  <p class="field-error" id="c-message-error" hidden></p>
+                </div>
+                <div class="field field-full field-check">
+                  <input id="c-consent" name="consent" type="checkbox" aria-describedby="c-consent-error">
+                  <label for="c-consent">I'm happy for Norvex Property to contact me about this enquiry.</label>
+                  <p class="field-error" id="c-consent-error" hidden></p>
+                </div>
+              </div>
+              <div class="actions">
+                <button type="submit" class="btn btn-primary">Send enquiry</button>
+                <span class="fineprint">We reply within one working day.</span>
+              </div>
+            </form>
+            <div class="form-success" id="form-success" tabindex="-1" hidden>
+              <svg class="icon icon-lg" aria-hidden="true"><use href="#i-check"/></svg>
+              <h3>Thank you, <span data-name>there</span>.</h3>
+              <p>Your enquiry is with the right specialist. Expect a call or email within one working day.</p>
+              <p class="fineprint">This prototype does not send data anywhere. Wire the form to your CRM or an email service before launch.</p>
+            </div>
+          </div>
+        </div>
+
+        <footer class="footer reveal">
+          <p class="footer-brand"><span class="brand-mark" aria-hidden="true">N</span>Norvex Property</p>
+          <nav aria-label="Footer">
+            <a href="#properties" data-room="1">Properties</a>
+            <a href="#mortgages" data-room="2">Mortgages</a>
+            <a href="#surveying" data-room="3">Surveying</a>
+            <a href="#bridging" data-room="4">Bridging</a>
+            <a href="#top" data-room="0">Back to the start</a>
+          </nav>
+          <p class="footer-legal">© 2026 Norvex Property. Prototype: all listings, rates and figures are illustrative.</p>
+        </footer>
+      </div>
+    </section>
+  </div>
+
+  <nav class="dots" aria-label="Rooms">
+    <ol>
+      <li><button type="button" data-room="0" aria-current="true"><span>Arrival</span></button></li>
+      <li><button type="button" data-room="1"><span>Foyer · Properties</span></button></li>
+      <li><button type="button" data-room="2"><span>Office · Mortgages</span></button></li>
+      <li><button type="button" data-room="3"><span>Study · Surveying</span></button></li>
+      <li><button type="button" data-room="4"><span>Vault · Bridging</span></button></li>
+      <li><button type="button" data-room="5"><span>Terrace · Contact</span></button></li>
+    </ol>
+  </nav>
+</main>
+</body>
+</html>
