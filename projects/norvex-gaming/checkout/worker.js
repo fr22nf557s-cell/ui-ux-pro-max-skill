@@ -61,7 +61,7 @@ async function loadCatalog(env, site, request) {
   return cached.data;
 }
 
-export async function buildSession(items, catalog, env, site) {
+export async function buildSession(items, catalog, env, site, imageBase = site) {
   if (!items.every((it) => it && typeof it.id === 'string' && it.id.length < 120)) throw Object.assign(new Error('Bad cart'), { status: 400 });
   const currency = String(catalog.config.currency || 'GBP').toLowerCase();
   const lines = []; let subtotal = 0; let preorder = false;
@@ -72,7 +72,7 @@ export async function buildSession(items, catalog, env, site) {
     const max = p.preorder ? 10 : Number(p.stock || 0);
     if (qty > max) throw Object.assign(new Error(max ? `Only ${max} of ${p.name} can be ordered` : `${p.name} is sold out`), { status: 400 });
     if (p.preorder) preorder = true;
-    const image = p.image ? (/^https?:/i.test(p.image) ? p.image : `${site}/${p.image}`) : null;
+    const image = p.image ? (/^https?:/i.test(p.image) ? p.image : `${imageBase}/${p.image}`) : null;
     lines.push({
       quantity: qty,
       price_data: { currency, unit_amount: Math.round(Number(p.price) * 100),
@@ -120,7 +120,10 @@ export default {
     if (items.length > 50) return json({ error: 'Too many items in one order' }, 400, cors);
     try {
       const catalog = await loadCatalog(env, site, request);
-      const session = await buildSession(items, catalog, env, site);
+      // Stripe fetches product photos itself: serve them from this Worker's own origin when it hosts the site
+      // (always a valid certificate), otherwise from the public site.
+      const imageBase = env.ASSETS ? new URL(request.url).origin : site;
+      const session = await buildSession(items, catalog, env, site, imageBase);
       const res = await fetch('https://api.stripe.com/v1/checkout/sessions', {
         method: 'POST', headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`, 'Content-Type': 'application/x-www-form-urlencoded', ...(idem ? { 'Idempotency-Key': idem } : {}) }, body: toForm(session)
       });
