@@ -82,8 +82,10 @@ export async function buildSession(items, catalog, env, site, imageBase = site) 
     });
     subtotal += Number(p.price) * qty;
   }
-  const free = subtotal >= Number(catalog.config.freeShippingThreshold ?? 100);
-  const standard = Number(env.SHIPPING_STANDARD ?? 499); const express = Number(env.SHIPPING_EXPRESS ?? 999);
+  // a cart made only of products flagged freeShipping (e.g. the checkout test item) ships free with no express option
+  const allFree = items.every((it) => catalog.byId[String(it.id)].freeShipping);
+  const free = allFree || subtotal >= Number(catalog.config.freeShippingThreshold ?? 100);
+  const standard = Number(env.SHIPPING_STANDARD ?? 499); const express = allFree ? 0 : Number(env.SHIPPING_EXPRESS ?? 999);
   const rate = (amount, name, min, max) => ({ shipping_rate_data: { type: 'fixed_amount', fixed_amount: { amount, currency }, display_name: name, delivery_estimate: { minimum: { unit: 'business_day', value: min }, maximum: { unit: 'business_day', value: max } } } });
   const shipping_options = [rate(free ? 0 : standard, free ? 'Free tracked & insured delivery' : 'Tracked & insured delivery', 2, 4)];
   if (express > 0) shipping_options.push(rate(express, 'Next working day, insured', 1, 1));

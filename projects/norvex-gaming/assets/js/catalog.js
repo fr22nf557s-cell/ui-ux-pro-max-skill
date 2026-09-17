@@ -9532,7 +9532,8 @@ window.NORVEX_DATA = {
         "Purpose": "Checkout test",
         "Refund": "Refunded after the test"
       },
-      "image": "assets/img/apple-touch-icon.png"
+      "image": "assets/img/apple-touch-icon.png",
+      "freeShipping": true
     }
   ]
 };
