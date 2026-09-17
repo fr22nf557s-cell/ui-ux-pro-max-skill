@@ -689,7 +689,7 @@
     const btn = $('[data-checkout]'); const label = btn ? btn.innerHTML : '';
     if (btn) { btn.disabled = true; btn.innerHTML = `${icon('lock')}Opening secure checkout…`; }
     try {
-      const res = await fetch(cfg.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: Cart.items.map((i) => ({ id: i.id, qty: i.qty })) }) });
+      const res = await fetch(cfg.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: Cart.items.map((i) => ({ id: i.id, qty: i.qty })), key: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())) }) });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.url) throw new Error(data.error || 'Checkout is unavailable right now');
       location.assign(data.url);

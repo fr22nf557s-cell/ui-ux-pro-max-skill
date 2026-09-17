@@ -20,6 +20,8 @@
      SHIP_COUNTRIES      GB                                 (comma-separated ISO codes)
      SHIPPING_STANDARD   499   pence, free above the catalogue's freeShippingThreshold
      SHIPPING_EXPRESS    999   pence, set to 0 to hide the express option
+     REQUIRE_TERMS       true  make shoppers accept your terms (needs a Terms URL under
+                               Stripe → Settings → Public details first)
    ========================================================================== */
 
 const CATALOG_TTL_MS = 5 * 60 * 1000;
@@ -57,6 +59,7 @@ async function loadCatalog(env, site) {
 }
 
 export async function buildSession(items, catalog, env, site) {
+  if (!items.every((it) => it && typeof it.id === 'string' && it.id.length < 120)) throw Object.assign(new Error('Bad cart'), { status: 400 });
   const currency = String(catalog.config.currency || 'GBP').toLowerCase();
   const lines = []; let subtotal = 0; let preorder = false;
   for (const it of items) {
@@ -90,6 +93,8 @@ export async function buildSession(items, catalog, env, site) {
     phone_number_collection: { enabled: true },
     allow_promotion_codes: true,
     customer_creation: 'if_required',
+    expires_at: Math.floor(Date.now() / 1000) + 30 * 60,      // an abandoned session releases its stock after 30 minutes
+    ...(String(env.REQUIRE_TERMS || '').toLowerCase() === 'true' ? { consent_collection: { terms_of_service: 'required' } } : {}),
     metadata: { store: catalog.config.storeName || 'Norvex Gaming', preorder: String(preorder), items: items.map((i) => `${i.id}x${i.qty}`).join(',').slice(0, 490) }
   };
 }
@@ -107,13 +112,14 @@ export default {
     if (!env.STRIPE_SECRET_KEY) return json({ error: 'Checkout is not configured yet (STRIPE_SECRET_KEY missing)' }, 500, cors);
     let body; try { body = await request.json(); } catch { return json({ error: 'Invalid request' }, 400, cors); }
     const items = Array.isArray(body && body.items) ? body.items : [];
+    const idem = typeof body.key === 'string' && /^[A-Za-z0-9-]{8,64}$/.test(body.key) ? body.key : null; // one Stripe session per checkout click, even on retries
     if (!items.length) return json({ error: 'Your cart is empty' }, 400, cors);
     if (items.length > 50) return json({ error: 'Too many items in one order' }, 400, cors);
     try {
       const catalog = await loadCatalog(env, site);
       const session = await buildSession(items, catalog, env, site);
       const res = await fetch('https://api.stripe.com/v1/checkout/sessions', {
-        method: 'POST', headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`, 'Content-Type': 'application/x-www-form-urlencoded' }, body: toForm(session)
+        method: 'POST', headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`, 'Content-Type': 'application/x-www-form-urlencoded', ...(idem ? { 'Idempotency-Key': idem } : {}) }, body: toForm(session)
       });
       const data = await res.json();
       if (!res.ok || !data.url) return json({ error: (data.error && data.error.message) || 'Stripe rejected the request' }, 502, cors);
