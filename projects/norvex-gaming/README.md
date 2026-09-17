@@ -189,6 +189,24 @@ Graded singles currently point at the public Pokémon TCG card-image CDN (`image
 if any image fails to load the storefront swaps in the slab art on its own. For launch, replace those
 URLs with your own photos of the actual slabs, cert label visible — buyers expect to see the real card.
 
+## Going live
+
+The storefront is static, so any static host works. The repo ships a GitHub Pages deploy
+(`.github/workflows/norvex-pages.yml`): every push that touches `projects/norvex-gaming/` assembles the
+three pages plus `assets/` (no scripts, no tooling) and publishes them. Enable Pages once under
+*Settings → Pages → Build and deployment → Source: GitHub Actions*; the site then lives at
+`https://<owner>.github.io/<repo>/`. For your own domain, put the hostname in
+`projects/norvex-gaming/CNAME` (for example `www.norvexgaming.co.uk`), add the domain under
+*Settings → Pages*, and point DNS at GitHub Pages: a `CNAME` record from `www` to `<owner>.github.io`,
+and for the bare domain the four A records `185.199.108.153`, `185.199.109.153`, `185.199.110.153`,
+`185.199.111.153`. Tick *Enforce HTTPS* once the certificate is issued.
+
+What "live" means today: a full catalogue and cart, but no payment step. The cart is stored in the
+shopper's browser and the *Checkout* button is a placeholder. Before taking orders, wire it to a
+checkout: Stripe Payment Links or Shopify Buy Button per product are the smallest change (one URL per
+product in `catalog.js`); a hosted platform (Shopify, WooCommerce) is the larger move and this
+catalogue exports to it via `scripts/catalog-template.csv`.
+
 ## Accessibility & performance notes
 
 * Skip link, landmarks, visible gold focus rings, 44 px+ touch targets, labelled icon buttons,

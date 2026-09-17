@@ -1,0 +1,63 @@
+name: Norvex – deploy site
+
+# Publishes projects/norvex-gaming/ to GitHub Pages on every push that touches it.
+# First run needs Pages enabled once: repo Settings → Pages → Build and deployment →
+# Source: "GitHub Actions" (the configure-pages step tries to do this itself).
+# Custom domain: put the hostname in projects/norvex-gaming/CNAME and point the DNS at
+# GitHub Pages (A records 185.199.108-111.153 or a CNAME to <owner>.github.io).
+
+on:
+  push:
+    branches:
+      - claude/norvex-gaming-ecommerce-5x8luq
+      - main
+    paths:
+      - "projects/norvex-gaming/**"
+      - ".github/workflows/norvex-pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: norvex-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assemble the site (pages + assets only, no tooling)
+        working-directory: projects/norvex-gaming
+        run: |
+          site="$GITHUB_WORKSPACE/_site"
+          mkdir -p "$site/assets/img"
+          cp index.html shop.html product.html "$site/"
+          cp -r assets/css assets/js "$site/assets/"
+          cp assets/img/*.svg "$site/assets/img/"
+          cp -r assets/img/products "$site/assets/img/"
+          [ -f CNAME ] && cp CNAME "$site/" || true
+          touch "$site/.nojekyll"
+          echo "site: $(du -sh "$site" | cut -f1), $(find "$site" -type f | wc -l) files"
+
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
