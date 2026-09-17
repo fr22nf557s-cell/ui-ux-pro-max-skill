@@ -196,7 +196,7 @@ The storefront is static, so any static host works. The repo ships a GitHub Page
 three pages plus `assets/` (no scripts, no tooling) and pushes them to the `gh-pages` branch, which
 GitHub publishes at `https://<owner>.github.io/<repo>/`. If nothing appears after the first run, pick the
 branch once under *Settings → Pages → Build and deployment → Source: Deploy from a branch → gh-pages*. The custom domain is set by
-`projects/norvex-gaming/CNAME` (currently `novexgaming.com`); the deploy copies it into the published
+`projects/norvex-gaming/CNAME` (currently `norvexgaming.com`); the deploy copies it into the published
 branch, which tells GitHub Pages to serve the site there. DNS at the registrar: four A records on the
 bare domain (`185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`), optionally the
 matching AAAA records (`2606:50c0:8000::153` to `2606:50c0:8003::153`), and a `CNAME` record from `www`
