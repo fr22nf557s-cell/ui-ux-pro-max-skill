@@ -457,7 +457,7 @@
   }
 
   function mailto(subject, body) {
-    return `mailto:${config.supportEmail || 'hello@norvexgaming.com'}?subject=${encodeURIComponent(subject)}${body ? '&body=' + encodeURIComponent(body) : ''}`;
+    return `mailto:${config.supportEmail || 'info@norvexgaming.com'}?subject=${encodeURIComponent(subject)}${body ? '&body=' + encodeURIComponent(body) : ''}`;
   }
 
   /* business details, contact email and social links all come from the catalogue config,

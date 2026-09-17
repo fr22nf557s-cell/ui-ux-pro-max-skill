@@ -361,7 +361,7 @@ INDEX = head('Norvex Gaming — Sealed TCG product, ' + ('graded singles &amp; p
             <button class="btn btn--primary" type="submit">Join the list</button>
             <span class="field__error" id="nl-error" style="grid-column:1/-1">Enter a valid email address.</span>
           </form>
-          <p class="newsletter__success" role="status">{ic('check')} Your email app should open with the request ready to send. If it doesn't, email <a href="mailto:hello@norvexgaming.com?subject=Allocation%20list">hello@norvexgaming.com</a> with the subject “Allocation list”.</p>
+          <p class="newsletter__success" role="status">{ic('check')} Your email app should open with the request ready to send. If it doesn't, email <a href="mailto:info@norvexgaming.com?subject=Allocation%20list">info@norvexgaming.com</a> with the subject “Allocation list”.</p>
           <p class="newsletter__fine">One email a week at most. Unsubscribe by replying “stop”.</p>
         </div>
       </div>
@@ -466,7 +466,7 @@ ORDER = head('Order confirmed · Norvex Gaming', 'Your Norvex Gaming order is co
   </main>
 {FOOTER}'''
 
-EMAIL = '<a data-email href="mailto:hello@norvexgaming.com">hello@norvexgaming.com</a>'
+EMAIL = '<a data-email href="mailto:info@norvexgaming.com">info@norvexgaming.com</a>'
 def textpage(page, canonical, title, desc, crumb, eyebrow, h1, lede, toc, body, extra=''):
     global CANONICAL
     CANONICAL = canonical

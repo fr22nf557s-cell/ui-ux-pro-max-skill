@@ -37,7 +37,7 @@ window.NORVEX_DATA = {
     "currency": "GBP",
     "locale": "en-GB",
     "freeShippingThreshold": 100,
-    "supportEmail": "hello@norvexgaming.com",
+    "supportEmail": "info@norvexgaming.com",
     "business": {
       "legalName": "Norvex Gaming",
       "tradingName": "Norvex Gaming",

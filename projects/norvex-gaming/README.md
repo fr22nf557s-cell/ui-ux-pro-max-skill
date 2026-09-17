@@ -141,7 +141,7 @@ paste keys into chat, commits or the front end.
 1. Check every price and stock figure in `catalog.js` against your inventory.
 2. Fill in `config.business` (address, company number, VAT number if registered) — the terms of
    sale and help page print them.
-3. Make sure `hello@norvexgaming.com` (or whatever `supportEmail` is) is a real mailbox you read.
+3. Make sure `info@norvexgaming.com` (or whatever `supportEmail` is) is a real mailbox you read.
 4. Confirm the delivery prices and windows on `help.html` match what your courier actually offers,
    and set the Worker's `SHIPPING_*` values to match.
 5. Place a test order with Stripe's test card, then switch the Worker to the live restricted key.
