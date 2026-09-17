@@ -42,7 +42,11 @@ window.NORVEX_DATA = {
       "legalName": "Norvex Gaming Limited",
       "tradingName": "Norvex Gaming",
       "country": "United Kingdom",
-      "address": [],
+      "address": [
+        "302 Harrow Road",
+        "Wembley",
+        "HA9 6LL"
+      ],
       "registeredIn": "England and Wales",
       "companyNumber": "16548577",
       "vatNumber": "",
