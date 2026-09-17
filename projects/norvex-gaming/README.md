@@ -195,11 +195,13 @@ The storefront is static, so any static host works. The repo ships a GitHub Page
 (`.github/workflows/norvex-pages.yml`): every push that touches `projects/norvex-gaming/` assembles the
 three pages plus `assets/` (no scripts, no tooling) and pushes them to the `gh-pages` branch, which
 GitHub publishes at `https://<owner>.github.io/<repo>/`. If nothing appears after the first run, pick the
-branch once under *Settings → Pages → Build and deployment → Source: Deploy from a branch → gh-pages*. For your own domain, put the hostname in
-`projects/norvex-gaming/CNAME` (for example `www.norvexgaming.co.uk`), add the domain under
-*Settings → Pages*, and point DNS at GitHub Pages: a `CNAME` record from `www` to `<owner>.github.io`,
-and for the bare domain the four A records `185.199.108.153`, `185.199.109.153`, `185.199.110.153`,
-`185.199.111.153`. Tick *Enforce HTTPS* once the certificate is issued.
+branch once under *Settings → Pages → Build and deployment → Source: Deploy from a branch → gh-pages*. The custom domain is set by
+`projects/norvex-gaming/CNAME` (currently `novexgaming.com`); the deploy copies it into the published
+branch, which tells GitHub Pages to serve the site there. DNS at the registrar: four A records on the
+bare domain (`185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`), optionally the
+matching AAAA records (`2606:50c0:8000::153` to `2606:50c0:8003::153`), and a `CNAME` record from `www`
+to `<owner>.github.io` so `www.` redirects to the bare domain. Tick *Enforce HTTPS* under
+*Settings → Pages* once the certificate is issued (up to an hour after DNS propagates).
 
 What "live" means today: a full catalogue and cart, but no payment step. The cart is stored in the
 shopper's browser and the *Checkout* button is a placeholder. Before taking orders, wire it to a
