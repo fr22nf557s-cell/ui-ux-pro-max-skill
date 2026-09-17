@@ -13,7 +13,10 @@
     "directory": "./_site",
     "binding": "ASSETS",
     "html_handling": "auto-trailing-slash",
-    "not_found_handling": "404-page"
+    "not_found_handling": "404-page",
+    // The checkout route must reach the Worker for every kind of request. Without this, a browser
+    // navigating to /session (the health check) is answered by the assets layer with the 404 page.
+    "run_worker_first": ["/session", "/session/*"]
   },
   "observability": { "enabled": true }
 }
