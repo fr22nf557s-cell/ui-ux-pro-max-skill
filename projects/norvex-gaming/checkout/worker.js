@@ -5,7 +5,8 @@
    Cloudflare Worker (paste this file into the dashboard editor); the same
    `export default { fetch }` shape also runs on Vercel Edge or Deno Deploy.
 
-   The browser POSTs { items: [{ id, qty }] } to /session. This function
+   The browser POSTs { items: [{ id, qty }] } to /session; GET /session?id=cs_… returns the
+   order summary for the confirmation page (needs Checkout Sessions: Read on a restricted key). This function
    looks every id up in the live catalogue (assets/js/catalog.js on the
    site), takes the price, name and photo from there — never from the
    browser — and asks Stripe for a hosted checkout page. Stripe handles the
@@ -88,7 +89,7 @@ export async function buildSession(items, catalog, env, site, imageBase = site) 
   return {
     mode: 'payment',
     line_items: lines,
-    success_url: `${site}/?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
+    success_url: `${site}/order.html?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${site}/?checkout=cancelled`,
     shipping_address_collection: { allowed_countries: String(env.SHIP_COUNTRIES || 'GB').split(',').map((s) => s.trim().toUpperCase()).filter(Boolean) },
     shipping_options,
@@ -102,6 +103,20 @@ export async function buildSession(items, catalog, env, site, imageBase = site) 
   };
 }
 
+/* What the confirmation page may see of a Checkout Session: totals, items, delivery address. */
+export function orderSummary(s) {
+  const ship = s.shipping_details || (s.collected_information && s.collected_information.shipping_details) || null;
+  const a = ship && ship.address ? ship.address : null;
+  return {
+    id: s.id, status: s.status, payment_status: s.payment_status, currency: s.currency,
+    email: (s.customer_details && s.customer_details.email) || s.customer_email || null,
+    name: (ship && ship.name) || (s.customer_details && s.customer_details.name) || null,
+    amount_subtotal: s.amount_subtotal, amount_total: s.amount_total, shipping_total: s.shipping_cost ? s.shipping_cost.amount_total : 0,
+    shipping: ship ? { name: ship.name || null, address: a ? [a.line1, a.line2, a.city, a.postal_code, a.country].filter(Boolean) : [] } : null,
+    items: ((s.line_items && s.line_items.data) || []).map((li) => ({ name: li.description, qty: li.quantity, amount_total: li.amount_total, product_id: (li.price && li.price.product && li.price.product.metadata && li.price.product.metadata.id) || null }))
+  };
+}
+
 export default {
   async fetch(request, env) {
     const site = String(env.SITE_URL || 'https://norvexgaming.com').replace(/\/$/, '');
@@ -110,7 +125,16 @@ export default {
     const cors = { 'Access-Control-Allow-Origin': allowed.includes(origin) ? origin : allowed[0], 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type', Vary: 'Origin' };
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
     const url = new URL(request.url);
-    if (request.method === 'GET') return json({ ok: true, service: 'norvex-checkout', configured: Boolean(env.STRIPE_SECRET_KEY) }, 200, cors);
+    if (request.method === 'GET') {
+      const id = url.searchParams.get('id');
+      if (!id) return json({ ok: true, service: 'norvex-checkout', configured: Boolean(env.STRIPE_SECRET_KEY) }, 200, cors);
+      if (!/^cs_(test|live)_[A-Za-z0-9]{10,}$/.test(id)) return json({ error: 'Unknown order' }, 400, cors);
+      if (!env.STRIPE_SECRET_KEY) return json({ error: 'Checkout is not configured yet' }, 500, cors);
+      const res = await fetch(`https://api.stripe.com/v1/checkout/sessions/${id}?expand[]=line_items.data.price.product`, { headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}` } });
+      const s = await res.json().catch(() => ({}));
+      if (!res.ok || !s.id) return json({ error: 'Order not found' }, 404, cors);
+      return json(orderSummary(s), 200, { ...cors, 'Cache-Control': 'private, max-age=300' });
+    }
     if (request.method !== 'POST' || !/\/session\/?$/.test(url.pathname)) return json({ error: 'Not found' }, 404, cors);
     if (!env.STRIPE_SECRET_KEY) return json({ error: 'Checkout is not configured yet (STRIPE_SECRET_KEY missing)' }, 500, cors);
     let body; try { body = await request.json(); } catch { return json({ error: 'Invalid request' }, 400, cors); }

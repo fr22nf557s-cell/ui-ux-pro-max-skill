@@ -822,3 +822,24 @@ select.input { appearance: none; -webkit-appearance: none; padding-right: 2.5rem
 /* helpers */
 .lg-hidden { display: inline-flex; }
 @media (min-width: 1024px) { .lg-hidden { display: none !important; } }
+
+/* ---- Order confirmation (order.html) ---- */
+.order { display: grid; gap: var(--space-6); grid-template-columns: 1fr; padding-block: var(--space-2) var(--space-9); }
+@media (min-width: 900px) { .order { grid-template-columns: minmax(0, 1.4fr) minmax(18rem, 1fr); align-items: start; gap: var(--space-8); } }
+.order__main { display: grid; gap: var(--space-5); }
+.order__title { font-family: var(--nv-font-display); font-weight: 500; font-size: clamp(2.4rem, 6vw, 4rem); line-height: 0.95; letter-spacing: -0.01em; }
+.order__lead { font-size: 1.05rem; line-height: 1.6; max-width: 40rem; }
+.order__lines { display: grid; gap: 0.6rem; max-width: 40rem; }
+.order__lines .line__name { font-weight: 600; }
+.order__totals { display: grid; gap: 0.4rem; padding-top: 1rem; border-top: 1px solid var(--nv-border); max-width: 40rem; }
+.order__totals > div { display: flex; justify-content: space-between; gap: 1rem; color: var(--nv-text-2); }
+.order__totals .order__total { color: var(--nv-text); font-weight: 600; font-size: 1.15rem; padding-top: 0.4rem; }
+.order__aside { display: grid; gap: var(--space-4); background: var(--nv-surface); border: 1px solid var(--nv-border); }
+.order__aside h2 { font-family: var(--nv-font-display); font-weight: 500; font-size: 1.7rem; line-height: 1.1; }
+.order__steps { display: grid; gap: 0.7rem; padding-left: 1.4rem; list-style: decimal; color: var(--nv-text-2); line-height: 1.5; }
+.order__steps li::marker { color: var(--nv-gold); font-weight: 600; }
+.order__address { display: grid; gap: 0.25rem; }
+.order__address address { font-style: normal; line-height: 1.5; }
+.order__pending { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.8rem; border-radius: var(--r-md); background: color-mix(in srgb, var(--nv-gold) 14%, transparent); color: var(--nv-gold); font-size: var(--fs-small); font-weight: 600; width: fit-content; }
+@media (prefers-reduced-motion: no-preference) { .order__main > * { animation: order-in 600ms var(--ease-out) both; } .order__main > :nth-child(2) { animation-delay: 80ms; } .order__main > :nth-child(3) { animation-delay: 160ms; } .order__main > :nth-child(4) { animation-delay: 240ms; } }
+@keyframes order-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }

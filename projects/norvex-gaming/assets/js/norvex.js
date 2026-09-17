@@ -700,10 +700,66 @@
   }
   function checkoutReturn() {
     const params = new URLSearchParams(location.search); const state = params.get('checkout'); if (!state) return;
+    if (state === 'success' && params.get('session_id')) { location.replace(`order.html?session_id=${encodeURIComponent(params.get('session_id'))}`); return; }
     if (state === 'success') { Cart.items = []; Cart.save(); Cart.render(); toast('Order received. Your receipt is on its way by email.', 'check'); }
     else if (state === 'cancelled') toast('Checkout cancelled. Your cart is still here.', 'lock');
     params.delete('checkout'); params.delete('session_id');
     const qs = params.toString(); history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + location.hash);
+  }
+
+  /* ---------------------------------------------------------- order page */
+  /* order.html?session_id=… — the order summary comes from the checkout function (GET endpoint?id=),
+     which reads it back from Stripe. If that is unreachable, the page still confirms the payment
+     from the cart it had before checkout. */
+  const orderRef = (id) => 'NV-' + String(id || '').replace(/[^a-z0-9]/gi, '').slice(-8).toUpperCase();
+  async function initOrder() {
+    const root = $('[data-order]'); if (!root) return;
+    const sid = new URLSearchParams(location.search).get('session_id') || '';
+    const snapshot = Cart.items.map((i) => ({ ...i }));
+    Cart.items = []; Cart.save(); Cart.render();
+    const cfg = config.checkout || {}; let order = null;
+    if (sid && cfg.endpoint) {
+      try { const res = await fetch(`${cfg.endpoint}?id=${encodeURIComponent(sid)}`); if (res.ok) order = await res.json(); } catch (e) { /* offline or blocked: fall back to the snapshot */ }
+    }
+    if (!sid && !snapshot.length) { root.innerHTML = `<div class="order__main"><span class="eyebrow">Your order</span><h1 class="order__title">Nothing to show yet.</h1><p class="order__lead muted">This page appears after a purchase. Your confirmation email has a link back to it.</p><p><a class="btn btn--primary" href="shop.html">Browse the shop</a></p></div>`; return; }
+    root.innerHTML = renderOrder(order, sid, snapshot);
+    document.title = `Order ${orderRef((order && order.id) || sid)} · ${config.storeName || 'Norvex Gaming'}`;
+  }
+  function renderOrder(o, sid, snapshot) {
+    const ref = orderRef((o && o.id) || sid);
+    const items = o && o.items && o.items.length ? o.items : snapshot.map((i) => ({ product_id: i.id, name: byId[i.id] ? byId[i.id].name : i.id, qty: i.qty, amount_total: Math.round((byId[i.id] ? byId[i.id].price : 0) * 100 * i.qty) }));
+    const line = (it) => {
+      const p = it.product_id ? byId[it.product_id] : null;
+      return `<div class="line"><div class="line__media" style="--a:${p ? gameOf(p).a : '#d9b75b'}">${p ? art(p) : ''}</div><div><div class="line__name">${esc(it.name)}</div><div class="muted-2 tiny">Qty ${esc(it.qty)}</div></div><span class="price">${fmt((it.amount_total || 0) / 100)}</span></div>`;
+    };
+    const pending = !!(o && o.payment_status && o.payment_status !== 'paid');
+    const first = o && o.name ? esc(String(o.name).trim().split(/\s+/)[0]) : '';
+    const totals = o ? `<div class="order__totals"><div><span>Subtotal</span><span>${fmt(o.amount_subtotal / 100)}</span></div><div><span>Delivery</span><span>${o.shipping_total ? fmt(o.shipping_total / 100) : 'Free'}</span></div><div class="order__total"><span>Total paid</span><span class="price">${fmt(o.amount_total / 100)}</span></div></div>` : '';
+    const addr = o && o.shipping ? [o.shipping.name].concat(o.shipping.address || []).filter(Boolean).map(esc).join('<br>') : '';
+    const lead = pending
+      ? `Your payment for order <b>${ref}</b> is being confirmed by your bank. We will email you the moment it clears, and nothing ships until it does.`
+      : `Order <b>${ref}</b> is paid and is being prepared.${o && o.email ? ` A receipt has been sent to <b>${esc(o.email)}</b>.` : ' Your receipt will arrive by email.'}`;
+    const support = config.supportEmail || '';
+    return `
+      <div class="order__main">
+        <span class="eyebrow">${pending ? 'Payment processing' : 'Order confirmed'}</span>
+        <h1 class="order__title">Thank you${first ? ', ' + first : ''}.</h1>
+        <p class="order__lead muted">${lead}</p>
+        ${pending ? `<span class="order__pending">${icon('lock')}Awaiting bank confirmation</span>` : ''}
+        <div class="order__lines">${items.map(line).join('')}</div>
+        ${totals}
+      </div>
+      <aside class="order__aside panel">
+        <h2>What happens next</h2>
+        <ol class="order__steps">
+          <li>We pull your items from the vault and double-box them with corner protection.</li>
+          <li>Dispatch within 48 hours. Pre-orders ship on release day.</li>
+          <li>You get a tracking number by email the moment it leaves us.</li>
+        </ol>
+        ${addr ? `<div class="order__address"><span class="tiny muted-2">Delivering to</span><address>${addr}</address></div>` : ''}
+        <a class="btn btn--primary btn--block" href="shop.html">Continue shopping</a>
+        <p class="tiny muted-2">Questions? Email <a href="mailto:${esc(support)}">${esc(support)}</a> quoting ${ref}.</p>
+      </aside>`;
   }
 
   /* --------------------------------------------------------------- init */
@@ -726,6 +782,7 @@
     Cart.load();
     Cart.mount();
     checkoutReturn();
+    initOrder();
     initMenu();
     initSearch();
     initHeader();
