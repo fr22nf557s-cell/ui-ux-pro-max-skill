@@ -1,0 +1,15 @@
+// Cloudflare Worker config: serves the built site (_site/) as static assets and runs the
+// Stripe checkout at /session. Build: bash build.sh · Deploy: npx wrangler deploy
+// Runtime settings (Worker → Settings → Variables and Secrets): STRIPE_SECRET_KEY (secret), SITE_URL.
+{
+  "name": "norvexgaming",
+  "main": "checkout/entry.js",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./_site",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "observability": { "enabled": true }
+}

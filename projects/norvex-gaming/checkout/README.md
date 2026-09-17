@@ -5,7 +5,16 @@ The storefront is static, so payment runs through one small server-side function
 payment page (card, Apple Pay, Google Pay, Klarna if enabled, address, receipt); the shopper
 returns to the site afterwards. The secret key lives only in the function's settings.
 
-## Simplest: as part of the site on Cloudflare Pages
+## Simplest: one Cloudflare Worker serving site + checkout
+
+`wrangler.jsonc` + `checkout/entry.js` deploy the built site as static assets with the checkout at
+`/session`, from Cloudflare's *Workers & Pages → Create → Import a repository* flow:
+build command `cd projects/norvex-gaming && bash build.sh`, deploy command
+`cd projects/norvex-gaming && npx wrangler deploy`, production branch
+`claude/norvex-gaming-ecommerce-5x8luq`. Then Worker → *Settings → Variables and Secrets*:
+`STRIPE_SECRET_KEY` (secret) and `SITE_URL`; set `"endpoint": "/session"` in `catalog.js`.
+
+## Or: as part of the site on Cloudflare Pages
 
 If the site is hosted on Cloudflare Pages, `functions/session.js` deploys with it and answers at
 `https://norvexgaming.com/session`; no separate Worker. Add `STRIPE_SECRET_KEY` (secret) and
