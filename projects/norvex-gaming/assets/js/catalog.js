@@ -43,8 +43,8 @@ window.NORVEX_DATA = {
       "tradingName": "Norvex Gaming",
       "country": "United Kingdom",
       "address": [],
-      "registeredIn": "",
-      "companyNumber": "",
+      "registeredIn": "England and Wales",
+      "companyNumber": "16548577",
       "vatNumber": "",
       "hours": "Monday to Friday, 9am to 6pm (UK)"
     },
