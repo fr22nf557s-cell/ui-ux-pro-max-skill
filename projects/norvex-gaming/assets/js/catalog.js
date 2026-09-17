@@ -220,7 +220,7 @@ window.NORVEX_DATA = {
         "Packs": "9",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/pokemon-mega-evolution-elite-trainer-box.webp"
     },
     {
       "id": "pokemon-destined-rivals-elite-trainer-box",
@@ -834,7 +834,7 @@ window.NORVEX_DATA = {
         "Packs": "6",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/pokemon-mega-evolution-booster-bundle.webp"
     },
     {
       "id": "pokemon-destined-rivals-booster-bundle",
@@ -1259,7 +1259,7 @@ window.NORVEX_DATA = {
         "Packs": "30",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-avatar-the-last-airbender-play-booster-box.webp"
     },
     {
       "id": "magic-marvel-s-spider-man-play-booster-box",
@@ -1313,7 +1313,7 @@ window.NORVEX_DATA = {
         "Packs": "36",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-edge-of-eternities-play-booster-box.webp"
     },
     {
       "id": "magic-tarkir-dragonstorm-play-booster-box",
@@ -1340,7 +1340,7 @@ window.NORVEX_DATA = {
         "Packs": "36",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-tarkir-dragonstorm-play-booster-box.webp"
     },
     {
       "id": "magic-aetherdrift-play-booster-box",
@@ -1475,7 +1475,7 @@ window.NORVEX_DATA = {
         "Packs": "36",
         "Ships": "On release day"
       },
-      "image": null
+      "image": "assets/img/products/magic-lorwyn-eclipsed-play-booster-box.webp"
     },
     {
       "id": "magic-final-fantasy-collector-booster-box",
@@ -1529,7 +1529,7 @@ window.NORVEX_DATA = {
         "Packs": "12",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-edge-of-eternities-collector-booster-box.webp"
     },
     {
       "id": "magic-avatar-the-last-airbender-collector-booster-box",
@@ -1556,7 +1556,7 @@ window.NORVEX_DATA = {
         "Packs": "12",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-avatar-the-last-airbender-collector-booster-box.webp"
     },
     {
       "id": "magic-tarkir-dragonstorm-collector-booster-box",
@@ -1583,7 +1583,7 @@ window.NORVEX_DATA = {
         "Packs": "12",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-tarkir-dragonstorm-collector-booster-box.webp"
     },
     {
       "id": "magic-bloomburrow-collector-booster-box",
@@ -1668,7 +1668,7 @@ window.NORVEX_DATA = {
         "Packs": "9",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-edge-of-eternities-bundle.webp"
     },
     {
       "id": "magic-avatar-the-last-airbender-bundle",
@@ -1697,7 +1697,7 @@ window.NORVEX_DATA = {
         "Packs": "9",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-avatar-the-last-airbender-bundle.webp"
     },
     {
       "id": "magic-tarkir-dragonstorm-bundle",
@@ -1726,7 +1726,7 @@ window.NORVEX_DATA = {
         "Packs": "9",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-tarkir-dragonstorm-bundle.webp"
     },
     {
       "id": "magic-bloomburrow-bundle",
@@ -2084,7 +2084,7 @@ window.NORVEX_DATA = {
         "Packs": "1",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-edge-of-eternities-play-booster-pack.webp"
     },
     {
       "id": "magic-avatar-the-last-airbender-play-booster-pack",
@@ -2110,7 +2110,7 @@ window.NORVEX_DATA = {
         "Packs": "1",
         "Condition": "Factory sealed"
       },
-      "image": null
+      "image": "assets/img/products/magic-avatar-the-last-airbender-play-booster-pack.webp"
     },
     {
       "id": "onepiece-op-11-a-fist-of-divine-speed-booster-box",
