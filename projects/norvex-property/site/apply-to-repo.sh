@@ -4,7 +4,8 @@
 #   bash apply-to-repo.sh /path/to/cloned/repo <film-url>
 set -euo pipefail
 REPO="$1"; FILM_URL="$2"
-RAW="https://raw.githubusercontent.com/fr22nf557s-cell/ui-ux-pro-max-skill/claude/jolly-galileo-tyb247/projects/norvex-property/site"
+SHA=$(curl -s https://api.github.com/repos/fr22nf557s-cell/ui-ux-pro-max-skill/commits/claude/jolly-galileo-tyb247 | jq -r .sha)
+RAW="https://raw.githubusercontent.com/fr22nf557s-cell/ui-ux-pro-max-skill/$SHA/projects/norvex-property/site"
 cd "$REPO"
 for f in app/design-brief.md app/src/scroll-scrub-scenes.ts app/src/routes/index.tsx app/src/norvex.css app/public/favicon.svg app/public/site.webmanifest; do
   mkdir -p "$(dirname "$f")"; curl -fsSL "$RAW/$f" -o "$f"
@@ -24,11 +25,13 @@ meta.update({
   "og_description": "Buy, let, sell, finance and survey with one quiet, exact team.",
   "og_image_url": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JSm3zkWdJl0vDJbWVyyAb7NnDy/8945142b-e935-4985-af64-7b8c2de51e52.png",
   "marketplace_cover_url": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JSm3zkWdJl0vDJbWVyyAb7NnDy/373b5d9f-98ca-46b4-a00a-924bf280109c.png",
+  "favicon_url": "/favicon.svg",
 })
 p.write_text(json.dumps(meta, indent=2) + "\n")
 print("app-meta.json:", json.dumps(meta, indent=2))
 PY
-# CSP: media-src must allow blob:
+# CSP: media-src must allow blob: (the engine assigns Blob URLs to <video src>)
+sed -i "s/media-src 'self' https:;/media-src 'self' blob: https:;/" app/src/lib/security-headers.server.ts
 echo "== CSP media-src occurrences"; grep -rn "media-src" app --include='*.ts' --include='*.tsx' --include='*.jsonc' --include='*.json' --include='*.toml' --include='*.txt' -l --exclude-dir=node_modules --exclude-dir=packages || echo "(none found: check __root.tsx / server.ts headers)"
 grep -rn "media-src" app --exclude-dir=node_modules --exclude-dir=packages | grep -v "blob:" || true
 echo "== placeholders / dashes / branding gate"
