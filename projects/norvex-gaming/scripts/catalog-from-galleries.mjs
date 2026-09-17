@@ -22,7 +22,7 @@ import { readFileSync, existsSync, readdirSync, statSync, mkdirSync, copyFileSyn
 import { resolve, join, dirname, extname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadCatalog, writeCatalog, parseCSV, slug } from './catalog-io.mjs';
-import { JUNK, MIN_IMAGE_BYTES, cleanName, setName, dedupeKey, detectFormat, describe, productCode } from './catalog-rules.mjs';
+import { JUNK, MIN_IMAGE_BYTES, cleanName, setName, dedupeKey, detectFormat, describe, productCode, looksLikeProduct, priceFor, boxSibling } from './catalog-rules.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -43,20 +43,7 @@ const gameOfHost = (h) => (HOST_GAME.find(([re]) => re.test(h)) || [null, null])
 
 /* Format detection, naming and junk rules live in catalog-rules.mjs (shared with tidy-catalog.mjs). */
 
-/* ---- estimated UK RRP by game + format (GBP) ----------------------------- */
-const PRICE = {
-  pokemon: { etb: 49.99, 'collector box': 149.99, 'play box': 149.99, box: 149.99, bundle: 26.99, pack: 4.49, commander: 14.99, starter: 14.99, structure: 14.99, 'battle deck': 14.99, deck: 14.99, upc: 119.99, spc: 84.99, 'premium collection': 39.99, trove: 49.99, tin: 24.99, 'gift set': 29.99, poster: 19.99, binder: 24.99, sticker: 19.99, 'ex box': 22.99, collection: 29.99 },
-  magic: { etb: 49.99, 'collector box': 249.99, 'play box': 129.99, 'jumpstart box': 109.99, box: 129.99, bundle: 49.99, pack: 4.99, commander: 44.99, starter: 24.99, structure: 24.99, deck: 34.99, 'gift set': 59.99, collection: 39.99 },
-  onepiece: { box: 109.99, pack: 4.99, starter: 14.99, deck: 14.99, 'premium collection': 39.99, collection: 39.99, bundle: 29.99 },
-  yugioh: { box: 79.99, pack: 3.49, structure: 12.99, starter: 12.99, deck: 12.99, tin: 22.99, collection: 24.99, bundle: 24.99 },
-  lorcana: { box: 119.99, pack: 4.99, starter: 16.99, deck: 16.99, trove: 49.99, 'gift set': 29.99, collection: 29.99, bundle: 29.99 },
-  swu: { box: 99.99, pack: 4.49, starter: 29.99, deck: 29.99, collection: 29.99, bundle: 29.99 },
-  fab: { box: 89.99, pack: 4.49, starter: 14.99, deck: 14.99, collection: 29.99, bundle: 29.99 },
-  digimon: { box: 74.99, pack: 3.99, starter: 12.99, deck: 12.99, collection: 29.99, bundle: 29.99 },
-  dragonball: { box: 79.99, pack: 3.99, starter: 12.99, deck: 12.99, collection: 29.99, bundle: 29.99 },
-  riftbound: { box: 139.99, pack: 5.99, starter: 19.99, deck: 19.99, collection: 29.99, bundle: 29.99 }
-};
-const priceFor = (game, fmt, type) => (PRICE[game] && (PRICE[game][fmt] ?? PRICE[game][type])) ?? ({ etb: 49.99, box: 119.99, bundle: 29.99, pack: 4.99, deck: 14.99, collection: 29.99, accessory: 14.99 })[type];
+/* Prices and booster-box siblings: catalog-rules.mjs (shared with tidy-catalog.mjs). */
 
 
 /* ---- format from context when the title has none ---------------------------
@@ -79,8 +66,6 @@ function withContext(name, r, game) {
   const c = ctx.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); const n = name.toLowerCase().replace(/[^a-z0-9]+/g, ' ');
   return !c || n.includes(c) ? name : `${ctx} ${name}`;
 }
-/* Games whose booster displays are simply 24 packs: list the box next to the pack (pictured with the pack art). */
-const BOX_SIBLING = { yugioh: 24, onepiece: 24, digimon: 24, dragonball: 24 };
 const SEALED = new Set(['etb', 'box', 'bundle', 'pack', 'deck', 'collection', 'accessory']);
 
 /* ---- read manifests ------------------------------------------------------- */
@@ -103,7 +88,7 @@ const added = []; const seenNames = new Set(); const perGame = {}; const attach 
 for (const r of rows) {
   const game = gameOfHost(r.host); if (!game || !data.games[game]) continue;
   const raw = r.title; if (!raw || JUNK.test(raw) || raw.length < 4 || raw.length > 110) continue;
-  let bare = cleanName(raw, game); if (!bare || JUNK.test(bare)) continue;
+  let bare = cleanName(raw, game); if (!bare || JUNK.test(bare) || !looksLikeProduct(bare, game)) continue;
   let hit = detectFormat(bare);
   if (!hit) { const label = inferFormat(r); if (!label) continue; bare = `${bare} ${label}`; hit = detectFormat(bare); if (!hit) continue; } // key art / logos / articles have no format anywhere
   const [fmt, type, re] = hit;
@@ -127,13 +112,9 @@ for (const r of rows) {
 }
 // booster displays for games that sell them as plain 24-pack boxes
 for (const p of [...added]) {
-  const n = BOX_SIBLING[p.game]; if (!n || p.type !== 'pack') continue;
-  const boxName = p.name.replace(/\b(Extra Booster|Premium Booster|Booster) Pack$/i, '$1 Box'); if (boxName === p.name) continue;
-  const key = dedupeKey(p.game, boxName); if (seenNames.has(key) || existingByKey.has(key)) continue; seenNames.add(key);
-  const id = slug(`${p.game}-${boxName}`); if (existingIds.has(id)) continue;
-  added.push({ ...p, id, name: boxName, type: 'box', price: priceFor(p.game, 'box', 'box'), description: describe('box', p.set, boxName),
-    contents: [`${n} ${p.set} booster packs`, 'Pictured: booster pack artwork'], specs: { ...p.specs, Format: data.types.box?.singular || 'Booster Box' } });
-  perGame[p.game] = (perGame[p.game] || 0) + 1;
+  const box = boxSibling(p, data.types); if (!box) continue;
+  const key = dedupeKey(p.game, box.name); if (seenNames.has(key) || existingByKey.has(key) || existingIds.has(box.id)) continue; seenNames.add(key);
+  added.push(box); perGame[p.game] = (perGame[p.game] || 0) + 1;
 }
 // feature the first few of each game so the home page shows the new lines
 const featuredCount = {};

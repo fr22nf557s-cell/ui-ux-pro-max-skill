@@ -23,7 +23,8 @@ import { readFileSync, existsSync, statSync, unlinkSync, renameSync, readdirSync
 import { resolve, join, extname, basename, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadCatalog, writeCatalog, slug } from './catalog-io.mjs';
-import { JUNK, MIN_IMAGE_BYTES, cleanName, setName, dedupeKey, detectFormat, describe, isTemplateCopy } from './catalog-rules.mjs';
+import { JUNK, MIN_IMAGE_BYTES, cleanName, setName, dedupeKey, detectFormat, describe, isTemplateCopy, looksLikeProduct, boxSibling } from './catalog-rules.mjs';
+import { copyFileSync } from 'node:fs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -60,7 +61,9 @@ for (const p of products) {
 
 /* 2. rules: junk titles, house-style names, sets, template copy ----------- */
 products = products.filter((p) => {
-  if (!SEALED.has(p.type) || !JUNK.test(p.name)) return true;
+  if (!SEALED.has(p.type)) return true;
+  const junk = JUNK.test(p.name) || JUNK.test(cleanName(p.name, p.game)) || (isTemplateCopy(p.description) && !looksLikeProduct(cleanName(p.name, p.game), p.game));
+  if (!junk) return true;
   console.log(`− drop (not a product): ${p.name}`); const f = localImg(p); if (f) deleted.add(f); stats.dropped++; return false;
 });
 for (const p of products) {
@@ -97,6 +100,17 @@ for (const [, ps] of groups) {
 }
 products = products.filter((p) => !losers.has(p));
 
+/* 4b. booster boxes next to packs for games sold as plain displays ------------ */
+const keysNow = new Set(products.filter((p) => SEALED.has(p.type)).map((p) => dedupeKey(p.game, p.name)));
+const copies = [];
+for (const p of [...products]) {
+  if (!isTemplateCopy(p.description) || !p.image || /^https?:/i.test(p.image)) continue;
+  const box = boxSibling(p, data.types); if (!box) continue;
+  const key = dedupeKey(p.game, box.name); if (keysNow.has(key)) continue; keysNow.add(key);
+  const src = localImg(p); const dest = join(dirname(src), box.id + extname(src)); box.image = rel(dest); delete box._id; delete box._forcedSet;
+  copies.push([src, dest]); products.push(box); console.log(`+ box for pack: ${box.name}`); stats.boxes = (stats.boxes || 0) + 1;
+}
+
 /* 5. ids follow names; image files follow ids ------------------------------ */
 const taken = new Set(products.map((p) => p.id));
 const moves = [];
@@ -111,7 +125,7 @@ for (const p of products) {
   if (target !== f) { moves.push([f, target]); p.image = rel(target); stats.moved++; }
 }
 const referenced = new Set(products.map(localImg).filter(Boolean));
-for (const f of [...deleted]) if (referenced.has(f) || moves.some(([, t]) => t === f)) deleted.delete(f);
+for (const f of [...deleted]) if (referenced.has(f) || moves.some(([, t]) => t === f) || copies.some(([, t]) => t === f)) deleted.delete(f);
 
 /* 6. featured: real photos only, up to N per game -------------------------- */
 for (const p of products) if (SEALED.has(p.type)) p.featured = false;   // re-picked below; graded singles keep their flag
@@ -138,15 +152,16 @@ if (existsSync(imgDir)) {
   const moveTargets = new Set(moves.map(([, t]) => t)); const moveSources = new Set(moves.map(([s]) => s));
   for (const f of readdirSync(imgDir)) {
     const full = join(imgDir, f); if (f.startsWith('.') || !statSync(full).isFile()) continue;
-    if (!finalRefs.has(full) && !moveTargets.has(full) && !moveSources.has(full) && !deleted.has(full)) { deleted.add(full); stats.orphans++; }
+    if (!finalRefs.has(full) && !moveTargets.has(full) && !moveSources.has(full) && !deleted.has(full) && !copies.some(([s]) => s === full)) { deleted.add(full); stats.orphans++; }
   }
 }
 
 /* summary ------------------------------------------------------------------- */
 data.products = products;
 const withPhoto = products.filter((p) => p.image).length;
-console.log(`\n${products.length} products (${withPhoto} with a photo) · dropped ${stats.dropped} · merged ${stats.merged} · renamed ${stats.renamed} · photos removed ${stats.photosRemoved} · files to move ${moves.length} · files to delete ${deleted.size} (${stats.orphans} orphans)`);
+console.log(`\n${products.length} products (${withPhoto} with a photo) · dropped ${stats.dropped} · merged ${stats.merged} · renamed ${stats.renamed} · photos removed ${stats.photosRemoved} · boxes added ${stats.boxes || 0} · files to move ${moves.length} · files to delete ${deleted.size} (${stats.orphans} orphans)`);
 if (!apply) { console.log('Dry run — add --apply to write catalog.js and move/delete the files'); process.exit(0); }
+for (const [from, to] of copies) { if (existsSync(from) && !existsSync(to)) copyFileSync(from, to); }
 for (const [from, to] of moves) { if (existsSync(from)) renameSync(from, to); }
 for (const f of deleted) { if (existsSync(f)) unlinkSync(f); }
 writeCatalog(catalogPath, data, header);

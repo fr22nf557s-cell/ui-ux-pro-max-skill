@@ -13,7 +13,17 @@
     "onepiece-what-s-next-power-up-your-deck-with-booster-packs",
     "onepiece-what-s-next-power-up-your-starter-deck",
     "pokemon-mega-evolution-elite-trainer-box",
-    "pokemon-mega-evolution-booster-bundle"
+    "pokemon-mega-evolution-booster-bundle",
+    "digimon-special-leather-deck-case",
+    "digimon-special-sleeves",
+    "dragonball-fs-13-the-saiyan-raised-on-earth-starter-deck",
+    "lorcana-elsa-gift-box-collection",
+    "lorcana-two-player-starter-decks",
+    "magic-the-hobbit-welcome-decks",
+    "magic-upgrading-the-miracle-worker-duskmourn-house-of-horror-commander-deck",
+    "onepiece-card-image-collection",
+    "onepiece-eb-05-one-piece-heroines-edition-vol-2-extra-booster-box",
+    "onepiece-eb-05-one-piece-heroines-edition-vol-2-extra-booster-pack"
   ],
   "unsetImage": [
     "magic-edge-of-eternities-bundle"
@@ -95,6 +105,12 @@
     },
     "onepiece-monkey-d-luffy-op05-119-manga-rare-psa-10": {
       "image": "https://en.onepiece-cardgame.com/images/cardlist/card/OP05-119.png"
+    },
+    "lorcana-single-player-deck": {
+      "name": "Hyperia City Starter Decks",
+      "set": "Hyperia City",
+      "type": "deck",
+      "price": 16.99
     }
   }
 }
