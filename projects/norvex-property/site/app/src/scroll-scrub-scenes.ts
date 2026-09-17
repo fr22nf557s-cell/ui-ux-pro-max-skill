@@ -1,7 +1,7 @@
 import type {
   ScrollScrubScene,
   ScrollScrubTheme,
-} from "./components/scroll-scrub/scroll-scrub";
+} from "@/components/scroll-scrub/scroll-scrub";
 
 /**
  * Norvex Property: the manor film.
@@ -111,3 +111,7 @@ export const scenes: ScrollScrubScene[] = [
 
 /** Segment cut points in seconds of the source take (must match the encode). */
 export const SEGMENT_CUTS = [0, 4, 10, 15, 20, 22.5, 24];
+
+/** Template-conventional aliases. */
+export const scrollScrubScenes = scenes;
+export const scrollScrubTheme = theme;

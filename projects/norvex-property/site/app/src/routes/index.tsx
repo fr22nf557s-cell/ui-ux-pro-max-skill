@@ -2,46 +2,17 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import type { FormEvent } from "react";
 
-import { ScrollScrub } from "../components/scroll-scrub/scroll-scrub";
-import type { ScrollScrubScene } from "../components/scroll-scrub/scroll-scrub";
-import { brand, scenes, theme } from "../scroll-scrub-scenes";
+import { ScrollScrub } from "@/components/scroll-scrub/scroll-scrub";
+import type { ScrollScrubScene } from "@/components/scroll-scrub/scroll-scrub";
+import { brand, scenes, theme } from "@/scroll-scrub-scenes";
 import "../norvex.css";
 
-const OG_IMAGE =
-  "https://d2ol7oe51mr4n9.cloudfront.net/user_3JSm3zkWdJl0vDJbWVyyAb7NnDy/8945142b-e935-4985-af64-7b8c2de51e52.png";
-
 export const Route = createFileRoute("/")({
+  // Title, description, og: and twitter: tags come from the root route
+  // (app-meta.json). This page only adds its fonts, icons and theme colour.
   head: () => ({
-    meta: [
-      { title: "Norvex Property: Buy, let, sell, finance and survey" },
-      {
-        name: "description",
-        content:
-          "Norvex Property is an estate agency for people who want one quiet, exact team: sales and lettings, whole-of-market mortgages, bridging finance and RICS surveys.",
-      },
-      { property: "og:title", content: "Norvex Property" },
-      {
-        property: "og:description",
-        content: "Buy, let, sell, finance and survey with one quiet, exact team.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:image", content: OG_IMAGE },
-      { property: "og:image:width", content: "1200" },
-      { property: "og:image:height", content: "630" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Norvex Property" },
-      {
-        name: "twitter:description",
-        content: "Buy, let, sell, finance and survey with one quiet, exact team.",
-      },
-      { name: "twitter:image", content: OG_IMAGE },
-      { name: "theme-color", content: "#0B0C10" },
-    ],
+    meta: [{ name: "theme-color", content: theme.background }],
     links: [
-      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
-      { rel: "icon", href: "/favicon.ico", sizes: "32x32" },
-      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
-      { rel: "manifest", href: "/site.webmanifest" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       {
         rel: "preconnect",
@@ -52,6 +23,9 @@ export const Route = createFileRoute("/")({
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Montserrat:wght@400;500;600&display=swap",
       },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+      { rel: "manifest", href: "/site.webmanifest" },
     ],
   }),
   component: Page,
