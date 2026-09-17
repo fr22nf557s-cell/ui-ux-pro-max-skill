@@ -34,8 +34,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add projects/norvex-property/film/assets
-          git commit -m "chore(projects): self-host the Norvex film and posters
-
-Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01Sx8sA7aUCePdYuBjwL9dLy" || { echo "nothing to commit"; exit 0; }
+          git commit -m "chore(projects): self-host the Norvex film and posters" \
+            -m "Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>" \
+            -m "Claude-Session: https://claude.ai/code/session_01Sx8sA7aUCePdYuBjwL9dLy" \
+            || { echo "nothing to commit"; exit 0; }
           git push origin "HEAD:${{ github.ref_name }}"
