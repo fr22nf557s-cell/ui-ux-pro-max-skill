@@ -49,6 +49,7 @@ const minSize = Number(opt('--min-size', 180));
 const maxRounds = Number(opt('--max-rounds', 80));
 const maxPages = Number(opt('--max-pages', 40));
 const paginate = opt('--paginate', null);
+const crawl = opt('--crawl', null); // e.g. "/en/products/" — also harvest same-host links under this path prefix
 const headed = args.includes('--headed');
 const debug = args.includes('--debug');
 mkdirSync(outDir, { recursive: true });
@@ -224,6 +225,19 @@ async function harvest(pageUrl, depth = 0) {
 }
 
 await harvest(url);
+
+/* ---- optional crawl: sub-pages under a path prefix (set pages, categories) ---- */
+if (crawl) {
+  const origin = new URL(url).origin;
+  const seen = new Set([page.url(), url]);
+  const queue = await page.evaluate((prefix) => [...document.querySelectorAll('a[href]')].map((a) => a.href).filter((h) => { try { const u = new URL(h); return u.pathname.startsWith(prefix) && !u.hash; } catch { return false; } }), crawl);
+  const links = [...new Set(queue)].filter((h) => h.startsWith(origin) && !seen.has(h) && !/\.(pdf|zip|jpe?g|png|webp)$/i.test(h)).slice(0, maxPages);
+  console.log(`   crawl: ${links.length} sub-page(s) under ${crawl}`);
+  for (const link of links) {
+    seen.add(link);
+    try { await harvest(link, maxPages); } catch (e) { console.log(`   ! ${link}: ${e.message}`); }
+  }
+}
 
 // download
 const rows = []; const used = new Set(); let ok = 0; let fail = 0;
