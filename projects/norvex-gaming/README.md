@@ -193,9 +193,9 @@ URLs with your own photos of the actual slabs, cert label visible — buyers exp
 
 The storefront is static, so any static host works. The repo ships a GitHub Pages deploy
 (`.github/workflows/norvex-pages.yml`): every push that touches `projects/norvex-gaming/` assembles the
-three pages plus `assets/` (no scripts, no tooling) and publishes them. Enable Pages once under
-*Settings → Pages → Build and deployment → Source: GitHub Actions*; the site then lives at
-`https://<owner>.github.io/<repo>/`. For your own domain, put the hostname in
+three pages plus `assets/` (no scripts, no tooling) and pushes them to the `gh-pages` branch, which
+GitHub publishes at `https://<owner>.github.io/<repo>/`. If nothing appears after the first run, pick the
+branch once under *Settings → Pages → Build and deployment → Source: Deploy from a branch → gh-pages*. For your own domain, put the hostname in
 `projects/norvex-gaming/CNAME` (for example `www.norvexgaming.co.uk`), add the domain under
 *Settings → Pages*, and point DNS at GitHub Pages: a `CNAME` record from `www` to `<owner>.github.io`,
 and for the bare domain the four A records `185.199.108.153`, `185.199.109.153`, `185.199.110.153`,
