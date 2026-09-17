@@ -86,7 +86,8 @@ mkdirSync(outDir, { recursive: true });
 for (const p of products) {
   let best = null;
   for (const img of images) {
-    const sc = Math.max(score(p.name, img.title), img.alt ? score(p.name, img.alt) : 0);
+    const ctx = img.context ? img.context + ' ' : '';
+    const sc = Math.max(score(p.name, img.title), img.alt ? score(p.name, img.alt) : 0, ctx ? score(p.name, ctx + img.title) : 0);
     if (!best || sc > best.sc) best = { img, sc };
   }
   const ok = best && best.sc >= minScore;

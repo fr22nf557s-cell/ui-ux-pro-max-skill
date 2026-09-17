@@ -1,0 +1,112 @@
+name: Norvex – fetch product images
+
+# Runs the storefront's gallery fetcher + matcher on a GitHub-hosted runner (which has
+# normal internet access), converts matched packshots to WebP and commits them to the
+# branch. Trigger it from the Actions tab (or the API) with the gallery URLs to walk.
+
+on:
+  workflow_dispatch:
+    inputs:
+      galleries:
+        description: "Gallery URLs to walk, one per line"
+        required: true
+        default: |
+          https://www.pokemon.com/uk/pokemon-tcg/product-gallery
+          https://magic.wizards.com/en/products
+          https://en.onepiece-cardgame.com/products/
+          https://www.yugioh-card.com/uk/products/
+          https://www.disneylorcana.com/en-GB/products
+          https://starwarsunlimited.com/products
+          https://fabtcg.com/products/
+      min_score:
+        description: "Minimum match score (0–1)"
+        required: false
+        default: "0.6"
+      commit:
+        description: "Commit matched images to the branch"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: norvex-fetch-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: projects/norvex-gaming
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Playwright + Chromium + sharp
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+          npm install --no-save --no-audit --no-fund sharp
+
+      - name: Walk galleries
+        env:
+          GALLERIES: ${{ inputs.galleries }}
+        run: |
+          set +e
+          echo "## Galleries" >> "$GITHUB_STEP_SUMMARY"
+          while IFS= read -r url; do
+            url="$(echo "$url" | xargs)"
+            [ -z "$url" ] && continue
+            echo "::group::$url"
+            if node scripts/fetch-gallery.mjs "$url" --max-rounds 120; then
+              host="$(node -e "console.log(new URL(process.argv[1]).hostname.replace(/^www\./,''))" "$url")"
+              n="$(tail -n +2 "assets/img/gallery/$host/manifest.csv" 2>/dev/null | wc -l | xargs)"
+              echo "- ✅ $url — $n images" >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "- ❌ $url — fetch failed (see log)" >> "$GITHUB_STEP_SUMMARY"
+            fi
+            echo "::endgroup::"
+          done <<< "$GALLERIES"
+          exit 0
+
+      - name: Match images to products
+        run: |
+          node scripts/match-images.mjs --min-score "${{ inputs.min_score }}" --apply | tee match.log
+          echo "## Matching" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"; cat match.log >> "$GITHUB_STEP_SUMMARY"; echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "### Report" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"; cat assets/img/gallery/match-report.csv >> "$GITHUB_STEP_SUMMARY"; echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Optimise matched images (WebP, max 1000px)
+        run: node scripts/optimize-images.mjs
+
+      - name: Upload manifests and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: norvex-gallery-manifests
+          path: |
+            projects/norvex-gaming/assets/img/gallery/**/manifest.csv
+            projects/norvex-gaming/assets/img/gallery/match-report.csv
+          if-no-files-found: ignore
+
+      - name: Commit matched images
+        if: ${{ inputs.commit }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/img/products assets/js/catalog.js
+          if git diff --cached --quiet; then
+            echo "Nothing matched — no commit."
+          else
+            git commit -m "chore(norvex): add matched product images from publisher galleries"
+            git push origin HEAD:${{ github.ref_name }}
+          fi

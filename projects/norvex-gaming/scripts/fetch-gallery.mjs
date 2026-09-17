@@ -22,7 +22,7 @@
 
    Output:
      <out>/<image files>            named after the product title (slugified)
-     <out>/manifest.csv             title, alt, file, image_url, page_url, width, height
+     <out>/manifest.csv             title, alt, context (page h1), file, image_url, page_url, width, height
 
    Then run `npm run match` to pair the files with catalogue products.
    Images belong to the publisher — you are an authorised retailer of their products;
@@ -69,6 +69,7 @@ async function collect() {
   const recs = await page.evaluate(({ scope, minSize }) => {
     const rootEl = scope ? document.querySelector(scope) : document.body;
     if (!rootEl) return [];
+    const h1 = document.querySelector('h1'); const ctx = ((h1 && h1.textContent) || document.title || '').trim().replace(/\s+/g, ' ').slice(0, 120);
     const bad = /logo|icon|sprite|badge|flag|avatar|arrow|pixel|tracking|spacer|banner-bg|placeholder/i;
     const out = [];
     for (const img of rootEl.querySelectorAll('img')) {
@@ -90,7 +91,7 @@ async function collect() {
       }
       if (!title) title = (img.alt || '').trim();
       if (!title) continue;
-      out.push({ title, alt: (img.alt || '').trim(), image_url: src, width: w, height: h });
+      out.push({ title, alt: (img.alt || '').trim(), image_url: src, width: w, height: h, context: ctx });
     }
     return out;
   }, { scope, minSize });
@@ -154,7 +155,7 @@ for (const rec of found.values()) {
     rows.push({ ...rec, file: name });
   } catch (e) { fail++; rows.push({ ...rec, file: '', error: e.message }); }
 }
-const cols = ['title', 'alt', 'file', 'image_url', 'page_url', 'width', 'height', 'error'];
+const cols = ['title', 'alt', 'context', 'file', 'image_url', 'page_url', 'width', 'height', 'error'];
 writeFileSync(join(outDir, 'manifest.csv'), cols.join(',') + '\n' + rows.map((r) => cols.map((c) => csvCell(r[c])).join(',')).join('\n') + '\n');
 await browser.close();
 console.log(`✔ ${ok} images saved to ${outDir}${fail ? ` (${fail} failed — see manifest.csv)` : ''}`);
