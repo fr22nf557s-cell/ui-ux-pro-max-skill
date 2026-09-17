@@ -469,7 +469,7 @@
       if (b.legalName) rows.push(`<b>${esc(b.legalName)}</b>${b.tradingName && b.tradingName !== b.legalName ? ` trading as ${esc(b.tradingName)}` : ''}`);
       (b.address || []).forEach((line) => rows.push(esc(line)));
       if (b.country && !(b.address || []).includes(b.country)) rows.push(esc(b.country));
-      if (b.companyNumber) rows.push(`Company number ${esc(b.companyNumber)}`);
+      if (b.companyNumber) rows.push(`${b.registeredIn ? `Registered in ${esc(b.registeredIn)}, company` : 'Company'} number ${esc(b.companyNumber)}`);
       if (b.vatNumber) rows.push(`VAT number ${esc(b.vatNumber)}`);
       if (email) rows.push(`<a href="mailto:${esc(email)}">${esc(email)}</a>`);
       if (b.hours) rows.push(`Email replies ${esc(b.hours)}`);

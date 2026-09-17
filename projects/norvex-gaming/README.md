@@ -69,7 +69,7 @@ appears once at least one product with `"type": "single"` exists.
 | Key | Used for |
 |-----|----------|
 | `storeName`, `supportEmail` | Titles, every "email us" link, the newsletter and restock requests |
-| `business` | Legal name, trading name, address lines, company and VAT numbers, reply hours; rendered on the help and legal pages (empty fields are skipped) |
+| `business` | Legal name (the Companies House name), trading name, registered office address lines, `registeredIn` (e.g. England and Wales), company and VAT numbers, reply hours; rendered on the help and legal pages and in the footer copyright (empty fields are skipped) |
 | `shipping` | Standard and express prices, free-delivery threshold, countries, dispatch window; shown on product pages. Keep in step with the Worker's `SHIPPING_*` settings |
 | `returnsDays` | Change-of-mind window shown on product pages |
 | `social` | Optional `{ "Instagram": "https://…", "TikTok": "https://…" }`; the footer links render only when set |

@@ -39,10 +39,11 @@ window.NORVEX_DATA = {
     "freeShippingThreshold": 100,
     "supportEmail": "info@norvexgaming.com",
     "business": {
-      "legalName": "Norvex Gaming",
+      "legalName": "Norvex Gaming Limited",
       "tradingName": "Norvex Gaming",
       "country": "United Kingdom",
       "address": [],
+      "registeredIn": "",
       "companyNumber": "",
       "vatNumber": "",
       "hours": "Monday to Friday, 9am to 6pm (UK)"

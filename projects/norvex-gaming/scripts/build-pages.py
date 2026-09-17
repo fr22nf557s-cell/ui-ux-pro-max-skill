@@ -94,6 +94,7 @@ for _g in re.findall(r'"game": "([a-z]+)"', _cat): _counts[_g] = _counts.get(_g,
 _names = dict(re.findall(r'\n    "([a-z]+)": \{\n      "name": "([^"]+)"', _cat))
 GAME_COUNT = sum(1 for k in _names if _counts.get(k) and k != 'norvex')
 HAS_SINGLES = '"type": "single"' in _cat
+LEGAL_NAME = (re.search(r'"legalName": "([^"]+)"', _cat) or re.search(r'"storeName": "([^"]+)"', _cat)).group(1)
 def first_id(pattern):
     m = re.search(r'"id": "(' + pattern + r')"', _cat)
     if not m: raise SystemExit(f'no product matches {pattern}')
@@ -140,7 +141,7 @@ FOOTER = f'''  <footer class="footer">
         </ul></div>
       </div>
       <div class="footer__bottom">
-        <p class="footer__legal">© <span data-year>2026</span> Norvex Gaming. All rights reserved. Pokémon, Magic: The Gathering, Yu-Gi-Oh!, One Piece Card Game, Disney Lorcana, Star Wars: Unlimited, Digimon Card Game, Dragon Ball Super Card Game, PSA and all related names, marks and artwork are trademarks of their respective owners. Norvex Gaming is an independent retailer and is not affiliated with or endorsed by any of them.</p>
+        <p class="footer__legal">© <span data-year>2026</span> {LEGAL_NAME}. All rights reserved. Pokémon, Magic: The Gathering, Yu-Gi-Oh!, One Piece Card Game, Disney Lorcana, Star Wars: Unlimited, Digimon Card Game, Dragon Ball Super Card Game, PSA and all related names, marks and artwork are trademarks of their respective owners. Norvex Gaming is an independent retailer and is not affiliated with or endorsed by any of them.</p>
         <div class="pay" aria-label="Accepted payment methods"><span>Visa</span><span>Mastercard</span><span>Amex</span><span>Apple Pay</span><span>Google Pay</span><span>Klarna</span></div>
       </div>
     </div>
