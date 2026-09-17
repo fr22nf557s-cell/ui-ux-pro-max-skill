@@ -238,3 +238,7 @@ The prototype is static, so any static host works: Cloudflare Pages, Netlify, Ve
 - The property feed, rates, survey fees and bridging pricing are static sample data.
 - The enquiry form does not submit anywhere.
 - The cinematic mode relies on native scrolling; if you adopt Lenis or Locomotive for inertia, register it with `ScrollTrigger.scrollerProxy`.
+
+## Live site
+
+The production site for norvexproperty.com now lives in its own repository, `fr22nf557s-cell/norvexproperty`, built from one layout by `tools/build.py` there. This folder keeps the prototype, the hosted-film build sources and the encoder scripts.
