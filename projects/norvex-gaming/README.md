@@ -146,6 +146,12 @@ npm run match                                 # dry run → assets/img/gallery/m
 npm run match -- --apply                      # copies to assets/img/products/<id>.<ext> + updates catalog.js
 ```
 
+**No machine to run it on?** The same pipeline runs in GitHub Actions: `Actions` tab → *Norvex – fetch
+product images* → *Run workflow* (pick the branch, keep the default gallery list). The runner walks the
+galleries, matches, converts to WebP and commits the results to the branch. On a fork, GitHub keeps
+Actions disabled until you click *"I understand my workflows, go ahead and enable them"* on the Actions
+tab once.
+
 The matcher scores titles against product names (it understands "ETB", "Booster Display", set
 prefixes like "Scarlet & Violet—") and refuses cross-format matches (a bundle never gets a box photo).
 Check `match-report.csv`, rename any stragglers to `<id>.<ext>` by hand, and re-run. Downloaded
