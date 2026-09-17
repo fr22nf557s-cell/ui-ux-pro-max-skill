@@ -5,6 +5,10 @@
   "name": "norvexgaming",
   "main": "checkout/entry.js",
   "compatibility_date": "2026-09-01",
+  // Runtime settings. SITE_URL lives here; STRIPE_SECRET_KEY is a secret added once in the
+  // dashboard (Settings → Variables and Secrets) and kept across deploys (keep_vars).
+  "vars": { "SITE_URL": "https://norvexgaming.com" },
+  "keep_vars": true,
   "assets": {
     "directory": "./_site",
     "binding": "ASSETS",
