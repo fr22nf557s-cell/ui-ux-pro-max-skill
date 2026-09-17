@@ -32,7 +32,7 @@ const catalogPath = resolve(root, opt('--catalog', 'assets/js/catalog.js'));
 const imgDir = resolve(root, opt('--images', 'assets/img/products'));
 const overridesPath = resolve(root, opt('--overrides', 'scripts/catalog-overrides.json'));
 const apply = args.includes('--apply');
-const SEALED = new Set(['etb', 'box', 'bundle', 'pack', 'deck', 'collection']);
+const SEALED = new Set(['etb', 'box', 'bundle', 'pack', 'deck', 'collection', 'accessory']);
 const FEATURED_PER_GAME = 3;
 const PRI = { etb: 0, box: 1, bundle: 2, deck: 3, collection: 4, pack: 5 };
 

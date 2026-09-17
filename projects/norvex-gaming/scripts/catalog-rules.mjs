@@ -14,7 +14,7 @@ export const JUNK = new RegExp([
   'learn more', 'cookie', 'privacy', '^products?$', '^booster packs$', '^structure decks$', '^tins$', '^starter decks$', '^others$', 'tournament packs',
   'key art', '^shop$', 'logo', 'wallpaper', 'banner', '\\btips?\\b', '\\bannounced\\b', "what'?s next", '\\bbuild a\\b', '\\bquests? in\\b',
   'deck building', 'product packaging image', '\\bassemble\\b', '\\bhow to\\b', '\\bguide\\b', '\\brules\\b', '\\bevents?\\b', '\\btournament\\b',
-  'championship', 'release notes', '\\bfaq\\b', '\\bnews\\b', '\\bpreview\\b', '\\bspoilers?\\b', '\\brevealed?\\b', '\\bcoming soon\\b', '\\bpower up your\\b'
+  'championship', 'release notes', '\\bfaq\\b', '\\bnews\\b', '\\bpreview\\b', '\\bspoilers?\\b', '\\brevealed?\\b', '\\bcoming soon\\b', '\\bpower up your\\b', 'related information', '\\brelated\\b', '\\bwhat is\\b', '\\blearn to play\\b'
 ].join('|'), 'i');
 
 /* Images this small are logos, gradients or "coming soon" placeholders, never a packshot. */
@@ -35,7 +35,8 @@ export const FORMATS = [
   ['poster', 'collection', /\bposter collection\b/i], ['binder', 'collection', /\bbinder collection\b/i], ['sticker', 'collection', /\bsticker collection\b/i],
   ['ex box', 'collection', /\bex box\b|\bV box\b|\bbox and\b/i], ['codex', 'bundle', /\bcodex bundle\b/i], ['bundle', 'bundle', /\bbundle\b/i], ['collection', 'collection', /\bcollections?\b|\bbox set\b|\bpremium\b/i], ['deck', 'deck', /\bdecks?\b/i]
 ];
-export const detectFormat = (title) => FORMATS.find(([, , re]) => re.test(title)) || null;
+export const ACCESSORY = /\bgame mat\b|\bplaymat\b|\bportfolio\b|\bsleeves?\b|\bdeck box\b|\bdeck case\b|\bbinder\b|\bcard case\b|\bdice\b|\bcoin\b/i;
+export const detectFormat = (title) => (ACCESSORY.test(title) ? ['accessory', 'accessory', ACCESSORY] : FORMATS.find(([, , re]) => re.test(title)) || null);
 
 /* ---- casing helpers ------------------------------------------------------ */
 const SMALL = new Set(['a', 'an', 'and', 'the', 'of', 'on', 'in', 'at', 'to', 'for', 'vs']);
@@ -90,12 +91,12 @@ function mergeCombined(s) {
 
 /* ---- public: clean a gallery title into a product name -------------------- */
 export function cleanName(raw, game) {
-  let s = String(raw).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+  let s = String(raw).replace(/<[^>]*>/g, ' ').replace(/[\u2010\u2011\u2012]/g, '-').replace(/\s+/g, ' ').trim()
     .replace(/^pok[eé]mon tcg:\s*/i, '').replace(/^scarlet\s*&\s*violet\s*[—–-]\s*/i, '').replace(/^sword\s*&\s*shield\s*[—–-]\s*/i, '')
-    .replace(/^magic:\s*the gathering\s*[—–:-]?\s*/i, '').replace(/^one piece card game\s*/i, '').replace(/^disney lorcana\s*/i, '').replace(/^yu-?gi-?oh!?\s*(tcg)?\s*/i, '')
+    .replace(/^magic:\s*the gathering\s*[—–:-]?\s*/i, '').replace(/^one piece card game\s*/i, '').replace(/^disney lorcana\s*/i, '').replace(/^yu-?gi-?oh!?\s*(tcg|trading card game)?\s*/i, '')
     .replace(/\s*\[(OP|EB|ST|SD|PRB)-?(\d+)\]\s*/gi, (m, a, n) => ` ${a.toUpperCase()}-${n} `).replace(/\s+/g, ' ').trim();
   if (game === 'onepiece') s = onePieceName(s);
-  if (game === 'pokemon') s = mergeCombined(s);
+  s = mergeCombined(s);                         // "X—A | X—B" and "X—A & X—B" → "X: A & B" (Pokémon and Konami list pairs this way)
   s = tidyPunct(titleCaps(s));
   return s.replace(/\s+/g, ' ').trim();
 }

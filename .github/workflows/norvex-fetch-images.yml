@@ -90,6 +90,9 @@ jobs:
           done <<< "$(printf '%b' "$GALLERIES")"
           exit 0
 
+      - name: Sync with the branch (other commits may have landed during the walk)
+        run: git pull --rebase --quiet origin "${{ github.ref_name }}"
+
       - name: Match images to products
         run: |
           node scripts/match-images.mjs --min-score "${{ inputs.min_score || '0.6' }}" --apply | tee match.log
@@ -121,9 +124,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/img/products assets/js/catalog.js
-          if git diff --cached --quiet; then
-            echo "Nothing matched — no commit."
-          else
-            git commit -m "chore(norvex): add matched product images from publisher galleries"
-            git push origin HEAD:${{ github.ref_name }}
-          fi
+          if git diff --cached --quiet; then echo "Nothing matched — no commit."; exit 0; fi
+          git commit -m "chore(norvex): add matched product images from publisher galleries"
+          for attempt in 1 2 3 4; do
+            git push origin HEAD:${{ github.ref_name }} && exit 0
+            echo "push rejected (attempt $attempt): rebasing the generated commit onto the latest branch"
+            git fetch origin ${{ github.ref_name }}
+            git rebase origin/${{ github.ref_name }} || { git rebase --abort; echo "::error::could not rebase the generated commit onto the branch; re-run the workflow"; exit 1; }
+          done
+          exit 1

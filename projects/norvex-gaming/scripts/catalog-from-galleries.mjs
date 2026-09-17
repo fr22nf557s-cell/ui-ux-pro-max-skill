@@ -56,7 +56,7 @@ const PRICE = {
   dragonball: { box: 79.99, pack: 3.99, starter: 12.99, deck: 12.99, collection: 29.99, bundle: 29.99 },
   riftbound: { box: 139.99, pack: 5.99, starter: 19.99, deck: 19.99, collection: 29.99, bundle: 29.99 }
 };
-const priceFor = (game, fmt, type) => (PRICE[game] && (PRICE[game][fmt] ?? PRICE[game][type])) ?? ({ etb: 49.99, box: 119.99, bundle: 29.99, pack: 4.99, deck: 14.99, collection: 29.99 })[type];
+const priceFor = (game, fmt, type) => (PRICE[game] && (PRICE[game][fmt] ?? PRICE[game][type])) ?? ({ etb: 49.99, box: 119.99, bundle: 29.99, pack: 4.99, deck: 14.99, collection: 29.99, accessory: 14.99 })[type];
 
 
 /* ---- format from context when the title has none ---------------------------
@@ -81,7 +81,7 @@ function withContext(name, r, game) {
 }
 /* Games whose booster displays are simply 24 packs: list the box next to the pack (pictured with the pack art). */
 const BOX_SIBLING = { yugioh: 24, onepiece: 24, digimon: 24, dragonball: 24 };
-const SEALED = new Set(['etb', 'box', 'bundle', 'pack', 'deck', 'collection']);
+const SEALED = new Set(['etb', 'box', 'bundle', 'pack', 'deck', 'collection', 'accessory']);
 
 /* ---- read manifests ------------------------------------------------------- */
 function walk(dir) {
