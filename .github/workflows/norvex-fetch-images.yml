@@ -17,11 +17,11 @@ on:
         default: |
           https://www.pokemon.com/uk/pokemon-tcg/product-gallery
           https://www.pokemon.com/us/pokemon-tcg/product-gallery
-          https://magic.wizards.com/en/products --crawl /en/products/ --max-pages 25
-          https://en.onepiece-cardgame.com/products/ --crawl /products/ --max-pages 25
-          https://www.yugioh-card.com/eu/products/ --crawl /eu/products/ --max-pages 25
-          https://www.disneylorcana.com/en-GB --crawl /en-GB/ --max-pages 30
-          https://starwarsunlimited.com/product-guide --crawl / --max-pages 25
+          https://magic.wizards.com/en/products --crawl /en/products/ --max-pages 8
+          https://en.onepiece-cardgame.com/products/ --crawl /products/ --max-pages 10
+          https://www.yugioh-card.com/eu/products/ --crawl /eu/products/ --max-pages 10
+          https://www.disneylorcana.com/en-GB --crawl /en-GB/ --max-pages 10
+          https://starwarsunlimited.com/product-guide --crawl / --max-pages 8
           https://fabtcg.com/products/
       min_score:
         description: "Minimum match score (0–1)"
@@ -43,7 +43,7 @@ jobs:
   fetch:
     if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[fetch-images]')
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 45
     defaults:
       run:
         working-directory: projects/norvex-gaming
@@ -64,7 +64,7 @@ jobs:
 
       - name: Walk galleries
         env:
-          GALLERIES: ${{ inputs.galleries || 'https://www.pokemon.com/uk/pokemon-tcg/product-gallery\nhttps://www.pokemon.com/us/pokemon-tcg/product-gallery\nhttps://magic.wizards.com/en/products --crawl /en/products/ --max-pages 25\nhttps://en.onepiece-cardgame.com/products/ --crawl /products/ --max-pages 25\nhttps://www.yugioh-card.com/eu/products/ --crawl /eu/products/ --max-pages 25\nhttps://www.disneylorcana.com/en-GB --crawl /en-GB/ --max-pages 30\nhttps://starwarsunlimited.com/product-guide --crawl / --max-pages 25\nhttps://fabtcg.com/products/' }}
+          GALLERIES: ${{ inputs.galleries || 'https://www.pokemon.com/uk/pokemon-tcg/product-gallery\nhttps://www.pokemon.com/us/pokemon-tcg/product-gallery\nhttps://magic.wizards.com/en/products --crawl /en/products/ --max-pages 8\nhttps://en.onepiece-cardgame.com/products/ --crawl /products/ --max-pages 10\nhttps://www.yugioh-card.com/eu/products/ --crawl /eu/products/ --max-pages 10\nhttps://www.disneylorcana.com/en-GB --crawl /en-GB/ --max-pages 10\nhttps://starwarsunlimited.com/product-guide --crawl / --max-pages 8\nhttps://fabtcg.com/products/' }}
         run: |
           set +e
           echo "## Galleries" >> "$GITHUB_STEP_SUMMARY"
@@ -76,7 +76,7 @@ jobs:
             host="$(node -e "console.log(new URL(process.argv[1]).hostname.replace(/^www\./,''))" "$url")"
             slugp="$(node -e "console.log((new URL(process.argv[1]).pathname.replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'')||'root').slice(0,60))" "$url")"
             out="assets/img/gallery/$host/$slugp"
-            if node scripts/fetch-gallery.mjs "$url" --out "$out" --max-rounds 120 --debug "$@"; then
+            if node scripts/fetch-gallery.mjs "$url" --out "$out" --max-rounds 25 --debug "$@"; then
               n="$(tail -n +2 "$out/manifest.csv" 2>/dev/null | wc -l | xargs)"
               echo "- ✅ $url — $n images" >> "$GITHUB_STEP_SUMMARY"
               echo "--- manifest head ($url):"; head -60 "$out/manifest.csv" | cut -c1-220

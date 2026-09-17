@@ -158,9 +158,9 @@ async function clickMore() {
 
 async function growPage() {
   // gentle incremental scroll so IntersectionObserver-based lazy loaders and infinite lists fire
-  for (let i = 0; i < 5; i++) { await page.evaluate(() => window.scrollBy(0, Math.round(window.innerHeight * 0.7))); await page.waitForTimeout(350); }
+  for (let i = 0; i < 4; i++) { await page.evaluate(() => window.scrollBy(0, Math.round(window.innerHeight * 0.8))); await page.waitForTimeout(250); }
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-  await page.waitForTimeout(900);
+  await page.waitForTimeout(600);
   return clickMore();
 }
 
@@ -192,13 +192,13 @@ async function harvest(pageUrl, depth = 0) {
   console.log(`→ ${pageUrl}`);
   const resp = await page.goto(pageUrl, { waitUntil: 'domcontentloaded', timeout: 60000 }).catch((e) => { console.log(`   ! navigation failed: ${e.message}`); return null; });
   if (resp) console.log(`   HTTP ${resp.status()} ${resp.url() !== pageUrl ? '→ ' + resp.url() : ''}`);
-  await page.waitForLoadState('networkidle', { timeout: 20000 }).catch(() => {});
-  await page.waitForTimeout(800);
+  await page.waitForLoadState('networkidle', { timeout: 6000 }).catch(() => {});
+  await page.waitForTimeout(500);
   await dismissBanners();
   const title = await page.title().catch(() => '');
   if (/just a moment|attention required|access denied|verify you are human/i.test(title)) console.log(`   ! bot wall: "${title}"`);
   let stale = 0;
-  for (let round = 0; round < maxRounds && stale < 4; round++) {
+  for (let round = 0; round < maxRounds && stale < 3; round++) {
     const added = await collect();
     const clicked = await growPage();
     const atBottom = await page.evaluate(() => window.innerHeight + window.scrollY >= document.body.scrollHeight - 4);
@@ -218,8 +218,8 @@ async function harvest(pageUrl, depth = 0) {
   } else {
     const before = page.url(); const beforeCount = found.size;
     await next.click({ timeout: 3000 }).catch(() => {});
-    await page.waitForLoadState('networkidle', { timeout: 20000 }).catch(() => {});
-    await page.waitForTimeout(800);
+    await page.waitForLoadState('networkidle', { timeout: 6000 }).catch(() => {});
+    await page.waitForTimeout(500);
     if (page.url() !== before || (await collect()) > 0 || found.size > beforeCount) return harvest(page.url(), depth + 1);
   }
 }
