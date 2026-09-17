@@ -21,6 +21,7 @@
      SHIP_COUNTRIES      GB                                 (comma-separated ISO codes)
      SHIPPING_STANDARD   499   pence, free above the catalogue's freeShippingThreshold
      SHIPPING_EXPRESS    999   pence, set to 0 to hide the express option
+     (a restricted key needs only Checkout Sessions: Write and Checkout Sessions: Read)
      REQUIRE_TERMS       true  make shoppers accept your terms (needs a Terms URL under
                                Stripe → Settings → Public details first)
    ========================================================================== */
@@ -107,13 +108,18 @@ export async function buildSession(items, catalog, env, site, imageBase = site) 
 export function orderSummary(s) {
   const ship = s.shipping_details || (s.collected_information && s.collected_information.shipping_details) || null;
   const a = ship && ship.address ? ship.address : null;
+  const lines = (s.line_items && s.line_items.data) || [];
+  // product ids were written into metadata.items ("<id>x<qty>,…") in line-item order at creation,
+  // so no Products permission is needed to read them back
+  const ids = String((s.metadata && s.metadata.items) || '').split(',').map((t) => t.slice(0, Math.max(0, t.lastIndexOf('x'))));
+  const productId = (li, i) => (li.price && li.price.product && li.price.product.metadata && li.price.product.metadata.id) || (ids.length === lines.length ? ids[i] : '') || null;
   return {
     id: s.id, status: s.status, payment_status: s.payment_status, currency: s.currency,
     email: (s.customer_details && s.customer_details.email) || s.customer_email || null,
     name: (ship && ship.name) || (s.customer_details && s.customer_details.name) || null,
     amount_subtotal: s.amount_subtotal, amount_total: s.amount_total, shipping_total: s.shipping_cost ? s.shipping_cost.amount_total : 0,
     shipping: ship ? { name: ship.name || null, address: a ? [a.line1, a.line2, a.city, a.postal_code, a.country].filter(Boolean) : [] } : null,
-    items: ((s.line_items && s.line_items.data) || []).map((li) => ({ name: li.description, qty: li.quantity, amount_total: li.amount_total, product_id: (li.price && li.price.product && li.price.product.metadata && li.price.product.metadata.id) || null }))
+    items: lines.map((li, i) => ({ name: li.description, qty: li.quantity, amount_total: li.amount_total, product_id: productId(li, i) }))
   };
 }
 
@@ -127,10 +133,10 @@ export default {
     const url = new URL(request.url);
     if (request.method === 'GET') {
       const id = url.searchParams.get('id');
-      if (!id) return json({ ok: true, service: 'norvex-checkout', configured: Boolean(env.STRIPE_SECRET_KEY) }, 200, cors);
+      if (!id) return json({ ok: true, service: 'norvex-checkout', configured: Boolean(env.STRIPE_SECRET_KEY), mode: /_live_/.test(env.STRIPE_SECRET_KEY || '') ? 'live' : /_test_/.test(env.STRIPE_SECRET_KEY || '') ? 'test' : null }, 200, cors);
       if (!/^cs_(test|live)_[A-Za-z0-9]{10,}$/.test(id)) return json({ error: 'Unknown order' }, 400, cors);
       if (!env.STRIPE_SECRET_KEY) return json({ error: 'Checkout is not configured yet' }, 500, cors);
-      const res = await fetch(`https://api.stripe.com/v1/checkout/sessions/${id}?expand[]=line_items.data.price.product`, { headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}` } });
+      const res = await fetch(`https://api.stripe.com/v1/checkout/sessions/${id}?expand[]=line_items`, { headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}` } });
       const s = await res.json().catch(() => ({}));
       if (!res.ok || !s.id) return json({ error: 'Order not found' }, 404, cors);
       return json(orderSummary(s), 200, { ...cors, 'Cache-Control': 'private, max-age=300' });

@@ -27,8 +27,10 @@ If the site is hosted on Cloudflare Pages, `functions/session.js` deploys with i
    Name it `norvex-checkout` and click **Deploy** (it deploys a hello-world first).
 2. Click **Edit code**, delete the sample, paste the whole of `worker.js`, click **Deploy**.
 3. **Settings → Variables and Secrets** → add:
-   - `STRIPE_SECRET_KEY` — type *Secret* — your key from https://dashboard.stripe.com/apikeys
-     (`sk_live_…` to take real payments, `sk_test_…` to try it first)
+   - `STRIPE_SECRET_KEY` — type *Secret* — a **restricted** key from https://dashboard.stripe.com/apikeys
+     with only *Checkout Sessions: Write* and *Checkout Sessions: Read* (`rk_live_…` to take real
+     payments, `rk_test_…` to try it first). Open the Worker URL with `/session` on the end to see
+     which mode it is in: `{"ok":true,…,"mode":"live"}`.
    - `SITE_URL` — `https://norvexgaming.com`
    Optional: `SHIP_COUNTRIES` (`GB,IE,FR,DE`), `SHIPPING_STANDARD` (pence, default 499, free above
    the catalogue's free-shipping threshold), `SHIPPING_EXPRESS` (pence, default 999; `0` hides it).
