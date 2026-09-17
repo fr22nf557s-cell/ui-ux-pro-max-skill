@@ -49,10 +49,13 @@ export function parseCatalog(text) {
   return { ...data, byId: Object.fromEntries(data.products.map((p) => [p.id, p])) };
 }
 
-async function loadCatalog(env, site) {
-  const url = env.CATALOG_URL || `${site}/assets/js/catalog.js`;
+/* The catalogue comes from the Worker's own static assets when the site is deployed with it
+   (wrangler.jsonc `assets`), otherwise from CATALOG_URL / the live site. */
+async function loadCatalog(env, site, request) {
+  const own = env.ASSETS && request ? new URL('/assets/js/catalog.js', request.url).href : null;
+  const url = own || env.CATALOG_URL || `${site}/assets/js/catalog.js`;
   if (cached.data && cached.url === url && Date.now() - cached.at < CATALOG_TTL_MS) return cached.data;
-  const res = await fetch(url, { headers: { Accept: 'application/javascript,*/*' } });
+  const res = own ? await env.ASSETS.fetch(new Request(own)) : await fetch(url, { headers: { Accept: 'application/javascript,*/*' } });
   if (!res.ok) throw new Error(`Could not load the catalogue (${res.status})`);
   cached = { at: Date.now(), url, data: parseCatalog(await res.text()) };
   return cached.data;
@@ -116,7 +119,7 @@ export default {
     if (!items.length) return json({ error: 'Your cart is empty' }, 400, cors);
     if (items.length > 50) return json({ error: 'Too many items in one order' }, 400, cors);
     try {
-      const catalog = await loadCatalog(env, site);
+      const catalog = await loadCatalog(env, site, request);
       const session = await buildSession(items, catalog, env, site);
       const res = await fetch('https://api.stripe.com/v1/checkout/sessions', {
         method: 'POST', headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`, 'Content-Type': 'application/x-www-form-urlencoded', ...(idem ? { 'Idempotency-Key': idem } : {}) }, body: toForm(session)
