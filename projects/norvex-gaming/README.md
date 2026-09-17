@@ -75,6 +75,17 @@ appears once at least one product with `"type": "single"` exists.
 | `social` | Optional `{ "Instagram": "https://…", "TikTok": "https://…" }`; the footer links render only when set |
 | `checkout.endpoint` | Where the cart is POSTed: the Worker's `/session` URL |
 
+**Prices and stock** are quickest to correct in a spreadsheet:
+
+```bash
+node scripts/catalog-sheet.mjs export prices.csv      # one row per product: id, name, price, compareAt, stock, preorder
+# edit the price / stock / preorder columns in Excel, Numbers or Google Sheets, save as CSV
+node scripts/catalog-sheet.mjs import prices.csv --dry-run   # shows every change and refuses bad rows
+node scripts/catalog-sheet.mjs import prices.csv             # writes assets/js/catalog.js
+```
+
+Only those columns are read; names, photos and descriptions are untouched, and a row with an unknown id is skipped rather than added.
+
 **Products** are the `products` array. Each needs a unique `id` (used in URLs and image names),
 `game`, `type`, `name`, `set`, `price`, `stock`, `image` (`assets/img/products/<id>.webp`) and
 optionally `preorder`, `releaseDate`, `maxQty`, `compareAt`, `contents`, `specs`, `description`.
