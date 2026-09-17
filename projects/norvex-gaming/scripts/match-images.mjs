@@ -49,7 +49,7 @@ const SYN = [
   [/\bpre-?order\b|\bcoming soon\b/g, ''], [/\(\d+ packs?\)|\b\d+ packs?\b/g, ''], [/\b(en|english)\b/g, '']
 ];
 function norm(s) {
-  s = String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’'`]/g, "'").replace(/[—–]/g, '-').replace(/[^a-z0-9&:'\-\s]/g, ' ');
+  s = String(s).replace(/<[^>]*>/g, ' ').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’'`]/g, "'").replace(/[—–]/g, '-').replace(/[^a-z0-9&:'\-\s]/g, ' ');
   for (const [re, rep] of SYN) s = s.replace(re, rep);
   return s.replace(/\s+/g, ' ').trim();
 }
@@ -73,7 +73,7 @@ function score(productName, title) {
   const a = setTokens(productName); const b = setTokens(title);
   if (!a.size || !b.size) return 0;
   let inter = 0; for (const t of a) if (b.has(t)) inter++;
-  let s = (2 * inter) / (a.size + b.size);           // Dice overlap of the set-name words only
+  let s = inter / (a.size + b.size - inter);         // Jaccard overlap of the set-name words only (extra words on either side count against)
   if (fa && fb) s = Math.min(1, s + 0.05); else s -= 0.1; // one side has no recognisable format: be cautious
   return Math.max(0, s);
 }

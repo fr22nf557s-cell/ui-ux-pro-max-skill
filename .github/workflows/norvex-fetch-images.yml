@@ -16,9 +16,17 @@ on:
         required: true
         default: |
           https://www.pokemon.com/uk/pokemon-tcg/product-gallery
+          https://www.pokemon.com/us/pokemon-tcg/product-gallery
           https://magic.wizards.com/en/products
+          https://magic.wizards.com/en/products/final-fantasy
+          https://magic.wizards.com/en/products/marvels-spider-man
+          https://magic.wizards.com/en/products/foundations
+          https://magic.wizards.com/en/products/aetherdrift
+          https://magic.wizards.com/en/products/bloomburrow
+          https://magic.wizards.com/en/products/duskmourn-house-of-horror
           https://en.onepiece-cardgame.com/products/
           https://www.yugioh-card.com/uk/products/
+          https://www.yugioh-card.com/eu/products/
           https://www.disneylorcana.com/en-GB/products
           https://starwarsunlimited.com/products
           https://fabtcg.com/products/
@@ -63,7 +71,7 @@ jobs:
 
       - name: Walk galleries
         env:
-          GALLERIES: ${{ inputs.galleries || 'https://www.pokemon.com/uk/pokemon-tcg/product-gallery\nhttps://magic.wizards.com/en/products\nhttps://en.onepiece-cardgame.com/products/\nhttps://www.yugioh-card.com/uk/products/\nhttps://www.disneylorcana.com/en-GB/products\nhttps://starwarsunlimited.com/products\nhttps://fabtcg.com/products/' }}
+          GALLERIES: ${{ inputs.galleries || 'https://www.pokemon.com/uk/pokemon-tcg/product-gallery\nhttps://www.pokemon.com/us/pokemon-tcg/product-gallery\nhttps://magic.wizards.com/en/products\nhttps://magic.wizards.com/en/products/final-fantasy\nhttps://magic.wizards.com/en/products/marvels-spider-man\nhttps://magic.wizards.com/en/products/foundations\nhttps://magic.wizards.com/en/products/aetherdrift\nhttps://magic.wizards.com/en/products/bloomburrow\nhttps://magic.wizards.com/en/products/duskmourn-house-of-horror\nhttps://en.onepiece-cardgame.com/products/\nhttps://www.yugioh-card.com/uk/products/\nhttps://www.yugioh-card.com/eu/products/\nhttps://www.disneylorcana.com/en-GB/products\nhttps://starwarsunlimited.com/products\nhttps://fabtcg.com/products/' }}
         run: |
           set +e
           echo "## Galleries" >> "$GITHUB_STEP_SUMMARY"
@@ -71,10 +79,13 @@ jobs:
             url="$(echo "$url" | xargs)"
             [ -z "$url" ] && continue
             echo "::group::$url"
-            if node scripts/fetch-gallery.mjs "$url" --max-rounds 120; then
-              host="$(node -e "console.log(new URL(process.argv[1]).hostname.replace(/^www\./,''))" "$url")"
-              n="$(tail -n +2 "assets/img/gallery/$host/manifest.csv" 2>/dev/null | wc -l | xargs)"
+            host="$(node -e "console.log(new URL(process.argv[1]).hostname.replace(/^www\./,''))" "$url")"
+            slugp="$(node -e "console.log((new URL(process.argv[1]).pathname.replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'')||'root').slice(0,60))" "$url")"
+            out="assets/img/gallery/$host/$slugp"
+            if node scripts/fetch-gallery.mjs "$url" --out "$out" --max-rounds 120 --debug; then
+              n="$(tail -n +2 "$out/manifest.csv" 2>/dev/null | wc -l | xargs)"
               echo "- ✅ $url — $n images" >> "$GITHUB_STEP_SUMMARY"
+              echo "--- manifest head ($url):"; head -60 "$out/manifest.csv" | cut -c1-220
             else
               echo "- ❌ $url — fetch failed (see log)" >> "$GITHUB_STEP_SUMMARY"
             fi
