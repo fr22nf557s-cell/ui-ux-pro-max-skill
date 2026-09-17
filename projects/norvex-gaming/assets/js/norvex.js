@@ -101,10 +101,32 @@
 
   /* Packaging art. The CSS mock always renders; a product photo (p.image) is layered on top and
      fades in when it loads. If the photo fails, it is removed and the mock stays. */
+  /* Packaging art. A product with a photo shows only the photo, on a background sampled from the
+     photo's own edges (white when the photo is transparent or has no dominant edge colour). The
+     CSS mock is used for products without a photo, and swapped in if a photo fails to load. */
   function art(p, opts = {}) {
-    const mock = artMock(p);
-    if (!p.image) return mock;
-    return `${mock}<img class="art__photo" src="${esc(p.image)}" alt="${esc(p.name)}" loading="${opts.eager ? 'eager' : 'lazy'}" decoding="async" width="800" height="1000" data-art-fallback="${esc(p.id)}">`;
+    if (!p.image) return artMock(p);
+    return `<figure class="photo"><img class="photo__img" src="${esc(p.image)}" alt="${esc(p.name)}" loading="${opts.eager ? 'eager' : 'lazy'}" decoding="async" width="800" height="1000" data-art-fallback="${esc(p.id)}"></figure>`;
+  }
+  /* Dominant colour along the photo's edges: the background the packshot was shot on. */
+  function photoBackground(img) {
+    try {
+      const s = 48; const c = document.createElement('canvas'); c.width = s; c.height = s;
+      const ctx = c.getContext('2d', { willReadFrequently: true }); ctx.drawImage(img, 0, 0, s, s);
+      const d = ctx.getImageData(0, 0, s, s).data; const buckets = new Map(); let clear = 0; let n = 0;
+      const px = (x, y) => {
+        const i = (y * s + x) * 4; n++;
+        if (d[i + 3] < 40) { clear++; return; }
+        const k = `${d[i] >> 4}-${d[i + 1] >> 4}-${d[i + 2] >> 4}`;
+        const b = buckets.get(k) || [0, 0, 0, 0]; b[0] += d[i]; b[1] += d[i + 1]; b[2] += d[i + 2]; b[3]++; buckets.set(k, b);
+      };
+      for (let x = 0; x < s; x++) { px(x, 0); px(x, s - 1); }
+      for (let y = 1; y < s - 1; y++) { px(0, y); px(s - 1, y); }
+      if (clear > n / 2) return '#fff';
+      let best = null; for (const b of buckets.values()) if (!best || b[3] > best[3]) best = b;
+      if (!best || best[3] < n * 0.3) return '#fff';
+      return `rgb(${Math.round(best[0] / best[3])} ${Math.round(best[1] / best[3])} ${Math.round(best[2] / best[3])})`;
+    } catch { return '#fff'; }
   }
   function artMock(p) {
     const g = gameOf(p);
@@ -660,11 +682,17 @@
   function init() {
     document.addEventListener('error', (e) => {
       const img = e.target;
-      if (img instanceof HTMLImageElement && img.dataset.artFallback) img.remove();
+      if (!(img instanceof HTMLImageElement) || !img.dataset.artFallback) return;
+      if (img.dataset.altSrc && !img.dataset.altTried) { img.dataset.altTried = '1'; img.src = img.dataset.altSrc; return; }
+      const fig = img.closest('.photo'); const p = byId[img.dataset.artFallback];
+      if (fig && p) fig.outerHTML = artMock(p); else img.remove();
     }, true);
     document.addEventListener('load', (e) => {
       const img = e.target;
-      if (img instanceof HTMLImageElement && img.dataset.artFallback) img.classList.add('is-loaded');
+      if (!(img instanceof HTMLImageElement) || !img.dataset.artFallback) return;
+      const fig = img.closest('.photo');
+      if (fig) { fig.style.setProperty('--photo-bg', photoBackground(img)); fig.classList.add('is-loaded'); }
+      img.classList.add('is-loaded');
     }, true);
     $$('[data-free-ship]').forEach((el) => { el.textContent = fmt0(config.freeShippingThreshold); });
     Cart.load();

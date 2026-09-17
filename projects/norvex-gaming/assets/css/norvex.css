@@ -496,8 +496,14 @@ select.input { appearance: none; -webkit-appearance: none; padding-right: 2.5rem
 @media (hover: hover) { .product:hover .product__add.btn--ghost { background: var(--nv-gold-grad); color: var(--nv-gold-ink); border-color: transparent; box-shadow: var(--sh-gold); } }
 
 /* product photo layered over the CSS mock; fades in on load, removed on error */
-.art__photo { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: contain; padding: 6%; background: transparent; opacity: 0; transition: opacity 450ms var(--ease-out); }
-.art__photo.is-loaded { opacity: 1; }
+/* Product photo: fills the media area on the packshot's own background (sampled on load) */
+.photo { position: absolute; inset: 0; z-index: 1; margin: 0; display: grid; place-items: center; background: transparent; transition: background-color 450ms var(--ease-out); }
+.photo.is-loaded { background: var(--photo-bg, #fff); }
+.photo__img { display: block; width: 100%; height: 100%; object-fit: contain; padding: 5%; opacity: 0; transition: opacity 450ms var(--ease-out), transform var(--d-slow) var(--ease-out); }
+.photo.is-loaded .photo__img { opacity: 1; }
+.product:hover .photo__img, .pdp__media:hover .photo__img { transform: scale(1.035); }
+.line__media .photo__img, .hit__media .photo__img { padding: 4%; }
+@media (prefers-reduced-motion: reduce) { .photo, .photo__img { transition: none; } .product:hover .photo__img, .pdp__media:hover .photo__img { transform: none; } }
 .line__media, .hit__media, .bento__art { position: relative; }
 
 /* packaging art (pure CSS, replaceable by <img>) */
