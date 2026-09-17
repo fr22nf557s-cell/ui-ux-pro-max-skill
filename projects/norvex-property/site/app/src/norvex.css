@@ -33,16 +33,15 @@ body {
 .nx a { color: inherit; }
 .nx :focus-visible { outline: 2px solid var(--nx-champagne); outline-offset: 3px; }
 
-/* ---------- header ---------- */
+/* ---------- header (brand + enquire; the film engine's chapter buttons sit in the same row) ---------- */
 .nx-nav {
   position: fixed; inset: 0 0 auto 0; z-index: 40;
   height: var(--nx-nav-h);
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
   padding: 0 var(--nx-gutter);
-  background: linear-gradient(to bottom, rgba(11, 12, 16, 0.75), rgba(11, 12, 16, 0));
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  pointer-events: none;
 }
+.nx-nav > * { pointer-events: auto; }
 .nx-brand {
   display: inline-flex; align-items: center; gap: 10px;
   font-family: var(--nx-display); font-weight: 600; font-size: 22px; letter-spacing: 0.02em;
@@ -51,13 +50,6 @@ body {
 .nx-brand__mark {
   width: 10px; height: 10px; border: 1.5px solid var(--nx-champagne); transform: rotate(45deg);
 }
-.nx-nav__links { display: flex; gap: 28px; }
-.nx-nav__links a {
-  font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none;
-  color: var(--nx-stone); transition: color 0.2s ease;
-}
-.nx-nav__links a:hover { color: var(--nx-champagne); }
-@media (max-width: 860px) { .nx-nav__links { display: none; } }
 
 /* ---------- CTA chrome: each call to action has its own identity ---------- */
 .nx-cta-valuation, .nx-cta-send, .nx-cta-facility, .nx-cta-terms, .nx-cta-advisor, .nx-cta-survey, .nx-cta-tour, .nx-cta-listings, .nx-cta-enquire-nav {
@@ -108,29 +100,46 @@ body {
 .nx-rate-use { color: var(--nx-champagne); font-size: 11px; }
 .nx-rate-use:hover { text-decoration: underline; }
 
-/* ---------- film chapters (engine copy) ---------- */
-.scroll-scrub { font-family: var(--nx-ui); }
-.scroll-scrub__stage::after {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
+/* ---------- film chapters (engine copy). Prefixed with .nx so these win over the engine sheet. ---------- */
+.nx .scroll-scrub { font-family: var(--nx-ui); }
+.nx .scroll-scrub__stage::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 160px; z-index: 3; pointer-events: none;
+  background: linear-gradient(to bottom, rgba(11, 12, 16, 0.78), rgba(11, 12, 16, 0));
+}
+.nx .scroll-scrub__stage::after {
+  content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none;
   background:
     linear-gradient(to top, rgba(11, 12, 16, 0.82) 0%, rgba(11, 12, 16, 0.35) 38%, rgba(11, 12, 16, 0) 62%),
     linear-gradient(to right, rgba(11, 12, 16, 0.45), rgba(11, 12, 16, 0) 55%);
 }
-.scroll-scrub__kicker {
+.nx .scroll-scrub__progress { top: var(--nx-nav-h); background: rgba(243, 238, 228, 0.12); }
+/* chapter buttons live in the header row, between the brand and the enquire pill */
+.nx .scroll-scrub__route {
+  top: 0; left: auto; right: calc(var(--nx-gutter) + 134px);
+  height: var(--nx-nav-h); align-items: center; gap: 2px;
+}
+.nx .scroll-scrub__route-button { min-height: 36px; padding: 8px 10px; color: var(--nx-stone); }
+.nx .scroll-scrub__route-button:hover, .nx .scroll-scrub__route-button[aria-current="step"] { color: var(--nx-ivory); }
+.nx .scroll-scrub__route-button span { font: 500 11px/1 var(--nx-ui); letter-spacing: 0.16em; text-transform: uppercase; }
+@media (max-width: 1100px) { .nx .scroll-scrub__route-button { padding: 8px 7px; } .nx .scroll-scrub__route-button span { letter-spacing: 0.12em; } }
+@media (max-width: 860px) {
+  .nx .scroll-scrub__route { top: var(--nx-nav-h); height: auto; left: var(--nx-gutter); right: var(--nx-gutter); align-items: stretch; }
+}
+.nx .scroll-scrub__kicker {
   font: 500 12px/1 var(--nx-ui); letter-spacing: 0.22em; text-transform: uppercase; color: var(--nx-champagne);
 }
-.scroll-scrub__title {
+.nx .scroll-scrub__title {
   font-family: var(--nx-display); font-weight: 500; letter-spacing: -0.01em;
   font-size: clamp(40px, 6.2vw, 92px); line-height: 0.98; color: var(--nx-ivory);
   text-wrap: balance;
 }
-.scroll-scrub__body { color: var(--nx-stone); font-size: clamp(15px, 1.25vw, 18px); line-height: 1.55; max-width: 44ch; }
-.scroll-scrub__tags li {
+.nx .scroll-scrub__body { color: var(--nx-stone); font-size: clamp(15px, 1.25vw, 18px); line-height: 1.55; max-width: 44ch; }
+.nx .scroll-scrub__tags li {
   font: 500 11px/1 var(--nx-ui); letter-spacing: 0.14em; text-transform: uppercase; color: var(--nx-ivory);
   border: 1px solid var(--nx-line); background: var(--nx-card); backdrop-filter: blur(8px);
 }
-.scroll-scrub__actions { display: flex; flex-wrap: wrap; gap: 12px; }
-.scroll-scrub__route-button span { font: 500 11px/1 var(--nx-ui); letter-spacing: 0.16em; text-transform: uppercase; }
+.nx .scroll-scrub__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+@media (max-width: 860px) { .nx .scroll-scrub__title { font-size: clamp(34px, 11vw, 60px); } }
 
 /* ---------- sections ---------- */
 .nx-section {

@@ -25,13 +25,10 @@ a{color:inherit}
 img,video{max-width:100%}
 
 /* header */
-.nav{position:fixed;inset:0 0 auto 0;z-index:40;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;gap:24px;padding:env(safe-area-inset-top,0px) var(--gutter) 0;background:linear-gradient(to bottom,rgba(11,12,16,.78),rgba(11,12,16,0));backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.nav{position:fixed;inset:0 0 auto 0;z-index:40;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;gap:24px;padding:env(safe-area-inset-top,0px) var(--gutter) 0;pointer-events:none}
+.nav>*{pointer-events:auto}
 .brand{display:inline-flex;align-items:center;gap:10px;font-family:var(--display);font-weight:600;font-size:22px;letter-spacing:.02em;text-decoration:none}
 .brand i{width:10px;height:10px;border:1.5px solid var(--champagne);transform:rotate(45deg)}
-.nav__links{display:flex;gap:28px}
-.nav__links a{font-size:12px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;color:var(--stone);transition:color .2s}
-.nav__links a:hover{color:var(--champagne)}
-@media (max-width:860px){.nav__links{display:none}}
 
 /* CTA chrome, one identity each */
 .cta-valuation,.cta-send,.cta-facility,.cta-terms,.cta-advisor,.cta-survey,.cta-tour,.cta-listings,.cta-enquire-nav{display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;cursor:pointer;border:1px solid transparent;font-family:var(--ui);font-weight:500;letter-spacing:.16em;text-transform:uppercase;line-height:1;font-size:12px}
@@ -71,14 +68,15 @@ img,video{max-width:100%}
 .film__poster,.film__video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block}
 .film__video{z-index:1;opacity:0;transition:opacity .4s}
 .film.is-painted .film__video{opacity:1}
-.film__scrim{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(to top,rgba(11,12,16,.82) 0%,rgba(11,12,16,.35) 38%,rgba(11,12,16,0) 62%),linear-gradient(to right,rgba(11,12,16,.45),rgba(11,12,16,0) 55%)}
-.film__progress{position:absolute;z-index:6;top:0;left:0;right:0;height:2px;background:rgba(243,238,228,.14)}
+.film__scrim{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(to bottom,rgba(11,12,16,.78),rgba(11,12,16,0) 160px),linear-gradient(to top,rgba(11,12,16,.82) 0%,rgba(11,12,16,.35) 38%,rgba(11,12,16,0) 62%),linear-gradient(to right,rgba(11,12,16,.45),rgba(11,12,16,0) 55%)}
+.film__progress{position:absolute;z-index:6;top:var(--nav-h);left:0;right:0;height:2px;background:rgba(243,238,228,.12)}
 .film__progress span{display:block;height:100%;width:100%;background:var(--champagne);transform:scaleX(0);transform-origin:left center}
-.route{position:absolute;z-index:6;top:calc(var(--nav-h) + 2px);right:var(--gutter);display:flex;gap:2px;flex-wrap:wrap;justify-content:flex-end}
+.route{position:absolute;z-index:6;top:0;height:var(--nav-h);right:calc(var(--gutter) + 134px);display:flex;align-items:center;gap:2px;justify-content:flex-end}
 .route button{background:none;border:0;color:var(--stone);cursor:pointer;min-height:40px;padding:8px 10px;font:500 11px/1 var(--ui);letter-spacing:.16em;text-transform:uppercase}
 .route button:hover,.route button[aria-current="step"]{color:var(--ivory)}
 .route button[aria-current="step"]{text-decoration:underline;text-decoration-color:var(--champagne);text-decoration-thickness:.15em;text-underline-offset:.3em}
-@media (max-width:860px){.route{left:var(--gutter);right:var(--gutter);justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;top:calc(var(--nav-h) - 8px)}.route button{flex:0 0 auto}}
+@media (max-width:1100px){.route button{padding:8px 7px;letter-spacing:.12em}}
+@media (max-width:860px){.route{left:var(--gutter);right:var(--gutter);top:var(--nav-h);height:auto;justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap}.route button{flex:0 0 auto}}
 .chapters{position:absolute;inset:0;z-index:4;pointer-events:none}
 .chapter{position:absolute;inset:0;display:flex;align-items:flex-end;padding:0 var(--gutter) clamp(56px,9vh,110px);opacity:0;transform:translateY(14px);transition:opacity .45s ease,transform .6s cubic-bezier(.2,.7,.2,1);pointer-events:none}
 .chapter[data-align="right"]{justify-content:flex-end}
@@ -204,9 +202,6 @@ img,video{max-width:100%}
 <body>
 <header class="nav">
   <a class="brand" href="#arrival"><i aria-hidden="true"></i>Norvex Property</a>
-  <nav class="nav__links" aria-label="Sections">
-    <a href="#properties">Properties</a><a href="#mortgages">Mortgages</a><a href="#surveying">Surveying</a><a href="#bridging">Bridging</a><a href="#contact">Contact</a>
-  </nav>
   <a class="cta-enquire-nav" href="#enquire">Enquire</a>
 </header>
 

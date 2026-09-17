@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
 
 import { ScrollScrub } from "@/components/scroll-scrub/scroll-scrub";
@@ -115,7 +115,31 @@ function monthlyPayment(
 /* Page                                                                 */
 /* ------------------------------------------------------------------ */
 
+/**
+ * In-page anchors scroll the document themselves. The router owns hash
+ * navigation otherwise, and a plain jump would fight the pinned film.
+ */
+function useInPageAnchors() {
+  useEffect(() => {
+    const onClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      const link = target?.closest?.('a[href^="#"]') as HTMLAnchorElement | null;
+      if (!link) return;
+      const id = (link.getAttribute("href") ?? "").slice(1);
+      const el = id ? document.getElementById(id) : null;
+      if (!el) return;
+      event.preventDefault();
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+      window.history.replaceState(null, "", `#${id}`);
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, []);
+}
+
 function Page() {
+  useInPageAnchors();
   return (
     <div className="nx">
       <SiteHeader />
@@ -138,13 +162,6 @@ function SiteHeader() {
         <span className="nx-brand__mark" aria-hidden="true" />
         {brand.name}
       </a>
-      <nav aria-label="Sections" className="nx-nav__links">
-        <a href="#properties">Properties</a>
-        <a href="#mortgages">Mortgages</a>
-        <a href="#surveying">Surveying</a>
-        <a href="#bridging">Bridging</a>
-        <a href="#contact">Contact</a>
-      </nav>
       <a className="nx-cta-enquire-nav" href="#enquire">
         Enquire
       </a>
