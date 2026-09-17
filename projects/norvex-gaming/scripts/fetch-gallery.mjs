@@ -40,7 +40,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
 const url = args.find((a) => !a.startsWith('--'));
 const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : d; };
-if (!url) { console.error('Usage: node scripts/fetch-gallery.mjs <gallery-url> [--out <dir>] [--selector <css>] [--min-size 180] [--max-rounds 80] [--max-pages 40] [--paginate <css>] [--headed] [--debug]'); process.exit(1); }
+if (!url) { console.error('Usage: node scripts/fetch-gallery.mjs <gallery-url> [--out <dir>] [--selector <css>] [--min-size 180] [--max-rounds 80] [--max-pages 40] [--paginate <css>] [--crawl <path-prefix>] [--channel chrome] [--headed] [--debug]'); process.exit(1); }
 
 const host = (() => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return 'gallery'; } })();
 const outDir = resolve(root, opt('--out', join('assets/img/gallery', host)));
@@ -50,6 +50,7 @@ const maxRounds = Number(opt('--max-rounds', 80));
 const maxPages = Number(opt('--max-pages', 40));
 const paginate = opt('--paginate', null);
 const crawl = opt('--crawl', null); // e.g. "/en/products/" — also harvest same-host links under this path prefix
+const channel = opt('--channel', null); // e.g. "chrome" — use the runner's installed Google Chrome (gets past some bot walls that block bundled Chromium)
 const headed = args.includes('--headed');
 const debug = args.includes('--debug');
 mkdirSync(outDir, { recursive: true });
@@ -58,7 +59,7 @@ let chromium;
 try { ({ chromium } = await import('playwright')); }
 catch { console.error('Playwright is not installed. Run `npm install` in projects/norvex-gaming first.'); process.exit(1); }
 
-const browser = await chromium.launch({ headless: !headed });
+const browser = await chromium.launch({ headless: !headed, ...(channel ? { channel } : {}) });
 const ctx = await browser.newContext({
   viewport: { width: 1440, height: 1000 }, locale: 'en-GB',
   userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36',
@@ -112,7 +113,8 @@ async function collect() {
     const bad = /logo|icon|sprite|badge|flag|avatar|arrow|pixel|tracking|spacer|banner-bg|placeholder|loading|spinner/i;
     const out = [];
     for (const img of rootEl.querySelectorAll('img')) {
-      let src = img.currentSrc || img.src || img.getAttribute('data-src') || img.getAttribute('data-lazy-src') || img.getAttribute('data-original') || '';
+      let src = img.getAttribute('data-src') || img.getAttribute('data-lazy-src') || img.getAttribute('data-original') || img.currentSrc || img.src || '';
+      try { src = new URL(src, location.href).href; } catch { /* keep as is */ }
       const srcset = img.getAttribute('srcset') || img.getAttribute('data-srcset');
       if (srcset) {
         const best = srcset.split(',').map((s) => s.trim().split(/\s+/)).map(([u, d]) => [u, parseFloat(d) || 0]).sort((a, b) => b[1] - a[1])[0];
@@ -226,17 +228,26 @@ async function harvest(pageUrl, depth = 0) {
 
 await harvest(url);
 
-/* ---- optional crawl: sub-pages under a path prefix (set pages, categories) ---- */
+/* ---- optional crawl: sub-pages under a path prefix (set pages, categories) ----
+   Breadth-first: links under the prefix on the start page are visited first, then the links
+   those pages expose (a category page leads to its product pages), up to --max-pages. */
 if (crawl) {
   const origin = new URL(url).origin;
-  const seen = new Set([page.url(), url]);
-  const queue = await page.evaluate((prefix) => [...document.querySelectorAll('a[href]')].map((a) => a.href).filter((h) => { try { const u = new URL(h); return u.pathname.startsWith(prefix) && !u.hash; } catch { return false; } }), crawl);
-  const links = [...new Set(queue)].filter((h) => h.startsWith(origin) && !seen.has(h) && !/\.(pdf|zip|jpe?g|png|webp)$/i.test(h)).slice(0, maxPages);
-  console.log(`   crawl: ${links.length} sub-page(s) under ${crawl}`);
-  for (const link of links) {
-    seen.add(link);
-    try { await harvest(link, maxPages); } catch (e) { console.log(`   ! ${link}: ${e.message}`); }
+  const normLink = (h) => { try { const u = new URL(h); u.hash = ''; return u.href.replace(/\/$/, ''); } catch { return null; } };
+  const okLink = (h) => h && h.startsWith(origin) && !/\.(pdf|zip|jpe?g|png|webp|gif|svg|mp4)(\?|$)/i.test(h);
+  const linksOn = async () => [...new Set((await page.evaluate((prefix) => [...document.querySelectorAll('a[href]')].map((a) => a.href).filter((h) => { try { return new URL(h).pathname.startsWith(prefix); } catch { return false; } }), crawl)).map(normLink).filter(okLink))];
+  const seen = new Set([normLink(page.url()), normLink(url)]);
+  const queue = (await linksOn()).filter((h) => !seen.has(h));
+  console.log(`   crawl: ${queue.length} link(s) under ${crawl} on the start page; visiting up to ${maxPages}`);
+  let visited = 0;
+  while (queue.length && visited < maxPages) {
+    const link = queue.shift(); if (seen.has(link)) continue; seen.add(link); visited++;
+    try {
+      await harvest(link, maxPages);
+      for (const h of await linksOn()) if (!seen.has(h) && !queue.includes(h)) queue.push(h);
+    } catch (e) { console.log(`   ! ${link}: ${e.message}`); }
   }
+  console.log(`   crawl: visited ${visited} sub-page(s)${queue.length ? `, ${queue.length} left (raise --max-pages to go further)` : ''}`);
 }
 
 // download

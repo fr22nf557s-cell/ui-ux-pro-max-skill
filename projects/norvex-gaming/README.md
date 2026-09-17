@@ -132,19 +132,35 @@ npm install                                   # once: Playwright + a headless Ch
 
 # 1. Walk a gallery page: scrolls, clicks "load more", downloads every packshot + writes manifest.csv
 npm run fetch -- "https://www.pokemon.com/uk/pokemon-tcg/product-gallery"
-npm run fetch -- "https://magic.wizards.com/en/products"
-npm run fetch -- "https://en.onepiece-cardgame.com/products/"
-npm run fetch -- "https://www.yugioh-card.com/uk/products/"
-npm run fetch -- "https://www.disneylorcana.com/en-GB/products"
-npm run fetch -- "https://starwarsunlimited.com/products"
-npm run fetch -- "https://fabtcg.com/products/"
-#   options: --selector <css> to scope to the product grid, --paginate <css> for "next page" links,
-#            --headed to watch it work (and click through any wall the script can't)
+npm run fetch -- "https://magic.wizards.com/en/products" --crawl /en/products/ --max-pages 20
+npm run fetch -- "https://en.onepiece-cardgame.com/products/" --crawl /products/ --max-pages 12
+npm run fetch -- "https://www.yugioh-card.com/eu/products/latest-releases/" --crawl /eu/products/ --max-pages 20
+npm run fetch -- "https://www.disneylorcana.com/en-GB/" --crawl /en-GB/product/ --max-pages 12
+npm run fetch -- "https://starwarsunlimited.com/product-guide" --crawl /products/ --max-pages 12
+npm run fetch -- "https://world.digimoncard.com/products/" --crawl /products/ --max-pages 10
+npm run fetch -- "https://www.dbs-cardgame.com/fw/en/products/" --crawl /fw/en/products/ --max-pages 10
+npm run fetch -- "https://fabtcg.com/products/" --channel chrome
+#   options: --crawl <prefix> walks same-site links under that path breadth-first (category pages lead
+#            to product pages) up to --max-pages; --selector <css> scopes to the product grid; --paginate
+#            <css> for "next page" links; --channel chrome uses an installed Google Chrome (some bot walls
+#            block bundled Chromium); --headed to watch it work (and click through any wall it can't)
 
 # 2. Pair the downloaded files with catalogue products by name, then copy them in and set `image`
 npm run match                                 # dry run → assets/img/gallery/match-report.csv
 npm run match -- --apply                      # copies to assets/img/products/<id>.<ext> + updates catalog.js
+
+# 3. Turn everything else the galleries list into products (current lines with official packshots)
+npm run catalog:galleries                     # dry run
+npm run catalog:galleries -- --apply --replace
+npm run tidy -- --apply                       # house-style names, duplicates, placeholders, featured picks
 ```
+
+The generator names products the way the storefront does: a title with no format word takes it from
+the page ("Glorious Victors" on Konami's booster page becomes "Glorious Victors Booster Pack"), a
+title with no set name takes it from the page heading ("Illumineer's Trove" on the Hyperia City page
+becomes "Hyperia City Illumineer's Trove"), and for games sold as plain 24-pack displays (Yu-Gi-Oh!,
+One Piece, Digimon, Dragon Ball) each booster pack also gets its booster box, pictured with the pack
+art. A product already in the catalogue is never duplicated; if it has no photo yet it receives one.
 
 **No machine to run it on?** The same pipeline runs in GitHub Actions: `Actions` tab → *Norvex – fetch
 product images* → *Run workflow* (pick the branch, keep the default gallery list). The runner walks the

@@ -33,7 +33,7 @@ export const FORMATS = [
   ['battle deck', 'deck', /\bbattle decks?\b|\bleague battle deck\b|\btheme deck\b|\bspotlight deck\b/i], ['upc', 'collection', /\bultra[- ]premium collection/i], ['spc', 'collection', /\bsuper[- ]premium collection/i],
   ['premium collection', 'collection', /\bpremium (card )?collection/i], ['trove', 'collection', /\btrove\b/i], ['tin', 'collection', /\btins?\b/i], ['gift set', 'collection', /\bgift set\b/i],
   ['poster', 'collection', /\bposter collection\b/i], ['binder', 'collection', /\bbinder collection\b/i], ['sticker', 'collection', /\bsticker collection\b/i],
-  ['ex box', 'collection', /\bex box\b|\bV box\b|\bbox and\b/i], ['codex', 'bundle', /\bcodex bundle\b/i], ['bundle', 'bundle', /\bbundle\b/i], ['collection', 'collection', /\bcollections?\b|\bbox set\b|\bpremium\b/i], ['deck', 'deck', /\bdeck\b/i]
+  ['ex box', 'collection', /\bex box\b|\bV box\b|\bbox and\b/i], ['codex', 'bundle', /\bcodex bundle\b/i], ['bundle', 'bundle', /\bbundle\b/i], ['collection', 'collection', /\bcollections?\b|\bbox set\b|\bpremium\b/i], ['deck', 'deck', /\bdecks?\b/i]
 ];
 export const detectFormat = (title) => FORMATS.find(([, , re]) => re.test(title)) || null;
 

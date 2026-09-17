@@ -22,7 +22,7 @@ import { readFileSync, existsSync, readdirSync, statSync, mkdirSync, copyFileSyn
 import { resolve, join, dirname, extname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadCatalog, writeCatalog, parseCSV, slug } from './catalog-io.mjs';
-import { JUNK, MIN_IMAGE_BYTES, cleanName, setName, dedupeKey, detectFormat, describe } from './catalog-rules.mjs';
+import { JUNK, MIN_IMAGE_BYTES, cleanName, setName, dedupeKey, detectFormat, describe, productCode } from './catalog-rules.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -59,6 +59,30 @@ const PRICE = {
 const priceFor = (game, fmt, type) => (PRICE[game] && (PRICE[game][fmt] ?? PRICE[game][type])) ?? ({ etb: 49.99, box: 119.99, bundle: 29.99, pack: 4.99, deck: 14.99, collection: 29.99 })[type];
 
 
+/* ---- format from context when the title has none ---------------------------
+   Konami titles are just the set name ("Glorious Victors"); the category page,
+   URL or packshot filename says what it is (Foil-Stack = booster packs,
+   Tuckbox = structure deck, TIN = tin). */
+const CTX_FORMAT = [
+  [/booster ?packs?|foil-?stack|\bbooster\b/i, 'Booster Pack'], [/structure ?decks?|tuck-?box|tuck-/i, 'Structure Deck'], [/starter ?decks?/i, 'Starter Deck'],
+  [/\btins?\b/i, 'Tin'], [/speed duel/i, 'Speed Duel Box'], [/collection|box set|special edition/i, 'Collection'], [/\bdecks?\b/i, 'Deck']
+];
+function inferFormat(r) {
+  for (const hint of [r.context || '', decodeURIComponent(r.page_url || ''), r.image_url || '']) for (const [re, label] of CTX_FORMAT) if (re.test(hint)) return label;
+  return null;
+}
+/* ---- set from context: a product page titled "Hyperia City" lists "Illumineer's Trove" ---- */
+const CTX_SKIP = /product|gallery|release|news|home|shop|latest|card game|tcg|^all\b|categor|^search|error|sign in|account/i;
+function withContext(name, r, game) {
+  const ctx = cleanName(r.context || '', game);
+  if (!ctx || ctx.length > 40 || JUNK.test(ctx) || CTX_SKIP.test(ctx) || productCode(name)) return name;
+  const c = ctx.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); const n = name.toLowerCase().replace(/[^a-z0-9]+/g, ' ');
+  return !c || n.includes(c) ? name : `${ctx} ${name}`;
+}
+/* Games whose booster displays are simply 24 packs: list the box next to the pack (pictured with the pack art). */
+const BOX_SIBLING = { yugioh: 24, onepiece: 24, digimon: 24, dragonball: 24 };
+const SEALED = new Set(['etb', 'box', 'bundle', 'pack', 'deck', 'collection']);
+
 /* ---- read manifests ------------------------------------------------------- */
 function walk(dir) {
   if (!existsSync(dir)) return [];
@@ -73,17 +97,23 @@ const rows = manifests.flatMap((m) => {
 
 const { data, header } = loadCatalog(catalogPath);
 const existingIds = new Set(data.products.map((p) => p.id));
-const existingKeys = new Set(data.products.filter((p) => ['etb', 'box', 'bundle', 'pack', 'deck', 'collection'].includes(p.type)).map((p) => dedupeKey(p.game, p.name)));
-const added = []; const seenNames = new Set(); const perGame = {};
+const existingByKey = new Map(data.products.filter((p) => SEALED.has(p.type)).map((p) => [dedupeKey(p.game, p.name), p]));
+const existingById = new Map(data.products.map((p) => [p.id, p]));
+const added = []; const seenNames = new Set(); const perGame = {}; const attach = new Map(); // existing product without a photo -> gallery file
 for (const r of rows) {
   const game = gameOfHost(r.host); if (!game || !data.games[game]) continue;
   const raw = r.title; if (!raw || JUNK.test(raw) || raw.length < 4 || raw.length > 110) continue;
-  const name = cleanName(raw, game); if (!name || JUNK.test(name)) continue;
-  const hit = detectFormat(name); if (!hit) continue;                // key art / logos / articles have no format word
+  let bare = cleanName(raw, game); if (!bare || JUNK.test(bare)) continue;
+  let hit = detectFormat(bare);
+  if (!hit) { const label = inferFormat(r); if (!label) continue; bare = `${bare} ${label}`; hit = detectFormat(bare); if (!hit) continue; } // key art / logos / articles have no format anywhere
   const [fmt, type, re] = hit;
   if (!existsSync(r.path) || statSync(r.path).size < MIN_IMAGE_BYTES) continue; // logos / gradients / "coming soon" placeholders
-  const key = dedupeKey(game, name); if (seenNames.has(key) || existingKeys.has(key)) continue; seenNames.add(key);
-  const id = slug(`${game}-${name}`); if (!id || existingIds.has(id)) continue;
+  const name = withContext(bare, r, game);
+  const key = dedupeKey(game, name); const bareKey = dedupeKey(game, bare);
+  if (seenNames.has(key) || seenNames.has(bareKey)) continue; seenNames.add(key); seenNames.add(bareKey);
+  const id = slug(`${game}-${name}`); if (!id) continue;
+  const existing = existingByKey.get(key) || existingByKey.get(bareKey) || existingById.get(id) || existingById.get(slug(`${game}-${bare}`));
+  if (existing) { if (!existing.image && !attach.has(existing)) attach.set(existing, r.path); continue; } // already listed: give it the photo if it lacks one
   const set = setName(name, game, re);
   const singular = data.types[type]?.singular || 'Product';
   const desc = describe(type, set, name);
@@ -95,11 +125,22 @@ for (const r of rows) {
   });
   perGame[game] = (perGame[game] || 0) + 1;
 }
+// booster displays for games that sell them as plain 24-pack boxes
+for (const p of [...added]) {
+  const n = BOX_SIBLING[p.game]; if (!n || p.type !== 'pack') continue;
+  const boxName = p.name.replace(/\b(Extra Booster|Premium Booster|Booster) Pack$/i, '$1 Box'); if (boxName === p.name) continue;
+  const key = dedupeKey(p.game, boxName); if (seenNames.has(key) || existingByKey.has(key)) continue; seenNames.add(key);
+  const id = slug(`${p.game}-${boxName}`); if (existingIds.has(id)) continue;
+  added.push({ ...p, id, name: boxName, type: 'box', price: priceFor(p.game, 'box', 'box'), description: describe('box', p.set, boxName),
+    contents: [`${n} ${p.set} booster packs`, 'Pictured: booster pack artwork'], specs: { ...p.specs, Format: data.types.box?.singular || 'Booster Box' } });
+  perGame[p.game] = (perGame[p.game] || 0) + 1;
+}
 // feature the first few of each game so the home page shows the new lines
 const featuredCount = {};
 for (const p of added) { featuredCount[p.game] = (featuredCount[p.game] || 0) + 1; if (featuredCount[p.game] <= 3 && (p.type === 'etb' || p.type === 'box' || p.type === 'collection')) p.featured = true; }
 
-console.log(`${rows.length} gallery images → ${added.length} new products: ${Object.entries(perGame).map(([g, n]) => `${g} ${n}`).join(', ') || 'none'}`);
+console.log(`${rows.length} gallery images → ${added.length} new products: ${Object.entries(perGame).map(([g, n]) => `${g} ${n}`).join(', ') || 'none'}${attach.size ? `; ${attach.size} existing product(s) get a photo` : ''}`);
+for (const [p] of attach) console.log(`   ⊕ photo for existing: ${p.name}`);
 for (const p of added.slice(0, 60)) console.log(`   + [${p.game}/${p.type}] ${p.name}  £${p.price}`);
 if (added.length > 60) console.log(`   … and ${added.length - 60} more`);
 
@@ -108,13 +149,17 @@ if (replace) {
   const covered = new Set(Object.entries(perGame).filter(([, n]) => n >= minPerGame).map(([g]) => g));
   const sealed = new Set(['etb', 'box', 'bundle', 'pack', 'deck', 'collection']);
   const before = data.products.length;
-  data.products = data.products.filter((p) => !(covered.has(p.game) && sealed.has(p.type) && !p.image));
+  data.products = data.products.filter((p) => !(covered.has(p.game) && sealed.has(p.type) && !p.image && !attach.has(p)));
   removed = before - data.products.length;
   console.log(`replace: dropped ${removed} older ${[...covered].join('/')} products that have no photo`);
 }
 
 if (!apply) { console.log('Dry run — add --apply to copy images and update catalog.js'); process.exit(0); }
 mkdirSync(outDir, { recursive: true });
+for (const [p, src] of attach) {
+  const dest = join(outDir, `${p.id}${(extname(src) || '.jpg').toLowerCase()}`);
+  copyFileSync(src, dest); p.image = relative(root, dest).replace(/\\/g, '/');
+}
 for (const p of added) {
   const ext = (extname(p._src) || '.jpg').toLowerCase();
   const dest = join(outDir, `${p.id}${ext}`);
@@ -124,4 +169,4 @@ for (const p of added) {
   data.products.push(p);
 }
 writeCatalog(catalogPath, data, header);
-console.log(`✔ added ${added.length} products with images (${removed} removed) → ${relative(root, catalogPath)}`);
+console.log(`✔ added ${added.length} products with images, gave ${attach.size} existing products a photo (${removed} removed) → ${relative(root, catalogPath)}`);

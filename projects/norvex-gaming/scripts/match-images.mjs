@@ -19,6 +19,7 @@ import { readFileSync, writeFileSync, copyFileSync, existsSync, readdirSync, sta
 import { resolve, join, dirname, extname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadCatalog, writeCatalog, parseCSV, csvCell } from './catalog-io.mjs';
+import { MIN_IMAGE_BYTES } from './catalog-rules.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -37,7 +38,7 @@ function walk(dir) {
 }
 const manifests = walk(galleryDir);
 if (!manifests.length) { console.error(`No manifest.csv found under ${galleryDir}. Run scripts/fetch-gallery.mjs first.`); process.exit(1); }
-const images = manifests.flatMap((m) => parseCSV(readFileSync(m, 'utf8')).filter((r) => r.file).map((r) => ({ ...r, path: join(dirname(m), r.file) })));
+const images = manifests.flatMap((m) => parseCSV(readFileSync(m, 'utf8')).filter((r) => r.file).map((r) => ({ ...r, path: join(dirname(m), r.file) }))).filter((r) => existsSync(r.path) && statSync(r.path).size >= MIN_IMAGE_BYTES); // logos / gradients / placeholders never match
 console.log(`${images.length} images from ${manifests.length} manifest(s)`);
 
 /* ---- normalisation + scoring ----------------------------------------- */

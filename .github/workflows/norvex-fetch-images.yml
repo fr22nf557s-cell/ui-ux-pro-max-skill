@@ -17,12 +17,15 @@ on:
         default: |
           https://www.pokemon.com/uk/pokemon-tcg/product-gallery
           https://www.pokemon.com/us/pokemon-tcg/product-gallery
-          https://magic.wizards.com/en/products --crawl /en/products/ --max-pages 8
-          https://en.onepiece-cardgame.com/products/ --crawl /products/ --max-pages 10
-          https://www.yugioh-card.com/eu/products/ --crawl /eu/products/ --max-pages 10
-          https://www.disneylorcana.com/en-GB --crawl /en-GB/ --max-pages 10
-          https://starwarsunlimited.com/product-guide --crawl / --max-pages 8
-          https://fabtcg.com/products/
+          https://magic.wizards.com/en/products --crawl /en/products/ --max-pages 20
+          https://en.onepiece-cardgame.com/products/ --crawl /products/ --max-pages 12
+          https://www.yugioh-card.com/eu/products/latest-releases/ --crawl /eu/products/ --max-pages 20
+          https://www.disneylorcana.com/en-GB/ --crawl /en-GB/product/ --max-pages 12
+          https://starwarsunlimited.com/product-guide --crawl /products/ --max-pages 12
+          https://world.digimoncard.com/products/ --crawl /products/ --max-pages 10
+          https://www.dbs-cardgame.com/fw/en/products/ --crawl /fw/en/products/ --max-pages 10
+          https://riftbound.leagueoflegends.com/en-us/ --crawl /en-us/ --max-pages 8
+          https://fabtcg.com/products/ --channel chrome
       min_score:
         description: "Minimum match score (0–1)"
         required: false
@@ -43,7 +46,7 @@ jobs:
   fetch:
     if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[fetch-images]')
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     defaults:
       run:
         working-directory: projects/norvex-gaming
@@ -64,7 +67,7 @@ jobs:
 
       - name: Walk galleries
         env:
-          GALLERIES: ${{ inputs.galleries || 'https://www.pokemon.com/uk/pokemon-tcg/product-gallery\nhttps://www.pokemon.com/us/pokemon-tcg/product-gallery\nhttps://magic.wizards.com/en/products --crawl /en/products/ --max-pages 8\nhttps://en.onepiece-cardgame.com/products/ --crawl /products/ --max-pages 10\nhttps://www.yugioh-card.com/eu/products/ --crawl /eu/products/ --max-pages 10\nhttps://www.disneylorcana.com/en-GB --crawl /en-GB/ --max-pages 10\nhttps://starwarsunlimited.com/product-guide --crawl / --max-pages 8\nhttps://fabtcg.com/products/' }}
+          GALLERIES: ${{ inputs.galleries || 'https://www.pokemon.com/uk/pokemon-tcg/product-gallery\nhttps://www.pokemon.com/us/pokemon-tcg/product-gallery\nhttps://magic.wizards.com/en/products --crawl /en/products/ --max-pages 20\nhttps://en.onepiece-cardgame.com/products/ --crawl /products/ --max-pages 12\nhttps://www.yugioh-card.com/eu/products/latest-releases/ --crawl /eu/products/ --max-pages 20\nhttps://www.disneylorcana.com/en-GB/ --crawl /en-GB/product/ --max-pages 12\nhttps://starwarsunlimited.com/product-guide --crawl /products/ --max-pages 12\nhttps://world.digimoncard.com/products/ --crawl /products/ --max-pages 10\nhttps://www.dbs-cardgame.com/fw/en/products/ --crawl /fw/en/products/ --max-pages 10\nhttps://riftbound.leagueoflegends.com/en-us/ --crawl /en-us/ --max-pages 8\nhttps://fabtcg.com/products/ --channel chrome' }}
         run: |
           set +e
           echo "## Galleries" >> "$GITHUB_STEP_SUMMARY"

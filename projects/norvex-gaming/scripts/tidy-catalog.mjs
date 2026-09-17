@@ -53,7 +53,7 @@ products = products.filter((p) => {
 for (const p of products) {
   if (unset.has(p.id) && p.image) { console.log(`· photo removed (overrides): ${p.name}`); const f = localImg(p); if (f) deleted.add(f); p.image = null; stats.photosRemoved++; }
   const e = edits[p.id]; if (!e) continue;
-  for (const k of ['name', 'set', 'type', 'price', 'compareAt', 'stock', 'badge', 'brand', 'description', 'featured', 'preorder']) if (e[k] !== undefined) p[k] = e[k];
+  for (const k of ['name', 'set', 'type', 'price', 'compareAt', 'stock', 'badge', 'brand', 'description', 'featured', 'preorder', 'image']) if (e[k] !== undefined) p[k] = e[k];
   if (e.id) p._id = e.id;
   p._forcedSet = e.set !== undefined;
 }
