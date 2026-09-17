@@ -22,6 +22,7 @@ import { readFileSync, existsSync, readdirSync, statSync, mkdirSync, copyFileSyn
 import { resolve, join, dirname, extname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadCatalog, writeCatalog, parseCSV, slug } from './catalog-io.mjs';
+import { JUNK, MIN_IMAGE_BYTES, cleanName, setName, dedupeKey, detectFormat, describe } from './catalog-rules.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -40,18 +41,7 @@ const HOST_GAME = [
 ];
 const gameOfHost = (h) => (HOST_GAME.find(([re]) => re.test(h)) || [null, null])[1];
 
-/* ---- format detection (same idea as match-images.mjs) -------------------- */
-const FORMATS = [
-  ['etb', 'etb', /\belite trainer box\b/i], ['collector box', 'box', /\bcollector booster (box|display)\b/i], ['play box', 'box', /\bplay booster (box|display)\b/i],
-  ['jumpstart box', 'box', /\bjumpstart booster box\b/i], ['box', 'box', /\bbooster (box|display)\b|\bdisplay box\b|\bbooster display\b/i], ['bundle', 'bundle', /\bbooster bundle\b/i],
-  ['pack', 'pack', /\bbooster pack\b|\bplay booster\b(?! box)|\bbooster$|\bextra booster\b|\bsleeved booster\b/i], ['commander', 'deck', /\bcommander deck\b/i],
-  ['starter', 'deck', /\bstarter deck\b|\bstarter kit\b|\btwo-player starter\b|\bstarter collection\b|\bstarter set\b/i], ['structure', 'deck', /\bstructure deck\b/i],
-  ['battle deck', 'deck', /\bbattle deck\b|\bleague battle deck\b|\btheme deck\b/i], ['upc', 'collection', /\bultra[- ]premium collection/i], ['spc', 'collection', /\bsuper[- ]premium collection/i],
-  ['premium collection', 'collection', /\bpremium (card )?collection/i], ['trove', 'collection', /\btrove\b/i], ['tin', 'collection', /\btins?\b/i], ['gift set', 'collection', /\bgift set\b/i],
-  ['poster', 'collection', /\bposter collection\b/i], ['binder', 'collection', /\bbinder collection\b/i], ['sticker', 'collection', /\bsticker collection\b/i],
-  ['ex box', 'collection', /\bex box\b|\bV box\b|\bbox and\b/i], ['bundle', 'bundle', /\bbundle\b/i], ['collection', 'collection', /\bcollections?\b|\bbox set\b|\bpremium\b/i], ['deck', 'deck', /\bdeck\b/i]
-];
-const detect = (title) => FORMATS.find(([, , re]) => re.test(title)) || null;
+/* Format detection, naming and junk rules live in catalog-rules.mjs (shared with tidy-catalog.mjs). */
 
 /* ---- estimated UK RRP by game + format (GBP) ----------------------------- */
 const PRICE = {
@@ -68,19 +58,6 @@ const PRICE = {
 };
 const priceFor = (game, fmt, type) => (PRICE[game] && (PRICE[game][fmt] ?? PRICE[game][type])) ?? ({ etb: 49.99, box: 119.99, bundle: 29.99, pack: 4.99, deck: 14.99, collection: 29.99 })[type];
 
-/* ---- title clean-up ------------------------------------------------------- */
-const JUNK = /select display language|error 404|latest releases|what will you discover|getting started|catch up on|coolest swag|learn more|cookie|privacy|^products?$|^booster packs$|^structure decks$|^tins$|^starter decks$|^others$|tournament packs|key art|^shop$|logo|wallpaper|banner/i;
-function cleanName(t) {
-  return String(t).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
-    .replace(/^pok[eé]mon tcg:\s*/i, '').replace(/^scarlet\s*&\s*violet\s*[—–-]\s*/i, '').replace(/^sword\s*&\s*shield\s*[—–-]\s*/i, '')
-    .replace(/^magic:\s*the gathering\s*[—–:-]?\s*/i, '').replace(/^one piece card game\s*/i, '').replace(/^disney lorcana\s*/i, '').replace(/^yu-?gi-?oh!?\s*(tcg)?\s*/i, '')
-    .replace(/\s*\[(OP|EB|ST|PRB)-?\d+\]\s*/i, (m) => ' ' + m.trim().replace(/[\[\]]/g, '') + ' ').replace(/\s+/g, ' ').trim();
-}
-function setName(name, fmtRe) {
-  let s = name.replace(fmtRe, '').replace(/\s*[—–-]\s*$/, '').replace(/^\s*[—–-]\s*/, '').replace(/\s*[—–]\s*/g, ' — ').trim();
-  s = s.replace(/\bPokémon Center\b/i, '').replace(/\s+/g, ' ').trim();
-  return s || name;
-}
 
 /* ---- read manifests ------------------------------------------------------- */
 function walk(dir) {
@@ -96,25 +73,20 @@ const rows = manifests.flatMap((m) => {
 
 const { data, header } = loadCatalog(catalogPath);
 const existingIds = new Set(data.products.map((p) => p.id));
+const existingKeys = new Set(data.products.filter((p) => ['etb', 'box', 'bundle', 'pack', 'deck', 'collection'].includes(p.type)).map((p) => dedupeKey(p.game, p.name)));
 const added = []; const seenNames = new Set(); const perGame = {};
 for (const r of rows) {
   const game = gameOfHost(r.host); if (!game || !data.games[game]) continue;
   const raw = r.title; if (!raw || JUNK.test(raw) || raw.length < 4 || raw.length > 110) continue;
-  const name = cleanName(raw); if (!name || JUNK.test(name)) continue;
-  const hit = detect(name); if (!hit) continue;                      // key art / logos / articles have no format word
+  const name = cleanName(raw, game); if (!name || JUNK.test(name)) continue;
+  const hit = detectFormat(name); if (!hit) continue;                // key art / logos / articles have no format word
   const [fmt, type, re] = hit;
-  const key = name.toLowerCase(); if (seenNames.has(key)) continue; seenNames.add(key);
+  if (!existsSync(r.path) || statSync(r.path).size < MIN_IMAGE_BYTES) continue; // logos / gradients / "coming soon" placeholders
+  const key = dedupeKey(game, name); if (seenNames.has(key) || existingKeys.has(key)) continue; seenNames.add(key);
   const id = slug(`${game}-${name}`); if (!id || existingIds.has(id)) continue;
-  const set = setName(name, re);
+  const set = setName(name, game, re);
   const singular = data.types[type]?.singular || 'Product';
-  const desc = {
-    etb: `Factory-sealed ${set} Elite Trainer Box: booster packs, an exclusive promo, sleeves, dice and the collector's box. Sourced direct from the distributor and tamper-checked before it enters the vault.`,
-    box: `A full sealed ${set} booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.`,
-    bundle: `Sealed ${set} booster packs in the official bundle. The efficient way into the chase without committing to a box.`,
-    pack: `A single factory-sealed ${set} booster pack, straight from an unopened display. Sold loose, never weighed.`,
-    deck: `Ready to play out of the box. A complete ${set} deck with everything you need for your first games.`,
-    collection: `${name}: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.`
-  }[type];
+  const desc = describe(type, set, name);
   added.push({
     id, name, set, game, type, brand: undefined, price: priceFor(game, fmt, type), compareAt: null, stock: 12, preorder: false, badge: null,
     featured: false, rating: 4.8, reviews: 18, description: desc,

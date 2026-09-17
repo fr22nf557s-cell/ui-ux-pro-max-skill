@@ -165,61 +165,6 @@ window.NORVEX_DATA = {
 
   products: [
     {
-      "id": "pokemon-mega-evolution-elite-trainer-box",
-      "name": "Mega Evolution Elite Trainer Box",
-      "set": "Mega Evolution",
-      "game": "pokemon",
-      "type": "etb",
-      "price": 49.99,
-      "compareAt": null,
-      "stock": 40,
-      "preorder": false,
-      "badge": "new",
-      "featured": true,
-      "rating": 4.8,
-      "reviews": 24,
-      "description": "Factory-sealed Mega Evolution Elite Trainer Box: nine booster packs, an exclusive full-art promo, sleeves, dice and the collector's box. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
-      "contents": [
-        "9 Mega Evolution booster packs",
-        "1 full-art foil promo card",
-        "65 card sleeves, 45 Energy cards",
-        "Dice, condition markers and player guide"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Elite Trainer Box",
-        "Packs": "9",
-        "Condition": "Factory sealed"
-      },
-      "image": "assets/img/products/pokemon-mega-evolution-elite-trainer-box.webp"
-    },
-    {
-      "id": "pokemon-mega-evolution-booster-bundle",
-      "name": "Mega Evolution Booster Bundle",
-      "set": "Mega Evolution",
-      "game": "pokemon",
-      "type": "bundle",
-      "price": 26.99,
-      "compareAt": null,
-      "stock": 45,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 24,
-      "description": "Six sealed Mega Evolution booster packs in the official display bundle. The efficient way into the chase without committing to a box.",
-      "contents": [
-        "6 Mega Evolution booster packs"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Booster Bundle",
-        "Packs": "6",
-        "Condition": "Factory sealed"
-      },
-      "image": "assets/img/products/pokemon-mega-evolution-booster-bundle.webp"
-    },
-    {
       "id": "magic-avatar-the-last-airbender-play-booster-box",
       "name": "Avatar: The Last Airbender Play Booster Box",
       "set": "Avatar: The Last Airbender",
@@ -230,7 +175,7 @@ window.NORVEX_DATA = {
       "stock": 20,
       "preorder": false,
       "badge": "new",
-      "featured": true,
+      "featured": false,
       "rating": 4.8,
       "reviews": 24,
       "description": "A full sealed Avatar: The Last Airbender booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
@@ -244,7 +189,7 @@ window.NORVEX_DATA = {
         "Packs": "30",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/magic-avatar-the-last-airbender-play-booster-box.webp"
+      "image": null
     },
     {
       "id": "magic-edge-of-eternities-play-booster-box",
@@ -257,7 +202,7 @@ window.NORVEX_DATA = {
       "stock": 18,
       "preorder": false,
       "badge": null,
-      "featured": false,
+      "featured": true,
       "rating": 4.8,
       "reviews": 24,
       "description": "A full sealed Edge of Eternities booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
@@ -284,7 +229,7 @@ window.NORVEX_DATA = {
       "stock": 14,
       "preorder": false,
       "badge": null,
-      "featured": false,
+      "featured": true,
       "rating": 4.8,
       "reviews": 24,
       "description": "A full sealed Tarkir: Dragonstorm booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
@@ -311,7 +256,7 @@ window.NORVEX_DATA = {
       "stock": 9,
       "preorder": false,
       "badge": null,
-      "featured": false,
+      "featured": true,
       "rating": 4.8,
       "reviews": 24,
       "description": "A full sealed Aetherdrift booster display box, never opened and never resealed. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
@@ -352,7 +297,7 @@ window.NORVEX_DATA = {
         "Packs": "36",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/magic-foundations-play-booster-box.webp"
+      "image": null
     },
     {
       "id": "magic-duskmourn-house-of-horror-play-booster-box",
@@ -487,7 +432,7 @@ window.NORVEX_DATA = {
         "Packs": "12",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/magic-avatar-the-last-airbender-collector-booster-box.webp"
+      "image": null
     },
     {
       "id": "magic-tarkir-dragonstorm-collector-booster-box",
@@ -557,7 +502,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 24,
-      "description": "Six sealed Final Fantasy booster packs in the official display bundle. The efficient way into the chase without committing to a box.",
+      "description": "Sealed Final Fantasy booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "9 Final Fantasy Play Booster packs",
         "1 traditional foil promo card",
@@ -566,11 +511,11 @@ window.NORVEX_DATA = {
       ],
       "specs": {
         "Language": "English",
-        "Format": "Bundle",
+        "Format": "Booster Bundle",
         "Packs": "9",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/magic-final-fantasy-bundle.gif"
+      "image": null
     },
     {
       "id": "magic-edge-of-eternities-bundle",
@@ -586,7 +531,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 24,
-      "description": "Six sealed Edge of Eternities booster packs in the official display bundle. The efficient way into the chase without committing to a box.",
+      "description": "Sealed Edge of Eternities booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "9 Edge of Eternities Play Booster packs",
         "1 traditional foil promo card",
@@ -595,11 +540,11 @@ window.NORVEX_DATA = {
       ],
       "specs": {
         "Language": "English",
-        "Format": "Bundle",
+        "Format": "Booster Bundle",
         "Packs": "9",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/magic-edge-of-eternities-bundle.webp"
+      "image": null
     },
     {
       "id": "magic-avatar-the-last-airbender-bundle",
@@ -615,7 +560,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 24,
-      "description": "Six sealed Avatar: The Last Airbender booster packs in the official display bundle. The efficient way into the chase without committing to a box.",
+      "description": "Sealed Avatar: The Last Airbender booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "9 Avatar: The Last Airbender Play Booster packs",
         "1 traditional foil promo card",
@@ -624,11 +569,11 @@ window.NORVEX_DATA = {
       ],
       "specs": {
         "Language": "English",
-        "Format": "Bundle",
+        "Format": "Booster Bundle",
         "Packs": "9",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/magic-avatar-the-last-airbender-bundle.webp"
+      "image": null
     },
     {
       "id": "magic-tarkir-dragonstorm-bundle",
@@ -644,7 +589,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 24,
-      "description": "Six sealed Tarkir: Dragonstorm booster packs in the official display bundle. The efficient way into the chase without committing to a box.",
+      "description": "Sealed Tarkir: Dragonstorm booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "9 Tarkir: Dragonstorm Play Booster packs",
         "1 traditional foil promo card",
@@ -653,7 +598,7 @@ window.NORVEX_DATA = {
       ],
       "specs": {
         "Language": "English",
-        "Format": "Bundle",
+        "Format": "Booster Bundle",
         "Packs": "9",
         "Condition": "Factory sealed"
       },
@@ -673,7 +618,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 24,
-      "description": "Six sealed Bloomburrow booster packs in the official display bundle. The efficient way into the chase without committing to a box.",
+      "description": "Sealed Bloomburrow booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "9 Bloomburrow Play Booster packs",
         "1 traditional foil promo card",
@@ -682,7 +627,7 @@ window.NORVEX_DATA = {
       ],
       "specs": {
         "Language": "English",
-        "Format": "Bundle",
+        "Format": "Booster Bundle",
         "Packs": "9",
         "Condition": "Factory sealed"
       },
@@ -702,17 +647,17 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 24,
-      "description": "Ready to play out of the box. A complete, tournament-legal Foundations deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete Foundations deck with everything you need for your first games.",
       "contents": [
         "Over 350 cards including 2 pre-built decks",
         "Deck boxes, dice and learn-to-play guide"
       ],
       "specs": {
         "Language": "English",
-        "Format": "Starter Collection",
+        "Format": "Deck",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/magic-foundations-starter-collection.webp"
+      "image": null
     },
     {
       "id": "magic-foundations-jumpstart-booster-box",
@@ -739,7 +684,7 @@ window.NORVEX_DATA = {
         "Packs": "18",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/magic-foundations-jumpstart-booster-box.webp"
+      "image": null
     },
     {
       "id": "magic-edge-of-eternities-play-booster-pack",
@@ -761,7 +706,7 @@ window.NORVEX_DATA = {
       ],
       "specs": {
         "Language": "English",
-        "Format": "Play Booster",
+        "Format": "Booster Pack",
         "Packs": "1",
         "Condition": "Factory sealed"
       },
@@ -787,11 +732,11 @@ window.NORVEX_DATA = {
       ],
       "specs": {
         "Language": "English",
-        "Format": "Play Booster",
+        "Format": "Booster Pack",
         "Packs": "1",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/magic-avatar-the-last-airbender-play-booster-pack.webp"
+      "image": null
     },
     {
       "id": "onepiece-st-28-yamato-starter-deck",
@@ -804,17 +749,17 @@ window.NORVEX_DATA = {
       "stock": 30,
       "preorder": false,
       "badge": null,
-      "featured": false,
+      "featured": true,
       "rating": 4.8,
       "reviews": 24,
-      "description": "Ready to play out of the box. A complete, tournament-legal Yamato deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete Yamato deck with everything you need for your first games.",
       "contents": [
         "51-card ready-to-play deck",
         "Leader card, DON!! cards and play sheet"
       ],
       "specs": {
         "Language": "English",
-        "Format": "Starter Deck",
+        "Format": "Deck",
         "Condition": "Factory sealed"
       },
       "image": "assets/img/products/onepiece-st-28-yamato-starter-deck.webp"
@@ -1063,7 +1008,7 @@ window.NORVEX_DATA = {
     {
       "id": "yugioh-structure-deck-blue-eyes-white-destiny",
       "name": "Structure Deck: Blue-Eyes White Destiny",
-      "set": "Blue-Eyes White Destiny",
+      "set": ": Blue-Eyes White Destiny",
       "game": "yugioh",
       "type": "deck",
       "price": 12.99,
@@ -1074,14 +1019,14 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 24,
-      "description": "Ready to play out of the box. A complete, tournament-legal Blue-Eyes White Destiny deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete : Blue-Eyes White Destiny deck with everything you need for your first games.",
       "contents": [
         "46-card pre-built deck",
         "Deluxe game mat and dueling guide"
       ],
       "specs": {
         "Language": "English",
-        "Format": "Structure Deck",
+        "Format": "Deck",
         "Condition": "Factory sealed"
       },
       "image": null
@@ -1284,7 +1229,7 @@ window.NORVEX_DATA = {
       "stock": 6,
       "preorder": false,
       "badge": "new",
-      "featured": true,
+      "featured": false,
       "rating": 4.8,
       "reviews": 24,
       "description": "The League of Legends trading card game, first set. Twenty-four sealed Origins booster packs with alternate-art Legends. Sourced direct from the distributor, tamper-checked and logged before it enters the vault.",
@@ -1303,7 +1248,7 @@ window.NORVEX_DATA = {
     {
       "id": "riftbound-riftbound-origins-booster-pack",
       "name": "Riftbound Origins Booster Pack",
-      "set": "Origins",
+      "set": "Riftbound Origins",
       "game": "riftbound",
       "type": "pack",
       "price": 5.99,
@@ -1314,9 +1259,9 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 24,
-      "description": "A single factory-sealed Origins booster pack, straight from an unopened display. Sold loose, never weighed.",
+      "description": "A single factory-sealed Riftbound Origins booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
-        "1 Origins booster pack"
+        "1 Riftbound Origins booster pack"
       ],
       "specs": {
         "Language": "English",
@@ -2133,38 +2078,12 @@ window.NORVEX_DATA = {
       "brand": "Norvex"
     },
     {
-      "id": "lorcana-collection-starter-set",
-      "name": "Collection Starter Set",
-      "set": "Collection",
-      "game": "lorcana",
-      "type": "deck",
-      "price": 16.99,
-      "compareAt": null,
-      "stock": 12,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
-      "description": "Ready to play out of the box. A complete Collection deck with everything you need for your first games.",
-      "contents": [
-        "Factory-sealed product",
-        "Contents as listed by the publisher"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Deck",
-        "Condition": "Factory sealed"
-      },
-      "image": "assets/img/products/lorcana-collection-starter-set.webp"
-    },
-    {
-      "id": "lorcana-curator-s-collection-heroines-announced",
-      "name": "Curator's Collection: Heroines Announced",
-      "set": "Curator's : Heroines Announced",
+      "id": "lorcana-curator-s-collection-heroines-edition",
+      "name": "Curator’s Collection: Heroines Edition",
+      "set": "Curator’s Collection",
       "game": "lorcana",
       "type": "collection",
-      "price": 29.99,
+      "price": 99.99,
       "compareAt": null,
       "stock": 12,
       "preorder": false,
@@ -2172,7 +2091,7 @@ window.NORVEX_DATA = {
       "featured": true,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Curator's Collection: Heroines Announced: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
+      "description": "Curator’s Collection: Heroines Edition: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -2182,142 +2101,12 @@ window.NORVEX_DATA = {
         "Format": "Premium Collection",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/lorcana-curator-s-collection-heroines-announced.webp"
+      "image": "assets/img/products/lorcana-curator-s-collection-heroines-edition.webp"
     },
     {
-      "id": "lorcana-build-a-collection",
-      "name": "Build a Collection",
-      "set": "Build a",
-      "game": "lorcana",
-      "type": "collection",
-      "price": 29.99,
-      "compareAt": null,
-      "stock": 12,
-      "preorder": false,
-      "badge": null,
-      "featured": true,
-      "rating": 4.8,
-      "reviews": 18,
-      "description": "Build a Collection: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
-      "contents": [
-        "Factory-sealed product",
-        "Contents as listed by the publisher"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Premium Collection",
-        "Condition": "Factory sealed"
-      },
-      "image": "assets/img/products/lorcana-build-a-collection.webp"
-    },
-    {
-      "id": "lorcana-new-collection-quests-in-paris-and-hong-kong",
-      "name": "New Collection Quests in Paris and Hong Kong",
-      "set": "New Quests in Paris and Hong Kong",
-      "game": "lorcana",
-      "type": "collection",
-      "price": 29.99,
-      "compareAt": null,
-      "stock": 12,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
-      "description": "New Collection Quests in Paris and Hong Kong: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
-      "contents": [
-        "Factory-sealed product",
-        "Contents as listed by the publisher"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Premium Collection",
-        "Condition": "Factory sealed"
-      },
-      "image": "assets/img/products/lorcana-new-collection-quests-in-paris-and-hong-kong.webp"
-    },
-    {
-      "id": "lorcana-deck-building-out-for-revenge",
-      "name": "Deck Building – Out for Revenge!",
-      "set": "Building — Out for Revenge!",
-      "game": "lorcana",
-      "type": "deck",
-      "price": 16.99,
-      "compareAt": null,
-      "stock": 12,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
-      "description": "Ready to play out of the box. A complete Building — Out for Revenge! deck with everything you need for your first games.",
-      "contents": [
-        "Factory-sealed product",
-        "Contents as listed by the publisher"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Deck",
-        "Condition": "Factory sealed"
-      },
-      "image": "assets/img/products/lorcana-deck-building-out-for-revenge.webp"
-    },
-    {
-      "id": "lorcana-sealed-deck-tips",
-      "name": "SEALED DECK TIPS",
-      "set": "SEALED TIPS",
-      "game": "lorcana",
-      "type": "deck",
-      "price": 16.99,
-      "compareAt": null,
-      "stock": 12,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
-      "description": "Ready to play out of the box. A complete SEALED TIPS deck with everything you need for your first games.",
-      "contents": [
-        "Factory-sealed product",
-        "Contents as listed by the publisher"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Deck",
-        "Condition": "Factory sealed"
-      },
-      "image": "assets/img/products/lorcana-sealed-deck-tips.webp"
-    },
-    {
-      "id": "lorcana-collection-starter-set-stitch-edition",
-      "name": "COLLECTION STARTER SET: STITCH EDITION",
-      "set": "COLLECTION : STITCH EDITION",
-      "game": "lorcana",
-      "type": "deck",
-      "price": 16.99,
-      "compareAt": null,
-      "stock": 12,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
-      "description": "Ready to play out of the box. A complete COLLECTION : STITCH EDITION deck with everything you need for your first games.",
-      "contents": [
-        "Factory-sealed product",
-        "Contents as listed by the publisher"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Deck",
-        "Condition": "Factory sealed"
-      },
-      "image": "assets/img/products/lorcana-collection-starter-set-stitch-edition.webp"
-    },
-    {
-      "id": "lorcana-illumineer-s-trove",
-      "name": "Illumineer’s Trove",
-      "set": "Illumineer’s",
+      "id": "lorcana-hyperia-city-illumineer-s-trove",
+      "name": "Hyperia City Illumineer’s Trove",
+      "set": "Hyperia City",
       "game": "lorcana",
       "type": "collection",
       "price": 49.99,
@@ -2325,10 +2114,10 @@ window.NORVEX_DATA = {
       "stock": 12,
       "preorder": false,
       "badge": null,
-      "featured": false,
+      "featured": true,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Illumineer’s Trove: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
+      "description": "Hyperia City Illumineer’s Trove: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -2338,12 +2127,12 @@ window.NORVEX_DATA = {
         "Format": "Premium Collection",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/lorcana-illumineer-s-trove.webp"
+      "image": "assets/img/products/lorcana-hyperia-city-illumineer-s-trove.webp"
     },
     {
-      "id": "lorcana-booster-display-box-booster-packs",
-      "name": "Booster Display Box & Booster Packs",
-      "set": "Box & Booster Packs",
+      "id": "lorcana-hyperia-city-booster-display-box",
+      "name": "Hyperia City Booster Display Box",
+      "set": "Hyperia City",
       "game": "lorcana",
       "type": "box",
       "price": 119.99,
@@ -2351,10 +2140,10 @@ window.NORVEX_DATA = {
       "stock": 12,
       "preorder": false,
       "badge": null,
-      "featured": false,
+      "featured": true,
       "rating": 4.8,
       "reviews": 18,
-      "description": "A full sealed Box & Booster Packs booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
+      "description": "A full sealed Hyperia City booster display, never opened and never resealed. Sourced direct from the distributor and tamper-checked before it enters the vault.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -2364,11 +2153,11 @@ window.NORVEX_DATA = {
         "Format": "Booster Box",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/lorcana-booster-display-box-booster-packs.webp"
+      "image": "assets/img/products/lorcana-hyperia-city-booster-display-box.webp"
     },
     {
       "id": "onepiece-premium-card-collection-ace-sabo-luffy",
-      "name": "Premium Card Collection -Ace & Sabo & Luffy-",
+      "name": "Premium Card Collection: Ace & Sabo & Luffy",
       "set": "Ace & Sabo & Luffy",
       "game": "onepiece",
       "type": "collection",
@@ -2377,10 +2166,10 @@ window.NORVEX_DATA = {
       "stock": 12,
       "preorder": false,
       "badge": null,
-      "featured": true,
+      "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Premium Card Collection -Ace & Sabo & Luffy-: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
+      "description": "Premium Card Collection: Ace & Sabo & Luffy: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -2394,8 +2183,8 @@ window.NORVEX_DATA = {
     },
     {
       "id": "onepiece-premium-card-collection-6-assort-vol-2",
-      "name": "Premium Card Collection -6 assort vol.2-",
-      "set": "6 assort vol.2",
+      "name": "Premium Card Collection: 6 Assort Vol. 2",
+      "set": "6 Assort Vol. 2",
       "game": "onepiece",
       "type": "collection",
       "price": 39.99,
@@ -2403,10 +2192,10 @@ window.NORVEX_DATA = {
       "stock": 12,
       "preorder": false,
       "badge": null,
-      "featured": true,
+      "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Premium Card Collection -6 assort vol.2-: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
+      "description": "Premium Card Collection: 6 Assort Vol. 2: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -2420,8 +2209,8 @@ window.NORVEX_DATA = {
     },
     {
       "id": "onepiece-premium-card-collection-live-action-edition-vol-2-baroque-works",
-      "name": "Premium Card Collection -Live Action Edition vol.2 Baroque Works-",
-      "set": "Live Action Edition vol.2 Baroque Works",
+      "name": "Premium Card Collection: Live Action Edition Vol. 2 Baroque Works",
+      "set": "Live Action Edition Vol. 2 Baroque Works",
       "game": "onepiece",
       "type": "collection",
       "price": 39.99,
@@ -2429,10 +2218,10 @@ window.NORVEX_DATA = {
       "stock": 12,
       "preorder": false,
       "badge": null,
-      "featured": true,
+      "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Premium Card Collection -Live Action Edition vol.2 Baroque Works-: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
+      "description": "Premium Card Collection: Live Action Edition Vol. 2 Baroque Works: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -2446,8 +2235,8 @@ window.NORVEX_DATA = {
     },
     {
       "id": "onepiece-premium-card-collection-live-action-edition-vol-2-straw-hat-crew",
-      "name": "Premium Card Collection -Live Action Edition vol.2 Straw Hat Crew-",
-      "set": "Live Action Edition vol.2 Straw Hat Crew",
+      "name": "Premium Card Collection: Live Action Edition Vol. 2 Straw Hat Crew",
+      "set": "Live Action Edition Vol. 2 Straw Hat Crew",
       "game": "onepiece",
       "type": "collection",
       "price": 39.99,
@@ -2458,7 +2247,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Premium Card Collection -Live Action Edition vol.2 Straw Hat Crew-: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
+      "description": "Premium Card Collection: Live Action Edition Vol. 2 Straw Hat Crew: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -2471,34 +2260,61 @@ window.NORVEX_DATA = {
       "image": "assets/img/products/onepiece-premium-card-collection-live-action-edition-vol-2-straw-hat-crew.webp"
     },
     {
-      "id": "onepiece-extra-booster-one-piece-heroines-edition-vol-2-eb-05",
-      "name": "EXTRA BOOSTER -ONE PIECE HEROINES EDITION vol.2- EB-05",
-      "set": "ONE PIECE HEROINES EDITION vol.2- EB-05",
+      "id": "onepiece-sd-01-set-sail-deck-set",
+      "name": "SD-01 Set Sail Deck Set",
+      "set": "Set Sail",
       "game": "onepiece",
-      "type": "pack",
-      "price": 4.99,
+      "type": "deck",
+      "price": 14.99,
       "compareAt": null,
       "stock": 12,
       "preorder": false,
       "badge": null,
-      "featured": false,
+      "featured": true,
       "rating": 4.8,
       "reviews": 18,
-      "description": "A single factory-sealed ONE PIECE HEROINES EDITION vol.2- EB-05 booster pack, straight from an unopened display. Sold loose, never weighed.",
+      "description": "Ready to play out of the box. A complete Set Sail deck with everything you need for your first games.",
       "contents": [
-        "1 ONE PIECE HEROINES EDITION vol.2- EB-05 booster pack"
+        "Factory-sealed product",
+        "Contents as listed by the publisher"
       ],
       "specs": {
         "Language": "English",
-        "Format": "Booster Pack",
+        "Format": "Deck",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/onepiece-extra-booster-one-piece-heroines-edition-vol-2-eb-05.webp"
+      "image": "assets/img/products/onepiece-sd-01-set-sail-deck-set.webp"
     },
     {
-      "id": "onepiece-set-sail-deck-set-sd-01",
-      "name": "Set Sail Deck Set [SD-01]",
-      "set": "Set Sail Set [SD-01]",
+      "id": "onepiece-st-36-yellow-eustass-captain-kid-starter-deck",
+      "name": "ST-36 Yellow Eustass \"Captain\" Kid Starter Deck",
+      "set": "Yellow Eustass \"Captain\" Kid",
+      "game": "onepiece",
+      "type": "deck",
+      "price": 14.99,
+      "compareAt": null,
+      "stock": 12,
+      "preorder": false,
+      "badge": null,
+      "featured": true,
+      "rating": 4.8,
+      "reviews": 18,
+      "description": "Ready to play out of the box. A complete Yellow Eustass \"Captain\" Kid deck with everything you need for your first games.",
+      "contents": [
+        "Factory-sealed product",
+        "Contents as listed by the publisher"
+      ],
+      "specs": {
+        "Language": "English",
+        "Format": "Deck",
+        "Condition": "Factory sealed"
+      },
+      "image": "assets/img/products/onepiece-st-36-yellow-eustass-captain-kid-starter-deck.webp"
+    },
+    {
+      "id": "onepiece-st-35-red-black-sabo-starter-deck",
+      "name": "ST-35 Red/Black Sabo Starter Deck",
+      "set": "Red/Black Sabo",
       "game": "onepiece",
       "type": "deck",
       "price": 14.99,
@@ -2509,7 +2325,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Ready to play out of the box. A complete Set Sail Set [SD-01] deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete Red/Black Sabo deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -2519,12 +2335,12 @@ window.NORVEX_DATA = {
         "Format": "Deck",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/onepiece-set-sail-deck-set-sd-01.webp"
+      "image": "assets/img/products/onepiece-st-35-red-black-sabo-starter-deck.webp"
     },
     {
-      "id": "onepiece-starter-deck-yellow-eustass-captain-kid-st-36",
-      "name": "STARTER DECK -YELLOW Eustass\"Captain\"Kid- ST-36",
-      "set": "YELLOW Eustass\"Captain\"Kid- ST-36",
+      "id": "onepiece-st-34-purple-charlotte-katakuri-starter-deck",
+      "name": "ST-34 Purple Charlotte Katakuri Starter Deck",
+      "set": "Purple Charlotte Katakuri",
       "game": "onepiece",
       "type": "deck",
       "price": 14.99,
@@ -2535,7 +2351,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Ready to play out of the box. A complete YELLOW Eustass\"Captain\"Kid- ST-36 deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete Purple Charlotte Katakuri deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -2545,12 +2361,12 @@ window.NORVEX_DATA = {
         "Format": "Deck",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/onepiece-starter-deck-yellow-eustass-captain-kid-st-36.webp"
+      "image": "assets/img/products/onepiece-st-34-purple-charlotte-katakuri-starter-deck.webp"
     },
     {
-      "id": "onepiece-starter-deck-red-black-sabo-st-35",
-      "name": "STARTER DECK -RED/BLACK Sabo- ST-35",
-      "set": "RED/BLACK Sabo- ST-35",
+      "id": "onepiece-st-33-blue-kuzan-starter-deck",
+      "name": "ST-33 Blue Kuzan Starter Deck",
+      "set": "Blue Kuzan",
       "game": "onepiece",
       "type": "deck",
       "price": 14.99,
@@ -2561,7 +2377,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Ready to play out of the box. A complete RED/BLACK Sabo- ST-35 deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete Blue Kuzan deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -2571,12 +2387,12 @@ window.NORVEX_DATA = {
         "Format": "Deck",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/onepiece-starter-deck-red-black-sabo-st-35.webp"
+      "image": "assets/img/products/onepiece-st-33-blue-kuzan-starter-deck.webp"
     },
     {
-      "id": "onepiece-starter-deck-purple-charlotte-katakuri-st-34",
-      "name": "STARTER DECK -PURPLE Charlotte Katakuri- ST-34",
-      "set": "PURPLE Charlotte Katakuri- ST-34",
+      "id": "onepiece-st-32-green-roronoa-zoro-starter-deck",
+      "name": "ST-32 Green Roronoa Zoro Starter Deck",
+      "set": "Green Roronoa Zoro",
       "game": "onepiece",
       "type": "deck",
       "price": 14.99,
@@ -2587,7 +2403,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Ready to play out of the box. A complete PURPLE Charlotte Katakuri- ST-34 deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete Green Roronoa Zoro deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -2597,12 +2413,12 @@ window.NORVEX_DATA = {
         "Format": "Deck",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/onepiece-starter-deck-purple-charlotte-katakuri-st-34.webp"
+      "image": "assets/img/products/onepiece-st-32-green-roronoa-zoro-starter-deck.webp"
     },
     {
-      "id": "onepiece-starter-deck-blue-kuzan-st-33",
-      "name": "STARTER DECK -BLUE Kuzan- ST-33",
-      "set": "BLUE Kuzan- ST-33",
+      "id": "onepiece-st-31-red-monkey-d-luffy-starter-deck",
+      "name": "ST-31 Red Monkey D. Luffy Starter Deck",
+      "set": "Red Monkey D. Luffy",
       "game": "onepiece",
       "type": "deck",
       "price": 14.99,
@@ -2613,7 +2429,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Ready to play out of the box. A complete BLUE Kuzan- ST-33 deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete Red Monkey D. Luffy deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -2623,12 +2439,12 @@ window.NORVEX_DATA = {
         "Format": "Deck",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/onepiece-starter-deck-blue-kuzan-st-33.webp"
+      "image": "assets/img/products/onepiece-st-31-red-monkey-d-luffy-starter-deck.webp"
     },
     {
-      "id": "onepiece-starter-deck-green-roronoa-zoro-st-32",
-      "name": "STARTER DECK -GREEN Roronoa Zoro- ST-32",
-      "set": "GREEN Roronoa Zoro- ST-32",
+      "id": "onepiece-st-30-luffy-ace-starter-deck-ex",
+      "name": "ST-30 Luffy & Ace Starter Deck EX",
+      "set": "Luffy & Ace",
       "game": "onepiece",
       "type": "deck",
       "price": 14.99,
@@ -2639,7 +2455,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Ready to play out of the box. A complete GREEN Roronoa Zoro- ST-32 deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete Luffy & Ace deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -2649,12 +2465,12 @@ window.NORVEX_DATA = {
         "Format": "Deck",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/onepiece-starter-deck-green-roronoa-zoro-st-32.webp"
+      "image": "assets/img/products/onepiece-st-30-luffy-ace-starter-deck-ex.webp"
     },
     {
-      "id": "onepiece-starter-deck-red-monkey-d-luffy-st-31",
-      "name": "STARTER DECK -RED Monkey.D.Luffy- ST-31",
-      "set": "RED Monkey.D.Luffy- ST-31",
+      "id": "onepiece-st-29-egghead-starter-deck",
+      "name": "ST-29 Egghead Starter Deck",
+      "set": "Egghead",
       "game": "onepiece",
       "type": "deck",
       "price": 14.99,
@@ -2665,7 +2481,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Ready to play out of the box. A complete RED Monkey.D.Luffy- ST-31 deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete Egghead deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -2675,64 +2491,12 @@ window.NORVEX_DATA = {
         "Format": "Deck",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/onepiece-starter-deck-red-monkey-d-luffy-st-31.webp"
-    },
-    {
-      "id": "onepiece-starter-deck-ex-luffy-ace-st-30",
-      "name": "STARTER DECK EX -Luffy & Ace- ST-30",
-      "set": "EX -Luffy & Ace- ST-30",
-      "game": "onepiece",
-      "type": "deck",
-      "price": 14.99,
-      "compareAt": null,
-      "stock": 12,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
-      "description": "Ready to play out of the box. A complete EX -Luffy & Ace- ST-30 deck with everything you need for your first games.",
-      "contents": [
-        "Factory-sealed product",
-        "Contents as listed by the publisher"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Deck",
-        "Condition": "Factory sealed"
-      },
-      "image": "assets/img/products/onepiece-starter-deck-ex-luffy-ace-st-30.webp"
-    },
-    {
-      "id": "onepiece-starter-deck-egghead-st-29",
-      "name": "STARTER DECK -Egghead- ST-29",
-      "set": "Egghead- ST-29",
-      "game": "onepiece",
-      "type": "deck",
-      "price": 14.99,
-      "compareAt": null,
-      "stock": 12,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
-      "description": "Ready to play out of the box. A complete Egghead- ST-29 deck with everything you need for your first games.",
-      "contents": [
-        "Factory-sealed product",
-        "Contents as listed by the publisher"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Deck",
-        "Condition": "Factory sealed"
-      },
-      "image": "assets/img/products/onepiece-starter-deck-egghead-st-29.webp"
+      "image": "assets/img/products/onepiece-st-29-egghead-starter-deck.webp"
     },
     {
       "id": "onepiece-learn-together-deck-set",
       "name": "Learn Together Deck Set",
-      "set": "Learn Together Set",
+      "set": "Learn Together",
       "game": "onepiece",
       "type": "deck",
       "price": 14.99,
@@ -2743,7 +2507,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Ready to play out of the box. A complete Learn Together Set deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete Learn Together deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -2756,9 +2520,9 @@ window.NORVEX_DATA = {
       "image": "assets/img/products/onepiece-learn-together-deck-set.webp"
     },
     {
-      "id": "onepiece-starter-deck-ace-newgate-st-22",
-      "name": "STARTER DECK -Ace & Newgate- ST-22",
-      "set": "Ace & Newgate- ST-22",
+      "id": "onepiece-st-22-ace-newgate-starter-deck",
+      "name": "ST-22 Ace & Newgate Starter Deck",
+      "set": "Ace & Newgate",
       "game": "onepiece",
       "type": "deck",
       "price": 14.99,
@@ -2769,7 +2533,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Ready to play out of the box. A complete Ace & Newgate- ST-22 deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete Ace & Newgate deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -2779,38 +2543,12 @@ window.NORVEX_DATA = {
         "Format": "Deck",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/onepiece-starter-deck-ace-newgate-st-22.webp"
+      "image": "assets/img/products/onepiece-st-22-ace-newgate-starter-deck.webp"
     },
     {
-      "id": "onepiece-starter-deck-green-yellow-yamato-st-28",
-      "name": "STARTER DECK -GREEN/YELLOW Yamato- ST-28",
-      "set": "GREEN/YELLOW Yamato- ST-28",
-      "game": "onepiece",
-      "type": "deck",
-      "price": 14.99,
-      "compareAt": null,
-      "stock": 12,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
-      "description": "Ready to play out of the box. A complete GREEN/YELLOW Yamato- ST-28 deck with everything you need for your first games.",
-      "contents": [
-        "Factory-sealed product",
-        "Contents as listed by the publisher"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Deck",
-        "Condition": "Factory sealed"
-      },
-      "image": "assets/img/products/onepiece-starter-deck-green-yellow-yamato-st-28.webp"
-    },
-    {
-      "id": "onepiece-booster-pack-the-world-s-strongest-warriors-op-17",
-      "name": "BOOSTER PACK -THE WORLD’S STRONGEST WARRIORS- OP-17",
-      "set": "THE WORLD’S STRONGEST WARRIORS- OP-17",
+      "id": "onepiece-op-17-the-world-s-strongest-warriors-booster-pack",
+      "name": "OP-17 The World’s Strongest Warriors Booster Pack",
+      "set": "The World’s Strongest Warriors",
       "game": "onepiece",
       "type": "pack",
       "price": 4.99,
@@ -2821,21 +2559,21 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "A single factory-sealed THE WORLD’S STRONGEST WARRIORS- OP-17 booster pack, straight from an unopened display. Sold loose, never weighed.",
+      "description": "A single factory-sealed The World’s Strongest Warriors booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
-        "1 THE WORLD’S STRONGEST WARRIORS- OP-17 booster pack"
+        "1 The World’s Strongest Warriors booster pack"
       ],
       "specs": {
         "Language": "English",
         "Format": "Booster Pack",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/onepiece-booster-pack-the-world-s-strongest-warriors-op-17.webp"
+      "image": "assets/img/products/onepiece-op-17-the-world-s-strongest-warriors-booster-pack.webp"
     },
     {
-      "id": "onepiece-booster-pack-the-time-of-battle-op-16",
-      "name": "BOOSTER PACK -THE TIME OF BATTLE- OP-16",
-      "set": "THE TIME OF BATTLE- OP-16",
+      "id": "onepiece-op-16-the-time-of-battle-booster-pack",
+      "name": "OP-16 The Time of Battle Booster Pack",
+      "set": "The Time of Battle",
       "game": "onepiece",
       "type": "pack",
       "price": 4.99,
@@ -2846,21 +2584,21 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "A single factory-sealed THE TIME OF BATTLE- OP-16 booster pack, straight from an unopened display. Sold loose, never weighed.",
+      "description": "A single factory-sealed The Time of Battle booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
-        "1 THE TIME OF BATTLE- OP-16 booster pack"
+        "1 The Time of Battle booster pack"
       ],
       "specs": {
         "Language": "English",
         "Format": "Booster Pack",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/onepiece-booster-pack-the-time-of-battle-op-16.webp"
+      "image": "assets/img/products/onepiece-op-16-the-time-of-battle-booster-pack.webp"
     },
     {
-      "id": "onepiece-booster-pack-adventure-on-kami-s-island-op15-eb04",
-      "name": "BOOSTER PACK -ADVENTURE ON KAMI’S ISLAND- [OP15-EB04]",
-      "set": "ADVENTURE ON KAMI’S ISLAND- [OP15-EB04]",
+      "id": "onepiece-op-15-adventure-on-kami-s-island-booster-pack",
+      "name": "OP-15 Adventure on Kami’s Island Booster Pack",
+      "set": "Adventure on Kami’s Island",
       "game": "onepiece",
       "type": "pack",
       "price": 4.99,
@@ -2871,21 +2609,21 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "A single factory-sealed ADVENTURE ON KAMI’S ISLAND- [OP15-EB04] booster pack, straight from an unopened display. Sold loose, never weighed.",
+      "description": "A single factory-sealed Adventure on Kami’s Island booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
-        "1 ADVENTURE ON KAMI’S ISLAND- [OP15-EB04] booster pack"
+        "1 Adventure on Kami’s Island booster pack"
       ],
       "specs": {
         "Language": "English",
         "Format": "Booster Pack",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/onepiece-booster-pack-adventure-on-kami-s-island-op15-eb04.webp"
+      "image": "assets/img/products/onepiece-op-15-adventure-on-kami-s-island-booster-pack.webp"
     },
     {
-      "id": "onepiece-extra-booster-one-piece-heroines-edition-eb-03",
-      "name": "EXTRA BOOSTER -ONE PIECE HEROINES EDITION- EB-03",
-      "set": "ONE PIECE HEROINES EDITION- EB-03",
+      "id": "onepiece-eb-03-one-piece-heroines-edition-extra-booster-pack",
+      "name": "EB-03 One Piece Heroines Edition Extra Booster Pack",
+      "set": "One Piece Heroines Edition",
       "game": "onepiece",
       "type": "pack",
       "price": 4.99,
@@ -2896,21 +2634,21 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "A single factory-sealed ONE PIECE HEROINES EDITION- EB-03 booster pack, straight from an unopened display. Sold loose, never weighed.",
+      "description": "A single factory-sealed One Piece Heroines Edition booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
-        "1 ONE PIECE HEROINES EDITION- EB-03 booster pack"
+        "1 One Piece Heroines Edition booster pack"
       ],
       "specs": {
         "Language": "English",
         "Format": "Booster Pack",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/onepiece-extra-booster-one-piece-heroines-edition-eb-03.webp"
+      "image": "assets/img/products/onepiece-eb-03-one-piece-heroines-edition-extra-booster-pack.webp"
     },
     {
-      "id": "onepiece-booster-pack-the-azure-sea-s-seven-op14-eb04",
-      "name": "BOOSTER PACK -THE AZURE SEA’S SEVEN- [OP14-EB04]",
-      "set": "THE AZURE SEA’S SEVEN- [OP14-EB04]",
+      "id": "onepiece-op-14-the-azure-sea-s-seven-booster-pack",
+      "name": "OP-14 The Azure Sea’s Seven Booster Pack",
+      "set": "The Azure Sea’s Seven",
       "game": "onepiece",
       "type": "pack",
       "price": 4.99,
@@ -2921,21 +2659,21 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "A single factory-sealed THE AZURE SEA’S SEVEN- [OP14-EB04] booster pack, straight from an unopened display. Sold loose, never weighed.",
+      "description": "A single factory-sealed The Azure Sea’s Seven booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
-        "1 THE AZURE SEA’S SEVEN- [OP14-EB04] booster pack"
+        "1 The Azure Sea’s Seven booster pack"
       ],
       "specs": {
         "Language": "English",
         "Format": "Booster Pack",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/onepiece-booster-pack-the-azure-sea-s-seven-op14-eb04.webp"
+      "image": "assets/img/products/onepiece-op-14-the-azure-sea-s-seven-booster-pack.webp"
     },
     {
-      "id": "onepiece-booster-pack-carrying-on-his-will-op-13",
-      "name": "BOOSTER PACK -CARRYING ON HIS WILL- OP-13",
-      "set": "CARRYING ON HIS WILL- OP-13",
+      "id": "onepiece-op-13-carrying-on-his-will-booster-pack",
+      "name": "OP-13 Carrying on His Will Booster Pack",
+      "set": "Carrying on His Will",
       "game": "onepiece",
       "type": "pack",
       "price": 4.99,
@@ -2946,24 +2684,24 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "A single factory-sealed CARRYING ON HIS WILL- OP-13 booster pack, straight from an unopened display. Sold loose, never weighed.",
+      "description": "A single factory-sealed Carrying on His Will booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
-        "1 CARRYING ON HIS WILL- OP-13 booster pack"
+        "1 Carrying on His Will booster pack"
       ],
       "specs": {
         "Language": "English",
         "Format": "Booster Pack",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/onepiece-booster-pack-carrying-on-his-will-op-13.webp"
+      "image": "assets/img/products/onepiece-op-13-carrying-on-his-will-booster-pack.webp"
     },
     {
-      "id": "onepiece-premium-booster-one-piece-card-the-best-vol-2-prb-02",
-      "name": "PREMIUM BOOSTER -ONE PIECE CARD THE BEST vol.2- PRB-02",
-      "set": "BOOSTER -ONE PIECE CARD THE BEST vol.2- PRB-02",
+      "id": "onepiece-prb-02-one-piece-card-the-best-vol-2-premium-booster-pack",
+      "name": "PRB-02 One Piece Card The Best Vol. 2 Premium Booster Pack",
+      "set": "One Piece Card The Best Vol. 2",
       "game": "onepiece",
-      "type": "collection",
-      "price": 39.99,
+      "type": "pack",
+      "price": 8.99,
       "compareAt": null,
       "stock": 12,
       "preorder": false,
@@ -2971,22 +2709,21 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "PREMIUM BOOSTER -ONE PIECE CARD THE BEST vol.2- PRB-02: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
+      "description": "A single factory-sealed One Piece Card The Best Vol. 2 booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
-        "Factory-sealed product",
-        "Contents as listed by the publisher"
+        "1 One Piece Card The Best Vol. 2 booster pack"
       ],
       "specs": {
         "Language": "English",
-        "Format": "Premium Collection",
+        "Format": "Booster Pack",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/onepiece-premium-booster-one-piece-card-the-best-vol-2-prb-02.webp"
+      "image": "assets/img/products/onepiece-prb-02-one-piece-card-the-best-vol-2-premium-booster-pack.webp"
     },
     {
-      "id": "onepiece-booster-pack-legacy-of-the-master-op-12",
-      "name": "BOOSTER PACK -LEGACY OF THE MASTER- OP-12",
-      "set": "LEGACY OF THE MASTER- OP-12",
+      "id": "onepiece-eb-02-anime-25th-collection-extra-booster-pack",
+      "name": "EB-02 Anime 25th Collection Extra Booster Pack",
+      "set": "Anime 25th Collection",
       "game": "onepiece",
       "type": "pack",
       "price": 4.99,
@@ -2997,21 +2734,21 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "A single factory-sealed LEGACY OF THE MASTER- OP-12 booster pack, straight from an unopened display. Sold loose, never weighed.",
+      "description": "A single factory-sealed Anime 25th Collection booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
-        "1 LEGACY OF THE MASTER- OP-12 booster pack"
+        "1 Anime 25th Collection booster pack"
       ],
       "specs": {
         "Language": "English",
         "Format": "Booster Pack",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/onepiece-booster-pack-legacy-of-the-master-op-12.webp"
+      "image": "assets/img/products/onepiece-eb-02-anime-25th-collection-extra-booster-pack.webp"
     },
     {
-      "id": "onepiece-booster-pack-a-fist-of-divine-speed-op-11",
-      "name": "BOOSTER PACK -A FIST OF DIVINE SPEED- OP-11",
-      "set": "A FIST OF DIVINE SPEED- OP-11",
+      "id": "onepiece-op-10-royal-blood-booster-pack",
+      "name": "OP-10 Royal Blood Booster Pack",
+      "set": "Royal Blood",
       "game": "onepiece",
       "type": "pack",
       "price": 4.99,
@@ -3022,70 +2759,20 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "A single factory-sealed A FIST OF DIVINE SPEED- OP-11 booster pack, straight from an unopened display. Sold loose, never weighed.",
+      "description": "A single factory-sealed Royal Blood booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
-        "1 A FIST OF DIVINE SPEED- OP-11 booster pack"
+        "1 Royal Blood booster pack"
       ],
       "specs": {
         "Language": "English",
         "Format": "Booster Pack",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/onepiece-booster-pack-a-fist-of-divine-speed-op-11.webp"
-    },
-    {
-      "id": "onepiece-extra-booster-anime-25th-collection-eb-02",
-      "name": "EXTRA BOOSTER -Anime 25th Collection- EB-02",
-      "set": "Anime 25th Collection- EB-02",
-      "game": "onepiece",
-      "type": "pack",
-      "price": 4.99,
-      "compareAt": null,
-      "stock": 12,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
-      "description": "A single factory-sealed Anime 25th Collection- EB-02 booster pack, straight from an unopened display. Sold loose, never weighed.",
-      "contents": [
-        "1 Anime 25th Collection- EB-02 booster pack"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Booster Pack",
-        "Condition": "Factory sealed"
-      },
-      "image": "assets/img/products/onepiece-extra-booster-anime-25th-collection-eb-02.webp"
-    },
-    {
-      "id": "onepiece-booster-pack-royal-blood-op-10",
-      "name": "BOOSTER PACK -ROYAL BLOOD- OP-10",
-      "set": "ROYAL BLOOD- OP-10",
-      "game": "onepiece",
-      "type": "pack",
-      "price": 4.99,
-      "compareAt": null,
-      "stock": 12,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
-      "description": "A single factory-sealed ROYAL BLOOD- OP-10 booster pack, straight from an unopened display. Sold loose, never weighed.",
-      "contents": [
-        "1 ROYAL BLOOD- OP-10 booster pack"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Booster Pack",
-        "Condition": "Factory sealed"
-      },
-      "image": "assets/img/products/onepiece-booster-pack-royal-blood-op-10.webp"
+      "image": "assets/img/products/onepiece-op-10-royal-blood-booster-pack.webp"
     },
     {
       "id": "onepiece-premium-card-collection-flame-flame-fruit-coliseum-edition",
-      "name": "Premium Card Collection - Flame-Flame Fruit Coliseum Edition",
+      "name": "Premium Card Collection: Flame-Flame Fruit Coliseum Edition",
       "set": "Flame-Flame Fruit Coliseum Edition",
       "game": "onepiece",
       "type": "collection",
@@ -3097,7 +2784,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Premium Card Collection - Flame-Flame Fruit Coliseum Edition: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
+      "description": "Premium Card Collection: Flame-Flame Fruit Coliseum Edition: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -3110,113 +2797,9 @@ window.NORVEX_DATA = {
       "image": "assets/img/products/onepiece-premium-card-collection-flame-flame-fruit-coliseum-edition.webp"
     },
     {
-      "id": "onepiece-what-s-next-power-up-your-deck-with-booster-packs",
-      "name": "What's Next? Power up Your Deck with Booster Packs!",
-      "set": "What's Next? Power up Your with Booster Packs!",
-      "game": "onepiece",
-      "type": "deck",
-      "price": 14.99,
-      "compareAt": null,
-      "stock": 12,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
-      "description": "Ready to play out of the box. A complete What's Next? Power up Your with Booster Packs! deck with everything you need for your first games.",
-      "contents": [
-        "Factory-sealed product",
-        "Contents as listed by the publisher"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Deck",
-        "Condition": "Factory sealed"
-      },
-      "image": "assets/img/products/onepiece-what-s-next-power-up-your-deck-with-booster-packs.webp"
-    },
-    {
-      "id": "onepiece-what-s-next-power-up-your-starter-deck",
-      "name": "What's Next? Power Up Your Starter Deck!",
-      "set": "What's Next? Power Up Your !",
-      "game": "onepiece",
-      "type": "deck",
-      "price": 14.99,
-      "compareAt": null,
-      "stock": 12,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
-      "description": "Ready to play out of the box. A complete What's Next? Power Up Your ! deck with everything you need for your first games.",
-      "contents": [
-        "Factory-sealed product",
-        "Contents as listed by the publisher"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Deck",
-        "Condition": "Factory sealed"
-      },
-      "image": "assets/img/products/onepiece-what-s-next-power-up-your-starter-deck.webp"
-    },
-    {
-      "id": "onepiece-product-packaging-image-of-premium-card-collection-ace-sabo-luffy",
-      "name": "Product packaging image of Premium Card Collection -Ace & Sabo & Luffy-",
-      "set": "Product packaging image of -Ace & Sabo & Luffy",
-      "game": "onepiece",
-      "type": "collection",
-      "price": 39.99,
-      "compareAt": null,
-      "stock": 12,
-      "preorder": false,
-      "badge": null,
-      "featured": false,
-      "rating": 4.8,
-      "reviews": 18,
-      "description": "Product packaging image of Premium Card Collection -Ace & Sabo & Luffy-: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
-      "contents": [
-        "Factory-sealed product",
-        "Contents as listed by the publisher"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Premium Collection",
-        "Condition": "Factory sealed"
-      },
-      "image": "assets/img/products/onepiece-product-packaging-image-of-premium-card-collection-ace-sabo-luffy.webp"
-    },
-    {
-      "id": "magic-assemble-the-ultimate-marvel-collection",
-      "name": "ASSEMBLE THE ULTIMATE MARVEL COLLECTION",
-      "set": "ASSEMBLE THE ULTIMATE MARVEL",
-      "game": "magic",
-      "type": "collection",
-      "price": 39.99,
-      "compareAt": null,
-      "stock": 12,
-      "preorder": false,
-      "badge": null,
-      "featured": true,
-      "rating": 4.8,
-      "reviews": 18,
-      "description": "ASSEMBLE THE ULTIMATE MARVEL COLLECTION: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
-      "contents": [
-        "Factory-sealed product",
-        "Contents as listed by the publisher"
-      ],
-      "specs": {
-        "Language": "English",
-        "Format": "Premium Collection",
-        "Condition": "Factory sealed"
-      },
-      "image": "assets/img/products/magic-assemble-the-ultimate-marvel-collection.webp"
-    },
-    {
       "id": "magic-silverquill-influence-commander-deck",
       "name": "Silverquill Influence Commander Deck",
-      "set": "Silverquill Influence",
+      "set": "Secrets of Strixhaven",
       "game": "magic",
       "type": "deck",
       "price": 44.99,
@@ -3227,7 +2810,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Ready to play out of the box. A complete Silverquill Influence deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete Secrets of Strixhaven deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -3242,7 +2825,7 @@ window.NORVEX_DATA = {
     {
       "id": "magic-prismari-artistry-commander-deck",
       "name": "Prismari Artistry Commander Deck",
-      "set": "Prismari Artistry",
+      "set": "Secrets of Strixhaven",
       "game": "magic",
       "type": "deck",
       "price": 44.99,
@@ -3253,7 +2836,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Ready to play out of the box. A complete Prismari Artistry deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete Secrets of Strixhaven deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -3268,7 +2851,7 @@ window.NORVEX_DATA = {
     {
       "id": "magic-witherbloom-pestilence-commander-deck",
       "name": "Witherbloom Pestilence Commander Deck",
-      "set": "Witherbloom Pestilence",
+      "set": "Secrets of Strixhaven",
       "game": "magic",
       "type": "deck",
       "price": 44.99,
@@ -3279,7 +2862,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Ready to play out of the box. A complete Witherbloom Pestilence deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete Secrets of Strixhaven deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -3294,7 +2877,7 @@ window.NORVEX_DATA = {
     {
       "id": "magic-lorehold-spirit-commander-deck",
       "name": "Lorehold Spirit Commander Deck",
-      "set": "Lorehold Spirit",
+      "set": "Secrets of Strixhaven",
       "game": "magic",
       "type": "deck",
       "price": 44.99,
@@ -3305,7 +2888,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Ready to play out of the box. A complete Lorehold Spirit deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete Secrets of Strixhaven deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -3320,7 +2903,7 @@ window.NORVEX_DATA = {
     {
       "id": "magic-quandrix-unlimited-commander-deck",
       "name": "Quandrix Unlimited Commander Deck",
-      "set": "Quandrix Unlimited",
+      "set": "Secrets of Strixhaven",
       "game": "magic",
       "type": "deck",
       "price": 44.99,
@@ -3331,7 +2914,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Ready to play out of the box. A complete Quandrix Unlimited deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete Secrets of Strixhaven deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -3344,9 +2927,9 @@ window.NORVEX_DATA = {
       "image": "assets/img/products/magic-quandrix-unlimited-commander-deck.webp"
     },
     {
-      "id": "magic-bundle",
-      "name": "Bundle",
-      "set": "Bundle",
+      "id": "magic-secrets-of-strixhaven-bundle",
+      "name": "Secrets of Strixhaven Bundle",
+      "set": "Secrets of Strixhaven",
       "game": "magic",
       "type": "bundle",
       "price": 49.99,
@@ -3357,7 +2940,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Sealed Bundle booster packs in the official bundle. The efficient way into the chase without committing to a box.",
+      "description": "Sealed Secrets of Strixhaven booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -3367,15 +2950,15 @@ window.NORVEX_DATA = {
         "Format": "Booster Bundle",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/magic-bundle.webp"
+      "image": "assets/img/products/magic-secrets-of-strixhaven-bundle.webp"
     },
     {
-      "id": "magic-codex-bundle",
-      "name": "Codex Bundle",
-      "set": "Codex",
+      "id": "magic-secrets-of-strixhaven-codex-bundle",
+      "name": "Secrets of Strixhaven Codex Bundle",
+      "set": "Secrets of Strixhaven",
       "game": "magic",
       "type": "bundle",
-      "price": 49.99,
+      "price": 79.99,
       "compareAt": null,
       "stock": 12,
       "preorder": false,
@@ -3383,7 +2966,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Sealed Codex booster packs in the official bundle. The efficient way into the chase without committing to a box.",
+      "description": "Sealed Secrets of Strixhaven booster packs in the official bundle. The efficient way into the chase without committing to a box.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -3393,7 +2976,7 @@ window.NORVEX_DATA = {
         "Format": "Booster Bundle",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/magic-codex-bundle.webp"
+      "image": "assets/img/products/magic-secrets-of-strixhaven-codex-bundle.webp"
     },
     {
       "id": "pokemon-mega-evolution-pitch-black-elite-trainer-box",
@@ -3432,7 +3015,7 @@ window.NORVEX_DATA = {
       "stock": 12,
       "preorder": false,
       "badge": null,
-      "featured": true,
+      "featured": false,
       "rating": 4.8,
       "reviews": 18,
       "description": "Factory-sealed Mega Evolution — Pitch Black Elite Trainer Box: booster packs, an exclusive promo, sleeves, dice and the collector's box. Sourced direct from the distributor and tamper-checked before it enters the vault.",
@@ -3502,7 +3085,7 @@ window.NORVEX_DATA = {
     {
       "id": "pokemon-30th-celebration-tech-sticker-collection",
       "name": "30th Celebration Tech Sticker Collection",
-      "set": "30th Celebration Tech",
+      "set": "30th Celebration",
       "game": "pokemon",
       "type": "collection",
       "price": 19.99,
@@ -3552,9 +3135,9 @@ window.NORVEX_DATA = {
       "image": "assets/img/products/pokemon-30th-celebration-poster-collection.webp"
     },
     {
-      "id": "pokemon-30th-celebration-sylveon-ex-box-and-greninja-ex-box",
-      "name": "30th Celebration Sylveon ex Box and Greninja ex Box",
-      "set": "30th Celebration Sylveon and Greninja ex Box",
+      "id": "pokemon-30th-celebration-sylveon-ex-box-greninja-ex-box",
+      "name": "30th Celebration Sylveon ex Box & Greninja ex Box",
+      "set": "30th Celebration",
       "game": "pokemon",
       "type": "collection",
       "price": 22.99,
@@ -3565,7 +3148,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "30th Celebration Sylveon ex Box and Greninja ex Box: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
+      "description": "30th Celebration Sylveon ex Box & Greninja ex Box: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -3575,7 +3158,7 @@ window.NORVEX_DATA = {
         "Format": "Premium Collection",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/pokemon-30th-celebration-sylveon-ex-box-and-greninja-ex-box.webp"
+      "image": "assets/img/products/pokemon-30th-celebration-sylveon-ex-box-greninja-ex-box.webp"
     },
     {
       "id": "pokemon-30th-celebration-elite-trainer-box",
@@ -3588,7 +3171,7 @@ window.NORVEX_DATA = {
       "stock": 12,
       "preorder": false,
       "badge": null,
-      "featured": false,
+      "featured": true,
       "rating": 4.8,
       "reviews": 18,
       "description": "Factory-sealed 30th Celebration Elite Trainer Box: booster packs, an exclusive promo, sleeves, dice and the collector's box. Sourced direct from the distributor and tamper-checked before it enters the vault.",
@@ -3656,9 +3239,9 @@ window.NORVEX_DATA = {
       "image": "assets/img/products/pokemon-30th-celebration-binder-collection.webp"
     },
     {
-      "id": "pokemon-30th-celebration-battle-deck-espeon-ex-30th-celebration-battle-deck-umbreon-ex",
-      "name": "30th Celebration Battle Deck—Espeon ex | 30th Celebration Battle Deck—Umbreon ex",
-      "set": "30th Celebration — Espeon ex | 30th Celebration Battle Deck — Umbreon ex",
+      "id": "pokemon-30th-celebration-battle-deck-espeon-ex-umbreon-ex",
+      "name": "30th Celebration Battle Deck: Espeon ex & Umbreon ex",
+      "set": "30th Celebration",
       "game": "pokemon",
       "type": "deck",
       "price": 14.99,
@@ -3669,7 +3252,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Ready to play out of the box. A complete 30th Celebration — Espeon ex | 30th Celebration Battle Deck — Umbreon ex deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete 30th Celebration deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -3679,12 +3262,12 @@ window.NORVEX_DATA = {
         "Format": "Deck",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/pokemon-30th-celebration-battle-deck-espeon-ex-30th-celebration-battle-deck-umbreon-ex.webp"
+      "image": "assets/img/products/pokemon-30th-celebration-battle-deck-espeon-ex-umbreon-ex.webp"
     },
     {
-      "id": "pokemon-30th-celebration-ultra-premium-collections-day-night",
-      "name": "30th Celebration Ultra-Premium Collections—Day & Night",
-      "set": "30th Celebration s — Day & Night",
+      "id": "pokemon-30th-celebration-ultra-premium-collection-day-night",
+      "name": "30th Celebration Ultra-Premium Collection: Day & Night",
+      "set": "30th Celebration",
       "game": "pokemon",
       "type": "collection",
       "price": 119.99,
@@ -3695,7 +3278,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "30th Celebration Ultra-Premium Collections—Day & Night: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
+      "description": "30th Celebration Ultra-Premium Collection: Day & Night: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -3705,12 +3288,12 @@ window.NORVEX_DATA = {
         "Format": "Premium Collection",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/pokemon-30th-celebration-ultra-premium-collections-day-night.webp"
+      "image": "assets/img/products/pokemon-30th-celebration-ultra-premium-collection-day-night.webp"
     },
     {
       "id": "pokemon-30th-celebration-figure-collection",
       "name": "30th Celebration Figure Collection",
-      "set": "30th Celebration Figure",
+      "set": "30th Celebration",
       "game": "pokemon",
       "type": "collection",
       "price": 29.99,
@@ -3736,7 +3319,7 @@ window.NORVEX_DATA = {
     {
       "id": "pokemon-first-partner-illustration-collection-series-3",
       "name": "First Partner Illustration Collection—Series 3",
-      "set": "First Partner Illustration — Series 3",
+      "set": "First Partner Illustration",
       "game": "pokemon",
       "type": "collection",
       "price": 29.99,
@@ -3788,7 +3371,7 @@ window.NORVEX_DATA = {
     {
       "id": "pokemon-first-partner-illustration-collection-series-2",
       "name": "First Partner Illustration Collection—Series 2",
-      "set": "First Partner Illustration — Series 2",
+      "set": "First Partner Illustration",
       "game": "pokemon",
       "type": "collection",
       "price": 29.99,
@@ -3840,7 +3423,7 @@ window.NORVEX_DATA = {
     {
       "id": "pokemon-lumiose-city-mini-tin",
       "name": "Lumiose City Mini Tin",
-      "set": "Lumiose City Mini",
+      "set": "Lumiose City",
       "game": "pokemon",
       "type": "collection",
       "price": 24.99,
@@ -3874,7 +3457,7 @@ window.NORVEX_DATA = {
       "stock": 12,
       "preorder": false,
       "badge": null,
-      "featured": false,
+      "featured": true,
       "rating": 4.8,
       "reviews": 18,
       "description": "Factory-sealed Mega Evolution — Chaos Rising Elite Trainer Box: booster packs, an exclusive promo, sleeves, dice and the collector's box. Sourced direct from the distributor and tamper-checked before it enters the vault.",
@@ -4074,7 +3657,7 @@ window.NORVEX_DATA = {
     {
       "id": "pokemon-first-partner-illustration-collection-series-1",
       "name": "First Partner Illustration Collection—Series 1",
-      "set": "First Partner Illustration — Series 1",
+      "set": "First Partner Illustration",
       "game": "pokemon",
       "type": "collection",
       "price": 29.99,
@@ -4098,9 +3681,9 @@ window.NORVEX_DATA = {
       "image": "assets/img/products/pokemon-first-partner-illustration-collection-series-1.webp"
     },
     {
-      "id": "pokemon-mega-evolution-ascended-heroes-collection-erika-mega-evolution-ascended-heroes-collection-larry",
-      "name": "Mega Evolution—Ascended Heroes Collection—Erika & Mega Evolution—Ascended Heroes Collection—Larry",
-      "set": "Mega Evolution — Ascended Heroes — Erika & Mega Evolution — Ascended Heroes Collection — Larry",
+      "id": "pokemon-mega-evolution-ascended-heroes-collection-erika-larry",
+      "name": "Mega Evolution—Ascended Heroes Collection: Erika & Larry",
+      "set": "Mega Evolution — Ascended Heroes",
       "game": "pokemon",
       "type": "collection",
       "price": 29.99,
@@ -4111,7 +3694,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Mega Evolution—Ascended Heroes Collection—Erika & Mega Evolution—Ascended Heroes Collection—Larry: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
+      "description": "Mega Evolution—Ascended Heroes Collection: Erika & Larry: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -4121,7 +3704,7 @@ window.NORVEX_DATA = {
         "Format": "Premium Collection",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/pokemon-mega-evolution-ascended-heroes-collection-erika-mega-evolution-ascended-heroes-collection-larry.webp"
+      "image": "assets/img/products/pokemon-mega-evolution-ascended-heroes-collection-erika-larry.webp"
     },
     {
       "id": "pokemon-mega-charizard-tin",
@@ -4178,7 +3761,7 @@ window.NORVEX_DATA = {
     {
       "id": "pokemon-mega-evolution-ascended-heroes-first-partners-deluxe-pin-collection",
       "name": "Mega Evolution—Ascended Heroes First Partners Deluxe Pin Collection",
-      "set": "Mega Evolution — Ascended Heroes First Partners Deluxe Pin",
+      "set": "Mega Evolution — Ascended Heroes",
       "game": "pokemon",
       "type": "collection",
       "price": 29.99,
@@ -4256,7 +3839,7 @@ window.NORVEX_DATA = {
     {
       "id": "pokemon-mega-evolution-ascended-heroes-tech-sticker-collection",
       "name": "Mega Evolution—Ascended Heroes Tech Sticker Collection",
-      "set": "Mega Evolution — Ascended Heroes Tech",
+      "set": "Mega Evolution — Ascended Heroes",
       "game": "pokemon",
       "type": "collection",
       "price": 19.99,
@@ -4282,7 +3865,7 @@ window.NORVEX_DATA = {
     {
       "id": "pokemon-mega-evolution-ascended-heroes-mini-tin",
       "name": "Mega Evolution—Ascended Heroes Mini Tin",
-      "set": "Mega Evolution — Ascended Heroes Mini",
+      "set": "Mega Evolution — Ascended Heroes",
       "game": "pokemon",
       "type": "collection",
       "price": 24.99,
@@ -4360,7 +3943,7 @@ window.NORVEX_DATA = {
     {
       "id": "swu-spotlight-deck-leia-organa",
       "name": "Spotlight Deck: Leia Organa",
-      "set": "Spotlight : Leia Organa",
+      "set": ": Leia Organa",
       "game": "swu",
       "type": "deck",
       "price": 29.99,
@@ -4368,10 +3951,10 @@ window.NORVEX_DATA = {
       "stock": 12,
       "preorder": false,
       "badge": null,
-      "featured": false,
+      "featured": true,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Ready to play out of the box. A complete Spotlight : Leia Organa deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete : Leia Organa deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -4386,7 +3969,7 @@ window.NORVEX_DATA = {
     {
       "id": "swu-spotlight-deck-jabba-the-hutt",
       "name": "Spotlight Deck: Jabba the Hutt",
-      "set": "Spotlight : Jabba the Hutt",
+      "set": ": Jabba the Hutt",
       "game": "swu",
       "type": "deck",
       "price": 29.99,
@@ -4394,10 +3977,10 @@ window.NORVEX_DATA = {
       "stock": 12,
       "preorder": false,
       "badge": null,
-      "featured": false,
+      "featured": true,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Ready to play out of the box. A complete Spotlight : Jabba the Hutt deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete : Jabba the Hutt deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -4420,7 +4003,7 @@ window.NORVEX_DATA = {
       "stock": 12,
       "preorder": false,
       "badge": null,
-      "featured": false,
+      "featured": true,
       "rating": 4.8,
       "reviews": 18,
       "description": "Ready to play out of the box. A complete Spark of Rebellion deck with everything you need for your first games.",
@@ -4436,9 +4019,9 @@ window.NORVEX_DATA = {
       "image": "assets/img/products/swu-spark-of-rebellion-two-player-starter.webp"
     },
     {
-      "id": "swu-two-player-starter",
-      "name": "Two-Player Starter",
-      "set": "Two-Player Starter",
+      "id": "swu-shadows-of-the-galaxy-two-player-starter",
+      "name": "Shadows of the Galaxy Two-Player Starter",
+      "set": "Shadows of the Galaxy",
       "game": "swu",
       "type": "deck",
       "price": 29.99,
@@ -4449,7 +4032,7 @@ window.NORVEX_DATA = {
       "featured": false,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Ready to play out of the box. A complete Two-Player Starter deck with everything you need for your first games.",
+      "description": "Ready to play out of the box. A complete Shadows of the Galaxy deck with everything you need for your first games.",
       "contents": [
         "Factory-sealed product",
         "Contents as listed by the publisher"
@@ -4459,15 +4042,15 @@ window.NORVEX_DATA = {
         "Format": "Deck",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/swu-two-player-starter.webp"
+      "image": "assets/img/products/swu-shadows-of-the-galaxy-two-player-starter.webp"
     },
     {
-      "id": "yugioh-rarity-collection-5",
-      "name": "Rarity Collection 5",
-      "set": "Rarity 5",
+      "id": "yugioh-rarity-collection-v-booster-pack",
+      "name": "Rarity Collection V Booster Pack",
+      "set": "Rarity Collection V",
       "game": "yugioh",
-      "type": "collection",
-      "price": 24.99,
+      "type": "pack",
+      "price": 5.49,
       "compareAt": null,
       "stock": 12,
       "preorder": false,
@@ -4475,17 +4058,16 @@ window.NORVEX_DATA = {
       "featured": true,
       "rating": 4.8,
       "reviews": 18,
-      "description": "Rarity Collection 5: a sealed collection with exclusive promos and accessories, exactly as the publisher shipped it.",
+      "description": "A single factory-sealed Rarity Collection V booster pack, straight from an unopened display. Sold loose, never weighed.",
       "contents": [
-        "Factory-sealed product",
-        "Contents as listed by the publisher"
+        "1 Rarity Collection V booster pack"
       ],
       "specs": {
         "Language": "English",
-        "Format": "Premium Collection",
+        "Format": "Booster Pack",
         "Condition": "Factory sealed"
       },
-      "image": "assets/img/products/yugioh-rarity-collection-5.webp"
+      "image": "assets/img/products/yugioh-rarity-collection-v-booster-pack.webp"
     }
   ]
 };

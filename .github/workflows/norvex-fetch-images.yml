@@ -92,6 +92,8 @@ jobs:
           node scripts/match-images.mjs --min-score "${{ inputs.min_score || '0.6' }}" --apply | tee match.log
           echo "--- build catalogue products from the galleries (current lines, official packshots):"
           node scripts/catalog-from-galleries.mjs --apply --replace | tee -a match.log
+          echo "--- tidy: drop non-products, house-style names, merge duplicates, placeholder photos, featured picks:"
+          node scripts/tidy-catalog.mjs --apply | tee -a match.log
           echo "## Matching" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"; cat match.log >> "$GITHUB_STEP_SUMMARY"; echo '```' >> "$GITHUB_STEP_SUMMARY"
           echo "### Report" >> "$GITHUB_STEP_SUMMARY"

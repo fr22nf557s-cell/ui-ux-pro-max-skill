@@ -152,6 +152,15 @@ galleries, matches, converts to WebP and commits the results to the branch. On a
 Actions disabled until you click *"I understand my workflows, go ahead and enable them"* on the Actions
 tab once.
 
+After a run, `npm run tidy -- --apply` cleans what the galleries dragged in: article photos and key art
+are dropped (`JUNK` in `scripts/catalog-rules.mjs`), titles are rewritten into house style (`OP-17 The
+World's Strongest Warriors Booster Pack`, not `BOOSTER PACK -THE WORLD'S STRONGEST WARRIORS- OP-17`),
+duplicates worded two ways are merged, placeholder-sized photos are removed, ids follow names and each
+game gets up to three featured products with a real photo. Anything the rules can't know (which set a
+generic "Booster Display Box" belongs to, a photo that shows the wrong product) goes in
+`scripts/catalog-overrides.json`, keyed by the id the generator derives, so it survives the next run.
+The Actions workflow runs the same tidy pass automatically.
+
 The matcher scores titles against product names (it understands "ETB", "Booster Display", set
 prefixes like "Scarlet & Violet—") and refuses cross-format matches (a bundle never gets a box photo).
 Check `match-report.csv`, rename any stragglers to `<id>.<ext>` by hand, and re-run. Downloaded

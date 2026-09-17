@@ -1,0 +1,41 @@
+{
+  "_comment": "Hand-curated fixes applied by scripts/tidy-catalog.mjs after every gallery run. Keys are product ids as the gallery generator derives them (game + title). drop: not a product / wrong photo. unsetImage: keep the product, remove a photo that shows something else. products: field overrides (name, set, type, price, id).",
+  "drop": [
+    "lorcana-build-a-collection",
+    "lorcana-collection-starter-set-stitch-edition",
+    "lorcana-collection-starter-set",
+    "lorcana-deck-building-out-for-revenge",
+    "lorcana-new-collection-quests-in-paris-and-hong-kong",
+    "lorcana-sealed-deck-tips",
+    "magic-assemble-the-ultimate-marvel-collection",
+    "onepiece-extra-booster-one-piece-heroines-edition-vol-2-eb-05",
+    "onepiece-product-packaging-image-of-premium-card-collection-ace-sabo-luffy",
+    "onepiece-what-s-next-power-up-your-deck-with-booster-packs",
+    "onepiece-what-s-next-power-up-your-starter-deck",
+    "pokemon-mega-evolution-elite-trainer-box",
+    "pokemon-mega-evolution-booster-bundle"
+  ],
+  "unsetImage": [
+    "magic-edge-of-eternities-bundle"
+  ],
+  "products": {
+    "lorcana-booster-display-box-booster-packs": { "name": "Hyperia City Booster Display Box", "set": "Hyperia City", "type": "box", "price": 119.99 },
+    "lorcana-illumineer-s-trove": { "name": "Hyperia City Illumineer’s Trove", "set": "Hyperia City" },
+    "lorcana-curator-s-collection-heroines-announced": { "name": "Curator’s Collection: Heroines Edition", "set": "Curator’s Collection", "price": 99.99 },
+    "magic-bundle": { "name": "Secrets of Strixhaven Bundle", "set": "Secrets of Strixhaven" },
+    "magic-codex-bundle": { "name": "Secrets of Strixhaven Codex Bundle", "set": "Secrets of Strixhaven", "price": 79.99 },
+    "magic-silverquill-influence-commander-deck": { "set": "Secrets of Strixhaven" },
+    "magic-prismari-artistry-commander-deck": { "set": "Secrets of Strixhaven" },
+    "magic-witherbloom-pestilence-commander-deck": { "set": "Secrets of Strixhaven" },
+    "magic-lorehold-spirit-commander-deck": { "set": "Secrets of Strixhaven" },
+    "magic-quandrix-unlimited-commander-deck": { "set": "Secrets of Strixhaven" },
+    "swu-two-player-starter": { "name": "Shadows of the Galaxy Two-Player Starter", "set": "Shadows of the Galaxy" },
+    "yugioh-rarity-collection-5": { "name": "Rarity Collection V Booster Pack", "set": "Rarity Collection V", "type": "pack", "price": 5.49 },
+    "onepiece-premium-booster-one-piece-card-the-best-vol-2-prb-02": { "name": "PRB-02 One Piece Card The Best Vol. 2 Premium Booster Pack", "set": "One Piece Card The Best Vol. 2", "type": "pack", "price": 8.99 },
+    "onepiece-premium-card-collection-6-assort-vol-2": { "name": "Premium Card Collection: 6 Assort Vol. 2" },
+    "onepiece-set-sail-deck-set-sd-01": { "name": "SD-01 Set Sail Deck Set", "set": "Set Sail" },
+    "onepiece-learn-together-deck-set": { "set": "Learn Together" },
+    "pokemon-30th-celebration-ultra-premium-collections-day-night": { "name": "30th Celebration Ultra-Premium Collection: Day & Night" },
+    "pokemon-30th-celebration-sylveon-ex-box-and-greninja-ex-box": { "name": "30th Celebration Sylveon ex Box & Greninja ex Box" }
+  }
+}
