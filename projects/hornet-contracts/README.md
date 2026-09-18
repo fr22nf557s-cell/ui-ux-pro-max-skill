@@ -43,83 +43,71 @@ real, checkable, and tells you the same thing more honestly.
 
 ## Setting it up
 
-You need the Cloudflare account that already hosts the website. Roughly fifteen
-minutes, once.
-
-### 1. Install
+You need the Cloudflare account that already hosts the website, and Node.js.
+One command, about five minutes, once.
 
 ```bash
 cd projects/hornet-contracts
-npm install
-npx wrangler login
+bash setup.sh
 ```
 
-### 2. Create the database
+It installs what it needs, signs you in to Cloudflare if you are not already,
+creates the database and writes its id into `wrangler.toml`, builds the tables,
+deploys the Worker, generates a dashboard password and stores it in Cloudflare.
+It is safe to run twice — anything that already exists is reused.
 
-```bash
-npx wrangler d1 create hornet-contracts
-```
+It prints the password once, at the end. **Save it in your password manager
+straight away**, because Cloudflare will not show it again, and do not paste it
+into a chat, including to me.
 
-It prints a `database_id`. Open `wrangler.toml` and replace
-`PASTE_DATABASE_ID_HERE` with it. The id is an identifier, not a password, and
-is safe to commit.
+Then, in this order:
 
-### 3. Create the tables
-
-```bash
-npm run schema
-```
-
-### 4. Set a password for the dashboard
-
-This data is commercially sensitive. The Worker refuses to serve anything until
-you set a token.
-
-```bash
-npx wrangler secret put DASH_TOKEN
-```
-
-Paste a long random string when prompted. Keep a copy — it is how you open the
-dashboard. **Do not paste it into a chat, including to me.**
-
-### 5. Deploy
-
-```bash
-npm run deploy
-```
-
-It prints a URL like `https://hornet-contracts.<your-subdomain>.workers.dev`.
-
-### 6. Check the APIs actually answer the way this code expects
-
-**Do not skip this.** See the warning below for why.
+**1. Check the APIs answer the way this code expects.** Do not skip this; the
+warning below says why.
 
 ```
-https://hornet-contracts.<your-subdomain>.workers.dev/api/selftest?key=YOUR_TOKEN
+https://hornet-contracts.<your-subdomain>.workers.dev/api/selftest?key=YOUR_PASSWORD
 ```
 
-For each source you want to see `"ok": true` and `"releases_found"` greater
-than zero. If you see `releases_found: 0` but `ok: true`, the API answered but
-in a shape this code does not recognise — send me the output and I will fix the
-parser. That is a ten-minute fix with a real response in hand.
+For each source you want `"ok": true` and `"releases_found"` above zero. If you
+see `releases_found: 0` alongside `ok: true`, the API answered in a shape this
+code does not recognise — send me that output and I will fix the parser. Ten
+minutes, with a real response in hand.
 
-### 7. Fill it for the first time
+**2. Fill it for the first time.** Reaches back ninety days, so it takes a
+minute or two.
 
 ```bash
 curl -X POST "https://hornet-contracts.<your-subdomain>.workers.dev/api/ingest" \
-  -H "Authorization: Bearer YOUR_TOKEN"
+  -H "Authorization: Bearer YOUR_PASSWORD"
 ```
 
-The first run reaches back ninety days, so it takes a minute or two. After
-that the cron keeps it current and each run only fetches what changed.
-
-### 8. Open it
+**3. Open it.**
 
 ```
-https://hornet-contracts.<your-subdomain>.workers.dev/?key=YOUR_TOKEN
+https://hornet-contracts.<your-subdomain>.workers.dev/?key=YOUR_PASSWORD
 ```
 
-The token becomes a cookie, so you only pass it in the URL once.
+The password becomes a cookie, so you pass it in the URL only once. After this
+the cron keeps everything current every six hours and each run fetches only
+what changed.
+
+<details>
+<summary>Doing it by hand instead</summary>
+
+```bash
+npm install
+npx wrangler login
+npx wrangler d1 create hornet-contracts     # paste the id into wrangler.toml
+npm run schema
+npx wrangler deploy
+npx wrangler secret put DASH_TOKEN          # a long random string
+```
+
+Deploy before setting the secret: a secret can only attach to a Worker that
+already exists. Then follow steps 1 to 3 above.
+
+</details>
 
 ---
 
@@ -182,4 +170,5 @@ src/ui.js       the dashboard, server-rendered, no build step.
 src/index.js    routes, auth, cron handler.
 schema.sql      the tables.
 test/run.mjs    63 tests over the pure logic. npm test.
+setup.sh        one-command deploy: database, tables, secret, Worker.
 ```
