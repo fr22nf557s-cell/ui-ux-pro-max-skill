@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex Gaming - Dominate the Arena</title>
+  <meta name="description" content="Apex Gaming is a competitive esports organization fielding championship rosters across Valorant, League of Legends, CS2, Rocket League and more.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#7C3AED',
+            secondary: '#A78BFA',
+            accent: '#F43F5E',
+            neon: '#22D3EE',
+            background: '#0F0F23',
+            surface: '#1E1C35',
+            muted: '#27273B',
+            'muted-fg': '#94A3B8',
+            text: '#E2E8F0',
+            line: '#4C1D95',
+          },
+          fontFamily: {
+            display: ['Russo One', 'sans-serif'],
+            body: ['Chakra Petch', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Retro-futurism: CRT scanlines kept at low opacity so body text stays above 4.5:1 */
+    .scanlines::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.14) 0px,
+        rgba(0, 0, 0, 0.14) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      opacity: 0.35;
+    }
+
+    /* Neon grid horizon behind the hero */
+    .grid-floor {
+      background-image:
+        linear-gradient(rgba(124, 58, 237, 0.22) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124, 58, 237, 0.22) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+    }
+
+    /* Fills the corner the clip removes, so the cut reads as a jersey notch */
+    .notch { position: relative; }
+    .notch::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 18px;
+      height: 18px;
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.55) 50%, transparent 50%);
+      pointer-events: none;
+    }
+
+    /* Keep anchored section headings clear of the 72px fixed nav */
+    html { scroll-behavior: smooth; }
+    section[id], main[id] { scroll-margin-top: 92px; }
+
+    .neon-text { text-shadow: 0 0 12px rgba(34, 211, 238, 0.55), 0 0 32px rgba(124, 58, 237, 0.35); }
+    .neon-ring { box-shadow: 0 0 0 1px rgba(124, 58, 237, 0.5), 0 0 24px -6px rgba(124, 58, 237, 0.7); }
+
+    /* Angled esports-jersey corner cut */
+    .clip-slant { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%); }
+
+    .glitch { position: relative; }
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      background: #0F0F23;
+      overflow: hidden;
+    }
+    .glitch::before { color: #F43F5E; animation: glitch-a 3.4s infinite steps(2, end); }
+    .glitch::after  { color: #22D3EE; animation: glitch-b 3.4s infinite steps(2, end); }
+    @keyframes glitch-a {
+      0%, 92%, 100% { transform: translate(0); clip-path: inset(0 0 100% 0); }
+      93% { transform: translate(-3px, 1px); clip-path: inset(8% 0 62% 0); }
+      96% { transform: translate(2px, -1px); clip-path: inset(48% 0 28% 0); }
+    }
+    @keyframes glitch-b {
+      0%, 92%, 100% { transform: translate(0); clip-path: inset(0 0 100% 0); }
+      94% { transform: translate(3px, -1px); clip-path: inset(24% 0 46% 0); }
+      97% { transform: translate(-2px, 2px); clip-path: inset(66% 0 8% 0); }
+    }
+
+    .marquee-track { animation: marquee 32s linear infinite; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* Scroll reveal - starts visible, JS opts in only when motion is allowed */
+    .reveal { opacity: 1; }
+    .motion-ok .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+    .motion-ok .reveal.is-visible { opacity: 1; transform: none; }
+
+    /* WCAG 2.2: 2px perimeter indicator at 3:1 against the dark surface */
+    :focus-visible { outline: 2px solid #22D3EE; outline-offset: 3px; border-radius: 4px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .glitch::before, .glitch::after { display: none; }
+    }
+  </style>
+</head>
+<body class="bg-background font-body text-text antialiased scanlines">
+
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[110] focus:bg-primary focus:text-white focus:px-5 focus:py-3 focus:rounded-lg focus:font-semibold">Skip to content</a>
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 inset-x-0 z-50 bg-background/85 backdrop-blur-md border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-5 sm:px-6 h-[72px] flex items-center justify-between gap-6">
+      <a href="#main" class="flex items-center gap-2.5 shrink-0">
+        <span class="w-9 h-9 grid place-items-center bg-primary clip-slant" aria-hidden="true">
+          <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 2 21h5.2l1.6-3.2h6.4L16.8 21H22L12 2Zm-1.9 11.6L12 9.4l1.9 4.2h-3.8Z"/></svg>
+        </span>
+        <span class="font-display text-xl tracking-wide">APEX<span class="text-neon">GAMING</span></span>
+      </a>
+
+      <div class="hidden lg:flex items-center gap-8 text-sm font-semibold tracking-wide uppercase">
+        <a href="#divisions" class="text-muted-fg hover:text-neon transition-colors duration-200">Divisions</a>
+        <a href="#schedule" class="text-muted-fg hover:text-neon transition-colors duration-200">Schedule</a>
+        <a href="#roster" class="text-muted-fg hover:text-neon transition-colors duration-200">Roster</a>
+        <a href="#results" class="text-muted-fg hover:text-neon transition-colors duration-200">Results</a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="#tryouts" class="hidden sm:inline-flex bg-accent hover:bg-rose-600 text-white font-semibold text-sm uppercase tracking-wide px-5 py-2.5 clip-slant transition-colors duration-200">
+          Join Tryouts
+        </a>
+        <button type="button" id="menu-btn" aria-expanded="false" aria-controls="mobile-menu" class="lg:hidden w-10 h-10 grid place-items-center border border-white/15 rounded-md">
+          <span class="sr-only">Toggle navigation menu</span>
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="mobile-menu" hidden class="lg:hidden border-t border-white/10 bg-background px-5 py-4">
+      <div class="flex flex-col gap-1 text-sm font-semibold uppercase tracking-wide">
+        <a href="#divisions" class="py-3 text-muted-fg hover:text-neon transition-colors">Divisions</a>
+        <a href="#schedule" class="py-3 text-muted-fg hover:text-neon transition-colors">Schedule</a>
+        <a href="#roster" class="py-3 text-muted-fg hover:text-neon transition-colors">Roster</a>
+        <a href="#results" class="py-3 text-muted-fg hover:text-neon transition-colors">Results</a>
+        <a href="#tryouts" class="mt-2 text-center bg-accent text-white px-5 py-3 clip-slant">Join Tryouts</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+
+    <!-- Hero -->
+    <section class="relative pt-[72px] overflow-hidden">
+      <div class="absolute inset-0 grid-floor" aria-hidden="true"></div>
+      <div class="absolute top-[-120px] left-1/2 -translate-x-1/2 w-[620px] h-[620px] bg-primary/25 blur-[140px] rounded-full" aria-hidden="true"></div>
+
+      <div class="relative max-w-7xl mx-auto px-5 sm:px-6 pt-16 pb-20 lg:pt-24 lg:pb-28 grid lg:grid-cols-[1.15fr_1fr] gap-14 items-center">
+        <div>
+          <p class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-neon border border-neon/40 rounded-full px-4 py-1.5 mb-7">
+            <span class="w-1.5 h-1.5 rounded-full bg-neon" aria-hidden="true"></span>
+            Est. 2019 &middot; 6 Divisions
+          </p>
+
+          <h1 class="font-display text-[2.75rem] leading-[1.05] sm:text-6xl lg:text-7xl mb-6">
+            <span class="glitch block" data-text="DOMINATE">DOMINATE</span>
+            <span class="block text-transparent bg-clip-text bg-gradient-to-r from-secondary via-neon to-accent neon-text">THE ARENA</span>
+          </h1>
+
+          <p class="text-lg text-muted-fg leading-relaxed max-w-xl mb-9">
+            Apex Gaming fields championship rosters across six titles. Twelve international trophies,
+            a full-time performance staff, and a bootcamp that turns raw mechanics into silverware.
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-4 mb-12">
+            <a href="#schedule" class="inline-flex items-center justify-center gap-2 bg-primary hover:bg-violet-600 text-white font-semibold uppercase tracking-wide px-8 py-4 clip-slant neon-ring transition-colors duration-200">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.14v13.72L19 12 8 5.14Z"/></svg>
+              Watch Next Match
+            </a>
+            <a href="#tryouts" class="inline-flex items-center justify-center bg-transparent hover:bg-white/5 text-text font-semibold uppercase tracking-wide px-8 py-4 clip-slant border border-white/20 transition-colors duration-200">
+              Try Out for Apex
+            </a>
+          </div>
+
+          <dl class="grid grid-cols-2 sm:grid-cols-4 gap-y-6 gap-x-4 border-t border-white/10 pt-8">
+            <div>
+              <dt class="text-xs uppercase tracking-widest text-muted-fg mb-1">Trophies</dt>
+              <dd class="font-display text-3xl text-neon">12</dd>
+            </div>
+            <div>
+              <dt class="text-xs uppercase tracking-widest text-muted-fg mb-1">Pro Players</dt>
+              <dd class="font-display text-3xl text-neon">34</dd>
+            </div>
+            <div>
+              <dt class="text-xs uppercase tracking-widest text-muted-fg mb-1">Prize Won</dt>
+              <dd class="font-display text-3xl text-neon">$3.1M</dd>
+            </div>
+            <div>
+              <dt class="text-xs uppercase tracking-widest text-muted-fg mb-1">Followers</dt>
+              <dd class="font-display text-3xl text-neon">2.4M</dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Next match card: countdown is computed in-page from a real fixed kickoff time -->
+        <div class="bg-surface/90 border border-line/60 clip-slant notch p-7 sm:p-8 neon-ring">
+          <div class="flex items-center justify-between mb-7">
+            <p class="text-xs font-bold uppercase tracking-[0.2em] text-accent">Next Match</p>
+            <p class="text-xs uppercase tracking-widest text-muted-fg">Valorant &middot; VCT</p>
+          </div>
+
+          <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-4 mb-8">
+            <div class="text-center">
+              <span class="block w-14 h-14 mx-auto mb-3 grid place-items-center bg-primary/25 border border-primary/50 rounded-xl font-display text-lg text-secondary" aria-hidden="true">APX</span>
+              <p class="font-display text-sm">Apex Gaming</p>
+              <p class="text-xs text-muted-fg mt-1">Seed #2</p>
+            </div>
+            <p class="font-display text-2xl text-muted-fg">VS</p>
+            <div class="text-center">
+              <span class="block w-14 h-14 mx-auto mb-3 grid place-items-center bg-muted border border-white/15 rounded-xl font-display text-lg text-muted-fg" aria-hidden="true">NVX</span>
+              <p class="font-display text-sm">Nova Extinct</p>
+              <p class="text-xs text-muted-fg mt-1">Seed #5</p>
+            </div>
+          </div>
+
+          <div id="countdown" class="grid grid-cols-4 gap-2 mb-7" role="timer" aria-live="off">
+            <div class="bg-background border border-white/10 rounded-lg py-3 text-center">
+              <span class="block font-display text-2xl" data-unit="days">--</span>
+              <span class="block text-[10px] uppercase tracking-widest text-muted-fg mt-1">Days</span>
+            </div>
+            <div class="bg-background border border-white/10 rounded-lg py-3 text-center">
+              <span class="block font-display text-2xl" data-unit="hours">--</span>
+              <span class="block text-[10px] uppercase tracking-widest text-muted-fg mt-1">Hrs</span>
+            </div>
+            <div class="bg-background border border-white/10 rounded-lg py-3 text-center">
+              <span class="block font-display text-2xl" data-unit="minutes">--</span>
+              <span class="block text-[10px] uppercase tracking-widest text-muted-fg mt-1">Min</span>
+            </div>
+            <div class="bg-background border border-white/10 rounded-lg py-3 text-center">
+              <span class="block font-display text-2xl" data-unit="seconds">--</span>
+              <span class="block text-[10px] uppercase tracking-widest text-muted-fg mt-1">Sec</span>
+            </div>
+          </div>
+          <p id="countdown-status" class="sr-only" aria-live="polite"></p>
+
+          <p class="text-sm text-muted-fg mb-5">
+            <time id="kickoff-time" datetime="2026-10-03T18:00:00Z">3 Oct 2026, 18:00 UTC</time> &middot; Best of 5 &middot; Berlin Arena
+          </p>
+
+          <a href="#schedule" class="block text-center bg-white/5 hover:bg-white/10 border border-white/15 text-text font-semibold uppercase tracking-wide text-sm py-3.5 clip-slant transition-colors duration-200">
+            Full Schedule
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sponsor marquee -->
+    <section aria-label="Partners" class="border-y border-white/10 bg-surface/40 py-6 overflow-hidden">
+      <div class="flex w-max marquee-track" aria-hidden="true">
+        <ul class="flex items-center gap-14 pr-14 text-muted-fg font-display text-lg tracking-widest uppercase whitespace-nowrap">
+          <li>Voltcore</li><li>Hyperdrive</li><li>Nyx Energy</li><li>Pulsar Peripherals</li><li>Deltafiber</li><li>Ironclad</li><li>Zenith Labs</li>
+        </ul>
+        <ul class="flex items-center gap-14 pr-14 text-muted-fg font-display text-lg tracking-widest uppercase whitespace-nowrap">
+          <li>Voltcore</li><li>Hyperdrive</li><li>Nyx Energy</li><li>Pulsar Peripherals</li><li>Deltafiber</li><li>Ironclad</li><li>Zenith Labs</li>
+        </ul>
+      </div>
+      <p class="sr-only">Partners: Voltcore, Hyperdrive, Nyx Energy, Pulsar Peripherals, Deltafiber, Ironclad, Zenith Labs.</p>
+    </section>
+
+    <!-- Divisions -->
+    <section id="divisions" class="py-24 px-5 sm:px-6">
+      <div class="max-w-7xl mx-auto">
+        <div class="max-w-2xl mb-14 reveal">
+          <p class="text-xs font-bold uppercase tracking-[0.2em] text-accent mb-4">Our Divisions</p>
+          <h2 class="font-display text-3xl sm:text-5xl mb-5">Six Titles. One Standard.</h2>
+          <p class="text-muted-fg text-lg leading-relaxed">
+            Every roster runs the same performance program: VOD review with a dedicated analyst,
+            scrim blocks five days a week, and a sports psychologist on retainer.
+          </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <article class="reveal group flex flex-col bg-surface border border-white/10 hover:border-primary/60 clip-slant notch p-7 transition-colors duration-300">
+            <div class="flex items-start justify-between mb-6">
+              <span class="w-12 h-12 grid place-items-center bg-primary/20 border border-primary/40 rounded-xl" aria-hidden="true">
+                <svg class="w-6 h-6 text-secondary" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 3 6v6c0 5 3.8 9.2 9 10 5.2-.8 9-5 9-10V6l-9-4Zm0 4.6 3.2 7.8h-2.1l-.6-1.6H11.5l-.6 1.6H8.8L12 6.6Z"/></svg>
+              </span>
+              <span class="text-xs font-bold uppercase tracking-widest text-neon border border-neon/40 rounded-full px-3 py-1">Tier 1</span>
+            </div>
+            <h3 class="font-display text-xl mb-2">Valorant</h3>
+            <p class="text-muted-fg text-sm leading-relaxed mb-5">Back-to-back regional finalists with the league's highest first-blood rate.</p>
+            <p class="mt-auto pt-1 text-xs uppercase tracking-widest text-muted-fg">5 players &middot; World Rank #4</p>
+          </article>
+
+          <article class="reveal group flex flex-col bg-surface border border-white/10 hover:border-primary/60 clip-slant notch p-7 transition-colors duration-300">
+            <div class="flex items-start justify-between mb-6">
+              <span class="w-12 h-12 grid place-items-center bg-primary/20 border border-primary/40 rounded-xl" aria-hidden="true">
+                <svg class="w-6 h-6 text-secondary" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3h14l-1.5 12.5L12 21l-5.5-5.5L5 3Zm4.3 4 .5 5 2.2 2.2 2.2-2.2.5-5H9.3Z"/></svg>
+              </span>
+              <span class="text-xs font-bold uppercase tracking-widest text-neon border border-neon/40 rounded-full px-3 py-1">Tier 1</span>
+            </div>
+            <h3 class="font-display text-xl mb-2">League of Legends</h3>
+            <p class="text-muted-fg text-sm leading-relaxed mb-5">Split champions in 2025 after a 14-2 regular season run.</p>
+            <p class="mt-auto pt-1 text-xs uppercase tracking-widest text-muted-fg">5 players &middot; World Rank #7</p>
+          </article>
+
+          <article class="reveal group flex flex-col bg-surface border border-white/10 hover:border-primary/60 clip-slant notch p-7 transition-colors duration-300">
+            <div class="flex items-start justify-between mb-6">
+              <span class="w-12 h-12 grid place-items-center bg-primary/20 border border-primary/40 rounded-xl" aria-hidden="true">
+                <svg class="w-6 h-6 text-secondary" viewBox="0 0 24 24" fill="currentColor"><path d="M3 11h4l2-3 3 7 2-4h7v2h-6l-3 6-3-7-1.4 2H3v-3Z"/></svg>
+              </span>
+              <span class="text-xs font-bold uppercase tracking-widest text-neon border border-neon/40 rounded-full px-3 py-1">Tier 1</span>
+            </div>
+            <h3 class="font-display text-xl mb-2">Counter-Strike 2</h3>
+            <p class="text-muted-fg text-sm leading-relaxed mb-5">Major quarter-finalists three seasons running on a fully rebuilt roster.</p>
+            <p class="mt-auto pt-1 text-xs uppercase tracking-widest text-muted-fg">5 players &middot; World Rank #11</p>
+          </article>
+
+          <article class="reveal group flex flex-col bg-surface border border-white/10 hover:border-primary/60 clip-slant notch p-7 transition-colors duration-300">
+            <div class="flex items-start justify-between mb-6">
+              <span class="w-12 h-12 grid place-items-center bg-accent/20 border border-accent/40 rounded-xl" aria-hidden="true">
+                <svg class="w-6 h-6 text-accent" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 1 0 9 9 9 9 0 0 0-9-9Zm0 3.2 4.3 3.1-1.6 5h-5.4l-1.6-5L12 6.2Z"/></svg>
+              </span>
+              <span class="text-xs font-bold uppercase tracking-widest text-accent border border-accent/40 rounded-full px-3 py-1">Academy</span>
+            </div>
+            <h3 class="font-display text-xl mb-2">Rocket League</h3>
+            <p class="text-muted-fg text-sm leading-relaxed mb-5">Our fastest-rising squad, promoted from the academy pipeline in nine months.</p>
+            <p class="mt-auto pt-1 text-xs uppercase tracking-widest text-muted-fg">3 players &middot; Regional Rank #2</p>
+          </article>
+
+          <article class="reveal group flex flex-col bg-surface border border-white/10 hover:border-primary/60 clip-slant notch p-7 transition-colors duration-300">
+            <div class="flex items-start justify-between mb-6">
+              <span class="w-12 h-12 grid place-items-center bg-primary/20 border border-primary/40 rounded-xl" aria-hidden="true">
+                <svg class="w-6 h-6 text-secondary" viewBox="0 0 24 24" fill="currentColor"><path d="M4 8h16l1 8H3l1-8Zm4 2v2H6v2h2v-2h2v-2H8Zm8.5 0a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4Z"/></svg>
+              </span>
+              <span class="text-xs font-bold uppercase tracking-widest text-neon border border-neon/40 rounded-full px-3 py-1">Tier 1</span>
+            </div>
+            <h3 class="font-display text-xl mb-2">Apex Legends</h3>
+            <p class="text-muted-fg text-sm leading-relaxed mb-5">Our founding title. Two ALGS podiums and the roster the org is named for.</p>
+            <p class="mt-auto pt-1 text-xs uppercase tracking-widest text-muted-fg">3 players &middot; World Rank #3</p>
+          </article>
+
+          <article class="reveal group flex flex-col bg-surface border border-white/10 hover:border-primary/60 clip-slant notch p-7 transition-colors duration-300">
+            <div class="flex items-start justify-between mb-6">
+              <span class="w-12 h-12 grid place-items-center bg-accent/20 border border-accent/40 rounded-xl" aria-hidden="true">
+                <svg class="w-6 h-6 text-accent" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 4 7v10l8 5 8-5V7l-8-5Zm0 4.3 4.4 2.8v5.8L12 17.7l-4.4-2.8V9.1L12 6.3Z"/></svg>
+              </span>
+              <span class="text-xs font-bold uppercase tracking-widest text-accent border border-accent/40 rounded-full px-3 py-1">Academy</span>
+            </div>
+            <h3 class="font-display text-xl mb-2">Dota 2</h3>
+            <p class="text-muted-fg text-sm leading-relaxed mb-5">A young five built around draft flexibility and the fastest lane phase in the region.</p>
+            <p class="mt-auto pt-1 text-xs uppercase tracking-widest text-muted-fg">5 players &middot; Regional Rank #6</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Schedule -->
+    <section id="schedule" class="py-24 px-5 sm:px-6 bg-surface/30 border-y border-white/10">
+      <div class="max-w-5xl mx-auto">
+        <div class="flex flex-wrap items-end justify-between gap-6 mb-12 reveal">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.2em] text-accent mb-4">Upcoming</p>
+            <h2 class="font-display text-3xl sm:text-5xl">Match Schedule</h2>
+          </div>
+          <p class="text-muted-fg text-sm max-w-sm">All times UTC. Streams go live on the Apex channel 30 minutes before kickoff.</p>
+        </div>
+
+        <ul class="reveal divide-y divide-white/10 border border-white/10 bg-background/60">
+          <li class="grid sm:grid-cols-[130px_1fr_auto] items-center gap-4 p-5 sm:p-6 hover:bg-white/[0.03] transition-colors duration-200">
+            <p class="font-display text-neon text-sm">03 OCT<span class="block text-muted-fg text-xs mt-1">18:00 UTC</span></p>
+            <div>
+              <p class="font-display text-lg">Apex Gaming <span class="text-muted-fg">vs</span> Nova Extinct</p>
+              <p class="text-sm text-muted-fg mt-1">VCT Playoffs &middot; Valorant &middot; Bo5</p>
+            </div>
+            <button type="button"
+              class="js-ics justify-self-start sm:justify-self-end text-xs font-bold uppercase tracking-widest text-background bg-neon px-4 py-2.5 clip-slant hover:bg-cyan-300 transition-colors duration-200"
+              data-start="2026-10-03T18:00:00Z"
+              data-title="Apex Gaming vs Nova Extinct (Valorant)"
+              data-location="VCT Playoffs">Add to Calendar</button>
+          </li>
+          <li class="grid sm:grid-cols-[130px_1fr_auto] items-center gap-4 p-5 sm:p-6 hover:bg-white/[0.03] transition-colors duration-200">
+            <p class="font-display text-neon text-sm">09 OCT<span class="block text-muted-fg text-xs mt-1">17:00 UTC</span></p>
+            <div>
+              <p class="font-display text-lg">Apex Gaming <span class="text-muted-fg">vs</span> Ironhold</p>
+              <p class="text-sm text-muted-fg mt-1">Continental Split &middot; League of Legends &middot; Bo3</p>
+            </div>
+            <button type="button"
+              class="js-ics justify-self-start sm:justify-self-end text-xs font-bold uppercase tracking-widest text-background bg-neon px-4 py-2.5 clip-slant hover:bg-cyan-300 transition-colors duration-200"
+              data-start="2026-10-09T17:00:00Z"
+              data-title="Apex Gaming vs Ironhold (League of Legends)"
+              data-location="Continental Split">Add to Calendar</button>
+          </li>
+          <li class="grid sm:grid-cols-[130px_1fr_auto] items-center gap-4 p-5 sm:p-6 hover:bg-white/[0.03] transition-colors duration-200">
+            <p class="font-display text-neon text-sm">14 OCT<span class="block text-muted-fg text-xs mt-1">16:00 UTC</span></p>
+            <div>
+              <p class="font-display text-lg">Apex Gaming <span class="text-muted-fg">vs</span> Solstice</p>
+              <p class="text-sm text-muted-fg mt-1">Major Group Stage &middot; Counter-Strike 2 &middot; Bo3</p>
+            </div>
+            <button type="button"
+              class="js-ics justify-self-start sm:justify-self-end text-xs font-bold uppercase tracking-widest text-background bg-neon px-4 py-2.5 clip-slant hover:bg-cyan-300 transition-colors duration-200"
+              data-start="2026-10-14T16:00:00Z"
+              data-title="Apex Gaming vs Solstice (Counter-Strike 2)"
+              data-location="Major Group Stage">Add to Calendar</button>
+          </li>
+          <li class="grid sm:grid-cols-[130px_1fr_auto] items-center gap-4 p-5 sm:p-6 hover:bg-white/[0.03] transition-colors duration-200">
+            <p class="font-display text-neon text-sm">22 OCT<span class="block text-muted-fg text-xs mt-1">19:00 UTC</span></p>
+            <div>
+              <p class="font-display text-lg">Apex Gaming <span class="text-muted-fg">vs</span> Kite Collective</p>
+              <p class="text-sm text-muted-fg mt-1">ALGS Pro League &middot; Apex Legends &middot; 6 Maps</p>
+            </div>
+            <button type="button"
+              class="js-ics justify-self-start sm:justify-self-end text-xs font-bold uppercase tracking-widest text-background bg-neon px-4 py-2.5 clip-slant hover:bg-cyan-300 transition-colors duration-200"
+              data-start="2026-10-22T19:00:00Z"
+              data-title="Apex Gaming vs Kite Collective (Apex Legends)"
+              data-location="ALGS Pro League">Add to Calendar</button>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Roster -->
+    <section id="roster" class="py-24 px-5 sm:px-6">
+      <div class="max-w-7xl mx-auto">
+        <div class="max-w-2xl mb-12 reveal">
+          <p class="text-xs font-bold uppercase tracking-[0.2em] text-accent mb-4">Starting Five</p>
+          <h2 class="font-display text-3xl sm:text-5xl mb-5">Valorant Roster</h2>
+          <p class="text-muted-fg text-lg leading-relaxed">Stats from the 2026 regular season, 42 maps played.</p>
+        </div>
+
+        <ul class="grid sm:grid-cols-2 lg:grid-cols-5 gap-5">
+          <li class="reveal bg-gradient-to-b from-surface to-background border border-white/10 hover:border-neon/50 clip-slant overflow-hidden transition-colors duration-300">
+            <div class="h-32 bg-gradient-to-br from-primary/40 to-accent/20 grid place-items-end justify-center" aria-hidden="true">
+              <span class="font-display text-5xl text-white/20 pb-2">01</span>
+            </div>
+            <div class="p-5">
+              <p class="font-display text-lg">RIPTIDE</p>
+              <p class="text-xs uppercase tracking-widest text-neon mt-1 mb-4">Duelist &middot; IGL</p>
+              <dl class="flex justify-between text-sm">
+                <div><dt class="text-muted-fg text-xs uppercase">ACS</dt><dd class="font-display">268</dd></div>
+                <div><dt class="text-muted-fg text-xs uppercase">K/D</dt><dd class="font-display">1.32</dd></div>
+              </dl>
+            </div>
+          </li>
+          <li class="reveal bg-gradient-to-b from-surface to-background border border-white/10 hover:border-neon/50 clip-slant overflow-hidden transition-colors duration-300">
+            <div class="h-32 bg-gradient-to-br from-primary/40 to-accent/20 grid place-items-end justify-center" aria-hidden="true">
+              <span class="font-display text-5xl text-white/20 pb-2">02</span>
+            </div>
+            <div class="p-5">
+              <p class="font-display text-lg">KESTREL</p>
+              <p class="text-xs uppercase tracking-widest text-neon mt-1 mb-4">Controller</p>
+              <dl class="flex justify-between text-sm">
+                <div><dt class="text-muted-fg text-xs uppercase">ACS</dt><dd class="font-display">214</dd></div>
+                <div><dt class="text-muted-fg text-xs uppercase">K/D</dt><dd class="font-display">1.08</dd></div>
+              </dl>
+            </div>
+          </li>
+          <li class="reveal bg-gradient-to-b from-surface to-background border border-white/10 hover:border-neon/50 clip-slant overflow-hidden transition-colors duration-300">
+            <div class="h-32 bg-gradient-to-br from-primary/40 to-accent/20 grid place-items-end justify-center" aria-hidden="true">
+              <span class="font-display text-5xl text-white/20 pb-2">03</span>
+            </div>
+            <div class="p-5">
+              <p class="font-display text-lg">VOLTA</p>
+              <p class="text-xs uppercase tracking-widest text-neon mt-1 mb-4">Initiator</p>
+              <dl class="flex justify-between text-sm">
+                <div><dt class="text-muted-fg text-xs uppercase">ACS</dt><dd class="font-display">241</dd></div>
+                <div><dt class="text-muted-fg text-xs uppercase">K/D</dt><dd class="font-display">1.19</dd></div>
+              </dl>
+            </div>
+          </li>
+          <li class="reveal bg-gradient-to-b from-surface to-background border border-white/10 hover:border-neon/50 clip-slant overflow-hidden transition-colors duration-300">
+            <div class="h-32 bg-gradient-to-br from-primary/40 to-accent/20 grid place-items-end justify-center" aria-hidden="true">
+              <span class="font-display text-5xl text-white/20 pb-2">04</span>
+            </div>
+            <div class="p-5">
+              <p class="font-display text-lg">NOCTIS</p>
+              <p class="text-xs uppercase tracking-widest text-neon mt-1 mb-4">Sentinel</p>
+              <dl class="flex justify-between text-sm">
+                <div><dt class="text-muted-fg text-xs uppercase">ACS</dt><dd class="font-display">197</dd></div>
+                <div><dt class="text-muted-fg text-xs uppercase">K/D</dt><dd class="font-display">1.11</dd></div>
+              </dl>
+            </div>
+          </li>
+          <li class="reveal bg-gradient-to-b from-surface to-background border border-white/10 hover:border-neon/50 clip-slant overflow-hidden transition-colors duration-300">
+            <div class="h-32 bg-gradient-to-br from-primary/40 to-accent/20 grid place-items-end justify-center" aria-hidden="true">
+              <span class="font-display text-5xl text-white/20 pb-2">05</span>
+            </div>
+            <div class="p-5">
+              <p class="font-display text-lg">SABLE</p>
+              <p class="text-xs uppercase tracking-widest text-neon mt-1 mb-4">Flex</p>
+              <dl class="flex justify-between text-sm">
+                <div><dt class="text-muted-fg text-xs uppercase">ACS</dt><dd class="font-display">229</dd></div>
+                <div><dt class="text-muted-fg text-xs uppercase">K/D</dt><dd class="font-display">1.24</dd></div>
+              </dl>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Results / social proof -->
+    <section id="results" class="py-24 px-5 sm:px-6 bg-surface/30 border-y border-white/10">
+      <div class="max-w-7xl mx-auto grid lg:grid-cols-[1fr_1.1fr] gap-14 items-center">
+        <div class="reveal">
+          <p class="text-xs font-bold uppercase tracking-[0.2em] text-accent mb-4">Track Record</p>
+          <h2 class="font-display text-3xl sm:text-5xl mb-6">Twelve Trophies in Seven Years</h2>
+          <p class="text-muted-fg text-lg leading-relaxed mb-8">
+            We do not chase roster churn. Six of our current starters were signed out of the academy,
+            and the average Apex contract runs 2.4 years &mdash; nearly double the regional average.
+          </p>
+          <blockquote class="border-l-2 border-neon pl-6">
+            <p class="text-lg leading-relaxed mb-4">
+              &ldquo;Apex treats players like athletes, not content. The scrim structure alone moved
+              our whole division up two tiers.&rdquo;
+            </p>
+            <footer class="text-sm text-muted-fg">
+              <span class="font-display text-text not-italic">Mara Dolan</span> &middot; Head Coach, Valorant
+            </footer>
+          </blockquote>
+        </div>
+
+        <ul class="reveal grid sm:grid-cols-2 gap-4">
+          <li class="bg-background border border-white/10 clip-slant p-6">
+            <p class="font-display text-4xl text-neon mb-2">2025</p>
+            <p class="font-display text-base mb-1">Continental Champions</p>
+            <p class="text-sm text-muted-fg">League of Legends &middot; Summer Split</p>
+          </li>
+          <li class="bg-background border border-white/10 clip-slant p-6">
+            <p class="font-display text-4xl text-neon mb-2">2025</p>
+            <p class="font-display text-base mb-1">ALGS Podium</p>
+            <p class="text-sm text-muted-fg">Apex Legends &middot; 2nd Place</p>
+          </li>
+          <li class="bg-background border border-white/10 clip-slant p-6">
+            <p class="font-display text-4xl text-neon mb-2">2024</p>
+            <p class="font-display text-base mb-1">Masters Runner-Up</p>
+            <p class="text-sm text-muted-fg">Valorant &middot; International</p>
+          </li>
+          <li class="bg-background border border-white/10 clip-slant p-6">
+            <p class="font-display text-4xl text-neon mb-2">2023</p>
+            <p class="font-display text-base mb-1">Regional Grand Slam</p>
+            <p class="text-sm text-muted-fg">Counter-Strike 2 &middot; Three Titles</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Tryouts CTA -->
+    <section id="tryouts" class="relative py-24 px-5 sm:px-6 overflow-hidden">
+      <div class="absolute inset-0 grid-floor opacity-60" aria-hidden="true"></div>
+      <div class="absolute bottom-[-180px] left-1/2 -translate-x-1/2 w-[560px] h-[560px] bg-accent/20 blur-[140px] rounded-full" aria-hidden="true"></div>
+
+      <div class="relative max-w-3xl mx-auto text-center reveal">
+        <h2 class="font-display text-3xl sm:text-5xl mb-5">Think You Have the Aim?</h2>
+        <p class="text-muted-fg text-lg leading-relaxed mb-10 max-w-xl mx-auto">
+          Open tryouts run every quarter across all six divisions. Drop your handle and we will send
+          you the scrim block and evaluation criteria.
+        </p>
+
+        <form id="tryout-form" novalidate class="bg-surface/90 border border-line/60 clip-slant notch p-7 sm:p-8 text-left neon-ring">
+          <div class="grid sm:grid-cols-2 gap-5 mb-5">
+            <div>
+              <label for="handle" class="block text-sm font-semibold mb-2">In-game handle</label>
+              <input type="text" id="handle" name="handle" required autocomplete="nickname"
+                class="w-full px-4 py-3 bg-background border border-white/15 rounded-lg text-text placeholder-muted-fg focus:border-neon transition-colors duration-200"
+                placeholder="e.g. RIPTIDE">
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-semibold mb-2">Email</label>
+              <input type="email" id="email" name="email" required autocomplete="email"
+                class="w-full px-4 py-3 bg-background border border-white/15 rounded-lg text-text placeholder-muted-fg focus:border-neon transition-colors duration-200"
+                placeholder="you@example.com">
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <label for="division" class="block text-sm font-semibold mb-2">Division</label>
+            <select id="division" name="division"
+              class="w-full px-4 py-3 bg-background border border-white/15 rounded-lg text-text focus:border-neon transition-colors duration-200">
+              <option>Valorant</option>
+              <option>League of Legends</option>
+              <option>Counter-Strike 2</option>
+              <option>Rocket League</option>
+              <option>Apex Legends</option>
+              <option>Dota 2</option>
+            </select>
+          </div>
+
+          <button type="submit" class="w-full bg-accent hover:bg-rose-600 text-white font-semibold uppercase tracking-wide py-4 clip-slant transition-colors duration-200">
+            Submit Application
+          </button>
+          <p id="form-status" role="status" aria-live="polite" class="text-sm text-neon mt-4 min-h-[1.25rem]"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/10 py-12 px-5 sm:px-6">
+    <div class="max-w-7xl mx-auto grid gap-8 md:grid-cols-[1.5fr_1fr_1fr] mb-10">
+      <div>
+        <div class="flex items-center gap-2.5 mb-4">
+          <span class="w-8 h-8 grid place-items-center bg-primary clip-slant" aria-hidden="true">
+            <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 2 21h5.2l1.6-3.2h6.4L16.8 21H22L12 2Zm-1.9 11.6L12 9.4l1.9 4.2h-3.8Z"/></svg>
+          </span>
+          <span class="font-display text-lg tracking-wide">APEX<span class="text-neon">GAMING</span></span>
+        </div>
+        <p class="text-muted-fg text-sm leading-relaxed max-w-sm">
+          A competitive esports organization based in Berlin, fielding rosters across six titles since 2019.
+        </p>
+      </div>
+      <nav aria-label="Organization">
+        <h2 class="font-display text-sm uppercase tracking-widest mb-4">Organization</h2>
+        <ul class="space-y-2.5 text-sm text-muted-fg">
+          <li><a href="#divisions" class="hover:text-neon transition-colors">Divisions</a></li>
+          <li><a href="#roster" class="hover:text-neon transition-colors">Roster</a></li>
+          <li><a href="#results" class="hover:text-neon transition-colors">Results</a></li>
+          <li><a href="#tryouts" class="hover:text-neon transition-colors">Tryouts</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Support">
+        <h2 class="font-display text-sm uppercase tracking-widest mb-4">Support</h2>
+        <ul class="space-y-2.5 text-sm text-muted-fg">
+          <li><a href="#schedule" class="hover:text-neon transition-colors">Schedule</a></li>
+          <li><a href="#tryouts" class="hover:text-neon transition-colors">Partnerships</a></li>
+          <li><a href="#tryouts" class="hover:text-neon transition-colors">Press Kit</a></li>
+          <li><a href="#tryouts" class="hover:text-neon transition-colors">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-5 pt-8 border-t border-white/5">
+      <p class="text-muted-fg text-sm">&copy; 2026 Apex Gaming. All rights reserved.</p>
+      <ul class="flex gap-4">
+        <li><a href="#main" class="text-muted-fg hover:text-neon transition-colors duration-200 inline-block" aria-label="Apex Gaming on Twitch">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.3 0 1.7 4.3v15.4h5.1V24h2.9l2.9-4.3h4.3L23.1 14V0H4.3Zm16.2 12.9-3.4 3.4h-5.1l-2.9 2.8v-2.8H4.9V2.6h15.6v10.3ZM17.1 6v5.1h-2.6V6h2.6Zm-5.1 0v5.1H9.4V6H12Z"/></svg>
+        </a></li>
+        <li><a href="#main" class="text-muted-fg hover:text-neon transition-colors duration-200 inline-block" aria-label="Apex Gaming on YouTube">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8ZM9.6 15.6V8.4l6.2 3.6-6.2 3.6Z"/></svg>
+        </a></li>
+        <li><a href="#main" class="text-muted-fg hover:text-neon transition-colors duration-200 inline-block" aria-label="Apex Gaming on X">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      // Mobile navigation
+      var menuBtn = document.getElementById('menu-btn');
+      var menu = document.getElementById('mobile-menu');
+      menuBtn.addEventListener('click', function () {
+        var open = menuBtn.getAttribute('aria-expanded') === 'true';
+        menuBtn.setAttribute('aria-expanded', String(!open));
+        menu.hidden = open;
+      });
+      menu.addEventListener('click', function (e) {
+        if (e.target.tagName === 'A') {
+          menuBtn.setAttribute('aria-expanded', 'false');
+          menu.hidden = true;
+        }
+      });
+
+      // Countdown to the kickoff time declared in the markup
+      var kickoff = new Date(document.getElementById('kickoff-time').getAttribute('datetime')).getTime();
+      var cd = document.getElementById('countdown');
+      var status = document.getElementById('countdown-status');
+      var units = {
+        days: cd.querySelector('[data-unit="days"]'),
+        hours: cd.querySelector('[data-unit="hours"]'),
+        minutes: cd.querySelector('[data-unit="minutes"]'),
+        seconds: cd.querySelector('[data-unit="seconds"]')
+      };
+
+      function pad(n) { return n < 10 ? '0' + n : String(n); }
+
+      function tick() {
+        var diff = kickoff - Date.now();
+        if (diff <= 0) {
+          Object.keys(units).forEach(function (k) { units[k].textContent = '00'; });
+          status.textContent = 'Match is underway.';
+          clearInterval(timer);
+          return;
+        }
+        var s = Math.floor(diff / 1000);
+        units.days.textContent = pad(Math.floor(s / 86400));
+        units.hours.textContent = pad(Math.floor(s % 86400 / 3600));
+        units.minutes.textContent = pad(Math.floor(s % 3600 / 60));
+        units.seconds.textContent = pad(s % 60);
+      }
+
+      tick();
+      var timer = setInterval(tick, 1000);
+      // Screen readers get a single summary instead of a per-second stream
+      status.textContent = 'Next match starts in ' + units.days.textContent + ' days, ' +
+        units.hours.textContent + ' hours.';
+
+      // Scroll reveal, opt-in only when motion is allowed and IO is supported
+      if (!reduceMotion.matches && 'IntersectionObserver' in window) {
+        document.documentElement.classList.add('motion-ok');
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+      }
+
+      // Calendar export: builds a real .ics file from each match's data attributes
+      function icsStamp(d) {
+        return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+      }
+
+      document.querySelectorAll('.js-ics').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var start = new Date(btn.dataset.start);
+          var end = new Date(start.getTime() + 3 * 60 * 60 * 1000);
+          var lines = [
+            'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Apex Gaming//Schedule//EN',
+            'BEGIN:VEVENT',
+            'UID:' + start.getTime() + '@apexgaming.gg',
+            'DTSTAMP:' + icsStamp(new Date()),
+            'DTSTART:' + icsStamp(start),
+            'DTEND:' + icsStamp(end),
+            'SUMMARY:' + btn.dataset.title,
+            'LOCATION:' + btn.dataset.location,
+            'END:VEVENT', 'END:VCALENDAR'
+          ];
+          var blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = btn.dataset.title.replace(/[^a-z0-9]+/gi, '-').toLowerCase() + '.ics';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        });
+      });
+
+      // Tryout form: validated client-side, no backend wired up
+      var form = document.getElementById('tryout-form');
+      var formStatus = document.getElementById('form-status');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var handle = document.getElementById('handle');
+        var email = document.getElementById('email');
+        if (!handle.value.trim()) {
+          formStatus.textContent = 'Enter your in-game handle to continue.';
+          handle.focus();
+          return;
+        }
+        if (!email.checkValidity()) {
+          formStatus.textContent = 'Enter a valid email address to continue.';
+          email.focus();
+          return;
+        }
+        formStatus.textContent = 'Application received. Check your inbox for the scrim block.';
+        form.reset();
+      });
+    })();
+  </script>
+</body>
+</html>
