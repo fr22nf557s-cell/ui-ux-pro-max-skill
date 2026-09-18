@@ -106,7 +106,7 @@ export async function dashboard(env, requestUrl) {
              FROM suppliers ORDER BY award_count DESC, total_value DESC LIMIT 25`,
         )
         .all(),
-      db.prepare(`SELECT * FROM ingest_runs ORDER BY started_at DESC LIMIT 6`).all(),
+      db.prepare(`SELECT * FROM ingest_runs ORDER BY started_at DESC LIMIT 12`).all(),
       db
         .prepare(
           `SELECT COUNT(*) AS all_count,
@@ -127,6 +127,14 @@ export async function dashboard(env, requestUrl) {
   } catch (err) {
     setupError = String(err)
   }
+
+  /*
+   * An empty list is ambiguous on its own: it could mean nothing matched, or
+   * that nothing was ever fetched. These two numbers separate them, and they
+   * are the first thing to reach for when the dashboard looks wrong.
+   */
+  const tenderRun = runs.find((r) => r.source === 'contracts_finder:tender')
+  const tendersScanned = Number(tenderRun?.releases_seen) || 0
 
   const lastRun = runs[0]
   const lastOk = runs.find((r) => r.ok === 1)
@@ -374,10 +382,17 @@ ${(() => {
         ${
           filtered
             ? `Nothing matches that filter. <a href="/">Show everything</a>.`
-            : `<strong>Nothing here yet.</strong><br>
-               <span class="note" style="border:0;padding:0;display:block;margin-top:8px">
-               This fills itself every six hours. To pull the last ninety days right now,
-               press <strong>Refresh now</strong> at the top and reload in a minute.</span>`
+            : tendersScanned > 0
+              ? `<strong>Nothing drone-related in the window.</strong><br>
+                 <span class="note" style="border:0;padding:0;display:block;margin-top:8px">
+                 The last run read <strong>${tendersScanned}</strong> tender notices — every open tender
+                 published across UK public procurement in that period — and none were drone work.
+                 UK public bodies put out only a handful of drone tenders a year, so an empty list
+                 here is normal rather than broken.</span>`
+              : `<strong>Nothing fetched yet.</strong><br>
+                 <span class="note" style="border:0;padding:0;display:block;margin-top:8px">
+                 Press <strong>Refresh now</strong> above and reload in a minute. It also fills
+                 itself every six hours without being asked.</span>`
         }
       </div>
     </section>`
@@ -393,8 +408,15 @@ ${(() => {
            procurement codes, explicit mentions of unmanned aircraft, an open deadline, a contract size
            you could deliver. Closed deadlines and prime-only sizes cost points. The rules are in
            <code>src/score.js</code>, and the reasons behind each score sit under its title.</p>`
-        : `<div class="empty">No open tenders right now. The awarded work below still tells you who
-           wins this kind of contract.</div>`
+        : `<div class="empty"><strong>Nothing open to bid right now.</strong><br>
+           <span class="note" style="border:0;padding:0;display:block;margin-top:8px">
+           ${
+             tendersScanned > 0
+               ? `The last run read <strong>${tendersScanned}</strong> tender notices across all of UK
+                  public procurement and none of the drone work in them is still open. `
+               : ''
+           }The closed and awarded work below still tells you who wins these contracts and for how
+           much.</span></div>`
     }
   </section>
 

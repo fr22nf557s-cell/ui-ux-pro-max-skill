@@ -92,20 +92,44 @@ export const SOURCES = {
  * read to its end in one run would stall the walk, so these are deliberately
  * conservative.
  *
- * The page budgets add up to well under the fifty outbound requests a Worker
- * gets per invocation, leaving room for Find a Tender and for the volume to
- * grow without anything silently truncating.
+ * ── The subrequest budget ────────────────────────────────────────────────────
+ * Cloudflare allows fifty outbound requests per Worker invocation, and D1
+ * queries count towards that same fifty — not only the fetches. A real run
+ * died on exactly this: "Too many subrequests by single Worker invocation",
+ * after 44 pages of reading left nothing for the writes.
+ *
+ * So the fetch budget is held to 26 across all four passes, leaving the rest
+ * for the upserts, the supplier rebuild and the run log. Reading less per run
+ * costs a slower backfill and nothing else, because a slice is only marked
+ * done once it has been read to its end.
+ */
+/*
+ * All four stages, because the brief is every drone-related government
+ * contract and not only the ones still open:
+ *
+ *   tender    open now, biddable
+ *   planning  early notice of work not yet advertised
+ *   award     who won, for how much — the competitive field
+ *   contract  the signed contract itself, where the buyer publishes one
+ *
+ * A year back on each. The walk is incremental and leaves no holes, so a long
+ * backfill costs patience rather than correctness: it advances as far as the
+ * budget allows each run and resumes exactly where it stopped.
+ *
+ * Tenders are cheap — about ten a day nationally, so a seven-day slice is a
+ * single page and one run covers roughly two months. Awards are 86% of the
+ * feed at ~260 a day, so they take small slices and fill in over a couple of
+ * days of hourly runs.
  */
 export const CF_PASSES = [
-  { stage: 'tender', sliceDays: 7, maxPages: 12, backfillDays: 90 },
-  { stage: 'planning', sliceDays: 30, maxPages: 4, backfillDays: 90 },
-  /*
-   * Awards are the bulk of the feed and only feed the supplier table, so they
-   * get the smallest slices and catch up over several runs rather than
-   * blocking the tenders anyone actually bids on.
-   */
-  { stage: 'award', sliceDays: 1, maxPages: 16, backfillDays: 60 },
+  { stage: 'tender', sliceDays: 7, maxPages: 8, backfillDays: 365 },
+  { stage: 'planning', sliceDays: 30, maxPages: 2, backfillDays: 365 },
+  { stage: 'contract', sliceDays: 14, maxPages: 2, backfillDays: 365 },
+  { stage: 'award', sliceDays: 1, maxPages: 9, backfillDays: 365 },
 ]
+
+/* Find a Tender's share of the same budget. */
+export const FT_MAX_PAGES = 5
 
 /** Walk arbitrary JSON and return every object that looks like an OCDS release. */
 export function collectReleases(node, found = [], depth = 0) {

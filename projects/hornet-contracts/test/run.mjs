@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
 import { classify, score, supplierSlug, cpvStem } from '../src/score.js'
-import { collectReleases, extractCpv, extractStage, normalise, normaliseAwards, SOURCES, CF_PASSES } from '../src/ingest.js'
+import { collectReleases, extractCpv, extractStage, normalise, normaliseAwards, SOURCES, CF_PASSES, FT_MAX_PAGES } from '../src/ingest.js'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const fx = JSON.parse(readFileSync(join(here, 'fixtures', 'releases.json'), 'utf8'))
@@ -163,20 +163,28 @@ group('the slice plan can actually finish inside a run', () => {
    * its own page budget stalls the walk, so each pass is checked against the
    * volume it will meet.
    */
-  const perDay = { tender: 12, planning: 4, award: 300 }
+  const perDay = { tender: 12, planning: 4, contract: 12, award: 300 }
   for (const pass of CF_PASSES) {
     const pagesNeeded = Math.ceil((perDay[pass.stage] * pass.sliceDays) / 100)
     check(`${pass.stage}: a ${pass.sliceDays}-day slice needs ~${pagesNeeded} pages, budget ${pass.maxPages}`,
       pagesNeeded <= pass.maxPages)
   }
 
-  const totalPages = CF_PASSES.reduce((n, p) => n + p.maxPages, 0) + 12
-  /* Cloudflare allows fifty outbound requests per Worker invocation. */
-  check(`every pass together stays under the subrequest cap (${totalPages} of 50)`, totalPages <= 50)
+  /*
+   * Cloudflare allows fifty outbound requests per Worker invocation and D1
+   * queries count towards the same fifty, so the fetches cannot use all of it.
+   * A real run died on this — "Too many subrequests by single Worker
+   * invocation" — after the page budget left nothing for the writes.
+   */
+  const totalPages = CF_PASSES.reduce((n, p) => n + p.maxPages, 0) + FT_MAX_PAGES
+  check(`fetches leave half the subrequest budget for database writes (${totalPages} of 50)`,
+    totalPages <= 26, `${totalPages} pages`)
 
   check('tenders are walked before awards, being the only actionable rows',
     CF_PASSES.findIndex((p) => p.stage === 'tender') < CF_PASSES.findIndex((p) => p.stage === 'award'))
-  check('every pass backfills at least 60 days', CF_PASSES.every((p) => p.backfillDays >= 60))
+  check('every pass reaches a year back', CF_PASSES.every((p) => p.backfillDays >= 365))
+  check('all four stages are covered, not just the biddable ones',
+    ['tender', 'planning', 'award', 'contract'].every((st) => CF_PASSES.some((p) => p.stage === st)))
   check('no slice is smaller than a day', CF_PASSES.every((p) => p.sliceDays >= 1))
 })
 
@@ -326,7 +334,7 @@ await group("dashboard renders without a live database", async () => {
     }),
   }
   const empty = await dashboard({ DB: emptyStub }, new URL('https://x.invalid/'))
-  check('empty database renders an explanation, not a crash', empty.includes('Nothing here yet'))
+  check('empty database renders an explanation, not a crash', empty.includes('Nothing fetched yet'))
   /* The explanation has to name the thing to press, not a command to type. */
   check('empty database points at the refresh button', empty.includes('Refresh now'))
   check('empty database is flagged as never run', empty.includes('Never run'))

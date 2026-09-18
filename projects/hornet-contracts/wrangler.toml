@@ -13,12 +13,17 @@ main = "src/index.js"
 compatibility_date = "2026-09-18"
 workers_dev = true
 
-# Every six hours. The source feeds publish on a daily cycle, so this is four
-# times more often than the data actually changes — frequent enough that
-# nothing sits unseen for a working day, cheap enough to stay inside the free
-# tier with room to spare. Tighten to "0 */3 * * *" if you want it keener.
+# Hourly.
+#
+# Not because the feeds change that fast — they publish on a daily cycle — but
+# because each run is deliberately capped at 26 pages to stay inside
+# Cloudflare's fifty-subrequest limit, and a year of award notices is a lot of
+# pages. Hourly turns a month of backfilling into a couple of days. Once it has
+# caught up, an hourly run has almost nothing to do and costs almost nothing.
+#
+# Relax to "0 */6 * * *" afterwards if you would rather it were quieter.
 [triggers]
-crons = ["0 */6 * * *"]
+crons = ["0 * * * *"]
 
 # Create the database first, then paste its id here:
 #   npx wrangler d1 create hornet-contracts

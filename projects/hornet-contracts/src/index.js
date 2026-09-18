@@ -20,7 +20,7 @@
  * security model.
  */
 
-import { SOURCES, CF_PASSES, collectReleases, normalise, normaliseAwards, fetchPage } from './ingest.js'
+import { SOURCES, CF_PASSES, FT_MAX_PAGES, collectReleases, normalise, normaliseAwards, fetchPage } from './ingest.js'
 import {
   upsertContracts, upsertAwards, rebuildSuppliers,
   getWatermark, setWatermark, recordRun,
@@ -181,7 +181,7 @@ async function ingestPass(env, pass, started) {
  * Above-threshold work only, so the volume is a fraction of Contracts Finder's
  * and one pass covers it without slicing.
  */
-async function ingestFindATender(env, started, { maxPages = 12 } = {}) {
+async function ingestFindATender(env, started, { maxPages = FT_MAX_PAGES } = {}) {
   const db = env.DB
   const run = { source: 'find_a_tender', started_at: started.toISOString(), pages_fetched: 0, releases_seen: 0 }
 
