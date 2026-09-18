@@ -1,0 +1,33 @@
+# Hornet Drones — contract monitor (Cloudflare Worker).
+#
+# Deployed separately from the marketing site on purpose. Cloudflare Pages has
+# no scheduled handler, so anything that runs on a timer has to be a Worker;
+# keeping it apart also means a bad deploy here cannot take hornetdrones.com
+# offline.
+#
+# Secrets never go in this file. Set the dashboard token with:
+#   npx wrangler secret put DASH_TOKEN
+
+name = "hornet-contracts"
+main = "src/index.js"
+compatibility_date = "2026-09-18"
+workers_dev = true
+
+# Every six hours. The source feeds publish on a daily cycle, so this is four
+# times more often than the data actually changes — frequent enough that
+# nothing sits unseen for a working day, cheap enough to stay inside the free
+# tier with room to spare. Tighten to "0 */3 * * *" if you want it keener.
+[triggers]
+crons = ["0 */6 * * *"]
+
+# Create the database first, then paste its id here:
+#   npx wrangler d1 create hornet-contracts
+#
+# The id is an identifier, not a credential, and is safe to commit.
+[[d1_databases]]
+binding = "DB"
+database_name = "hornet-contracts"
+database_id = "PASTE_DATABASE_ID_HERE"
+
+[observability]
+enabled = true
