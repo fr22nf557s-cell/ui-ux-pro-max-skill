@@ -182,6 +182,92 @@ async function selftest(env) {
   return out
 }
 
+/*
+ * Parameter probe.
+ *
+ * The selftest proved both APIs answer and that the envelope parses. It also
+ * showed something worse: a Contracts Finder search for keyword=drone came
+ * back with a solicitor's development loan first, which means the keyword is
+ * being ignored and we are reading an undifferentiated slice of all UK
+ * procurement.
+ *
+ * This endpoint exists to find the parameter that does work. It fetches one
+ * page per candidate and reports, for each, how many of the hundred releases
+ * actually classify as drone work, plus the date range of the page so we can
+ * tell which end of the window the API serves first. Whichever variant scores
+ * far above the unfiltered baseline is the right one.
+ *
+ * It writes nothing. Delete it once the answer is known.
+ */
+async function probe(env) {
+  const since = new Date(Date.now() - 90 * 86400000).toISOString()
+
+  const variants = [
+    { label: 'keyword=drone (current)', params: { keyword: 'drone' } },
+    { label: 'searchTerm=drone', params: { searchTerm: 'drone' } },
+    { label: 'keywords=drone', params: { keywords: 'drone' } },
+    { label: 'q=drone', params: { q: 'drone' } },
+    { label: 'searchCriteria.keyword=drone', params: { 'searchCriteria.keyword': 'drone' } },
+    { label: 'no keyword at all (baseline)', params: {} },
+  ]
+
+  const summarise = (releases) => {
+    const dates = releases.map((r) => r?.date).filter(Boolean).sort()
+    const droneish = releases.filter((r) => Boolean(normalise(r, 'contracts_finder')))
+    return {
+      releases_on_page: releases.length,
+      classified_as_drone_work: droneish.length,
+      first_date_on_page: dates[0] || null,
+      last_date_on_page: dates[dates.length - 1] || null,
+      first_title: releases[0]?.tender?.title?.slice(0, 90) || null,
+      a_drone_title: droneish[0]?.tender?.title?.slice(0, 90) || null,
+    }
+  }
+
+  const contracts_finder = []
+  for (const v of variants) {
+    const u = new URL('https://www.contractsfinder.service.gov.uk/Published/Notices/OCDS/Search')
+    u.searchParams.set('publishedFrom', since)
+    u.searchParams.set('stages', 'planning,tender,award,contract')
+    for (const [k, val] of Object.entries(v.params)) u.searchParams.set(k, val)
+    try {
+      const { body, next } = await fetchPage(u.toString())
+      contracts_finder.push({
+        variant: v.label,
+        ok: true,
+        ...summarise(collectReleases(body)),
+        has_next_page: Boolean(next),
+      })
+    } catch (err) {
+      contracts_finder.push({ variant: v.label, ok: false, error: String(err).slice(0, 200) })
+    }
+  }
+
+  /* Find a Tender has no text filter; what matters is which end it serves. */
+  let find_a_tender
+  try {
+    const { body, next } = await fetchPage(SOURCES.find_a_tender.url({ since }))
+    const releases = collectReleases(body)
+    find_a_tender = {
+      ok: true,
+      ...summarise(releases),
+      has_next_page: Boolean(next),
+    }
+  } catch (err) {
+    find_a_tender = { ok: false, error: String(err).slice(0, 200) }
+  }
+
+  return {
+    window_start: since,
+    how_to_read_this:
+      'The variant whose classified_as_drone_work is far above the baseline is the parameter ' +
+      'that filters. If every variant matches the baseline, none of them work and relevance ' +
+      'has to come from paging the whole window instead.',
+    contracts_finder,
+    find_a_tender,
+  }
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url)
@@ -212,6 +298,8 @@ export default {
 
     try {
       if (url.pathname === '/api/selftest') return json(await selftest(env))
+
+      if (url.pathname === '/api/probe') return json(await probe(env))
 
       if (url.pathname === '/api/ingest' && request.method === 'POST') {
         return json(await runIngest(env))
