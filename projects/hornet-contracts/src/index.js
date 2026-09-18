@@ -200,71 +200,94 @@ async function selftest(env) {
  * It writes nothing. Delete it once the answer is known.
  */
 async function probe(env) {
-  const since = new Date(Date.now() - 90 * 86400000).toISOString()
-
-  const variants = [
-    { label: 'keyword=drone (current)', params: { keyword: 'drone' } },
-    { label: 'searchTerm=drone', params: { searchTerm: 'drone' } },
-    { label: 'keywords=drone', params: { keywords: 'drone' } },
-    { label: 'q=drone', params: { q: 'drone' } },
-    { label: 'searchCriteria.keyword=drone', params: { 'searchCriteria.keyword': 'drone' } },
-    { label: 'no keyword at all (baseline)', params: {} },
-  ]
+  const CF = 'https://www.contractsfinder.service.gov.uk/Published/Notices/OCDS/Search'
+  const days = (n) => new Date(Date.now() - n * 86400000).toISOString()
 
   const summarise = (releases) => {
     const dates = releases.map((r) => r?.date).filter(Boolean).sort()
-    const droneish = releases.filter((r) => Boolean(normalise(r, 'contracts_finder')))
+    const drone = releases.filter((r) => Boolean(normalise(r, 'contracts_finder')))
+    const stages = {}
+    for (const r of releases) {
+      const t = Array.isArray(r?.tag) ? r.tag.join('+') : String(r?.tag ?? '?')
+      stages[t] = (stages[t] || 0) + 1
+    }
     return {
       releases_on_page: releases.length,
-      classified_as_drone_work: droneish.length,
-      first_date_on_page: dates[0] || null,
-      last_date_on_page: dates[dates.length - 1] || null,
-      first_title: releases[0]?.tender?.title?.slice(0, 90) || null,
-      a_drone_title: droneish[0]?.tender?.title?.slice(0, 90) || null,
+      drone_work: drone.length,
+      oldest: dates[0] || null,
+      newest: dates[dates.length - 1] || null,
+      tags: stages,
     }
   }
 
-  const contracts_finder = []
-  for (const v of variants) {
-    const u = new URL('https://www.contractsfinder.service.gov.uk/Published/Notices/OCDS/Search')
-    u.searchParams.set('publishedFrom', since)
-    u.searchParams.set('stages', 'planning,tender,award,contract')
-    for (const [k, val] of Object.entries(v.params)) u.searchParams.set(k, val)
+  const tryUrl = async (label, params) => {
+    const u = new URL(CF)
+    for (const [k, v] of Object.entries(params)) u.searchParams.set(k, v)
     try {
       const { body, next } = await fetchPage(u.toString())
-      contracts_finder.push({
-        variant: v.label,
-        ok: true,
-        ...summarise(collectReleases(body)),
-        has_next_page: Boolean(next),
-      })
+      return { label, ok: true, ...summarise(collectReleases(body)), has_next: Boolean(next) }
     } catch (err) {
-      contracts_finder.push({ variant: v.label, ok: false, error: String(err).slice(0, 200) })
+      return { label, ok: false, error: String(err).slice(0, 160) }
     }
   }
 
-  /* Find a Tender has no text filter; what matters is which end it serves. */
-  let find_a_tender
-  try {
-    const { body, next } = await fetchPage(SOURCES.find_a_tender.url({ since }))
-    const releases = collectReleases(body)
-    find_a_tender = {
-      ok: true,
-      ...summarise(releases),
-      has_next_page: Boolean(next),
-    }
-  } catch (err) {
-    find_a_tender = { ok: false, error: String(err).slice(0, 200) }
-  }
+  /*
+   * Question 1 — can the window be bounded at both ends?
+   *
+   * If publishedTo works, the 90-day backfill can be walked in slices instead
+   * of paged from the present day, which is the difference between a few
+   * requests and a few hundred.
+   */
+  const windowing = [
+    await tryUrl('control: publishedFrom=2d only', { publishedFrom: days(2) }),
+    await tryUrl('publishedFrom=60d & publishedTo=58d', { publishedFrom: days(60), publishedTo: days(58) }),
+    await tryUrl('publishedFrom=60d & publishedUntil=58d', { publishedFrom: days(60), publishedUntil: days(58) }),
+  ]
+
+  /*
+   * Question 2 — can a page carry more than a hundred?
+   *
+   * Cloudflare caps a Worker at fifty outbound requests per invocation, so
+   * page size sets how much history one run can cover at all.
+   */
+  const pageSize = [
+    await tryUrl('size=500', { publishedFrom: days(2), size: '500' }),
+    await tryUrl('limit=500', { publishedFrom: days(2), limit: '500' }),
+    await tryUrl('pageSize=500', { publishedFrom: days(2), pageSize: '500' }),
+  ]
+
+  /*
+   * Question 3 — is there a CPV filter after all?
+   *
+   * 34711200 is the procurement code for unmanned aerial vehicles. If any of
+   * these narrows the results, the whole volume problem disappears: ask for
+   * the code and get only drone work back.
+   */
+  const cpv = [
+    await tryUrl('cpvCodes=34711200', { publishedFrom: days(90), cpvCodes: '34711200' }),
+    await tryUrl('cpv=34711200', { publishedFrom: days(90), cpv: '34711200' }),
+    await tryUrl('classification=34711200', { publishedFrom: days(90), classification: '34711200' }),
+    await tryUrl('cpvCodes=34711200-6 (with check digit)', { publishedFrom: days(90), cpvCodes: '34711200-6' }),
+  ]
+
+  /* Question 4 — does the stage filter do anything? */
+  const stageFilter = [
+    await tryUrl('stages=tender only', { publishedFrom: days(2), stages: 'tender' }),
+  ]
 
   return {
-    window_start: since,
-    how_to_read_this:
-      'The variant whose classified_as_drone_work is far above the baseline is the parameter ' +
-      'that filters. If every variant matches the baseline, none of them work and relevance ' +
-      'has to come from paging the whole window instead.',
-    contracts_finder,
-    find_a_tender,
+    read_this_first: [
+      'windowing: if a publishedTo/publishedUntil row shows dates around 60 days old rather than',
+      '  today, the window can be bounded and the backfill can be sliced.',
+      'pageSize: if releases_on_page is above 100 anywhere, one request covers more history.',
+      'cpv: if any row shows drone_work close to releases_on_page, that filter works and solves',
+      '  the volume problem outright.',
+      'stageFilter: if tags shows only tender, the stage filter works.',
+    ],
+    windowing,
+    pageSize,
+    cpv,
+    stageFilter,
   }
 }
 
