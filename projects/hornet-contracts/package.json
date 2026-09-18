@@ -1,0 +1,19 @@
+{
+  "name": "hornet-contracts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Scheduled Cloudflare Worker that tracks UK public-procurement notices for drone work and records who wins them.",
+  "scripts": {
+    "test": "node test/run.mjs",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "schema": "wrangler d1 execute hornet-contracts --remote --file=./schema.sql",
+    "schema:local": "wrangler d1 execute hornet-contracts --local --file=./schema.sql",
+    "tail": "wrangler tail",
+    "preview": "node scripts/preview.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "^4.135.0"
+  }
+}
