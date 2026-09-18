@@ -273,7 +273,9 @@ await group("dashboard renders without a live database", async () => {
     }),
   }
   const empty = await dashboard({ DB: emptyStub }, new URL('https://x.invalid/'))
-  check('empty database renders an explanation, not a crash', empty.includes('Nothing ingested yet'))
+  check('empty database renders an explanation, not a crash', empty.includes('Nothing here yet'))
+  /* The explanation has to name the thing to press, not a command to type. */
+  check('empty database points at the refresh button', empty.includes('Refresh now'))
   check('empty database is flagged as never run', empty.includes('Never run'))
 
   /* And the case where the schema was never applied. */
