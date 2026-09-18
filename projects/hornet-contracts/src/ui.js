@@ -59,6 +59,7 @@ export async function dashboard(env, requestUrl) {
    * state to go stale.
    */
   const params = requestUrl instanceof URL ? requestUrl.searchParams : new URLSearchParams()
+  const refreshing = params.get('refreshing') === '1'
   const q = (params.get('q') || '').trim()
   const stage = params.get('stage') || 'all'
 
@@ -175,26 +176,50 @@ export async function dashboard(env, requestUrl) {
   .chip.bad{border-color:rgba(240,122,122,.5);color:var(--bad)}
   .chip.warn{border-color:rgba(245,196,81,.5);color:var(--warn)}
 
-  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:22px}
-  .tile{border:1px solid var(--line);border-radius:14px;background:var(--ink);padding:18px 20px}
-  .tile .v{font-family:var(--mono);font-size:30px;font-variant-numeric:tabular-nums;line-height:1}
-  .tile .l{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--silver);margin-top:10px}
+  .tiles{display:flex;flex-wrap:wrap;gap:0;margin-top:26px;border:1px solid var(--line);
+    border-radius:14px;background:var(--ink);overflow:hidden}
+  .tile{flex:1 1 150px;padding:16px 20px;border-right:1px solid var(--line)}
+  .tile:last-child{border-right:0}
+  .tile .v{font-family:var(--mono);font-size:26px;font-variant-numeric:tabular-nums;line-height:1}
+  .tile .l{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--slate);margin-top:8px}
 
-  .rows{display:flex;flex-direction:column;gap:10px}
-  .row{border:1px solid var(--line);border-radius:14px;background:var(--ink);padding:18px 20px;
-       display:grid;grid-template-columns:64px 1fr auto;gap:18px;align-items:start}
-  .sc{font-family:var(--mono);font-size:24px;font-variant-numeric:tabular-nums;text-align:center;
-      border:1px solid var(--line2);border-radius:10px;padding:8px 0}
-  .sc.hi{background:#fff;color:#000;border-color:#fff}
-  .row h3{font-size:16px;font-weight:600;line-height:1.35}
-  .meta{font-family:var(--mono);font-size:11.5px;color:var(--silver);margin-top:8px;
-        display:flex;flex-wrap:wrap;gap:6px 14px}
-  .why{margin-top:10px;font-size:13px;color:var(--silver)}
-  .why span{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:3px 10px;margin:3px 4px 0 0}
-  .right{text-align:right;font-family:var(--mono);font-size:13px;white-space:nowrap}
-  .right .val{font-size:17px}
-  .urgent{color:var(--warn)}
-  .gone{color:var(--slate);text-decoration:line-through}
+  .rows{display:flex;flex-direction:column;gap:8px}
+
+  /* A live opportunity. The score anchors the row; everything else supports it. */
+  .row{border:1px solid var(--line);border-radius:12px;background:var(--ink);padding:16px 20px;
+    display:grid;grid-template-columns:56px 1fr auto;gap:20px;align-items:center}
+  .row:hover{border-color:var(--line2)}
+
+  .sc{font-family:var(--mono);font-size:21px;font-variant-numeric:tabular-nums;text-align:center;
+    border:1px solid var(--line2);border-radius:9px;padding:9px 0;color:var(--silver)}
+  .sc.mid{color:var(--fg);border-color:var(--fg)}
+  .sc.hi{background:#fff;color:#000;border-color:#fff;font-weight:600}
+
+  .row h3{font-size:15.5px;font-weight:600;line-height:1.35}
+  .row h3 a{text-decoration:none}
+  .row h3 a:hover{text-decoration:underline}
+  .meta{font-family:var(--mono);font-size:11px;color:var(--slate);margin-top:7px;
+    display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center}
+  .meta .stage{text-transform:uppercase;letter-spacing:.16em;font-size:9.5px;color:var(--silver);
+    border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+  .why{margin-top:9px;display:flex;flex-wrap:wrap;gap:5px}
+  .why span{font-size:11px;color:var(--slate);border:1px solid var(--line);border-radius:999px;
+    padding:2px 9px;white-space:nowrap}
+  .why span.block{color:var(--warn);border-color:rgba(245,196,81,.35)}
+
+  .right{text-align:right;font-family:var(--mono);white-space:nowrap}
+  .right .val{font-size:17px;font-variant-numeric:tabular-nums}
+  .right .when{font-size:11.5px;color:var(--slate);margin-top:5px}
+  .right .when.urgent{color:var(--warn)}
+
+  /* Already-awarded work is reference, not opportunity: one clear tempo quieter. */
+  .past .row{padding:12px 20px;background:transparent;grid-template-columns:1fr auto}
+  .past .row h3{font-size:14px;font-weight:500;color:var(--silver)}
+  .past .row .right .val{font-size:14px;color:var(--silver)}
+
+  .count{font-family:var(--mono);font-size:12px;color:var(--slate);letter-spacing:.1em;
+    margin-left:10px;font-weight:400}
   .stage{text-transform:uppercase;letter-spacing:.16em;font-size:10px}
 
   table{width:100%;border-collapse:collapse;font-size:14px}
@@ -211,6 +236,11 @@ export async function dashboard(env, requestUrl) {
   .empty{border:1px dashed var(--line2);border-radius:14px;padding:28px;color:var(--silver);text-align:center}
   code{font-family:var(--mono);font-size:12.5px;background:var(--panel);padding:2px 6px;border-radius:5px}
   .note{border-left:2px solid var(--line2);padding-left:16px;color:var(--silver);font-size:13.5px;margin-top:14px}
+  button.refresh{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    padding:6px 14px;border-radius:999px}
+  .banner{margin-top:18px;border:1px solid var(--line2);border-radius:12px;background:var(--ink);
+    padding:14px 18px;font-size:14px;color:var(--silver)}
+  .banner a{color:var(--fg)}
   @media(max-width:700px){
     .row{grid-template-columns:52px 1fr;gap:14px}
     .right{grid-column:1/-1;text-align:left;margin-top:6px}
@@ -229,7 +259,17 @@ small supplier could realistically bid, plus the award history of who actually w
   ${lastRun ? `<span class="chip">last run ${esc(day(lastRun.started_at))}</span>` : ''}
   ${lastOk ? `<span class="chip">last success ${esc(day(lastOk.started_at))}</span>` : ''}
   <span class="chip">sources: Contracts Finder · Find a Tender</span>
+  <form method="post" action="/refresh" style="display:inline">
+    <button type="submit" class="refresh">Refresh now</button>
+  </form>
 </div>
+
+${
+  refreshing
+    ? `<div class="banner">Fetching from both sources now. It takes a minute or two —
+       <a href="/">reload this page</a> when you are ready to see the result.</div>`
+    : ''
+}
 
 ${
   setupError
@@ -250,9 +290,66 @@ ${
   <div class="tile"><div class="v">${suppliers.length}</div><div class="l">Suppliers seen winning</div></div>
 </div>
 
-<section>
-  <h2>Opportunities, best fit first</h2>
-  <form class="filters" method="get" action="/">
+${(() => {
+  /*
+   * Two lists, not one. A tender you can still bid and an award somebody else
+   * already won are different kinds of thing, and the old single list made
+   * them look identical — the one distinction that actually decides whether
+   * you act on a row.
+   */
+  const now = Date.now()
+  const isLive = (c) => {
+    if (c.stage !== 'tender' && c.stage !== 'planning') return false
+    if (!c.deadline_at) return true
+    const d = new Date(c.deadline_at).getTime()
+    return Number.isNaN(d) || d >= now
+  }
+  const live = contracts.filter(isLive)
+  const past = contracts.filter((c) => !isLive(c))
+
+  const row = (c, compact) => {
+    const cl = closes(c.deadline_at)
+    let reasons = []
+    try {
+      reasons = JSON.parse(c.fit_reasons || '[]')
+    } catch {
+      reasons = []
+    }
+    const score = Number(c.fit_score) || 0
+    const tier = score >= 75 ? 'hi' : score >= 55 ? 'mid' : ''
+    const blocking = /^(deadline passed|already awarded|over £|very low value)/i
+    const title = esc(c.title) || '(untitled notice)'
+    const link = c.url
+      ? `<a href="${esc(c.url)}" target="_blank" rel="noopener noreferrer">${title}</a>`
+      : title
+
+    return `<article class="row">
+      ${compact ? '' : `<div class="sc ${tier}">${score}</div>`}
+      <div>
+        <h3>${link}</h3>
+        <div class="meta">
+          <span class="stage">${esc(c.stage)}</span>
+          <span>${esc(c.buyer_name) || 'buyer unknown'}</span>
+          <span>${esc(day(c.published_at))}</span>
+          <span>${esc(c.source === 'find_a_tender' ? 'Find a Tender' : 'Contracts Finder')}</span>
+        </div>
+        ${
+          compact
+            ? ''
+            : `<div class="why">${reasons
+                .slice(0, 3)
+                .map((r) => `<span class="${blocking.test(r) ? 'block' : ''}">${esc(r)}</span>`)
+                .join('')}</div>`
+        }
+      </div>
+      <div class="right">
+        <div class="val">${esc(money(c.value_amount, c.value_currency))}</div>
+        <div class="when ${cl.urgent ? 'urgent' : ''}">${esc(cl.text)}</div>
+      </div>
+    </article>`
+  }
+
+  const filters = `<form class="filters" method="get" action="/">
     <input type="search" name="q" placeholder="Search title or buyer" value="${esc(q)}">
     <select name="stage">
       ${[
@@ -267,48 +364,51 @@ ${
     </select>
     <button type="submit">Filter</button>
     ${filtered ? '<a class="chip" href="/" style="align-self:center">clear</a>' : ''}
-  </form>
+  </form>`
+
+  if (contracts.length === 0) {
+    return `<section>
+      <h2>Opportunities</h2>
+      ${filters}
+      <div class="empty">
+        ${
+          filtered
+            ? `Nothing matches that filter. <a href="/">Show everything</a>.`
+            : `<strong>Nothing here yet.</strong><br>
+               <span class="note" style="border:0;padding:0;display:block;margin-top:8px">
+               This fills itself every six hours. To pull the last ninety days right now,
+               press <strong>Refresh now</strong> at the top and reload in a minute.</span>`
+        }
+      </div>
+    </section>`
+  }
+
+  return `<section>
+    <h2>Open to bid${live.length ? `<span class="count">${live.length}</span>` : ''}</h2>
+    ${filters}
+    ${
+      live.length
+        ? `<div class="rows">${live.map((c) => row(c, false)).join('')}</div>
+           <p class="note">Scored 0–100 for whether a small supplier could realistically bid: drone
+           procurement codes, explicit mentions of unmanned aircraft, an open deadline, a contract size
+           you could deliver. Closed deadlines and prime-only sizes cost points. The rules are in
+           <code>src/score.js</code>, and the reasons behind each score sit under its title.</p>`
+        : `<div class="empty">No open tenders right now. The awarded work below still tells you who
+           wins this kind of contract.</div>`
+    }
+  </section>
 
   ${
-    contracts.length === 0
-      ? filtered
-        ? `<div class="empty">No notices match that filter. <a href="/">Show everything</a>.</div>`
-        : `<div class="empty">Nothing ingested yet. The cron runs every six hours, or trigger it now with
-           <code>POST /api/ingest</code>.</div>`
-      : `<div class="rows">${contracts
-          .map((c) => {
-            const cl = closes(c.deadline_at)
-            let reasons = []
-            try {
-              reasons = JSON.parse(c.fit_reasons || '[]')
-            } catch {
-              reasons = []
-            }
-            return `<article class="row">
-              <div class="sc ${c.fit_score >= 60 ? 'hi' : ''}">${Number(c.fit_score) || 0}</div>
-              <div>
-                <h3><a href="${esc(c.url)}" target="_blank" rel="noopener noreferrer">${esc(c.title) || '(untitled notice)'}</a></h3>
-                <div class="meta">
-                  <span>${esc(c.buyer_name) || 'buyer unknown'}</span>
-                  <span class="stage">${esc(c.stage)}</span>
-                  <span>published ${esc(day(c.published_at))}</span>
-                  <span>${esc(c.source === 'find_a_tender' ? 'Find a Tender' : 'Contracts Finder')}</span>
-                </div>
-                <div class="why">${reasons.slice(0, 4).map((r) => `<span>${esc(r)}</span>`).join('')}</div>
-              </div>
-              <div class="right">
-                <div class="val">${esc(money(c.value_amount, c.value_currency))}</div>
-                <div class="${cl.urgent ? 'urgent' : cl.gone ? 'gone' : ''}">${esc(cl.text)}</div>
-              </div>
-            </article>`
-          })
-          .join('')}</div>`
-  }
-  <p class="note">The score is a rule of thumb, not a judgement. It rewards drone procurement codes,
-  explicit mentions of unmanned aircraft, an open deadline and a contract size a small supplier could
-  deliver; it penalises closed deadlines and contracts large enough to be prime-only. Every rule lives
-  in <code>src/score.js</code> and the reasons behind each score are shown above.</p>
-</section>
+    past.length
+      ? `<section class="past">
+          <h2>Closed and awarded<span class="count">${past.length}</span></h2>
+          <p class="note" style="margin-bottom:16px">Not biddable — kept because it shows what gets
+          bought, by whom, and for how much.</p>
+          <div class="rows">${past.map((c) => row(c, true)).join('')}</div>
+        </section>`
+      : ''
+  }`
+})()}
 
 <section>
   <h2>Who wins this work</h2>

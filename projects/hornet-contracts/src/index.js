@@ -183,7 +183,7 @@ async function selftest(env) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url)
 
     if (!env.DASH_TOKEN) {
@@ -215,6 +215,24 @@ export default {
 
       if (url.pathname === '/api/ingest' && request.method === 'POST') {
         return json(await runIngest(env))
+      }
+
+      /*
+       * The dashboard's "Refresh now" button.
+       *
+       * Started in the background rather than awaited: a full ingest takes a
+       * minute or two, which is far longer than anyone should watch a browser
+       * spinner, and longer than a request should reasonably be held open.
+       * The redirect comes back immediately and the page says a run is under
+       * way. The cron does exactly the same work on its own schedule; this is
+       * only for when you do not want to wait for it.
+       */
+      if (url.pathname === '/refresh' && request.method === 'POST') {
+        ctx.waitUntil(runIngest(env))
+        return new Response(null, {
+          status: 303,
+          headers: { location: '/?refreshing=1', 'cache-control': 'no-store', ...setCookie },
+        })
       }
 
       if (url.pathname === '/api/contracts') {
