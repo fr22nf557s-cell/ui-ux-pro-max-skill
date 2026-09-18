@@ -34,12 +34,41 @@ note "done"
 WRANGLER="npx --yes wrangler"
 
 # ── 2. Cloudflare login ──────────────────────────────────────────────────────
+#
+# `wrangler whoami` exits 0 even when nobody is signed in — it reports the fact
+# rather than failing on it — so the exit code cannot be trusted here. Read what
+# it actually says instead.
+#
+# And `wrangler login` must run attached to this terminal. Wrangler checks
+# whether its output is a terminal; if it is not, it decides it is running
+# unattended and refuses to open a browser, asking for an API token instead.
+# So nothing below captures its output.
 say "2/6  Checking you are signed in to Cloudflare"
-if $WRANGLER whoami >/dev/null 2>&1; then
+WHOAMI_OUT="$($WRANGLER whoami 2>&1 || true)"
+if printf '%s' "$WHOAMI_OUT" | grep -qiE 'not authenticated|not logged in|CLOUDFLARE_API_TOKEN|you need to login'; then
+  NEEDS_LOGIN=yes
+elif printf '%s' "$WHOAMI_OUT" | grep -qiE 'associated with the email|account id|account name'; then
+  NEEDS_LOGIN=no
+else
+  # Unrecognised output — assume signed out, since a redundant login is
+  # harmless and a missed one strands the next step.
+  NEEDS_LOGIN=yes
+fi
+
+if [ "$NEEDS_LOGIN" = "no" ]; then
   note "already signed in"
 else
-  note "opening a browser window — approve the login, then come back here"
-  $WRANGLER login
+  note "a browser window will open — approve the login, then come back here"
+  echo
+  $WRANGLER login || die "Cloudflare login did not complete. Run this script again to retry."
+  echo
+
+  WHOAMI_OUT="$($WRANGLER whoami 2>&1 || true)"
+  if ! printf '%s' "$WHOAMI_OUT" | grep -qiE 'associated with the email|account id|account name'; then
+    printf '%s\n' "$WHOAMI_OUT"
+    die "Still not signed in after the login step. Run this script again."
+  fi
+  note "signed in"
 fi
 
 # ── 3. Database ──────────────────────────────────────────────────────────────
@@ -51,21 +80,13 @@ fi
 # and you would be left staring at a prompt with no explanation.
 say "3/6  Database"
 if grep -q 'PASTE_DATABASE_ID_HERE' wrangler.toml; then
-  CREATE_RC=0
-  CREATE_OUT="$($WRANGLER d1 create hornet-contracts 2>&1)" || CREATE_RC=$?
-
-  if [ "$CREATE_RC" -ne 0 ]; then
-    if printf '%s' "$CREATE_OUT" | grep -qiE 'already exists|duplicate'; then
-      note "a database of that name already exists — reusing it"
-    else
-      printf '\n%s\n' "$CREATE_OUT"
-      die "Could not create the database. The output above says why.
-
-If it mentions billing or a plan, D1 needs the Workers free plan enabled on
-the account once: dash.cloudflare.com, Workers & Pages, and follow the prompt
-to enable Workers. Then run this script again."
-    fi
-  fi
+  # Attached to the terminal, for the same reason as the login step above:
+  # a captured wrangler cannot prompt. Whether this worked is decided below by
+  # looking for the database, not by this command's exit code — "already
+  # exists" is a failure here and a success for our purposes.
+  echo
+  $WRANGLER d1 create hornet-contracts || true
+  echo
 
   # Read the id back. `|| true` keeps a failure here from killing the script.
   LIST_ERR="$(mktemp)"
@@ -88,9 +109,14 @@ to enable Workers. Then run this script again."
     printf '\n--- what wrangler printed ---\n%s\n' "${LIST_OUT:-(nothing)}"
     [ -s "$LIST_ERR" ] && printf -- '--- errors ---\n%s\n' "$(cat "$LIST_ERR")"
     rm -f "$LIST_ERR"
-    die "Could not read the database id back from Cloudflare.
+    die "No database called hornet-contracts exists, and it could not be created.
+The output above says why.
 
-Do this instead, it takes a minute:
+If it mentions billing or a plan: D1 needs the Workers free plan switched on
+for the account once. Go to dash.cloudflare.com, open Workers & Pages, follow
+the prompt to enable Workers, then run this script again.
+
+If it is something else, you can do this step by hand:
   1. Run:  npx wrangler d1 list
   2. Copy the id shown for hornet-contracts.
   3. Open wrangler.toml, replace PASTE_DATABASE_ID_HERE with it, save.
