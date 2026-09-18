@@ -154,6 +154,31 @@ and answers `/session` for checkout. Add `STRIPE_SECRET_KEY` as a **secret** und
 Variables and Secrets (`SITE_URL` is in `wrangler.jsonc`). When the domain points at Cloudflare,
 set `config.checkout.endpoint` to `/session` and switch the GitHub Pages deploy off.
 
+## Brand
+
+The mark is defined once, in `scripts/brand.mjs`: the hexagon's radius, the keyline, and the
+monogram N (drawn as a single outline with flat terminals, its diagonal a little heavier than the
+stems because an equal-width diagonal always reads thinner). Nothing else hand-draws the logo.
+
+```bash
+npm run brand      # regenerates every asset below from that one definition
+```
+
+| File | Use |
+|------|-----|
+| `assets/img/logo.svg` | Full lockup for dark backgrounds. Montserrat is embedded, so it renders correctly anywhere |
+| `assets/img/logo-on-light.svg` | The same lockup for white backgrounds, invoices and print |
+| `assets/img/logo-mono.svg` | One colour, no keyline. Inherits `currentColor` (black on its own), for tape, stamps and embroidery |
+| `assets/img/mark.svg` | The seal on its own; the product manager's header points at this file |
+| `assets/img/favicon.svg` | The seal pushed to the edge of the canvas, so 16 px gets every pixel it can |
+| `assets/img/favicon-32.png`, `apple-touch-icon.png`, `logo-512.png` | Tab, home screen, and the logo in the site's structured data |
+| `assets/img/og-image.jpg` | 1200x630 preview used when the site is shared |
+| `scripts/mark-inline.svg` | Template inlined into the page header by `build-pages.py`; `__ID__` is replaced per copy |
+
+Each inlined copy of the mark needs its own gradient id (`nvm-h` in the header, `nvm-f` in the
+footer), because duplicate ids in one document are invalid. The mobile menu does not carry a copy at
+all: it clones the header's brand and re-scopes the ids, so there is nothing to keep in sync.
+
 ## Checkout
 
 `checkout/worker.js` prices every cart line from the catalogue, applies stock limits and delivery

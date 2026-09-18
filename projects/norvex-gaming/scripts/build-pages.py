@@ -35,8 +35,15 @@ def ic(n, cls=''):
     s = SVG.replace('fill="none"', 'fill="currentColor"') if n == 'star' else SVG
     return f'<svg{(" class=%s" % chr(34)+cls+chr(34)) if cls else ""} {s}>{I[n]}</svg>'
 
-BRAND_MARK = '<svg class="brand__mark" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M20 2.5 35.2 11.25v17.5L20 37.5 4.8 28.75v-17.5Z" stroke="#d9b75b" stroke-width="1.6"/><path d="M13.5 27V13l13 14V13" stroke="#f3d98b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-BRAND = f'<a class="brand" href="index.html" aria-label="Norvex Gaming home">{BRAND_MARK}<span class="brand__word"><span class="brand__name">NORVEX</span><span class="brand__sub">GAMING</span></span></a>'
+# the mark comes from scripts/brand.mjs via `npm run brand`; never hand-edit the paths
+MARK_ID = '__ID__'
+_MARK = (pathlib.Path(__file__).resolve().parent / 'mark-inline.svg').read_text().strip()
+
+def brand(mark_id):
+    """The lockup. Each copy on a page gets its own gradient id so the markup stays valid."""
+    mark = _MARK.replace(MARK_ID, mark_id)
+    word = '<span class="brand__word"><span class="brand__name">NORVEX</span><span class="brand__sub">GAMING</span></span>'
+    return f'<a class="brand" href="index.html" aria-label="Norvex Gaming home">{mark}{word}</a>'
 
 CANONICAL = ''
 def head(title, desc, extra='', canonical=None, pre=''):
@@ -75,7 +82,7 @@ def header(solid=False):
   <header class="header"{attr}>
     <div class="container">
       <nav class="nav" aria-label="Primary">
-        {BRAND}
+        {brand('nvm-h')}
         <div class="nav__links">
           <a href="shop.html">Shop</a>
           <a href="shop.html?game=pokemon">Pokémon</a>
@@ -111,7 +118,7 @@ FOOTER = f'''  <footer class="footer">
     <div class="container">
       <div class="footer__grid">
         <div class="footer__brand">
-          {BRAND}
+          {brand('nvm-f')}
           <p>{RANGE[0].upper() + RANGE[1:]} from every major trading card game. Independent, collector-run and obsessive about condition.</p>
           <div class="social" data-social hidden></div>
         </div>

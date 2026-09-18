@@ -49,8 +49,11 @@
   const icon = (name, cls = '') =>
     `<svg${cls ? ` class="${cls}"` : ''} viewBox="0 0 24 24" fill="${name === 'star' ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PATHS[name] || ''}</svg>`;
 
-  const BRAND_MARK = '<svg class="brand__mark" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M20 2.5 35.2 11.25v17.5L20 37.5 4.8 28.75v-17.5Z" stroke="#d9b75b" stroke-width="1.6"/><path d="M13.5 27V13l13 14V13" stroke="#f3d98b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  const BRAND = `<a class="brand" href="index.html" aria-label="Norvex Gaming home">${BRAND_MARK}<span class="brand__word"><span class="brand__name">NORVEX</span><span class="brand__sub">GAMING</span></span></a>`;
+  /* the menu shows the header's own brand, with any ids re-scoped so the copy stays valid markup */
+  const brandHtml = () => {
+    const el = $('.brand');
+    return el ? el.outerHTML.replace(/id="([^"]+)"/g, (_, id) => `id="${id}-m"`).replace(/url\(#([^)]+)\)/g, (_, id) => `url(#${id}-m)`) : '';
+  };
 
   const NAV = [
     { label: 'Shop all', href: 'shop.html' },
@@ -396,7 +399,7 @@
     menuEl.setAttribute('role', 'dialog'); menuEl.setAttribute('aria-modal', 'true');
     menuEl.setAttribute('aria-label', 'Menu'); menuEl.setAttribute('aria-hidden', 'true');
     menuEl.innerHTML = `
-      <div class="menu__top">${BRAND}<button class="btn btn--icon btn--ghost" type="button" data-close-menu aria-label="Close menu">${icon('x')}</button></div>
+      <div class="menu__top">${brandHtml()}<button class="btn btn--icon btn--ghost" type="button" data-close-menu aria-label="Close menu">${icon('x')}</button></div>
       <nav class="menu__links" aria-label="Mobile">${NAV.map((l) => `<a href="${l.href}">${esc(l.label)}${icon('arrowRight')}</a>`).join('')}</nav>
       <div class="menu__foot"><a href="help.html">Help &amp; delivery</a><a href="help.html#track">Order tracking</a><a href="mailto:${esc(config.supportEmail)}">${esc(config.supportEmail)}</a></div>`;
     document.body.appendChild(menuEl);
