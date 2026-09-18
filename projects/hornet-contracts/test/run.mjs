@@ -102,6 +102,21 @@ group('scoring behaves the way the rules say', () => {
   check('the size penalty is given as a reason',
     JSON.parse(closedHuge.fit_reasons).some((r) => /prime contractor/i.test(r)))
 
+  /*
+   * The dashboard shows only the first few reasons, so a reason that kills the
+   * opportunity has to appear before the ones that flatter it. Caught by
+   * rendering the dashboard against sample data, where a closed notice read as
+   * "Open tender, biddable".
+   */
+  check('a blocking reason is listed before the encouraging ones',
+    /deadline passed/i.test(JSON.parse(closedHuge.fit_reasons)[0]),
+    JSON.parse(closedHuge.fit_reasons)[0])
+  check('a blocking reason survives the dashboard cutting the list to four',
+    JSON.parse(closedHuge.fit_reasons).slice(0, 4).some((r) => /deadline passed/i.test(r)))
+  check('a tender past its deadline is not described as biddable',
+    !JSON.parse(closedHuge.fit_reasons).some((r) => /biddable/i.test(r)),
+    JSON.parse(closedHuge.fit_reasons).join(' | '))
+
   const awarded = normalise(ft[0], 'find_a_tender')
   check('an already-awarded notice is marked as intelligence only',
     JSON.parse(awarded.fit_reasons).some((r) => /already awarded/i.test(r)))

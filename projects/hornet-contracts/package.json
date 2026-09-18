@@ -10,7 +10,8 @@
     "deploy": "wrangler deploy",
     "schema": "wrangler d1 execute hornet-contracts --remote --file=./schema.sql",
     "schema:local": "wrangler d1 execute hornet-contracts --local --file=./schema.sql",
-    "tail": "wrangler tail"
+    "tail": "wrangler tail",
+    "preview": "node scripts/preview.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.135.0"

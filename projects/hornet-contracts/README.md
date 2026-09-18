@@ -41,6 +41,21 @@ real, checkable, and tells you the same thing more honestly.
 
 ---
 
+## Seeing it before you deploy
+
+```bash
+npm install
+npm run preview
+```
+
+Writes `dashboard-preview.html`, which you can open in any browser. It runs the
+real schema, the real scoring and the real dashboard renderer against stand-in
+notices, so the layout is exactly what you will get — only the contracts are
+invented, and the page says so at the top. Useful for arguing with the scoring
+rules before any of this is live.
+
+---
+
 ## Setting it up
 
 You need the Cloudflare account that already hosts the website, and Node.js.
@@ -171,4 +186,5 @@ src/index.js    routes, auth, cron handler.
 schema.sql      the tables.
 test/run.mjs    63 tests over the pure logic. npm test.
 setup.sh        one-command deploy: database, tables, secret, Worker.
+scripts/preview.mjs  renders the dashboard offline against sample data.
 ```

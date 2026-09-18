@@ -117,6 +117,13 @@ export function classify({ title = '', description = '', cpv = [] }) {
 export function score(notice, evidence, now = new Date()) {
   let points = 0
   const reasons = []
+  /*
+   * Reasons that cut the score are kept apart and returned first. The dashboard
+   * shows only the first few chips, and a notice whose deadline has passed must
+   * not read as "Open tender, biddable" simply because that reason was recorded
+   * earlier. The decisive fact goes first.
+   */
+  const blockers = []
 
   if (evidence.cpvDrone.length > 0) {
     points += 40
@@ -138,33 +145,53 @@ export function score(notice, evidence, now = new Date()) {
   }
 
   /*
+   * Worked out before stage, because the stage wording below depends on it.
+   * null means the notice carries no usable deadline at all, which is not the
+   * same as a deadline that has passed.
+   */
+  let deadlineDays = null
+  if (notice.deadline_at) {
+    const deadline = new Date(notice.deadline_at)
+    if (!Number.isNaN(deadline.getTime())) deadlineDays = Math.round((deadline - now) / 86400000)
+  }
+
+  /*
    * Stage matters more than almost anything. An open tender can be bid; an
    * award notice is a contract somebody else has already won, and is useful
    * only as intelligence about who and for how much.
    */
   if (notice.stage === 'tender' || notice.stage === 'planning') {
     points += 12
-    reasons.push(notice.stage === 'planning' ? 'Early notice — pipeline, not yet open' : 'Open tender, biddable')
+    /*
+     * Do not call a tender "biddable" once its deadline has gone. The stage
+     * field and the deadline can disagree — publishers leave the stage at
+     * "tender" long after closing — and the deadline is the one that decides
+     * whether anything can be done about it.
+     */
+    reasons.push(
+      notice.stage === 'planning'
+        ? 'Early notice — pipeline, not yet open'
+        : deadlineDays !== null && deadlineDays < 0
+          ? 'Tender stage, but the window has closed'
+          : 'Open tender, biddable',
+    )
   } else if (notice.stage === 'award' || notice.stage === 'contract') {
     points -= 5
-    reasons.push('Already awarded — intelligence only')
+    blockers.push('Already awarded — intelligence only')
   }
 
   /* A deadline that has passed cannot be bid, whatever else is true of it. */
-  if (notice.deadline_at) {
-    const deadline = new Date(notice.deadline_at)
-    if (!Number.isNaN(deadline.getTime())) {
-      const days = Math.round((deadline - now) / 86400000)
-      if (days < 0) {
-        points -= 25
-        reasons.push(`Deadline passed ${Math.abs(days)} day${Math.abs(days) === 1 ? '' : 's'} ago`)
-      } else if (days <= 7) {
-        points += 4
-        reasons.push(`Closes in ${days} day${days === 1 ? '' : 's'} — urgent`)
-      } else {
-        points += 10
-        reasons.push(`Open for another ${days} days`)
-      }
+  if (deadlineDays !== null) {
+    const days = deadlineDays
+    if (days < 0) {
+      points -= 25
+      blockers.push(`Deadline passed ${Math.abs(days)} day${Math.abs(days) === 1 ? '' : 's'} ago`)
+    } else if (days <= 7) {
+      points += 4
+      reasons.push(`Closes in ${days} day${days === 1 ? '' : 's'} — urgent`)
+    } else {
+      points += 10
+      reasons.push(`Open for another ${days} days`)
     }
   }
 
@@ -177,17 +204,17 @@ export function score(notice, evidence, now = new Date()) {
   if (Number.isFinite(v) && v > 0) {
     if (v > 10_000_000) {
       points -= 15
-      reasons.push('Over £10M — realistically a prime contractor bid, or a subcontract route')
+      blockers.push('Over £10M — realistically a prime contractor bid, or a subcontract route')
     } else if (v >= 50_000 && v <= 2_000_000) {
       points += 10
       reasons.push('Value in range a small supplier can deliver')
     } else if (v < 10_000) {
       points -= 5
-      reasons.push('Very low value')
+      blockers.push('Very low value')
     }
   }
 
-  return { score: Math.max(0, Math.min(100, points)), reasons }
+  return { score: Math.max(0, Math.min(100, points)), reasons: [...blockers, ...reasons] }
 }
 
 /**
