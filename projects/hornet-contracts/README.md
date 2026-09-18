@@ -181,5 +181,5 @@ src/db.js       D1 upserts and the supplier rollup.
 src/ui.js       the dashboard, server-rendered, no build step.
 src/index.js    routes, auth, cron handler.
 schema.sql      the tables.
-test/run.mjs    47 tests over the pure logic. npm test.
+test/run.mjs    63 tests over the pure logic. npm test.
 ```
