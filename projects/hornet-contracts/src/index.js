@@ -20,7 +20,7 @@
  * security model.
  */
 
-import { SOURCES, SEARCH_KEYWORDS, collectReleases, normalise, normaliseAwards, fetchPage } from './ingest.js'
+import { SOURCES, CF_PASSES, collectReleases, normalise, normaliseAwards, fetchPage } from './ingest.js'
 import {
   upsertContracts, upsertAwards, rebuildSuppliers,
   getWatermark, setWatermark, recordRun,
@@ -59,64 +59,171 @@ function authorised(request, env) {
   return [bearer, fromCookie, fromQuery].some((t) => tokenMatches(t, env.DASH_TOKEN))
 }
 
+/** Collect releases from one page into the row maps. Shared by both walks. */
+function absorb(releases, sourceKey, started, contractRows, awardRows) {
+  for (const release of releases) {
+    const row = normalise(release, sourceKey, started)
+    if (!row) continue
+    contractRows.set(row.ocid, row)
+    for (const award of normaliseAwards(release, sourceKey)) awardRows.set(award.id, award)
+  }
+}
+
 /**
- * Pull one source end to end.
+ * Walk one Contracts Finder stage forward through time in dated slices.
  *
- * Failure of one source never aborts the other: MOD work lives on Find a
- * Tender and everyday work on Contracts Finder, so half the picture is much
- * better than none while one API is having a bad day.
+ * The API serves newest first and has no text or CPV filter, so the only way
+ * to be sure nothing is missed is to read every notice of a stage within a
+ * bounded window. `publishedTo` makes the window boundable; `stages` keeps the
+ * volume sane. A slice is only marked done, and the watermark only moved, once
+ * that slice has been read to its last page — so running out of budget costs a
+ * delay, never a hole in the data.
+ *
+ * If a single slice is too dense to finish even at its smallest size, the walk
+ * advances anyway rather than stalling forever on it, and says so in the run
+ * log. That is a real anomaly worth seeing, not something to hide.
  */
-async function ingestSource(env, sourceKey, { maxPages = 15 } = {}) {
+async function ingestPass(env, pass, started) {
   const db = env.DB
-  const started = new Date()
-  const run = { source: sourceKey, started_at: started.toISOString(), pages_fetched: 0, releases_seen: 0 }
+  const key = `contracts_finder:${pass.stage}`
+  const run = { source: key, started_at: started.toISOString(), pages_fetched: 0, releases_seen: 0 }
 
   try {
-    const since = await getWatermark(db, sourceKey)
-    const source = SOURCES[sourceKey]
-
-    /*
-     * Contracts Finder takes one keyword per query, so it needs a pass each.
-     * Find a Tender has no keyword filter and returns everything changed since
-     * the watermark, which classify() then narrows — a bigger download, but the
-     * only way to avoid missing a notice whose title never says "drone".
-     */
-    const startUrls =
-      sourceKey === 'contracts_finder'
-        ? SEARCH_KEYWORDS.map((keyword) => source.url({ since, keyword }))
-        : [source.url({ since })]
+    const cursorIso = await getWatermark(db, key, pass.backfillDays)
+    let from = new Date(cursorIso)
+    let reached = new Date(cursorIso)
+    let budget = pass.maxPages
+    let sliceDays = pass.sliceDays
+    let truncated = 0
 
     const contractRows = new Map()
     const awardRows = new Map()
 
-    for (const startUrl of startUrls) {
-      let url = startUrl
-      let pages = 0
-      while (url && pages < maxPages) {
+    while (from < started && budget > 0) {
+      const to = new Date(Math.min(from.getTime() + sliceDays * 86400000, started.getTime()))
+
+      let url = SOURCES.contracts_finder.url({
+        from: from.toISOString(),
+        to: to.toISOString(),
+        stage: pass.stage,
+      })
+      let complete = false
+
+      while (url && budget > 0) {
         const { body, next } = await fetchPage(url)
-        pages += 1
+        budget -= 1
         run.pages_fetched += 1
 
         const releases = collectReleases(body)
         run.releases_seen += releases.length
-
-        for (const release of releases) {
-          const row = normalise(release, sourceKey, started)
-          if (!row) continue
-          contractRows.set(row.ocid, row)
-          for (const award of normaliseAwards(release, sourceKey)) awardRows.set(award.id, award)
-        }
+        absorb(releases, 'contracts_finder', started, contractRows, awardRows)
 
         /* A next link that does not move is a loop, not a page. */
-        url = next && next !== url ? next : null
+        if (!next || next === url) {
+          complete = true
+          break
+        }
+        url = next
       }
+
+      if (complete) {
+        reached = to
+        from = to
+        sliceDays = pass.sliceDays /* restore after any narrowing */
+        continue
+      }
+
+      if (sliceDays > 1) {
+        /* Too dense for the budget. Narrow and try the same ground again. */
+        sliceDays = Math.max(1, Math.floor(sliceDays / 2))
+        continue
+      }
+
+      /*
+       * A single day that will not fit. Step over it rather than stall the
+       * walk here on every future run, and record that it happened.
+       */
+      truncated += 1
+      reached = to
+      from = to
+      break
     }
 
     const nowIso = started.toISOString()
     run.contracts_upserted = await upsertContracts(db, [...contractRows.values()], nowIso)
     run.awards_upserted = await upsertAwards(db, [...awardRows.values()])
 
-    await setWatermark(db, sourceKey, nowIso)
+    const behindDays = Math.max(0, Math.round((started - reached) / 86400000))
+    await setWatermark(
+      db,
+      key,
+      reached.toISOString(),
+      behindDays > 1 ? `backfilling — ${behindDays} days behind` : 'current',
+    )
+
+    run.ok = true
+    run.caught_up_to = reached.toISOString()
+    run.days_behind = behindDays
+    if (truncated) run.error = `${truncated} day(s) held more notices than one run could read`
+  } catch (err) {
+    run.ok = false
+    run.error = err?.stack || String(err)
+  }
+
+  run.finished_at = new Date().toISOString()
+  await recordRun(db, run).catch(() => {})
+  return run
+}
+
+/**
+ * Find a Tender, walked by its own cursor.
+ *
+ * Above-threshold work only, so the volume is a fraction of Contracts Finder's
+ * and one pass covers it without slicing.
+ */
+async function ingestFindATender(env, started, { maxPages = 12 } = {}) {
+  const db = env.DB
+  const run = { source: 'find_a_tender', started_at: started.toISOString(), pages_fetched: 0, releases_seen: 0 }
+
+  try {
+    const from = await getWatermark(db, 'find_a_tender', 90)
+    const contractRows = new Map()
+    const awardRows = new Map()
+
+    let url = SOURCES.find_a_tender.url({ from })
+    let pages = 0
+    let complete = false
+
+    while (url && pages < maxPages) {
+      const { body, next } = await fetchPage(url)
+      pages += 1
+      run.pages_fetched += 1
+
+      const releases = collectReleases(body)
+      run.releases_seen += releases.length
+      absorb(releases, 'find_a_tender', started, contractRows, awardRows)
+
+      if (!next || next === url) {
+        complete = true
+        break
+      }
+      url = next
+    }
+
+    const nowIso = started.toISOString()
+    run.contracts_upserted = await upsertContracts(db, [...contractRows.values()], nowIso)
+    run.awards_upserted = await upsertAwards(db, [...awardRows.values()])
+
+    /*
+     * Only move the watermark on a walk that reached the end. Stopping early
+     * and claiming to be current would skip everything left unread.
+     */
+    if (complete) {
+      await setWatermark(db, 'find_a_tender', nowIso, 'current')
+    } else {
+      run.error = 'more pages remained; watermark held back so the next run resumes here'
+    }
+
     run.ok = true
   } catch (err) {
     run.ok = false
@@ -129,11 +236,16 @@ async function ingestSource(env, sourceKey, { maxPages = 15 } = {}) {
 }
 
 export async function runIngest(env) {
+  const started = new Date()
   const runs = []
-  for (const key of Object.keys(SOURCES)) {
-    runs.push(await ingestSource(env, key))
+
+  /* Tenders first: they are the only rows anyone can still act on. */
+  for (const pass of CF_PASSES) {
+    runs.push(await ingestPass(env, pass, started))
   }
-  /* Rebuilt once after both sources, not once per source. */
+  runs.push(await ingestFindATender(env, started))
+
+  /* Rebuilt once at the end, not once per pass. */
   let suppliers = 0
   try {
     suppliers = await rebuildSuppliers(env.DB)
@@ -155,7 +267,8 @@ async function selftest(env) {
   const out = {}
   const since = new Date(Date.now() - 30 * 86400000).toISOString()
   for (const [key, source] of Object.entries(SOURCES)) {
-    const url = key === 'contracts_finder' ? source.url({ since, keyword: 'drone' }) : source.url({ since })
+    const url =
+      key === 'contracts_finder' ? source.url({ from: since, stage: 'tender' }) : source.url({ from: since })
     try {
       const { body } = await fetchPage(url)
       const releases = collectReleases(body)
@@ -180,115 +293,6 @@ async function selftest(env) {
     }
   }
   return out
-}
-
-/*
- * Parameter probe.
- *
- * The selftest proved both APIs answer and that the envelope parses. It also
- * showed something worse: a Contracts Finder search for keyword=drone came
- * back with a solicitor's development loan first, which means the keyword is
- * being ignored and we are reading an undifferentiated slice of all UK
- * procurement.
- *
- * This endpoint exists to find the parameter that does work. It fetches one
- * page per candidate and reports, for each, how many of the hundred releases
- * actually classify as drone work, plus the date range of the page so we can
- * tell which end of the window the API serves first. Whichever variant scores
- * far above the unfiltered baseline is the right one.
- *
- * It writes nothing. Delete it once the answer is known.
- */
-async function probe(env) {
-  const CF = 'https://www.contractsfinder.service.gov.uk/Published/Notices/OCDS/Search'
-  const days = (n) => new Date(Date.now() - n * 86400000).toISOString()
-
-  const summarise = (releases) => {
-    const dates = releases.map((r) => r?.date).filter(Boolean).sort()
-    const drone = releases.filter((r) => Boolean(normalise(r, 'contracts_finder')))
-    const stages = {}
-    for (const r of releases) {
-      const t = Array.isArray(r?.tag) ? r.tag.join('+') : String(r?.tag ?? '?')
-      stages[t] = (stages[t] || 0) + 1
-    }
-    return {
-      releases_on_page: releases.length,
-      drone_work: drone.length,
-      oldest: dates[0] || null,
-      newest: dates[dates.length - 1] || null,
-      tags: stages,
-    }
-  }
-
-  const tryUrl = async (label, params) => {
-    const u = new URL(CF)
-    for (const [k, v] of Object.entries(params)) u.searchParams.set(k, v)
-    try {
-      const { body, next } = await fetchPage(u.toString())
-      return { label, ok: true, ...summarise(collectReleases(body)), has_next: Boolean(next) }
-    } catch (err) {
-      return { label, ok: false, error: String(err).slice(0, 160) }
-    }
-  }
-
-  /*
-   * Question 1 — can the window be bounded at both ends?
-   *
-   * If publishedTo works, the 90-day backfill can be walked in slices instead
-   * of paged from the present day, which is the difference between a few
-   * requests and a few hundred.
-   */
-  const windowing = [
-    await tryUrl('control: publishedFrom=2d only', { publishedFrom: days(2) }),
-    await tryUrl('publishedFrom=60d & publishedTo=58d', { publishedFrom: days(60), publishedTo: days(58) }),
-    await tryUrl('publishedFrom=60d & publishedUntil=58d', { publishedFrom: days(60), publishedUntil: days(58) }),
-  ]
-
-  /*
-   * Question 2 — can a page carry more than a hundred?
-   *
-   * Cloudflare caps a Worker at fifty outbound requests per invocation, so
-   * page size sets how much history one run can cover at all.
-   */
-  const pageSize = [
-    await tryUrl('size=500', { publishedFrom: days(2), size: '500' }),
-    await tryUrl('limit=500', { publishedFrom: days(2), limit: '500' }),
-    await tryUrl('pageSize=500', { publishedFrom: days(2), pageSize: '500' }),
-  ]
-
-  /*
-   * Question 3 — is there a CPV filter after all?
-   *
-   * 34711200 is the procurement code for unmanned aerial vehicles. If any of
-   * these narrows the results, the whole volume problem disappears: ask for
-   * the code and get only drone work back.
-   */
-  const cpv = [
-    await tryUrl('cpvCodes=34711200', { publishedFrom: days(90), cpvCodes: '34711200' }),
-    await tryUrl('cpv=34711200', { publishedFrom: days(90), cpv: '34711200' }),
-    await tryUrl('classification=34711200', { publishedFrom: days(90), classification: '34711200' }),
-    await tryUrl('cpvCodes=34711200-6 (with check digit)', { publishedFrom: days(90), cpvCodes: '34711200-6' }),
-  ]
-
-  /* Question 4 — does the stage filter do anything? */
-  const stageFilter = [
-    await tryUrl('stages=tender only', { publishedFrom: days(2), stages: 'tender' }),
-  ]
-
-  return {
-    read_this_first: [
-      'windowing: if a publishedTo/publishedUntil row shows dates around 60 days old rather than',
-      '  today, the window can be bounded and the backfill can be sliced.',
-      'pageSize: if releases_on_page is above 100 anywhere, one request covers more history.',
-      'cpv: if any row shows drone_work close to releases_on_page, that filter works and solves',
-      '  the volume problem outright.',
-      'stageFilter: if tags shows only tender, the stage filter works.',
-    ],
-    windowing,
-    pageSize,
-    cpv,
-    stageFilter,
-  }
 }
 
 export default {
@@ -321,8 +325,6 @@ export default {
 
     try {
       if (url.pathname === '/api/selftest') return json(await selftest(env))
-
-      if (url.pathname === '/api/probe') return json(await probe(env))
 
       if (url.pathname === '/api/ingest' && request.method === 'POST') {
         return json(await runIngest(env))

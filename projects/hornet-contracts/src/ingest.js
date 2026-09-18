@@ -8,17 +8,21 @@
  *   Find a Tender      the UK's post-Brexit replacement for OJEU. Above-
  *                      threshold contracts, including most MOD work.
  *
- * ── A warning about the response shape ───────────────────────────────────────
- * This file was written against the published API documentation, not against a
- * live response, because the network this was authored on could not reach
- * either service. The envelope each service wraps its releases in is therefore
- * the least certain thing here.
+ * ── What was learned by probing the live APIs ────────────────────────────────
+ * This was first written against published documentation, on a machine that
+ * could reach neither service. Probing the real endpoints from the deployed
+ * Worker corrected two things worth stating plainly.
  *
- * `collectReleases` exists for exactly that reason: rather than reaching into
- * a documented path like `body.results[0].releases`, it walks the whole JSON
- * tree and picks out every object that looks like an OCDS release. That is
- * slower and less elegant, and it survives an envelope that differs from the
- * documentation. Run /api/selftest after deploying to see the real shape.
+ * The envelope was fine: both wrap releases the documented way, and
+ * `collectReleases` — which walks the whole JSON tree rather than reaching
+ * into a fixed path — handles both. It stays, because it costs little and
+ * would survive the shape changing under us.
+ *
+ * The query was not fine. Contracts Finder honours neither a text search nor
+ * a CPV filter; both were being sent and silently ignored, so the ingest was
+ * reading an undifferentiated slice of all UK procurement and throwing 92% of
+ * it away. What it does honour is `stages` and `publishedTo`, and those two
+ * are what the design below is built on. See SOURCES.contracts_finder.
  */
 
 import { classify, score, supplierSlug, cpvStem } from './score.js'
@@ -27,15 +31,33 @@ export const SOURCES = {
   contracts_finder: {
     label: 'Contracts Finder',
     /*
-     * Documented as GET /Published/Notices/OCDS/Search. Keyword search plus a
-     * published-from watermark; the API has no CPV filter, so relevance is
-     * decided locally by classify().
+     * GET /Published/Notices/OCDS/Search.
+     *
+     * What this API does and does not offer, established by probing it rather
+     * than by reading the documentation:
+     *
+     *   - There is NO text search. keyword, searchTerm, keywords, q and
+     *     searchCriteria.keyword are all accepted and all silently ignored;
+     *     each returns a page identical to passing nothing at all.
+     *   - There is NO CPV filter. cpvCodes and classification are ignored too.
+     *   - `stages` DOES filter, and it is the one that matters. Roughly 86% of
+     *     everything published is award notices and about 8% open tenders, so
+     *     asking for tenders alone cuts the volume fifteenfold.
+     *   - `publishedTo` DOES bound the window (publishedUntil does not), which
+     *     makes it possible to walk history in dated slices instead of always
+     *     paging back from today.
+     *   - Results are newest first, 100 to a page.
+     *
+     * Those five facts are the whole design. Ask for one stage at a time
+     * inside a bounded window, and a Worker can cover ninety days of tenders
+     * in about ten requests instead of the two hundred and seventy it would
+     * take to read everything.
      */
-    url({ since, keyword }) {
+    url({ from, to, stage }) {
       const u = new URL('https://www.contractsfinder.service.gov.uk/Published/Notices/OCDS/Search')
-      u.searchParams.set('publishedFrom', since)
-      if (keyword) u.searchParams.set('keyword', keyword)
-      u.searchParams.set('stages', 'planning,tender,award,contract')
+      u.searchParams.set('publishedFrom', from)
+      if (to) u.searchParams.set('publishedTo', to)
+      if (stage) u.searchParams.set('stages', stage)
       return u.toString()
     },
     noticeUrl: (id) => `https://www.contractsfinder.service.gov.uk/notice/${encodeURIComponent(id)}`,
@@ -47,10 +69,13 @@ export const SOURCES = {
      * most 100 releases a page. updatedFrom is when the record last changed,
      * not when it was first published, so a re-published notice reappears —
      * which is what we want, since the upsert is keyed on ocid.
+     *
+     * Above-threshold work only, so the volume is a fraction of Contracts
+     * Finder's and no stage filter is needed to keep it manageable.
      */
-    url({ since }) {
+    url({ from }) {
       const u = new URL('https://www.find-tender.service.gov.uk/api/1.0/ocdsReleasePackages')
-      u.searchParams.set('updatedFrom', since)
+      u.searchParams.set('updatedFrom', from)
       u.searchParams.set('limit', '100')
       return u.toString()
     },
@@ -59,11 +84,28 @@ export const SOURCES = {
 }
 
 /*
- * Keywords passed to Contracts Finder's own search, to keep the volume down
- * before classify() runs. Each is fetched separately; Contracts Finder takes a
- * single keyword per query.
+ * What to pull from Contracts Finder, in priority order, and how hard to work
+ * at each.
+ *
+ * `sliceDays` is chosen so that one slice fits comfortably inside `maxPages`
+ * at observed volumes: ~10 tenders a day, ~260 awards. A slice that cannot be
+ * read to its end in one run would stall the walk, so these are deliberately
+ * conservative.
+ *
+ * The page budgets add up to well under the fifty outbound requests a Worker
+ * gets per invocation, leaving room for Find a Tender and for the volume to
+ * grow without anything silently truncating.
  */
-export const SEARCH_KEYWORDS = ['drone', 'unmanned aerial', 'UAV', 'remotely piloted']
+export const CF_PASSES = [
+  { stage: 'tender', sliceDays: 7, maxPages: 12, backfillDays: 90 },
+  { stage: 'planning', sliceDays: 30, maxPages: 4, backfillDays: 90 },
+  /*
+   * Awards are the bulk of the feed and only feed the supplier table, so they
+   * get the smallest slices and catch up over several runs rather than
+   * blocking the tenders anyone actually bids on.
+   */
+  { stage: 'award', sliceDays: 1, maxPages: 16, backfillDays: 60 },
+]
 
 /** Walk arbitrary JSON and return every object that looks like an OCDS release. */
 export function collectReleases(node, found = [], depth = 0) {

@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
 import { classify, score, supplierSlug, cpvStem } from '../src/score.js'
-import { collectReleases, extractCpv, extractStage, normalise, normaliseAwards } from '../src/ingest.js'
+import { collectReleases, extractCpv, extractStage, normalise, normaliseAwards, SOURCES, CF_PASSES } from '../src/ingest.js'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const fx = JSON.parse(readFileSync(join(here, 'fixtures', 'releases.json'), 'utf8'))
@@ -125,6 +125,59 @@ group('scoring behaves the way the rules say', () => {
     { stage: 'tender', value_amount: 500000, deadline_at: null },
     { cpvDrone: ['35613000'], cpvRelated: [], strong: 9, capability: 9 },
   ).score <= 100)
+})
+
+group('the Contracts Finder query asks only for what the API honours', () => {
+  const u = (opts) => new URL(SOURCES.contracts_finder.url(opts))
+  const from = '2026-06-01T00:00:00Z'
+  const to = '2026-06-08T00:00:00Z'
+
+  const full = u({ from, to, stage: 'tender' })
+  check('publishedFrom is set', full.searchParams.get('publishedFrom') === from)
+  check('publishedTo bounds the window', full.searchParams.get('publishedTo') === to)
+  check('stages carries the one filter that works', full.searchParams.get('stages') === 'tender')
+
+  /*
+   * Probing the live API showed keyword, searchTerm, keywords, q and
+   * searchCriteria.keyword are all accepted and all ignored, returning pages
+   * identical to the unfiltered baseline. Sending one would be a lie about
+   * what the request does, and it was what made the ingest read five days of
+   * everything instead of ninety days of tenders.
+   */
+  for (const dead of ['keyword', 'searchTerm', 'keywords', 'q', 'cpvCodes', 'classification']) {
+    check(`no ${dead} parameter, which the API ignores`, !full.searchParams.has(dead))
+  }
+
+  const open = u({ from, stage: 'tender' })
+  check('publishedTo is omitted when no end is given', !open.searchParams.has('publishedTo'))
+
+  check('find a tender still builds a notice url', typeof SOURCES.find_a_tender.noticeUrl === 'function')
+  check('find a tender notice url points at the right service',
+    SOURCES.find_a_tender.noticeUrl('abc').includes('find-tender.service.gov.uk'))
+})
+
+group('the slice plan can actually finish inside a run', () => {
+  /*
+   * Observed volumes: about 10 tenders and 260 awards published a day, 100
+   * releases to a page. A slice that cannot be read to its last page inside
+   * its own page budget stalls the walk, so each pass is checked against the
+   * volume it will meet.
+   */
+  const perDay = { tender: 12, planning: 4, award: 300 }
+  for (const pass of CF_PASSES) {
+    const pagesNeeded = Math.ceil((perDay[pass.stage] * pass.sliceDays) / 100)
+    check(`${pass.stage}: a ${pass.sliceDays}-day slice needs ~${pagesNeeded} pages, budget ${pass.maxPages}`,
+      pagesNeeded <= pass.maxPages)
+  }
+
+  const totalPages = CF_PASSES.reduce((n, p) => n + p.maxPages, 0) + 12
+  /* Cloudflare allows fifty outbound requests per Worker invocation. */
+  check(`every pass together stays under the subrequest cap (${totalPages} of 50)`, totalPages <= 50)
+
+  check('tenders are walked before awards, being the only actionable rows',
+    CF_PASSES.findIndex((p) => p.stage === 'tender') < CF_PASSES.findIndex((p) => p.stage === 'award'))
+  check('every pass backfills at least 60 days', CF_PASSES.every((p) => p.backfillDays >= 60))
+  check('no slice is smaller than a day', CF_PASSES.every((p) => p.sliceDays >= 1))
 })
 
 group('normalisation produces complete rows', () => {
