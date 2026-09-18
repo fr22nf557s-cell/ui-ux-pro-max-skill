@@ -8,9 +8,7 @@
   <meta name="theme-color" content="#08080a">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="assets/img/favicon-32.png" type="image/png" sizes="32x32">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500;1,600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/fonts.css">
   <link rel="stylesheet" href="assets/css/norvex.css">
   <link rel="stylesheet" href="assets/css/manage.css">
 </head>
@@ -87,6 +85,10 @@
             <div class="field"><label class="field__label" for="f-price">Price (£)</label><input class="input" id="f-price" name="price" type="number" min="0.01" step="0.01" required></div>
             <div class="field"><label class="field__label" for="f-compare">Was price (£)</label><input class="input" id="f-compare" name="compareAt" type="number" min="0" step="0.01" placeholder="optional"></div>
             <div class="field"><label class="field__label" for="f-stock">Stock</label><input class="input" id="f-stock" name="stock" type="number" min="0" step="1" required></div>
+          </div>
+          <div class="mg-editor__two">
+            <div class="field"><label class="field__label" for="f-release">Release date (pre-orders)</label><input class="input" id="f-release" name="releaseDate" type="date"></div>
+            <div class="field"><label class="field__label" for="f-badge">Badge</label><select class="input" id="f-badge" name="badge"><option value="">None</option><option value="new">New</option><option value="hot">Hot</option></select></div>
           </div>
           <div class="mg-editor__flags">
             <label class="mg-check"><input type="checkbox" name="preorder"> Pre-order (charged now, ships on release)</label>

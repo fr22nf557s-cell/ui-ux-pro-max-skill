@@ -54,13 +54,17 @@ def head(title, desc, extra='', canonical=None, pre=''):
   <meta property="og:type" content="website">
   <meta property="og:title" content="{title}">
   <meta property="og:description" content="{desc}">
-  <meta property="og:image" content="https://norvexgaming.com/assets/img/products/pokemon-30th-celebration-elite-trainer-box.webp">
+  <meta property="og:image" content="https://norvexgaming.com/assets/img/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="assets/img/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500;1,600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="preload" href="assets/fonts/montserrat-JTUSjIg1_i6t8kCHKm459Wlhyw.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/cormorant-H4clBXOCl9bbnla_nHIq75u9.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/fonts.css">
   <link rel="stylesheet" href="assets/css/norvex.css">
 {extra}</head>'''
 
@@ -210,7 +214,7 @@ VAULT = f'''    <!-- ========================================================= V
       </div>
     </section>''' if HAS_SINGLES else ''
 
-ORG_JSONLD = '  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://norvexgaming.com/#org", "name": "Norvex Gaming", "legalName": "Norvex Gaming Limited", "url": "https://norvexgaming.com/", "logo": "https://norvexgaming.com/assets/img/logo.svg", "email": "info@norvexgaming.com", "address": {"@type": "PostalAddress", "streetAddress": "302 Harrow Road", "addressLocality": "Wembley", "postalCode": "HA9 6LL", "addressCountry": "GB"}}, {"@type": "WebSite", "@id": "https://norvexgaming.com/#site", "url": "https://norvexgaming.com/", "name": "Norvex Gaming", "publisher": {"@id": "https://norvexgaming.com/#org"}, "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": "https://norvexgaming.com/shop.html?q={search_term_string}"}, "query-input": "required name=search_term_string"}}]}</script>\n'
+ORG_JSONLD = '  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://norvexgaming.com/#org", "name": "Norvex Gaming", "legalName": "Norvex Gaming Limited", "url": "https://norvexgaming.com/", "logo": "https://norvexgaming.com/assets/img/logo-512.png", "email": "info@norvexgaming.com", "address": {"@type": "PostalAddress", "streetAddress": "302 Harrow Road", "addressLocality": "Wembley", "postalCode": "HA9 6LL", "addressCountry": "GB"}}, {"@type": "WebSite", "@id": "https://norvexgaming.com/#site", "url": "https://norvexgaming.com/", "name": "Norvex Gaming", "publisher": {"@id": "https://norvexgaming.com/#org"}, "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": "https://norvexgaming.com/shop.html?q={search_term_string}"}, "query-input": "required name=search_term_string"}}]}</script>\n'
 
 CANONICAL = ''
 INDEX = head('Norvex Gaming — Sealed TCG product, ' + ('graded singles &amp; pre-orders' if HAS_SINGLES else 'pre-orders &amp; accessories'),
@@ -606,7 +610,7 @@ LEGAL = textpage('legal', 'legal.html', 'Terms of sale, privacy &amp; cookies ·
             <p><b>Payment details.</b> Your card details are entered on Stripe's secure checkout page and processed by Stripe. They never reach us. Stripe's own <a href="https://stripe.com/gb/privacy" rel="noopener" target="_blank">privacy policy</a> covers that step.</p>
             <p><b>Email.</b> If you email us we keep the correspondence for as long as needed to deal with it. If you join the allocation list we keep your email address only to send the updates you asked for. Reply "stop" and it is deleted.</p>
             <p><b>No tracking.</b> We do not run analytics, advertising or tracking pixels on this site.</p>
-            <p><b>Who else sees your data.</b> Stripe (payment); the courier (your name, delivery address and phone number for delivery only); our hosting provider, which keeps standard server logs for security; and Google, whose servers deliver the fonts this site uses and therefore receive your IP address when a page loads.</p>
+            <p><b>Who else sees your data.</b> Stripe (payment); the courier (your name, delivery address and phone number for delivery only); and our hosting provider, which keeps standard server logs for security. The site's fonts and images are served from the site itself, so no other company sees your visit.</p>
             <p><b>Your rights.</b> You can ask for a copy of the personal data we hold, ask us to correct or delete it, or object to how we use it, by emailing {EMAIL}. You can also complain to the Information Commissioner's Office at <a href="https://ico.org.uk" rel="noopener" target="_blank">ico.org.uk</a>.</p>''') + '\n' +
     sec('cookies', 'Cookies &amp; storage', '''            <p>This site sets no tracking cookies. Your cart is kept in your browser's local storage on this device so it survives a refresh; it is never sent to us until you check out, and clearing your browser data removes it.</p>
             <p>Stripe's checkout page sets its own strictly necessary cookies to complete payment and prevent fraud. Those are covered by Stripe's cookie policy.</p>'''))

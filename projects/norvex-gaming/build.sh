@@ -11,18 +11,19 @@ node scripts/check-catalog.mjs
 rm -rf _site
 mkdir -p _site/assets/img
 cp $PAGES _site/
-cp -r assets/css assets/js _site/assets/
-cp assets/img/*.svg assets/img/*.png _site/assets/img/
+cp -r assets/css assets/js assets/fonts _site/assets/
+cp site.webmanifest _site/
+cp assets/img/*.svg assets/img/*.png assets/img/*.jpg _site/assets/img/
 cp -r assets/img/products _site/assets/img/
 [ -f CNAME ] && cp CNAME _site/ || true
 # Cache-busting: every deploy gets a fresh version tag on the stylesheet and scripts, so shoppers
 # never see a stale catalogue (prices, stock, checkout settings) after a push.
 rev="$(git rev-parse --short HEAD 2>/dev/null || date -u +%Y%m%d%H%M)"
 for f in $PAGES; do
-  sed -i.bak -e "s#assets/css/norvex.css\"#assets/css/norvex.css?v=$rev\"#" -e "s#assets/css/manage.css\"#assets/css/manage.css?v=$rev\"#" -e "s#assets/js/catalog.js\"#assets/js/catalog.js?v=$rev\"#" -e "s#assets/js/norvex.js\"#assets/js/norvex.js?v=$rev\"#" -e "s#assets/js/manage.js\"#assets/js/manage.js?v=$rev\"#" "_site/$f"
+  sed -i.bak -e "s#assets/css/norvex.css\"#assets/css/norvex.css?v=$rev\"#" -e "s#assets/css/manage.css\"#assets/css/manage.css?v=$rev\"#" -e "s#assets/css/fonts.css\"#assets/css/fonts.css?v=$rev\"#" -e "s#assets/js/catalog.js\"#assets/js/catalog.js?v=$rev\"#" -e "s#assets/js/norvex.js\"#assets/js/norvex.js?v=$rev\"#" -e "s#assets/js/manage.js\"#assets/js/manage.js?v=$rev\"#" "_site/$f"
 done
 rm -f _site/*.bak
-printf '/assets/img/products/*\n  Cache-Control: public, max-age=31536000, immutable\n/assets/*\n  Cache-Control: public, max-age=86400\n/*.html\n  Cache-Control: public, max-age=300\n' > _site/_headers
+printf '/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: DENY\n  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self)\n/assets/img/products/*\n  Cache-Control: public, max-age=31536000, immutable\n/assets/fonts/*\n  Cache-Control: public, max-age=31536000, immutable\n/assets/*\n  Cache-Control: public, max-age=86400\n/*.html\n  Cache-Control: public, max-age=300\n' > _site/_headers
 # robots + sitemap: every indexable page and every product, nothing private (order pages, 404)
 printf 'User-agent: *\nDisallow: /order.html\nDisallow: /manage.html\nAllow: /\nSitemap: %s/sitemap.xml\n' "$SITE_URL" > _site/robots.txt
 {

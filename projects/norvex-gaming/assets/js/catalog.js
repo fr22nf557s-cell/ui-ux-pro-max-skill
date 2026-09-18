@@ -4178,6 +4178,7 @@ window.NORVEX_DATA = {
     },
     {
       "id": "digimon-ex-13-chivalrous-xiii-extra-booster-pack",
+      "releaseDate": "2026-10-02",
       "name": "EX-13 Chivalrous XIII Extra Booster Pack",
       "set": "EX-13 Chivalrous XIII Pack",
       "game": "digimon",
@@ -9381,6 +9382,7 @@ window.NORVEX_DATA = {
     },
     {
       "id": "digimon-ex-13-chivalrous-xiii-extra-booster-box",
+      "releaseDate": "2026-10-02",
       "name": "EX-13 Chivalrous XIII Extra Booster Box",
       "set": "EX-13 Chivalrous XIII Extra",
       "game": "digimon",

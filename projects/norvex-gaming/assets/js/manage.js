@@ -147,7 +147,7 @@
     return `<article class="mg-row${st ? ' is-' + st : ''}" data-id="${esc(p.id)}">
       <div class="mg-row__photo">${img ? `<img src="${esc(img)}" alt="" loading="lazy">` : ''}</div>
       <div class="mg-row__name"><a href="product.html?id=${encodeURIComponent(p.id)}" target="_blank" rel="noopener">${esc(p.name)}</a>${tags}</div>
-      <div class="mg-row__meta">${esc(g.short || g.name || p.game)} · ${esc(t.singular || p.type)}${p.set ? ' · ' + esc(p.set) : ''}</div>
+      <div class="mg-row__meta">${esc(g.short || g.name || p.game)} · ${esc(t.singular || p.type)}${p.set ? ' · ' + esc(p.set) : ''}${p.preorder && p.releaseDate ? ' · releases ' + esc(p.releaseDate) : ''}</div>
       <div class="mg-row__fields">
         <label class="mg-num mg-num--price"><span>£</span><input class="input${changed('price')}" type="number" min="0.01" step="0.01" value="${esc(p.price)}" data-field="price" aria-label="Price" ${st === 'removed' ? 'disabled' : ''}></label>
         <label class="mg-num mg-num--stock"><input class="input${changed('stock')}" type="number" min="0" step="1" value="${esc(p.stock ?? 0)}" data-field="stock" aria-label="Stock" ${st === 'removed' ? 'disabled' : ''}></label>
@@ -195,6 +195,7 @@
     $('[data-editor-id]').textContent = p ? `Product link: product.html?id=${p.id}` : 'The product link is made from the game and the name.';
     const v = p || { name: '', game: 'pokemon', type: 'etb', set: '', price: '', compareAt: null, stock: 0, preorder: false, featured: false, hidden: false, freeShipping: false, description: '', contents: [], specs: {} };
     for (const k of ['name', 'game', 'type', 'set', 'price', 'stock', 'description']) form.elements[k].value = v[k] ?? '';
+    form.elements.releaseDate.value = v.releaseDate || ''; form.elements.badge.value = v.badge || '';
     form.elements.compareAt.value = v.compareAt ?? '';
     for (const k of ['preorder', 'featured', 'hidden', 'freeShipping']) form.elements[k].checked = Boolean(v[k]);
     form.elements.contents.value = (v.contents || []).join('\n');
@@ -209,6 +210,7 @@
     const fields = {
       name, game, type, set: f.set.value.trim(), price: Math.round(Number(f.price.value) * 100) / 100, compareAt: f.compareAt.value === '' ? null : Math.round(Number(f.compareAt.value) * 100) / 100,
       stock: Math.floor(Number(f.stock.value)), preorder: f.preorder.checked, featured: f.featured.checked, hidden: f.hidden.checked, freeShipping: f.freeShipping.checked,
+      releaseDate: f.releaseDate.value || null, badge: f.badge.value || null, manual: true,
       description: f.description.value.trim(), contents: f.contents.value.split('\n').map((s) => s.trim()).filter(Boolean),
       specs: Object.fromEntries(f.specs.value.split('\n').map((s) => s.trim()).filter(Boolean).map((line) => { const i = line.indexOf(':'); return i > 0 ? [line.slice(0, i).trim(), line.slice(i + 1).trim()] : [line, '']; })),
     };
@@ -324,7 +326,7 @@
       const row = e.target.closest('.mg-row'); if (!row) return; const id = row.dataset.id; const field = e.target.dataset.field; if (!field) return;
       const value = field === 'preorder' ? e.target.checked : field === 'stock' ? Math.max(0, Math.floor(Number(e.target.value) || 0)) : Math.round(Number(e.target.value) * 100) / 100;
       if (field === 'price' && !(value > 0)) { toast('Price must be above £0.'); e.target.value = current().find((p) => p.id === id).price; return; }
-      setFields(id, { [field]: value }); renderList();
+      setFields(id, { [field]: value, manual: true }); renderList();
     });
     list.addEventListener('click', (e) => {
       const row = e.target.closest('.mg-row'); if (!row) return; const id = row.dataset.id;

@@ -114,6 +114,11 @@ optionally `preorder`, `releaseDate`, `maxQty`, `compareAt`, `contents`, `specs`
 
 Then run `python3 scripts/build-pages.py` so the vault sections come back.
 
+Products created or edited in the product manager carry `"manual": true`. The image pipeline
+(`tidy-catalog.mjs`, `catalog-from-galleries.mjs`) leaves those exactly as they are: no renames,
+merges, drops or featured re-picks. Pre-orders with a `releaseDate` (ISO date) show it on the card and
+product page and in the structured data.
+
 **Photos.** The catalogue rule is *no photo, no listing* (`tidy-catalog.mjs --photos-only`).
 Publisher packshots are pulled from the publishers' public product galleries:
 
@@ -177,7 +182,7 @@ Skip link, landmarks, visible gold focus rings, 44 px+ touch targets, labelled i
 focus-trapped dialogs (cart, menu, search) with `Esc` and focus restore, `aria-live` cart count,
 text contrast ≥ 4.5:1 throughout, motion disabled under `prefers-reduced-motion`. Product media uses
 a fixed ratio so there is no layout shift; images are lazy-loaded. No analytics or third-party
-scripts; the only external requests are the two Google Fonts families and Stripe at checkout.
+scripts. The two typefaces are self-hosted under `assets/fonts/` (SIL Open Font License), so the only external request a shopper's browser makes is to Stripe at checkout.
 
 ## Trademarks
 

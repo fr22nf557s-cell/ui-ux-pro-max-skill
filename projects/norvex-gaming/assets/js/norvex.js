@@ -87,8 +87,17 @@
         : p.stock <= 5 ? { key: 'low', label: `Only ${p.stock} left` }
           : { key: 'in', label: 'In stock' };
   const productHref = (p) => `product.html?id=${encodeURIComponent(p.id)}`;
-  const haystack = (p) => `${p.name} ${p.set} ${p.brand || ''} ${gameOf(p).name} ${typeOf(p).name} ${p.grade ? p.grade.grader + ' ' + p.grade.grade : ''}`.toLowerCase();
-  const matches = (p, q) => { const h = haystack(p); return q.toLowerCase().split(/\s+/).filter(Boolean).every((t) => h.includes(t)); };
+  const fold = (s) => String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const ALIASES = {
+    game: { pokemon: 'pokemon pkmn ptcg', magic: 'mtg magic gathering', onepiece: 'one piece optcg', yugioh: 'yugioh ygo yu-gi-oh konami', lorcana: 'lorcana disney', swu: 'star wars unlimited swu', digimon: 'digimon bandai', dragonball: 'dragon ball dbs fusion world bandai' },
+    type: { etb: 'etb elite trainer box', box: 'booster box display', bundle: 'bundle', pack: 'booster pack', deck: 'deck starter', collection: 'collection', accessory: 'accessory accessories' },
+  };
+  const haystack = (p) => fold(`${p.name} ${p.set} ${p.brand || ''} ${gameOf(p).name} ${typeOf(p).name} ${ALIASES.game[p.game] || ''} ${ALIASES.type[p.type] || ''} ${p.grade ? p.grade.grader + ' ' + p.grade.grade : ''}`);
+  // every query word must start a word of the product (so "tin" finds tins, not "Destiny"; "case" finds cases, not "Showcase")
+  const words = (s) => s.split(/[^a-z0-9]+/).filter(Boolean);
+  const matches = (p, q) => { const ws = words(haystack(p)); return words(fold(q)).every((t) => ws.some((w) => w.startsWith(t))); };
+  const soldOut = (p) => !p.preorder && !(p.stock > 0);
+  const releaseText = (p) => { if (!p.releaseDate) return ''; const d = new Date(p.releaseDate + 'T00:00:00'); return Number.isNaN(d.getTime()) ? '' : new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(d); };
 
   function badges(p) {
     const b = [];
@@ -160,6 +169,7 @@
     const t = typeOf(p);
     const av = availability(p);
     const addLabel = av.key === 'out' ? 'Sold out' : av.key === 'pre' ? 'Pre-order' : 'Add to cart';
+    const stockLabel = av.key === 'pre' && releaseText(p) ? `Releases ${releaseText(p)}` : av.label;
     return `<article class="product reveal reveal--scale" style="--i:${i % 8}" data-product="${esc(p.id)}">
       <div class="product__media" style="--a:${g.a}">
         <div class="product__badges">${badges(p)}</div>
@@ -170,7 +180,7 @@
         <h3 class="product__name"><a href="${productHref(p)}">${esc(p.name)}</a></h3>
         <div class="product__row">
           <span class="price product__price">${fmt(p.price)}${p.compareAt ? `<span class="price--compare">${fmt(p.compareAt)}</span>` : ''}</span>
-          <span class="product__stock product__stock--${av.key}">${esc(av.label)}</span>
+          <span class="product__stock product__stock--${av.key}">${esc(stockLabel)}</span>
         </div>
         <button class="btn btn--ghost btn--sm btn--block product__add" type="button" data-add="${esc(p.id)}"${av.key === 'out' ? ' disabled' : ''} aria-label="${addLabel}: ${esc(p.name)}">${addLabel}</button>
       </div>
@@ -180,7 +190,7 @@
   function select(spec) {
     const [kind, val] = String(spec || 'all').split(':');
     switch (kind) {
-      case 'featured': return products.filter((p) => p.featured && !p.preorder && p.type !== 'single');
+      case 'featured': return products.filter((p) => p.featured && !p.preorder && p.type !== 'single').sort((a, b) => soldOut(a) - soldOut(b));
       case 'preorder': return products.filter((p) => p.preorder);
       case 'type': return products.filter((p) => p.type === val);
       case 'game': return products.filter((p) => p.game === val);
@@ -560,7 +570,7 @@
     }
     const rank = (p) => (p.badge === 'hot' ? 2 : p.badge === 'new' ? 1 : 0);
     const sorters = {
-      featured: (a, b) => (b.featured - a.featured) || (rank(b) - rank(a)),
+      featured: (a, b) => (soldOut(a) - soldOut(b)) || (b.featured - a.featured) || (rank(b) - rank(a)),
       newest: (a, b) => ((b.badge === 'new') - (a.badge === 'new')) || (b.preorder - a.preorder),
       'price-asc': (a, b) => a.price - b.price,
       'price-desc': (a, b) => b.price - a.price,
@@ -652,7 +662,7 @@
       : '';
     const dispatchHours = (config.shipping && config.shipping.dispatchHours) || 48;
     const returnsDays = config.returnsDays || 14;
-    const stockNote = p.preorder ? ' · charged now, dispatched insured on release day' : av.key === 'out' ? '' : ` · dispatched within ${dispatchHours} hours`;
+    const stockNote = p.preorder ? (releaseText(p) ? ` · releases ${releaseText(p)}, charged now and dispatched insured on release day` : ' · charged now, dispatched insured on release day') : av.key === 'out' ? '' : ` · dispatched within ${dispatchHours} hours`;
     const buy = av.key === 'out'
       ? `<button class="btn btn--ghost btn--lg btn--block" type="button" disabled style="grid-column:1/-1">Sold out</button><button class="btn btn--outline btn--block" type="button" style="grid-column:1/-1" data-notify>Notify me when restocked</button>`
       : `<div class="stepper" role="group" aria-label="Quantity">
@@ -713,6 +723,7 @@
   /* Per-product canonical URL, social preview and Product structured data (JSON-LD), so
      search engines index each product page on its own rather than as copies of product.html */
   function seo(p, g, t, av) {
+    const dispatchHours = (config.shipping && config.shipping.dispatchHours) || 48; const returnsDays = config.returnsDays || 14;
     const canon = $('link[rel="canonical"]'); const origin = canon ? new URL(canon.href).origin : location.origin;
     const url = `${origin}/product.html?id=${encodeURIComponent(p.id)}`; const image = `${origin}/${p.image}`;
     if (canon) canon.href = url;
@@ -724,7 +735,11 @@
     const data = [
       { '@context': 'https://schema.org', '@type': 'Product', name: p.name, image: [image], description: p.description, sku: p.id, category: `${g.name} ${t.name}`,
         brand: { '@type': 'Brand', name: p.brand || g.name },
-        offers: { '@type': 'Offer', url, priceCurrency: config.currency || 'GBP', price: Number(p.price).toFixed(2), availability, itemCondition: 'https://schema.org/NewCondition', seller: { '@type': 'Organization', name: (config.business && config.business.legalName) || config.storeName } } },
+        offers: { '@type': 'Offer', url, priceCurrency: config.currency || 'GBP', price: Number(p.price).toFixed(2), availability, itemCondition: 'https://schema.org/NewCondition', seller: { '@type': 'Organization', name: (config.business && config.business.legalName) || config.storeName },
+          ...(p.preorder && p.releaseDate ? { availabilityStarts: p.releaseDate } : {}),
+          shippingDetails: { '@type': 'OfferShippingDetails', shippingRate: { '@type': 'MonetaryAmount', value: p.freeShipping ? 0 : Number((config.shipping && config.shipping.standard) || 4.99), currency: config.currency || 'GBP' }, shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'GB' },
+            deliveryTime: { '@type': 'ShippingDeliveryTime', handlingTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: Math.ceil(dispatchHours / 24), unitCode: 'DAY' }, transitTime: { '@type': 'QuantitativeValue', minValue: 2, maxValue: 4, unitCode: 'DAY' } } },
+          hasMerchantReturnPolicy: { '@type': 'MerchantReturnPolicy', applicableCountry: 'GB', returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow', merchantReturnDays: returnsDays, returnMethod: 'https://schema.org/ReturnByMail', returnFees: 'https://schema.org/ReturnShippingFees' } } },
       { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: `${origin}/` },
         { '@type': 'ListItem', position: 2, name: 'Shop', item: `${origin}/shop.html` },

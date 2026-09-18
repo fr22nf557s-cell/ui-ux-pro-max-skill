@@ -60,6 +60,11 @@ for (const p of products) {
   p._forcedSet = e.set !== undefined;
 }
 
+/* products created or edited in the product manager belong to the owner: no renames, merges, drops or re-picks */
+const manualProducts = products.filter((p) => p.manual);
+products = products.filter((p) => !p.manual);
+if (manualProducts.length) console.log(`· ${manualProducts.length} hand-managed product(s) left exactly as they are`);
+
 /* 2. rules: junk titles, house-style names, sets, template copy ----------- */
 products = products.filter((p) => {
   if (!SEALED.has(p.type)) return true;
@@ -108,7 +113,7 @@ for (const [, ps] of groups) {
 products = products.filter((p) => !losers.has(p));
 
 /* 4b. booster boxes next to packs for games sold as plain displays ------------ */
-const keysNow = new Set(products.filter((p) => SEALED.has(p.type)).map((p) => dedupeKey(p.game, p.name)));
+const keysNow = new Set([...products, ...manualProducts].filter((p) => SEALED.has(p.type)).map((p) => dedupeKey(p.game, p.name)));
 const copies = [];
 for (const p of [...products]) {
   if (!isTemplateCopy(p.description) || !p.image || /^https?:/i.test(p.image)) continue;
@@ -119,7 +124,7 @@ for (const p of [...products]) {
 }
 
 /* 5. ids follow names; image files follow ids ------------------------------ */
-const taken = new Set(products.map((p) => p.id));
+const taken = new Set([...products, ...manualProducts].map((p) => p.id));
 const moves = [];
 for (const p of products) {
   const want = p._id; delete p._id; delete p._forcedSet;
@@ -139,7 +144,7 @@ for (const p of products) if (SEALED.has(p.type)) p.featured = false;   // re-pi
 const byGame = {};
 for (const p of products) if (SEALED.has(p.type)) (byGame[p.game] ||= []).push(p);
 for (const [g, ps] of Object.entries(byGame)) {
-  let have = 0;
+  let have = manualProducts.filter((m) => m.game === g && m.featured).length;   // the owner's picks count first
   const pool = ps.filter((p) => p.image && !p.preorder).sort((a, b) => (PRI[a.type] ?? 9) - (PRI[b.type] ?? 9));
   const sets = new Set();
   for (const pass of [0, 1]) for (const p of pool) {   // pass 0: one per set, no store-exclusive variants; pass 1: fill up
@@ -152,6 +157,8 @@ for (const [g, ps] of Object.entries(byGame)) {
   for (const p of extra) p.featured = false;
   if (ps.some((p) => p.image)) console.log(`★ ${g}: ${ps.filter((p) => p.featured).map((p) => p.name).join(' · ')}`);
 }
+
+products = [...products, ...manualProducts];
 
 /* 7. orphan image files ----------------------------------------------------- */
 if (existsSync(imgDir)) {

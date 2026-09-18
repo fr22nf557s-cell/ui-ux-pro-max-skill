@@ -130,7 +130,7 @@ if (replace) {
   const covered = new Set(Object.entries(perGame).filter(([, n]) => n >= minPerGame).map(([g]) => g));
   const sealed = new Set(['etb', 'box', 'bundle', 'pack', 'deck', 'collection']);
   const before = data.products.length;
-  data.products = data.products.filter((p) => !(covered.has(p.game) && sealed.has(p.type) && !p.image && !attach.has(p)));
+  data.products = data.products.filter((p) => p.manual || !(covered.has(p.game) && sealed.has(p.type) && !p.image && !attach.has(p)));
   removed = before - data.products.length;
   console.log(`replace: dropped ${removed} older ${[...covered].join('/')} products that have no photo`);
 }

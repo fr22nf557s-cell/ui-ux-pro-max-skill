@@ -904,3 +904,13 @@ select.input { appearance: none; -webkit-appearance: none; padding-right: 2.5rem
 .shop__more { display: grid; justify-items: center; gap: var(--space-3); padding-top: var(--space-6); }
 .shop__more[hidden] { display: none; }
 .shop__more-count { font-size: var(--fs-small); }
+
+/* ---------------------------------------------------------------- print (order confirmations, product pages) */
+@media print {
+  .announce, .header, .footer, .scroll-cue, .drawer, .toast, .hero__bg, .marquee, .newsletter, .nav__actions, .btn, .stage, .skip-link, [data-related-section] { display: none !important; }
+  body { background: #fff !important; color: #000 !important; }
+  main, main * { color: #000 !important; text-shadow: none !important; }
+  .glass, .order__aside, .pdp__buy { background: none !important; border: 1px solid #999 !important; backdrop-filter: none !important; }
+  a { color: #000; text-decoration: none; }
+  .photo { background: #fff !important; }
+}
