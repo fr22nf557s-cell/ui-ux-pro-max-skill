@@ -7,6 +7,38 @@ Work through it in order — several steps produce values the next one needs.
 
 ---
 
+## What else deploys from this repository
+
+Worth knowing before you touch any Cloudflare build setting, because it is not
+obvious from the code and it has already caused one round of confusion.
+
+This repository holds more than Hornet Drones. Three Cloudflare projects build
+from it, all under the same Cloudflare account:
+
+| Project | Kind | Root directory | Branch it builds from |
+| --- | --- | --- | --- |
+| `hornet-drones` | Pages | `projects/hornet-drones` | this project's branch |
+| `hornet-contracts` | Worker | `projects/hornet-contracts` | deployed by hand, no Git link |
+| `norvexgaming` | Worker | `projects/norvex-gaming` | `claude/norvex-gaming-ecommerce-5x8luq` |
+
+`norvexgaming` is a **separate business** that happens to share this repository
+and this Cloudflare account. Its code lives only on its own branch.
+
+Its Worker build settings must keep **"Builds for non-production branches"
+switched off**. With it on, Cloudflare tries to build norvexgaming on every
+push to every branch, including this one, where `projects/norvex-gaming` does
+not exist — so it fails in under a second and posts a red check on Hornet
+Drones pull requests that no change here can fix. Turning that checkbox off is
+the fix. **Do not press Disconnect** on its Git repository: that is what
+actually stops norvexgaming deploying.
+
+Worth separating the two businesses into their own repositories before giving
+anyone outside the founders access to this one — a contractor, or a technical
+reviewer during a raise, currently gets both codebases and both sets of
+Functions.
+
+---
+
 ## 0. Before you start
 
 You need:
