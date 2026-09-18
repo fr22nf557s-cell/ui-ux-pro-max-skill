@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /order.html
+Disallow: /manage.html
+Allow: /
+Sitemap: https://norvexgaming.com/sitemap.xml

@@ -1,0 +1,21 @@
+{
+  "name": "Norvex Gaming",
+  "short_name": "Norvex",
+  "description": "Sealed trading card product, pre-orders and accessories. UK delivery, tracked and insured.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#08080a",
+  "theme_color": "#08080a",
+  "icons": [
+    {
+      "src": "assets/img/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/img/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
