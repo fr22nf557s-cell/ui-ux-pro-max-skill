@@ -259,7 +259,7 @@ export function htmlPage(title, body, status = 200) {
 </head><body><div class="wrap">
 <header class="pagehead"><a class="mark" href="/">HORNET<span>DRONES</span></a><nav aria-label="Site"><a href="/#hardware">Hardware</a><a href="/#how">How it works</a><a href="/#command">Command</a><a href="/#specs">Specs</a><a href="/#faq">FAQ</a><a class="pill" href="/#reserve">Reserve</a></nav></header>
 <main>${body}</main>
-<footer>© 2026 Hornet Drones. <a href="/">Back to the site</a><nav aria-label="Site pages"><a href="/about">About</a><a href="/press">Press</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a></nav></footer>
+<footer>© 2026 Hornet Drones Limited. Registered in England and Wales, company number 17463533. <a href="/">Back to the site</a><nav aria-label="Site pages"><a href="/about">About</a><a href="/press">Press</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a></nav></footer>
 </div></body></html>`,
     { status, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' } },
   )

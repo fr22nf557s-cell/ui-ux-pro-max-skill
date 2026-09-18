@@ -406,7 +406,8 @@ export default function FooterCTA() {
         {/* ── Status bar ── */}
         <div className="flex flex-col items-start justify-between gap-4 border-t border-white/8 py-8 sm:flex-row sm:items-center">
           <p className="font-mono text-[11px] text-white/55">
-            © {new Date().getFullYear()} Hornet Drones Ltd. All rights reserved.
+            © {new Date().getFullYear()} Hornet Drones Limited. Registered in England and Wales,
+            company number 17463533. All rights reserved.
           </p>
           <p className="flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-wide2 text-white/55">
             <StatusDot />
