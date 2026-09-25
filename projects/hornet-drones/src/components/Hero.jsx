@@ -1,0 +1,182 @@
+import { useEffect, useRef } from 'react'
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
+import { EASE, DURATION, stagger, revealUp } from '../lib/motion'
+import { GlowButton, GlassButton, StatusDot } from './Primitives'
+import HeroFlight from './HeroFlight'
+
+const HEADLINE = ['Autonomous Aerial', 'Protection.', 'Unseen. Unmatched.']
+
+export default function Hero() {
+  const reduce = useReducedMotion()
+  const sectionRef = useRef(null)
+
+  // The paint-first shell in index.html has done its job once we are on
+  // screen. Remove it after commit so there is never a frame with neither.
+  useEffect(() => {
+    document.getElementById('lcp-shell')?.remove()
+    document.getElementById('lcp-copy')?.remove()
+  }, [])
+
+  // Scroll-linked hero exit. Mapping the section's own progress (0 -> 1 across
+  // one viewport) means the copy drifts up and dims as the next section takes
+  // over — a depth cue, not a parallax gimmick.
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  })
+  const copyY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -90])
+  const copyOpacity = useTransform(scrollYProgress, [0, 0.75], [1, reduce ? 1 : 0])
+  const sceneScale = useTransform(scrollYProgress, [0, 1], [1, reduce ? 1 : 1.16])
+
+  return (
+    <section
+      id="top"
+      ref={sectionRef}
+      className="relative min-h-[100svh] overflow-hidden pt-24 sm:pt-32 md:[@media(max-height:780px)]:pt-20"
+      aria-labelledby="hero-heading"
+    >
+      {/*
+        ── Full-bleed backdrop ──
+        The flight footage is the introduction: it fills the whole section and
+        its playhead is driven by this section's scroll progress, so the swarm
+        flies in as you enter the page. A slow scale-up on the same progress
+        adds depth without a second scroll listener.
+      */}
+      <motion.div style={{ scale: sceneScale }} className="gpu absolute inset-0">
+        <HeroFlight progress={scrollYProgress} fullBleed className="absolute inset-0" />
+      </motion.div>
+
+      {/* ── Legibility scrims + ambient stack (decorative, never interactive) ── */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        {/*
+          Text sits in the left column, so the ground is opaque there and opens
+          up across to the right. Without this the headline would sit on moving
+          footage and fail contrast at unpredictable frames.
+        */}
+        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/25 lg:to-transparent" />
+        {/* Film grain over the footage: a static noise tile at low alpha, so the
+            plate reads as photographed rather than rendered. */}
+        <div className="absolute inset-0 bg-grain opacity-[0.16] mix-blend-overlay" />
+        {/* Top and bottom falloff ties the section into the nav and the next one */}
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/90 via-transparent to-void" />
+        {/* Tactical grid, masked to fade toward the edges */}
+        <div
+          className="absolute inset-0 bg-grid [background-size:64px_64px] opacity-[0.28]"
+          style={{ maskImage: 'radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 78%)', WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 78%)' }}
+        />
+        {/* Pure-black vignette anchors the section to the one below */}
+        <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-void to-transparent" />
+
+        {/* HUD brackets, now framing the whole viewport rather than a panel */}
+        <div className="absolute inset-5 hidden sm:inset-8 lg:block lg:inset-12">
+          {[
+            'left-0 top-0 border-l border-t',
+            'right-0 top-0 border-r border-t',
+            'left-0 bottom-0 border-l border-b',
+            'right-0 bottom-0 border-r border-b',
+          ].map((pos) => (
+            <span key={pos} className={`absolute h-7 w-7 border-white/25 ${pos}`} />
+          ))}
+          <span className="absolute bottom-1 right-10 font-mono text-[9px] uppercase tracking-label text-white/55">
+            HRN-01 · Live telemetry
+          </span>
+        </div>
+      </div>
+
+      <div className="relative mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-10 px-5 sm:px-8 md:min-h-[calc(100svh-8rem)] lg:grid-cols-12 lg:gap-6 lg:px-12">
+        {/* ── Copy, overlaid on the footage ── */}
+        <motion.div
+          style={{ y: copyY, opacity: copyOpacity }}
+          variants={stagger(reduce, 0.11)}
+          initial="hidden"
+          animate="visible"
+          className="z-10 lg:col-span-7 xl:col-span-6"
+        >
+          <div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 backdrop-blur-md">
+            <StatusDot />
+            <span className="font-mono text-[10px] uppercase tracking-label text-white/70">
+              Alpha waitlist open · 500 systems
+            </span>
+          </div>
+
+          {/* The text is static on purpose: the paint-first shell in index.html
+              has already drawn it, and this hero takes over in place. Entrance
+              motion belongs to the buttons and stats below. */}
+          <h1 id="hero-heading" className="font-display text-hero font-bold">
+            {HEADLINE.map((line, i) => (
+              <span key={line} className="block pb-[0.06em]">
+                {i === 2 ? (
+                  <>
+                    <span className="text-silver">Unseen.</span> Unmatched.
+                  </>
+                ) : (
+                  line
+                )}
+              </span>
+            ))}
+          </h1>
+
+          <p
+            className="mt-6 max-w-xl text-[17px] leading-relaxed text-white/60 md:[@media(max-height:780px)]:mt-4">
+            The ultra-quiet, AI-powered perimeter drone system that patrols, detects, and deters threats before they
+            reach your doorstep.
+          </p>
+
+          <motion.div variants={revealUp(reduce, 0.1)} className="mt-9 flex flex-wrap items-center gap-4 md:[@media(max-height:780px)]:mt-6">
+            <GlowButton onClick={() => document.querySelector('#reserve')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' })}>
+              Reserve System
+            </GlowButton>
+            <GlassButton onClick={() => document.querySelector('#command')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' })}>
+              Explore Command View
+              <span className="grid h-6 w-6 place-items-center rounded-full bg-white/10 transition-colors group-hover:bg-white group-hover:text-void">
+                <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+                  <path d="M2 5h6M5 2l3 3-3 3" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+            </GlassButton>
+          </motion.div>
+
+          <motion.dl
+            variants={revealUp(reduce, 0.2)}
+            className="mt-11 grid max-w-lg grid-cols-3 gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10 md:[@media(max-height:780px)]:mt-7"
+          >
+            {[
+              ['24/7', 'Autonomous patrol'],
+              ['<18 dB', 'At 30 m altitude'],
+              ['0.4 s', 'Threat classify'],
+            ].map(([v, k]) => (
+              <div key={k} className="bg-ink/90 px-4 py-4">
+                <dt className="font-mono text-lg font-medium text-white">{v}</dt>
+                <dd className="mt-1 font-mono text-[10px] uppercase tracking-wide2 text-white/55">{k}</dd>
+              </div>
+            ))}
+          </motion.dl>
+        </motion.div>
+
+      </div>
+
+      {/* Scroll affordance. The scroll-linked fade and the delayed entrance
+          sit on separate elements on purpose: binding `copyOpacity` in
+          `style` while also animating `opacity` on the same element makes
+          Framer animate the shared motion value itself, which held the hero
+          copy at opacity 0 for the first 1.7 s of every visit. */}
+      <motion.div
+        style={{ opacity: copyOpacity }}
+        className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 lg:block [@media(max-height:780px)]:lg:hidden"
+      >
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5, duration: 0.6 }}
+        className="flex flex-col items-center gap-3"
+      >
+        <span className="font-mono text-[9px] uppercase tracking-label text-white/55">Scroll</span>
+        {/* The line "drains" downward on a loop: transform-origin trick, GPU only */}
+        <span className="relative h-12 w-px overflow-hidden bg-white/10">
+          <span className="absolute inset-x-0 top-0 h-1/2 bg-white animate-scanline" />
+        </span>
+      </motion.div>
+      </motion.div>
+    </section>
+  )
+}

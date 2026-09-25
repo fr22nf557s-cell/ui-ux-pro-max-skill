@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en-GB" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0B0C10" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <!-- The hero poster is the LCP element; ask for it before the bundle parses. -->
+    <link rel="preload" as="image" href="/hornet-flight-poster.jpg" fetchpriority="high" />
+    <!-- The two faces the hero text is set in, so the first paint is already in the brand type. -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/space-grotesk-latin-700-normal.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-latin-400-normal.woff2" crossorigin />
+    <title>Hornet Drones — Autonomous Aerial Protection</title>
+    <meta
+      name="description"
+      content="The ultra-quiet, AI-powered perimeter drone system that patrols, detects, and deters threats before they reach your doorstep."
+    />
+
+    <!-- Update the domain here and in wrangler.toml, robots.txt and sitemap.xml together. -->
+    <link rel="canonical" href="https://hornetdrones.com/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://hornetdrones.com/" />
+    <meta property="og:title" content="Hornet Drones — Autonomous Aerial Protection" />
+    <meta
+      property="og:description"
+      content="The ultra-quiet, AI-powered perimeter drone system that patrols, detects, and deters threats before they reach your doorstep."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image" content="https://hornetdrones.com/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Hornet Drones. Autonomous aerial protection." />
+    <meta name="twitter:image" content="https://hornetdrones.com/og.jpg" />
+    <meta property="og:site_name" content="Hornet Drones" />
+    <meta property="og:locale" content="en_GB" />
+
+    <!--
+      Organization + Product only.
+
+      Deliberately NOT LocalBusiness: that type is for premises customers visit,
+      and misusing it risks a structured-data manual action. Equally there is no
+      `offers` block (no public price) and no `aggregateRating` (no reviews) —
+      inventing either is exactly the kind of markup that earns a penalty.
+    -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://hornetdrones.com/#org",
+            "name": "Hornet Drones",
+            "url": "https://hornetdrones.com/",
+            "logo": "https://hornetdrones.com/press/hornet-mark.png",
+            "email": "hello@hornetdrones.com",
+            "description": "Autonomous aerial perimeter protection for private property."
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://hornetdrones.com/#site",
+            "url": "https://hornetdrones.com/",
+            "name": "Hornet Drones",
+            "publisher": { "@id": "https://hornetdrones.com/#org" }
+          },
+          {
+            "@type": "Product",
+            "name": "HRN-01",
+            "description": "Ultra-quiet autonomous perimeter drone with thermal and optical sensing, returning to a weatherproof charging nest between patrols.",
+            "category": "Home security system",
+            "brand": { "@id": "https://hornetdrones.com/#org" }
+          }
+        ]
+      }
+    </script>
+
+  </head>
+  <body>
+    <!--
+      Paint-first shell. The hero's backdrop, as plain HTML, so the largest
+      element on screen is painted before the bundle has even parsed. Hero.jsx
+      removes it the moment the real hero has committed; on a fast connection
+      nobody sees the handover, on a slow one they see the site instead of a
+      black screen.
+    -->
+    <img
+      id="lcp-shell"
+      src="/hornet-flight-poster.jpg"
+      alt=""
+      fetchpriority="high"
+      decoding="async"
+      style="position:fixed;inset:0;width:100%;height:100vh;height:100svh;object-fit:cover;object-position:50% 38%;filter:brightness(.42);pointer-events:none"
+    />
+    <!--
+      The hero copy, as plain HTML, painted with the first frame. The real hero
+      takes over in place with the text already where it is, so the largest
+      text on screen is on screen seconds before React is on a slow link, and
+      the headline never has to wait for a bundle. Same classes as Hero.jsx,
+      so the swap is exact; only the buttons and stats play an entrance.
+    -->
+    <div id="lcp-copy" aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 pt-24 sm:pt-32 md:[@media(max-height:780px)]:pt-20">
+      <div class="mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-10 px-5 sm:px-8 md:min-h-[calc(100svh-8rem)] lg:grid-cols-12 lg:gap-6 lg:px-12">
+        <div class="lg:col-span-7 xl:col-span-6">
+          <div class="mb-6 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2">
+            <span class="flex h-2 w-2 rounded-full bg-white"></span>
+            <span class="font-mono text-[10px] uppercase tracking-label text-white/70">Alpha waitlist open · 500 systems</span>
+          </div>
+          <div class="font-display text-hero font-bold">
+            <span class="block pb-[0.06em]">Autonomous Aerial</span>
+            <span class="block pb-[0.06em]">Protection.</span>
+            <span class="block pb-[0.06em]"><span class="text-silver">Unseen.</span> Unmatched.</span>
+          </div>
+          <p class="mt-6 max-w-xl text-[17px] leading-relaxed text-white/60 md:[@media(max-height:780px)]:mt-4">
+            The ultra-quiet, AI-powered perimeter drone system that patrols, detects, and deters threats before they
+            reach your doorstep.
+          </p>
+          <!-- Layout-only stand-ins for the buttons and stats (same classes as
+               the React ones), so the block is the same height and the text
+               above lands on the same pixel. They stay invisible; the real
+               ones play their entrance when React mounts. -->
+          <div class="invisible mt-9 flex flex-wrap items-center gap-4 md:[@media(max-height:780px)]:mt-6">
+            <button type="button" tabindex="-1" class="relative rounded-full border border-white/70 px-8 py-4 font-mono text-[12px] uppercase tracking-wide2">Reserve System</button>
+            <button type="button" tabindex="-1" class="glass inline-flex items-center gap-3 rounded-full px-8 py-4 font-mono text-[12px] uppercase tracking-wide2">Explore Command View<span class="h-6 w-6"></span></button>
+          </div>
+          <div class="invisible mt-11 grid max-w-lg grid-cols-3 gap-px rounded-xl border border-white/10 md:[@media(max-height:780px)]:mt-7">
+            <div class="px-4 py-4"><div class="font-mono text-lg font-medium">24/7</div><div class="mt-1 font-mono text-[10px] uppercase tracking-wide2">Autonomous patrol</div></div>
+            <div class="px-4 py-4"><div class="font-mono text-lg font-medium">&lt;18 dB</div><div class="mt-1 font-mono text-[10px] uppercase tracking-wide2">At 30 m altitude</div></div>
+            <div class="px-4 py-4"><div class="font-mono text-lg font-medium">0.4 s</div><div class="mt-1 font-mono text-[10px] uppercase tracking-wide2">Threat classify</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <noscript>
+      <div style="position:relative;z-index:1;max-width:640px;margin:0 auto;padding:24px 20px 40px;font:15px/1.6 Inter,system-ui,sans-serif;color:#a8adb8">
+        <p style="margin:0 0 12px;color:#fff">This page needs JavaScript for the interactive command view and the waitlist form. The rest of the site does not:</p>
+        <p style="margin:0">
+          <a href="/hrn-01" style="color:#fff">HRN-01 drone</a> ·
+          <a href="/charging-nest" style="color:#fff">Charging nest</a> ·
+          <a href="/command-view" style="color:#fff">Command view</a> ·
+          <a href="/specifications" style="color:#fff">Specifications</a> ·
+          <a href="/about" style="color:#fff">About</a> ·
+          <a href="/privacy" style="color:#fff">Privacy</a>
+        </p>
+        <p style="margin:12px 0 0">To join the alpha waitlist without JavaScript, email <a href="mailto:alpha@hornetdrones.com" style="color:#fff">alpha@hornetdrones.com</a>.</p>
+      </div>
+    </noscript>
+    <div id="root" style="position:relative"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
