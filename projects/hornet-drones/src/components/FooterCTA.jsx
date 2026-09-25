@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { EASE, DURATION, VIEWPORT, revealUp, stagger } from '../lib/motion'
+import { COMPANY, OFFICE_PENDING } from '../lib/company'
 import { StatusDot } from './Primitives'
 import Logo from './Logo'
 import Turnstile from './Turnstile'
@@ -62,6 +63,7 @@ const FOOTER_LINKS = [
       { label: 'Privacy notice', href: '/privacy' },
       { label: 'Data residency', href: '/privacy#processors' },
       { label: 'Airspace & regulation', href: '/airspace' },
+      { label: 'Compliance', href: '/compliance' },
       { label: 'Terms of use', href: '/terms' },
     ],
   },
@@ -404,11 +406,35 @@ export default function FooterCTA() {
         </div>
 
         {/* ── Status bar ── */}
-        <div className="flex flex-col items-start justify-between gap-4 border-t border-white/8 py-8 sm:flex-row sm:items-center">
-          <p className="font-mono text-[11px] text-white/55">
-            © {new Date().getFullYear()} Hornet Drones Limited. Registered in England and Wales,
-            company number 17463533. All rights reserved.
-          </p>
+        <div className="flex flex-col items-start justify-between gap-4 border-t border-white/8 py-8 sm:flex-row sm:items-end">
+          {/*
+            Statutory trading disclosure. The 2015 Names and Trading Disclosures
+            Regulations want the registered name, the registered number, the
+            part of the UK of registration and the registered office address
+            somewhere reasonably accessible on the site; this footer and
+            /compliance are both, and both read the same constants so they
+            cannot drift. The office line is omitted while the address is still
+            a placeholder — see src/lib/company.js.
+          */}
+          <div className="font-mono text-[11px] leading-relaxed text-white/55">
+            <p>
+              © {new Date().getFullYear()} {COMPANY.name}. All rights reserved.
+            </p>
+            <p className="mt-1.5">
+              Registered in {COMPANY.jurisdiction}, company number {COMPANY.number}.
+            </p>
+            {!OFFICE_PENDING && (
+              <p className="mt-1.5">Registered office: {COMPANY.registeredOffice}.</p>
+            )}
+            <p className="mt-1.5">
+              <a
+                href="/compliance"
+                className="underline underline-offset-2 transition-colors duration-200 hover:text-white"
+              >
+                Compliance and company information
+              </a>
+            </p>
+          </div>
           <p className="flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-wide2 text-white/55">
             <StatusDot />
             All Systems Operational

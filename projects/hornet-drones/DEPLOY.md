@@ -402,19 +402,37 @@ These are not code problems, so they are not done:
    figures or remove. The "VERIFIED" stamp asserts third-party validation and
    should go regardless.
 2. **"Alpha units shipping Q3"** is a delivery promise.
-3. **The privacy notice and terms are drafts.** Every `[square bracket]` needs
-   filling and both documents need a solicitor's eye. The About, Press,
-   Careers and Airspace pages each carry a ⚠ box saying what is still missing
-   (team and registration details, a real press kit, application retention,
-   the product's regulatory status). Remove each box only when its content is
-   real.
-4. **Company details.** If Hornet Drones Ltd is a registered company, UK law
-   requires its number and registered office on the site.
-5. **Error tracking** is not wired up. Cloudflare's Workers logs cover the API;
+3. **The privacy notice, terms and compliance pages are drafts.** Every
+   `[square bracket]` needs filling and all three need a solicitor's eye. The
+   About, Press, Careers and Airspace pages each carry a ⚠ box saying what is
+   still missing (team and registration details, a real press kit, application
+   retention, the product's regulatory status). Remove each box only when its
+   content is real.
+4. **The registered office address.** The registered name, number and place of
+   registration are on the site — in the homepage footer and on `/compliance`,
+   both reading `src/lib/company.js`. The office address is the last piece UK
+   trading disclosure rules require, and it is still the placeholder token
+   `[REGISTERED OFFICE ADDRESS]`. Take it from the company's Companies House
+   record, exactly as that record prints it, then replace it everywhere at
+   once:
+
+   ```bash
+   grep -rl '\[REGISTERED OFFICE ADDRESS\]' src public   # 4 files today
+   ```
+
+   The homepage footer prints the office line only once the token is gone, so
+   nothing bracketed is ever shown to a visitor; `/compliance`, `/privacy` and
+   `/terms` do show it, behind their ⚠ draft boxes.
+5. **`/compliance` has no certificates on it yet.** Every row of its documents
+   table reads *Not yet published*, which is true of the page and says nothing
+   about what the company holds. As each permission, policy or certificate is
+   issued, put the PDF under `public/compliance/` and change that row. Never
+   mark a row as held before the document is in hand.
+6. **Error tracking** is not wired up. Cloudflare's Workers logs cover the API;
    add Sentry if you want client-side errors too.
-6. **Rotate both secrets.** The Turnstile secret and the Resend API key were
+7. **Rotate both secrets.** The Turnstile secret and the Resend API key were
    each shown on screen during setup. Turnstile → widget → Rotate secret
    key; Resend → API keys → delete and recreate (Sending access). Update the
    two Pages secrets, retry the deployment, submit the form once.
-7. **Mailbox aliases.** `privacy@`, `hello@` and `alpha@hornetdrones.com` must
+8. **Mailbox aliases.** `privacy@`, `hello@` and `alpha@hornetdrones.com` must
    exist on the Professional Email mailbox or mail to them bounces.
