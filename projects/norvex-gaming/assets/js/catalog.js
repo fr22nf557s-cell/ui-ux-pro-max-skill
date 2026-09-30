@@ -67,7 +67,7 @@ window.NORVEX_DATA = {
       "endpoint": "https://norvexgaming.gohilan2003.workers.dev/session"
     },
     "whatsapp": {
-      "number": "",
+      "number": "447492474669",
       "hours": "Monday to Friday, 9am to 6pm (UK)",
       "replyTime": "within a couple of hours in opening hours"
     }
