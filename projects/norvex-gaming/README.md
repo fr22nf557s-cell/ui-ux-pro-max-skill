@@ -74,6 +74,7 @@ appears once at least one product with `"type": "single"` exists.
 | `returnsDays` | Change-of-mind window shown on product pages |
 | `social` | Optional `{ "Instagram": "https://…", "TikTok": "https://…" }`; the footer links render only when set |
 | `checkout.endpoint` | Where the cart is POSTed: the Worker's `/session` URL |
+| `whatsapp` | `number` (international digits, e.g. `447700900123`), `hours`, `replyTime`. **Leave `number` empty and the chat button, the help-page line and the WhatsApp sentence in the privacy policy all disappear** |
 
 **Product manager (no code).** `manage.html` is an unlisted page on the site (`noindex`, kept out of
 robots and the sitemap) for changing prices and stock, adding a product with a photo, or removing
@@ -153,6 +154,22 @@ directory `projects/norvex-gaming`, build command `bash build.sh`, deploy comman
 and answers `/session` for checkout. Add `STRIPE_SECRET_KEY` as a **secret** under Settings →
 Variables and Secrets (`SITE_URL` is in `wrangler.jsonc`). When the domain points at Cloudflare,
 set `config.checkout.endpoint` to `/session` and switch the GitHub Pages deploy off.
+
+## WhatsApp chat
+
+A button in the bottom right opens a small panel of ready-written questions; picking one opens
+WhatsApp with that message already typed. It is a deep link to `wa.me`, not a live chat: no
+third-party script runs on the site and nothing is sent without the shopper pressing send in
+WhatsApp themselves.
+
+The questions follow the page. On a product page the first one names that product and includes its
+link, or asks when it is back if it is sold out. On the confirmation page it quotes the order
+reference. If the basket has something in it, one option lists those items so stock can be checked.
+
+Set `config.whatsapp.number` in `assets/js/catalog.js` to switch it on; any format works
+(`+44 7700 900123` is normalised to digits). Leave it empty and nothing renders anywhere, which is
+how it ships. The button sits below the cart and menu overlays so they dim it, and it is hidden when
+a page is printed.
 
 ## Brand
 

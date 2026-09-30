@@ -65,6 +65,11 @@ window.NORVEX_DATA = {
     "checkout": {
       "provider": "stripe",
       "endpoint": "https://norvexgaming.gohilan2003.workers.dev/session"
+    },
+    "whatsapp": {
+      "number": "",
+      "hours": "Monday to Friday, 9am to 6pm (UK)",
+      "replyTime": "within a couple of hours in opening hours"
     }
   },
 
