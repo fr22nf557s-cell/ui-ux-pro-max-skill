@@ -515,76 +515,38 @@
   }
 
   /* ------------------------------------------------------ WhatsApp chat */
-  /* Opens a real WhatsApp conversation with the first message already written.
-     It never sends anything itself and never claims to be live chat. Nothing
-     renders at all until config.whatsapp.number is filled in. */
+  /* One button that opens WhatsApp with the first line already written. It is a
+     wa.me deep link, not live chat, and nothing renders until a number is set. */
   const WA_GLYPH = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>';
 
   function initChat() {
     const wa = config.whatsapp || {};
     const number = String(wa.number || '').replace(/\D/g, '');
     const store = config.storeName || 'Norvex Gaming';
-    if (!number) { $$('[data-whatsapp]').forEach((el) => el.remove()); return; }   // not set up yet: show nothing anywhere
+    if (!number) { $$('[data-whatsapp]').forEach((el) => el.remove()); return; }   // not set up: show nothing anywhere
 
     const link = (text) => `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
-    $$('[data-whatsapp]').forEach((el) => { el.hidden = false; });
-    $$('[data-whatsapp-link]').forEach((a) => { a.href = link(`Hi ${store}, `); a.textContent = a.textContent || 'WhatsApp'; });
-
-    /* what the shopper is looking at decides the first option, so the message
-       already says which product or order they mean */
-    function options() {
-      const list = [];
+    /* whatever the shopper is looking at goes into the message, so they do not have to explain it */
+    const message = () => {
       const p = byId[new URLSearchParams(location.search).get('id')];
-      if (p && $('[data-pdp]')) {
-        const url = location.href.split('#')[0];
-        list.push(availability(p).key === 'out'
-          ? { label: `When is ${p.name} back in stock?`, text: `Hi ${store}, when do you expect "${p.name}" back in stock?\n${url}` }
-          : { label: `Ask about ${p.name}`, text: `Hi ${store}, I have a question about "${p.name}" (${fmt(p.price)}).\n${url}` });
-      }
+      if (p && $('[data-pdp]')) return `Hi ${store}, I have a question about "${p.name}".\n${location.href.split('#')[0]}`;
       const ref = $('[data-order]') && $('.order__lead b');
-      if (ref) list.push({ label: `About order ${ref.textContent.trim()}`, text: `Hi ${store}, I have a question about order ${ref.textContent.trim()}.` });
-      if (Cart.items.length) {
-        const lines = Cart.items.map((i) => `${byId[i.id] ? byId[i.id].name : i.id} x${i.qty}`).join('\n');
-        list.push({ label: 'Check the items in my basket', text: `Hi ${store}, could you check these are in stock?\n${lines}` });
-      }
-      list.push({ label: 'Is something in stock?', text: `Hi ${store}, do you have this in stock? ` });
-      list.push({ label: 'Pre-order question', text: `Hi ${store}, I have a question about a pre-order.` });
-      list.push({ label: 'Delivery or an existing order', text: `Hi ${store}, I have a question about delivery.` });
-      list.push({ label: 'I want to sell cards', text: `Hi ${store}, I would like to sell some cards. ` });
-      return list.slice(0, 5);
-    }
+      if (ref) return `Hi ${store}, I have a question about order ${ref.textContent.trim()}.`;
+      return `Hi ${store}, `;
+    };
 
-    const el = document.createElement('div');
+    $$('[data-whatsapp]').forEach((el) => { el.hidden = false; });
+    $$('[data-whatsapp-link]').forEach((a) => { a.href = link(message()); });
+
+    const el = document.createElement('a');
     el.className = 'wa';
-    el.innerHTML = `
-      <div class="wa__panel" id="wa-panel" role="dialog" aria-labelledby="wa-title" hidden>
-        <div class="wa__head">
-          <img class="wa__avatar" src="assets/img/mark.svg" alt="" width="40" height="40">
-          <span class="wa__who"><b id="wa-title">${esc(store)}</b><span class="wa__status">${esc(wa.replyTime || 'Replies in opening hours')}</span></span>
-          <button class="wa__x" type="button" data-wa-close aria-label="Close">${icon('x')}</button>
-        </div>
-        <div class="wa__body">
-          <p class="wa__bubble">Hi! Pick a question and we'll open WhatsApp with it ready to send.</p>
-          <div class="wa__actions"></div>
-        </div>
-        <p class="wa__foot">${WA_GLYPH}Opens WhatsApp${wa.hours ? ` · we reply ${esc(wa.hours)}` : ''}</p>
-      </div>
-      <button class="wa__fab" type="button" data-wa-toggle aria-expanded="false" aria-controls="wa-panel" aria-label="Chat with us on WhatsApp">${WA_GLYPH}</button>`;
+    el.target = '_blank'; el.rel = 'noopener';
+    el.href = link(message());
+    el.setAttribute('aria-label', 'Chat to us on WhatsApp');
+    el.innerHTML = `${WA_GLYPH}<span class="wa__label">Chat</span>`;
+    el.addEventListener('click', () => { el.href = link(message()); });   // the order reference arrives after this runs
     document.body.appendChild(el);
     document.body.classList.add('has-chat');
-
-    const panel = $('.wa__panel', el); const fab = $('.wa__fab', el);
-    const close = () => { if (panel.hidden) return; panel.hidden = true; el.classList.remove('is-open'); fab.setAttribute('aria-expanded', 'false'); fab.focus(); };
-    const open = () => {
-      $('.wa__actions', el).innerHTML = options().map((o) =>
-        `<a class="wa__action" href="${esc(link(o.text))}" target="_blank" rel="noopener">${esc(o.label)}${icon('arrowRight')}</a>`).join('');
-      panel.hidden = false; el.classList.add('is-open'); fab.setAttribute('aria-expanded', 'true');
-      const first = $('.wa__action', el); if (first) first.focus();
-    };
-    fab.addEventListener('click', () => (panel.hidden ? open() : close()));
-    el.addEventListener('click', (e) => { if (e.target.closest('[data-wa-close]') || e.target.closest('.wa__action')) close(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden) close(); });
-    document.addEventListener('click', (e) => { if (!panel.hidden && !el.contains(e.target)) close(); });
   }
 
   /* ---------------------------------------------------------- shop page */

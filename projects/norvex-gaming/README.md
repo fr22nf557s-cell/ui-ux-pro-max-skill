@@ -157,19 +157,19 @@ set `config.checkout.endpoint` to `/session` and switch the GitHub Pages deploy 
 
 ## WhatsApp chat
 
-A button in the bottom right opens a small panel of ready-written questions; picking one opens
-WhatsApp with that message already typed. It is a deep link to `wa.me`, not a live chat: no
-third-party script runs on the site and nothing is sent without the shopper pressing send in
-WhatsApp themselves.
+A single button in the bottom right opens WhatsApp with the first line already written. It is a
+`wa.me` deep link, not live chat: no third-party script runs on the site, and the shopper still
+presses send themselves. It shows the word "Chat" beside the icon on desktop and collapses to a
+circle on phones.
 
-The questions follow the page. On a product page the first one names that product and includes its
-link, or asks when it is back if it is sold out. On the confirmation page it quotes the order
-reference. If the basket has something in it, one option lists those items so stock can be checked.
+The opening line follows the page. On a product page it names that product and includes its link; on
+the confirmation page it quotes the order reference; everywhere else it is a plain greeting. The
+link is refreshed on click, because the order reference only arrives once the page has loaded.
 
 Set `config.whatsapp.number` in `assets/js/catalog.js` to switch it on; any format works
-(`+44 7700 900123` is normalised to digits). Leave it empty and nothing renders anywhere, which is
-how it ships. The button sits below the cart and menu overlays so they dim it, and it is hidden when
-a page is printed.
+(`+44 7700 900123` is normalised to digits). Leave it empty and the button, the help-page line and
+the WhatsApp sentence in the privacy policy are all removed rather than hidden, which is how it
+ships. The button sits below the cart and menu overlays so they dim it, and it is hidden in print.
 
 ## Brand
 

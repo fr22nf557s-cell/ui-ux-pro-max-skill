@@ -918,48 +918,22 @@ select.input { appearance: none; -webkit-appearance: none; padding-right: 2.5rem
 /* ---------------------------------------------------------------- WhatsApp chat
    Sits below the scrim (--z-drawer) on purpose, so the cart, menu and search dim it
    the way they dim the rest of the page. */
-.wa { position: fixed; right: var(--gutter); bottom: calc(1.25rem + env(safe-area-inset-bottom)); z-index: calc(var(--z-nav) + 10); display: grid; justify-items: end; gap: 0.75rem; }
-.wa__fab {
-  width: 3.5rem; height: 3.5rem; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+.wa {
+  position: fixed; right: var(--gutter); bottom: calc(1.25rem + env(safe-area-inset-bottom));
+  z-index: calc(var(--z-nav) + 10); display: inline-flex; align-items: center; gap: 0.6rem;
+  height: 3.5rem; padding: 0 1.2rem; border-radius: var(--r-pill);
   background: var(--nv-surface-2); border: 1px solid rgba(37, 211, 102, 0.45); color: #25d366;
+  font-family: var(--nv-font-ui); font-size: var(--fs-small); font-weight: 600;
   box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   transition: transform var(--d-base) var(--ease-out), background var(--d-base) var(--ease-out), border-color var(--d-base) var(--ease-out);
 }
-.wa__fab svg { width: 1.7rem; height: 1.7rem; }
-.wa__fab:hover { transform: translateY(-2px); background: rgba(37, 211, 102, 0.14); border-color: rgba(37, 211, 102, 0.7); }
-.wa__fab:active { transform: translateY(0); }
-.wa__panel {
-  width: min(21rem, calc(100vw - 2 * var(--gutter))); border-radius: var(--r-lg); overflow: hidden;
-  background: rgba(16, 16, 19, 0.96); border: 1px solid var(--nv-border-2);
-  box-shadow: 0 30px 70px -24px rgba(0, 0, 0, 0.95); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-  transform-origin: bottom right; animation: wa-in var(--d-base) var(--ease-out);
-}
-.wa__panel[hidden] { display: none; }
-@keyframes wa-in { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: none; } }
-.wa__head { display: flex; align-items: center; gap: 0.7rem; padding: 0.85rem 0.9rem; border-bottom: 1px solid var(--nv-border); }
-.wa__avatar { width: 2.5rem; height: 2.5rem; flex: none; }
-.wa__who { display: grid; line-height: 1.25; min-width: 0; flex: 1; }
-.wa__who b { font-size: var(--fs-small); font-weight: 600; }
-.wa__status { font-size: var(--fs-tiny); color: var(--nv-text-3); display: inline-flex; align-items: center; gap: 0.35rem; }
-.wa__status::before { content: ""; width: 0.4rem; height: 0.4rem; border-radius: 50%; background: #25d366; flex: none; }
-.wa__x { width: 2rem; height: 2rem; flex: none; display: grid; place-items: center; border-radius: 50%; color: var(--nv-text-3); cursor: pointer; background: none; border: 0; }
-.wa__x:hover { color: var(--nv-text); background: var(--nv-surface-2); }
-.wa__x svg { width: 1rem; height: 1rem; }
-.wa__body { padding: 0.9rem; display: grid; gap: 0.75rem; }
-.wa__bubble { font-size: var(--fs-small); color: var(--nv-text-2); background: var(--nv-surface); border: 1px solid var(--nv-border); border-radius: 0 12px 12px 12px; padding: 0.65rem 0.8rem; line-height: 1.5; }
-.wa__actions { display: grid; gap: 0.4rem; }
-.wa__action {
-  display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; text-align: left;
-  padding: 0.65rem 0.8rem; border-radius: 10px; font-size: var(--fs-small); line-height: 1.35;
-  background: var(--nv-surface); border: 1px solid var(--nv-border-2); color: var(--nv-text);
-  transition: border-color var(--d-fast) var(--ease-out), background var(--d-fast) var(--ease-out);
-}
-.wa__action svg { width: 0.95rem; height: 0.95rem; flex: none; color: #25d366; }
-.wa__action:hover { background: var(--nv-surface-2); border-color: rgba(37, 211, 102, 0.5); }
-.wa__foot { display: flex; align-items: center; gap: 0.45rem; padding: 0.7rem 0.9rem; border-top: 1px solid var(--nv-border); font-size: var(--fs-tiny); color: var(--nv-text-3); }
-.wa__foot svg { width: 0.85rem; height: 0.85rem; flex: none; color: #25d366; }
+.wa svg { width: 1.5rem; height: 1.5rem; flex: none; }
+.wa__label { color: var(--nv-text); }
+.wa:hover { transform: translateY(-2px); background: rgba(37, 211, 102, 0.14); border-color: rgba(37, 211, 102, 0.7); }
+.wa:active { transform: translateY(0); }
+@media (max-width: 639px) { .wa { width: 3.5rem; padding: 0; justify-content: center; } .wa__label { display: none; } }
 /* the toast is centred at the bottom and would sit under the button on a phone */
 @media (max-width: 639px) { body.has-chat .toast { bottom: calc(5.75rem + env(safe-area-inset-bottom)); } }
-@media (prefers-reduced-motion: reduce) { .wa__panel { animation: none; } .wa__fab, .wa__fab:hover { transition: none; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .wa, .wa:hover { transition: none; transform: none; } }
 @media print { .wa { display: none !important; } }
