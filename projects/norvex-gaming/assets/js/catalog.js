@@ -66,6 +66,11 @@ window.NORVEX_DATA = {
       "provider": "stripe",
       "endpoint": "https://norvexgaming.gohilan2003.workers.dev/session"
     },
+    "orders": {
+      "paused": true,
+      "notice": "Orders are paused",
+      "message": "We've paused new orders for a short while. Everything here stays browsable and will be back to buy soon."
+    },
     "whatsapp": {
       "number": "447492474669",
       "hours": "Monday to Friday, 9am to 6pm (UK)",

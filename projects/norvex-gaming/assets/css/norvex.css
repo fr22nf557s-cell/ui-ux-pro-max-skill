@@ -336,6 +336,16 @@ select.input { appearance: none; -webkit-appearance: none; padding-right: 2.5rem
 .announce a { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(243,217,139,0.5); }
 .announce a:hover { text-decoration-color: currentColor; }
 @media (max-width: 639px) { .announce__more { display: none; } .announce { letter-spacing: 0.1em; } }
+/* Orders paused (config.orders.paused): the bar states it, and the cart and product pages
+   explain it where the buy button used to be. */
+.announce--paused { background: linear-gradient(90deg, #140d06, #2a1b08 50%, #140d06); border-bottom-color: rgba(217,183,91,0.42); }
+.announce--paused .container span { display: inline-flex; align-items: center; gap: 0.5rem; }
+.announce--paused svg { width: 14px; height: 14px; }
+.note--paused {
+  font-size: var(--fs-tiny); line-height: 1.55; color: var(--nv-gold-2);
+  background: rgba(217,183,91,0.08); border: 1px solid rgba(217,183,91,0.28);
+  border-radius: var(--r-sm); padding: 0.65rem 0.8rem; margin: 0;
+}
 
 .header {
   position: sticky; top: 0; z-index: var(--z-nav);

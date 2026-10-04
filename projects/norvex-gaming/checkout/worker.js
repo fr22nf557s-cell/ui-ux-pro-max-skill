@@ -5,6 +5,10 @@
    Cloudflare Worker (paste this file into the dashboard editor); the same
    `export default { fetch }` shape also runs on Vercel Edge or Deno Deploy.
 
+   Orders can be paused from the catalogue itself: set config.orders.paused to true in
+   assets/js/catalog.js and this function refuses to create any session (503) until it is
+   set back to false — no redeploy either way. GET /session reports it as "paused".
+
    The browser POSTs { items: [{ id, qty }] } to /session; GET /session?id=cs_… returns the
    order summary for the confirmation page (needs Checkout Sessions: Read on a restricted key). This function
    looks every id up in the live catalogue (assets/js/catalog.js on the
@@ -135,7 +139,11 @@ export default {
     const url = new URL(request.url);
     if (request.method === 'GET') {
       const id = url.searchParams.get('id');
-      if (!id) return json({ ok: true, service: 'norvex-checkout', configured: Boolean(env.STRIPE_SECRET_KEY), mode: /_live_/.test(env.STRIPE_SECRET_KEY || '') ? 'live' : /_test_/.test(env.STRIPE_SECRET_KEY || '') ? 'test' : null }, 200, cors);
+      if (!id) {
+        let paused = null;
+        try { paused = Boolean((await loadCatalog(env, site, request)).config.orders?.paused); } catch { /* the catalogue is not reachable; say nothing rather than guess */ }
+        return json({ ok: true, service: 'norvex-checkout', configured: Boolean(env.STRIPE_SECRET_KEY), mode: /_live_/.test(env.STRIPE_SECRET_KEY || '') ? 'live' : /_test_/.test(env.STRIPE_SECRET_KEY || '') ? 'test' : null, paused }, 200, cors);
+      }
       if (!/^cs_(test|live)_[A-Za-z0-9]{10,}$/.test(id)) return json({ error: 'Unknown order' }, 400, cors);
       if (!env.STRIPE_SECRET_KEY) return json({ error: 'Checkout is not configured yet' }, 500, cors);
       const res = await fetch(`https://api.stripe.com/v1/checkout/sessions/${id}?expand[]=line_items`, { headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}` } });
@@ -152,6 +160,10 @@ export default {
     if (items.length > 50) return json({ error: 'Too many items in one order' }, 400, cors);
     try {
       const catalog = await loadCatalog(env, site, request);
+      // The pause lives in the catalogue, so flipping it on the site closes checkout here too
+      // (within CATALOG_TTL_MS) with no redeploy of this Worker.
+      const orders = catalog.config.orders || {};
+      if (orders.paused) return json({ error: orders.message || 'We have paused new orders for a short while.' }, 503, cors);
       // Stripe fetches product photos itself: serve them from this Worker's own origin when it hosts the site
       // (always a valid certificate), otherwise from the public site.
       const imageBase = env.ASSETS ? new URL(request.url).origin : site;

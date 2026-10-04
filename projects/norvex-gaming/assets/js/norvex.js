@@ -11,6 +11,13 @@
   const { config, games, types } = D;
   // a product marked hidden is reachable by its URL and can be bought, but never listed, searched or related
   const products = D.products.filter((p) => !p.hidden);
+  /* Orders can be paused from the catalogue (config.orders.paused). The shop stays browsable and
+     prices stay visible, but nothing can be added to a cart and checkout is closed. The Worker
+     refuses to create a Stripe session while the same flag is set, so this is not only cosmetic. */
+  const ORDERS = config.orders || {};
+  const paused = Boolean(ORDERS.paused);
+  const pausedNotice = String(ORDERS.notice || 'Orders are paused');
+  const pausedMsg = String(ORDERS.message || 'We have paused new orders for a short while. Everything here will be back to buy soon.');
   document.documentElement.classList.remove('no-js');
 
   /* ------------------------------------------------------------ helpers */
@@ -171,7 +178,7 @@
     const g = gameOf(p);
     const t = typeOf(p);
     const av = availability(p);
-    const addLabel = av.key === 'out' ? 'Sold out' : av.key === 'pre' ? 'Pre-order' : 'Add to cart';
+    const addLabel = paused ? 'Orders paused' : av.key === 'out' ? 'Sold out' : av.key === 'pre' ? 'Pre-order' : 'Add to cart';
     const stockLabel = av.key === 'pre' && releaseText(p) ? `Releases ${releaseText(p)}` : av.label;
     return `<article class="product reveal reveal--scale" style="--i:${i % 8}" data-product="${esc(p.id)}">
       <div class="product__media" style="--a:${g.a}">
@@ -185,7 +192,7 @@
           <span class="price product__price">${fmt(p.price)}${p.compareAt ? `<span class="price--compare">${fmt(p.compareAt)}</span>` : ''}</span>
           <span class="product__stock product__stock--${av.key}">${esc(stockLabel)}</span>
         </div>
-        <button class="btn btn--ghost btn--sm btn--block product__add" type="button" data-add="${esc(p.id)}"${av.key === 'out' ? ' disabled' : ''} aria-label="${addLabel}: ${esc(p.name)}">${addLabel}</button>
+        <button class="btn btn--ghost btn--sm btn--block product__add" type="button" data-add="${esc(p.id)}"${paused || av.key === 'out' ? ' disabled' : ''} aria-label="${addLabel}: ${esc(p.name)}">${addLabel}</button>
       </div>
     </article>`;
   }
@@ -292,6 +299,7 @@
     save() { try { localStorage.setItem(this.KEY, JSON.stringify(this.items)); } catch (e) { /* private mode */ } },
     max(p) { return p.preorder ? 10 : p.stock; },
     add(id, qty = 1) {
+      if (paused) { toast(pausedMsg, 'lock'); return false; }
       const p = byId[id]; if (!p) return false;
       const line = this.items.find((i) => i.id === id);
       const cur = line ? line.qty : 0;
@@ -327,8 +335,11 @@
         <div class="drawer__foot" data-cart-foot hidden>
           <div class="shipbar"><span data-ship-text></span><div class="shipbar__track" aria-hidden="true"><div class="shipbar__fill" data-ship-fill></div></div></div>
           <div class="total"><span>Subtotal</span><b data-cart-total>${fmt(0)}</b></div>
-          <p class="tiny muted-2">Shipping, insurance and taxes are calculated at checkout.</p>
-          <button class="btn btn--primary btn--lg btn--block" type="button" data-checkout>${icon('lock')}Secure checkout</button>
+          ${paused
+            ? `<p class="note note--paused">${esc(pausedMsg)}</p>
+          <button class="btn btn--ghost btn--lg btn--block" type="button" disabled>${icon('lock')}Orders paused</button>`
+            : `<p class="tiny muted-2">Shipping, insurance and taxes are calculated at checkout.</p>
+          <button class="btn btn--primary btn--lg btn--block" type="button" data-checkout>${icon('lock')}Secure checkout</button>`}
           <button class="btn btn--link" type="button" data-close-cart style="justify-self:center">Continue shopping</button>
         </div>`;
       document.body.append(this.scrim, this.el);
@@ -701,7 +712,10 @@
     const dispatchHours = (config.shipping && config.shipping.dispatchHours) || 48;
     const returnsDays = config.returnsDays || 14;
     const stockNote = p.preorder ? (releaseText(p) ? ` · releases ${releaseText(p)}, charged now and dispatched insured on release day` : ' · charged now, dispatched insured on release day') : av.key === 'out' ? '' : ` · dispatched within ${dispatchHours} hours`;
-    const buy = av.key === 'out'
+    const buy = paused
+      ? `<button class="btn btn--ghost btn--lg btn--block" type="button" disabled style="grid-column:1/-1">${icon('lock')}Orders paused</button>
+         <p class="note note--paused" style="grid-column:1/-1">${esc(pausedMsg)}</p>`
+      : av.key === 'out'
       ? `<button class="btn btn--ghost btn--lg btn--block" type="button" disabled style="grid-column:1/-1">Sold out</button><button class="btn btn--outline btn--block" type="button" style="grid-column:1/-1" data-notify>Notify me when restocked</button>`
       : `<div class="stepper" role="group" aria-label="Quantity">
            <button type="button" data-step="-1" aria-label="Decrease quantity">${icon('minus')}</button>
@@ -769,7 +783,7 @@
     const desc = `${p.name}: ${p.description}`.slice(0, 300);
     meta('meta[name="description"]', desc); meta('meta[property="og:title"]', `${p.name} · ${config.storeName}`); meta('meta[property="og:description"]', desc);
     meta('meta[property="og:url"]', url); meta('meta[property="og:image"]', image); meta('meta[property="og:type"]', 'product');
-    const availability = av.key === 'out' ? 'https://schema.org/OutOfStock' : p.preorder ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock';
+    const availability = paused || av.key === 'out' ? 'https://schema.org/OutOfStock' : p.preorder ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock';
     const data = [
       { '@context': 'https://schema.org', '@type': 'Product', name: p.name, image: [image], description: p.description, sku: p.id, category: `${g.name} ${t.name}`,
         brand: { '@type': 'Brand', name: p.brand || g.name },
@@ -785,6 +799,17 @@
         { '@type': 'ListItem', position: 4, name: p.name, item: url }] }
     ];
     const s = document.createElement('script'); s.type = 'application/ld+json'; s.textContent = JSON.stringify(data); document.head.appendChild(s);
+  }
+
+  /* The announcement bar states it on every page, in place of the shipping line. */
+  function initPaused() {
+    if (!paused) return;
+    document.body.classList.add('is-paused');
+    $$('.announce').forEach((bar) => {
+      bar.classList.add('announce--paused');
+      const c = $('.container', bar);
+      if (c) c.innerHTML = `<span>${icon('lock')}${esc(pausedNotice)}</span>`;
+    });
   }
 
   /* ------------------------------------------------ global delegation */
@@ -814,6 +839,7 @@
      ?checkout=success or ?checkout=cancelled. */
   async function checkout() {
     const cfg = config.checkout || {};
+    if (paused) { toast(pausedMsg, 'lock'); return; }
     if (!Cart.items.length) { toast('Your cart is empty', 'lock'); return; }
     if (!cfg.endpoint) { toast('Secure checkout goes live once payments are connected', 'lock'); return; }
     const btn = $('[data-checkout]'); const label = btn ? btn.innerHTML : '';
@@ -926,6 +952,7 @@
     initNewsletter();
     initChat();
     initBusiness();
+    initPaused();
     $$('[data-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
     observe(document);
   }

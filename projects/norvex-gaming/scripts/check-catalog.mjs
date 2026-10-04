@@ -16,6 +16,9 @@ catch (e) { console.error(`catalog.js does not parse: ${e.message}\n(usually a m
 const { config, games, types, products } = data;
 if (!config || !config.storeName || !config.currency) problems.push('config needs storeName and currency');
 if (!Array.isArray(products) || !products.length) problems.push('products must be a non-empty list');
+// the pause switch: a typo here would silently leave the shop open, so insist on a real boolean
+if (!config || !config.orders || typeof config.orders !== 'object') problems.push('config.orders is missing (it holds the orders.paused switch)');
+else if (typeof config.orders.paused !== 'boolean') problems.push(`config.orders.paused must be true or false, not ${JSON.stringify(config.orders.paused)}`);
 const seen = new Set();
 for (const [i, p] of (products || []).entries()) {
   const where = p && p.id ? p.id : `product #${i + 1}`;
