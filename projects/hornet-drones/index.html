@@ -39,12 +39,21 @@
     <meta property="og:locale" content="en_GB" />
 
     <!--
-      Organization + Product only.
+      Organization + WebSite only.
 
       Deliberately NOT LocalBusiness: that type is for premises customers visit,
-      and misusing it risks a structured-data manual action. Equally there is no
-      `offers` block (no public price) and no `aggregateRating` (no reviews) —
-      inventing either is exactly the kind of markup that earns a penalty.
+      and misusing it risks a structured-data manual action.
+
+      There is deliberately no Product node either. Google requires product
+      markup to carry `offers`, `review` or `aggregateRating`; the HRN-01 has no
+      public price, no reviews and no rating, and inventing any of them is
+      exactly the kind of markup that earns a penalty. A Product node without
+      them is not a safe middle ground — Search Console reports it as an invalid
+      item and it earns no rich result either way, so it is omitted rather than
+      faked.
+
+      When there is a real price, add Product back with a real `offers` block
+      (price, priceCurrency, availability) and nothing invented around it.
     -->
     <script type="application/ld+json">
       {
@@ -65,13 +74,6 @@
             "url": "https://hornetdrones.com/",
             "name": "Hornet Drones",
             "publisher": { "@id": "https://hornetdrones.com/#org" }
-          },
-          {
-            "@type": "Product",
-            "name": "HRN-01",
-            "description": "Ultra-quiet autonomous perimeter drone with thermal and optical sensing, returning to a weatherproof charging nest between patrols.",
-            "category": "Home security system",
-            "brand": { "@id": "https://hornetdrones.com/#org" }
           }
         ]
       }
