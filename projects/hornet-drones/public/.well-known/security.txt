@@ -1,0 +1,6 @@
+# Hornet Drones — security contact (RFC 9116)
+Contact: mailto:hello@hornetdrones.com
+Expires: 2027-09-16T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://hornetdrones.com/.well-known/security.txt
+Policy: https://hornetdrones.com/privacy

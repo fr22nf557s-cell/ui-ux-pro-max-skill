@@ -1,0 +1,113 @@
+{
+  "_comment": [
+    "Hand-built OCDS 1.1 fixtures modelled on the published Contracts Finder and",
+    "Find a Tender schemas. They exist because the machine this was written on",
+    "could not reach either live API, so the transform logic is tested against",
+    "these instead. They are representative, NOT captured from a real response:",
+    "if /api/selftest shows the live envelope differs, fix collectReleases and",
+    "add a real captured page here."
+  ],
+
+  "contracts_finder_envelope": {
+    "results": [
+      {
+        "releases": [
+          {
+            "ocid": "ocds-h6vhtk-04a1b2",
+            "id": "04a1b2-2026-01",
+            "date": "2026-09-01T09:00:00Z",
+            "tag": ["tender"],
+            "initiationType": "tender",
+            "buyer": { "id": "GB-GOV-1", "name": "Ministry of Defence" },
+            "tender": {
+              "id": "MOD-UAS-2026-114",
+              "title": "Supply of small unmanned aircraft systems for perimeter surveillance",
+              "description": "Framework for the supply of sUAS with thermal imaging payloads for persistent surveillance of fixed sites.",
+              "status": "active",
+              "value": { "amount": 850000, "currency": "GBP" },
+              "tenderPeriod": { "startDate": "2026-09-01T09:00:00Z", "endDate": "2099-10-15T17:00:00Z" },
+              "items": [
+                {
+                  "id": "1",
+                  "classification": { "scheme": "CPV", "id": "35613000-4", "description": "Unmanned aerial vehicles" },
+                  "additionalClassifications": [
+                    { "scheme": "CPV", "id": "35125000-6", "description": "Surveillance system" }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "ocid": "ocds-h6vhtk-99zz01",
+            "id": "99zz01-2026-01",
+            "date": "2026-08-20T11:00:00Z",
+            "tag": ["tender"],
+            "buyer": { "name": "Leeds City Council" },
+            "tender": {
+              "id": "LCC-2026-77",
+              "title": "Grounds maintenance and grass cutting",
+              "description": "Cutting of verges and open spaces across the district. No drones are to be used on site.",
+              "status": "active",
+              "value": { "amount": 240000, "currency": "GBP" },
+              "items": [{ "id": "1", "classification": { "scheme": "CPV", "id": "77314000-4" } }]
+            }
+          }
+        ]
+      }
+    ]
+  },
+
+  "find_a_tender_envelope": {
+    "version": "1.1",
+    "publisher": { "name": "Find a Tender" },
+    "releases": [
+      {
+        "ocid": "ocds-abc123-77bb",
+        "id": "77bb-award-1",
+        "date": "2026-07-14T00:00:00Z",
+        "tag": ["award"],
+        "buyer": { "name": "Police Digital Service" },
+        "parties": [{ "id": "PDS", "name": "Police Digital Service", "roles": ["buyer"] }],
+        "tender": {
+          "id": "PDS-DRONE-22",
+          "title": "Remotely piloted aircraft systems and training",
+          "description": "Provision of RPAS airframes, ground control and pilot training.",
+          "items": [{ "id": "1", "classification": { "scheme": "CPV", "id": "34711200-6" } }]
+        },
+        "awards": [
+          {
+            "id": "award-1",
+            "date": "2026-07-14T00:00:00Z",
+            "status": "active",
+            "value": { "amount": 1250000, "currency": "GBP" },
+            "suppliers": [{ "id": "GB-COH-01234567", "name": "Skyward Aerial Systems Ltd" }]
+          },
+          {
+            "id": "award-2",
+            "date": "2026-07-14T00:00:00Z",
+            "status": "active",
+            "value": { "amount": 480000, "currency": "GBP" },
+            "suppliers": [{ "name": "Northern UAV Services Limited" }]
+          }
+        ]
+      },
+      {
+        "ocid": "ocds-abc123-55aa",
+        "id": "55aa-tender-1",
+        "date": "2026-09-10T00:00:00Z",
+        "tag": ["tender"],
+        "buyer": { "name": "National Highways" },
+        "tender": {
+          "id": "NH-2026-900",
+          "title": "Aerial survey and inspection services for structures",
+          "description": "Inspection of bridges and gantries using drones where access is restricted.",
+          "status": "active",
+          "value": { "amount": 40000000, "currency": "GBP" },
+          "tenderPeriod": { "endDate": "2020-01-01T00:00:00Z" },
+          "items": [{ "id": "1", "classification": { "scheme": "CPV", "id": "71356100-9" } }]
+        }
+      }
+    ],
+    "links": { "next": "https://www.find-tender.service.gov.uk/api/1.0/ocdsReleasePackages?cursor=2" }
+  }
+}

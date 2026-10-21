@@ -1,0 +1,108 @@
+/* Brand typefaces, the same files the app bundles, served from /fonts for the static pages. */
+@font-face { font-family: 'Space Grotesk'; font-weight: 700; font-display: swap; src: url('/fonts/space-grotesk-latin-700-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Space Grotesk'; font-weight: 600; font-display: swap; src: url('/fonts/space-grotesk-latin-600-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-weight: 400; font-display: swap; src: url('/fonts/inter-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-weight: 600; font-display: swap; src: url('/fonts/inter-latin-600-normal.woff2') format('woff2'); }
+@font-face { font-family: 'JetBrains Mono'; font-weight: 400; font-display: swap; src: url('/fonts/jetbrains-mono-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Chakra Petch'; font-weight: 700; font-style: italic; font-display: swap; src: url('/fonts/chakra-petch-latin-700-italic.woff2') format('woff2'); }
+@font-face { font-family: 'Chakra Petch'; font-weight: 700; font-style: normal; font-display: swap; src: url('/fonts/chakra-petch-latin-700-normal.woff2') format('woff2'); }
+
+/*
+ * Shared stylesheet for the static secondary pages (/privacy, /terms, /about,
+ * /press, /careers, /airspace). These are plain HTML under /public so they
+ * ship with zero JavaScript; the tokens mirror src/index.css.
+ */
+:root { color-scheme: dark; --ink: #0b0c10; --void: #000; --silver: #a8adb8; --hair: rgba(255, 255, 255, 0.12); }
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--ink); color: #fff; padding: 0 20px;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  line-height: 1.65; -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 720px; margin: 0 auto; padding: 56px 0 96px; }
+.mark { font-family: 'Chakra Petch', sans-serif; font-style: italic; font-size: 18px; font-weight: 700; letter-spacing: -.01em; text-decoration: none; color: #fff; display: inline-block; }
+.mark span { font-style: normal; font-size: 9px; letter-spacing: .34em; color: var(--silver); padding-left: 8px; }
+.eyebrow { margin: 48px 0 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: var(--silver); }
+h1 { font-family: 'Space Grotesk', Inter, sans-serif; font-weight: 700; font-size: clamp(30px, 5vw, 44px); line-height: 1.08; margin: 10px 0 8px; letter-spacing: -.03em; }
+.eyebrow + h1 { margin-top: 10px; }
+.updated { color: var(--silver); font-size: 13px; margin: 0 0 40px; }
+.lede { font-size: 18px; color: #fff; margin: 0 0 32px; }
+h2 { font-family: 'Space Grotesk', Inter, sans-serif; font-weight: 600; font-size: 21px; margin: 40px 0 10px; letter-spacing: -.015em; scroll-margin-top: 24px; }
+p, li, dd { color: var(--silver); font-size: 15.5px; }
+ul, ol { padding-left: 20px; }
+li { margin-bottom: 8px; }
+a { color: #fff; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em; }
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14.5px; }
+/* Specifications page only: the same column rhythm on every table, so the
+   Spec and Value columns line up from section to section. */
+.specs table { table-layout: fixed; }
+.specs th:first-child, .specs td:first-child { width: 26%; }
+.specs th:nth-child(2), .specs td:nth-child(2) { width: 22%; }
+@media (max-width: 560px) { .specs th:first-child, .specs td:first-child, .specs th:nth-child(2), .specs td:nth-child(2) { width: auto; } }
+th, td { text-align: left; padding: 10px 12px; border: 1px solid var(--hair); vertical-align: top; color: var(--silver); }
+th { color: #fff; font-weight: 600; background: rgba(255, 255, 255, .04); }
+dl { margin: 16px 0; }
+dt { color: #fff; font-weight: 600; margin-top: 14px; }
+dd { margin: 4px 0 0; }
+.todo { border: 1px solid rgba(255, 255, 255, .25); background: rgba(255, 255, 255, .05); padding: 16px 18px; border-radius: 10px; margin: 32px 0; }
+.todo p { color: #fff; margin: 0; font-size: 14px; }
+.cta { display: inline-block; margin-top: 8px; background: #fff; color: #000; text-decoration: none; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 13px 24px; border-radius: 999px; }
+footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--hair); font-size: 13px; color: var(--silver); }
+footer nav { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 12px; }
+footer nav a { color: var(--silver); text-decoration: none; }
+footer nav a:hover, footer nav a:focus-visible { color: #fff; }
+:where(a, button):focus-visible { outline: 2px solid #fff; outline-offset: 3px; border-radius: 4px; }
+@media (max-width: 560px) {
+  table, thead, tbody, th, td, tr { display: block; }
+  th { display: none; }
+  td { border: 0; border-bottom: 1px solid var(--hair); padding: 8px 0; }
+}
+
+/* ── Product pages ── */
+.product .wrap { max-width: 860px; }
+.hero-img { display: block; width: 100%; aspect-ratio: 16 / 7; object-fit: cover; object-position: 50% 40%; border-radius: 14px; border: 1px solid var(--hair); margin: 28px 0 8px; filter: grayscale(1) contrast(1.05); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--hair); border: 1px solid var(--hair); border-radius: 12px; overflow: hidden; margin: 28px 0; }
+.stats > div { background: var(--ink); padding: 18px 16px; }
+.stats b { display: block; font-family: 'Space Grotesk', Inter, sans-serif; font-size: 28px; line-height: 1; letter-spacing: -.02em; color: #fff; }
+.stats b small { font-size: 13px; color: var(--silver); margin-left: 4px; font-weight: 400; }
+.stats span { display: block; margin-top: 8px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--silver); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 12px 0 0; list-style: none; }
+.chips li { margin: 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: rgba(255,255,255,.8); border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.06); border-radius: 999px; padding: 4px 12px; }
+.part { border-top: 1px solid var(--hair); padding: 24px 0 8px; }
+.part .code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: .2em; color: var(--silver); }
+.part h2 { margin-top: 6px; font-size: 24px; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 36px; }
+.cta-ghost { display: inline-block; color: #fff; text-decoration: none; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; padding: 12px 22px; border: 1px solid rgba(255,255,255,.35); border-radius: 999px; }
+.cta-ghost:hover, .cta:hover { opacity: .85; }
+
+.illus { display: block; width: 100%; height: auto; color: #fff; border: 1px solid var(--hair); border-radius: 14px; background: linear-gradient(180deg, #101217, #0b0c10); margin: 28px 0 8px; padding: 12px; box-sizing: border-box; }
+
+/* Page header shared by every static page */
+.pagehead { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.pagehead nav { display: flex; align-items: center; gap: 22px; }
+.pagehead nav a { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--silver); text-decoration: none; }
+.pagehead nav a:hover, .pagehead nav a:focus-visible { color: #fff; }
+.pagehead nav a.pill { color: #fff; border: 1px solid rgba(255,255,255,.6); border-radius: 999px; padding: 9px 16px; }
+.pagehead nav a.pill:hover { background: #fff; color: #000; }
+@media (max-width: 640px) { .pagehead nav a:not(.pill) { display: none; } }
+
+/* Contents list on long legal pages */
+.contents { border: 1px solid var(--hair); border-radius: 10px; padding: 16px 18px; margin: 28px 0; }
+.contents p { margin: 0 0 8px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .28em; text-transform: uppercase; color: var(--silver); }
+.contents ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+.contents li { margin: 0 0 6px; break-inside: avoid; font-size: 14px; }
+.contents a { color: var(--silver); text-decoration: none; }
+.contents a:hover { color: #fff; }
+@media (max-width: 560px) { .contents ol { columns: 1; } }
+
+/* Print: spec sheets and legal pages come out black on white, without chrome */
+@media print {
+  :root { color-scheme: light; }
+  body { background: #fff; color: #000; padding: 0; }
+  .pagehead nav, footer nav, .cta-row, .todo, .illus, .hero-img { display: none !important; }
+  .mark, .mark span, h1, h2, p, li, dd, th, td, a, .stats b, .stats span { color: #000 !important; }
+  .stats > div { background: #fff; }
+  th, td { border-color: #999; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 11px; color: #555; }
+}

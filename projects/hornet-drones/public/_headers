@@ -1,0 +1,49 @@
+# Cloudflare Pages response headers.
+#
+# CSP lives here rather than in a <meta> tag because frame-ancestors and
+# report-to are ignored in meta, and HSTS can only ever be a real header.
+
+/*
+  # Two years, subdomains included. Deliberately NOT `preload`: that flag gets
+  # the domain baked into browser preload lists and is close to irreversible,
+  # so it belongs on a domain that has run HTTPS on every subdomain for a while,
+  # not on launch day. Add `; preload` later, once you are certain.
+  Strict-Transport-Security: max-age=63072000; includeSubDomains
+
+  # Vite emits no inline script, so script-src needs no 'unsafe-inline'.
+  # style-src does: Tailwind is a static file, but Framer Motion writes inline
+  # styles for every animated element. Fonts are self-hosted, so no Google
+  # origin appears anywhere in the policy.
+  # static.cloudflareinsights.com / cloudflareinsights.com are Cloudflare Web
+  # Analytics (the beacon is injected by the Pages project, not by this code):
+  # cookie-free, aggregated page counts only. Described in the privacy notice.
+  # frame-ancestors 'none' replaces X-Frame-Options; both are sent because
+  # some older scanners still look for the latter.
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://challenges.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self'; connect-src 'self' https://cloudflareinsights.com; frame-src https://challenges.cloudflare.com; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
+
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Cross-Origin-Opener-Policy: same-origin
+
+  # Hardware this site has no business touching.
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+
+# Hashed filenames are immutable by construction.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Self-hosted fonts and press assets: stable names, long cache, revalidate.
+/fonts/*
+  Cache-Control: public, max-age=31536000
+/press/*
+  Cache-Control: public, max-age=604800
+/og.jpg
+  Cache-Control: public, max-age=604800
+
+# Large media: long cache, but not immutable — these filenames are stable and
+# do get replaced when the footage is re-graded.
+/*.mp4
+  Cache-Control: public, max-age=604800
+/*.webm
+  Cache-Control: public, max-age=604800
